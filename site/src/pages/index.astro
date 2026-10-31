@@ -5,7 +5,7 @@ import { getHome } from '../lib/home.mjs';
 const page = getHome(await getGraph());
 const { hero, sections: { core, method, brief, evidence, install, read } } = page;
 ---
-<SiteLayout title={page.title} description={hero.sub} nav={page.nav} navCta={page.navCta} motion>
+<SiteLayout title={page.title} description={hero.sub} nav={page.nav} navCta={page.navCta} motion face={false}>
   <link slot="head" rel="stylesheet" href="/home.css" />
   <section class="hero" data-hero-root>
     <div class="hero-motion-host" aria-hidden="true"></div>
@@ -60,7 +60,7 @@ const { hero, sections: { core, method, brief, evidence, install, read } } = pag
       </div>
     ))}
     <noscript><p class="note">Each harness has its own page: {install.tabs.map((tab, index) => <>{index > 0 && ', '}<a class="link" href={tab.source.href}>{tab.name}</a></>)}.</p></noscript>
-    <span class="visually-hidden" role="status" data-copy-status></span>
+    <span class="sp-sr" role="status" data-copy-status></span>
   </section>
 
   <section class="s s-cta" id="read">

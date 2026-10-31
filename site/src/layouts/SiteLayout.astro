@@ -1,5 +1,6 @@
 ---
 import '@misty-step/brand/brand.css';
+import '@misty-step/brand/spine.css';
 import '../styles/site.css';
 import { HTML_ATTRS } from '@misty-step/brand/attrs';
 import { lockup } from '@misty-step/brand/mark';
@@ -10,12 +11,14 @@ import ogCard from '@misty-step/brand/identity/og/stack.png?url';
 import { home } from '../copy/home.mjs';
 import { canonical, release, repositoryUrl } from '../lib/release.mjs';
 const links = [{ href: '/guide/', label: 'Guide' }, { href: '/library/', label: 'Library' }, { href: '/evals/', label: 'Evals' }, { href: '/search/', label: 'Search' }];
-const { title, description = 'A small always-on core, task-shaped playbooks and outside proof for your coding agent.', section = 'About', path = Astro.url.pathname, noindex = false, motion = false, nav = links, navCta = { href: '/install/', label: 'Install' } } = Astro.props;
+const { title, description = 'A small always-on core, task-shaped playbooks and outside proof for your coding agent.', section = 'About', path = Astro.url.pathname, noindex = false, motion = false, face = true, nav = links, navCta = { href: '/install/', label: 'Install' } } = Astro.props;
 const more = [{ href: '/install/', label: 'Install' }, { href: '/foundation/', label: 'Foundation' }, { href: '/decisions/', label: 'Decisions' }, { href: repositoryUrl, label: 'GitHub' }];
 const footer = [{ href: 'https://mistystep.io', label: 'Misty Step' }, { href: repositoryUrl, label: 'Source' }, ...links.slice(1), { href: '/foundation/', label: 'Foundation' }, { href: '/decisions/', label: 'Decisions' }, { href: '/stories/', label: 'Stories' }, { href: '/domain/', label: 'Domain' }, { href: '/exemplars/', label: 'Exemplars' }, { href: '/attribution/', label: 'Attribution' }, { href: '/changelog/', label: 'Changelog' }];
 const selected = (href) => (path.startsWith(href) ? 'page' : undefined);
 const fullTitle = title === 'mistystack' ? title : `${title} | mistystack`;
 const url = new URL(path, canonical);
+// Inner pages use the spine's components, so <body> is their studio face root.
+// The home page follows the brand's home markup, which has no face root (face={false}).
 ---
 <!doctype html>
 <html lang="en" {...HTML_ATTRS}>
@@ -44,7 +47,7 @@ const url = new URL(path, canonical);
     <meta name="twitter:card" content="summary_large_image" />
     <slot name="head" />
   </head>
-  <body id="top">
+  <body id="top" data-face={face ? 'studio' : undefined}>
     <a class="skip" href="#main">Skip to content</a>
     <header class="nav" data-pagefind-ignore>
       <a class="brand" href="/" aria-label="mistystack home"><Fragment set:html={lockup('MISTYSTACK')} /></a>

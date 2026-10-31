@@ -18,6 +18,7 @@ const stringify = unified().use(rehypeStringify);
 const text = (node) => node.value ?? (node.children ?? []).map(text).join('');
 const element = (tagName, properties, children) => ({ type: 'element', tagName, properties, children });
 const literal = (value) => ({ type: 'text', value });
+const addClass = (node, name) => { node.properties.className = [...(node.properties.className ?? []), name]; };
 const rootRoutes = {
   'README.md': '/repository/', 'DOMAIN.md': '/domain/', 'USER_STORIES.md': '/stories/',
   'ATTRIBUTION.md': '/attribution/', 'CHANGELOG.md': '/changelog/',
@@ -212,25 +213,32 @@ function resolveTarget(doc, href, node, graph, image = false) {
   return `${targetDoc.url}${query}${fragment ? `#${fragment}` : ''}`;
 }
 
+// Rendered Markdown takes the spine's component classes (@misty-step/brand/spine.css):
+// links, code, and tables in their scrolling plate. A right-aligned GFM column is numeric.
 function decorateHtml(doc, graph) {
-  visit(doc.hast, 'element', (node) => {
+  visit(doc.hast, 'element', (node, index, parent) => {
     const properties = node.properties ?? {};
     if (node.tagName === 'a' && typeof properties.href === 'string') {
       if (properties.href.startsWith('omp://')) {
         node.children.push(literal(' (Open in OMP)'));
         properties.title = 'Open in OMP';
       } else properties.href = resolveTarget(doc, properties.href, node, graph);
+      if (!properties.className?.includes('heading-anchor')) addClass(node, 'sp-link');
     }
     if (node.tagName === 'img' && typeof properties.src === 'string') properties.src = resolveTarget(doc, properties.src, node, graph, true);
     if (node.tagName === 'pre') {
+      addClass(node, 'sp-code');
       properties.tabIndex = 0;
       properties.role = 'region';
       properties.ariaLabel = 'Code example, scroll horizontally if needed';
     }
+    if (node.tagName === 'code' && parent?.tagName !== 'pre') addClass(node, 'sp-code-inline');
+    if (node.tagName === 'table') addClass(node, 'sp-table');
+    if ((node.tagName === 'th' || node.tagName === 'td') && properties.align === 'right') addClass(node, 'num');
   });
   visit(doc.hast, 'element', (node, index, parent) => {
-    if (node.tagName !== 'table' || !parent || parent.properties?.className?.includes('table-scroll')) return;
-    parent.children[index] = element('div', { className: ['table-scroll'], tabIndex: 0, role: 'region', ariaLabel: 'Table, scroll horizontally if needed' }, [node]);
+    if (node.tagName !== 'table' || !parent || parent.properties?.className?.includes('sp-plate')) return;
+    parent.children[index] = element('div', { className: ['sp-plate'], tabIndex: 0, role: 'region', ariaLabel: 'Table, scroll horizontally if needed' }, [node]);
   });
   doc.html = stringify.stringify(doc.hast);
 }

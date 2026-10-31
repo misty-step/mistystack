@@ -110,8 +110,10 @@ Presentation comes from the Misty Step identity package, `@misty-step/brand`
 (built in `brand/` of misty-step/aesthetic), pinned to a release tarball in
 `site/package.json`: its stylesheet, `<html>` attributes, runtime
 (entrances, the hero's Ground fog field, theme and pause), mark, icons and
-social card. `site/src/styles/site.css` adds only the handbook's own parts on
-the brand tokens. The home page's words live in `site/src/copy/home.mjs`;
+social card, and the spine: components for inner pages (links, code, tables,
+forms and panels) and the behaviour that also runs the home page's tabs.
+`site/src/styles/site.css` adds only the handbook's own parts on the brand
+tokens. The home page's words live in `site/src/copy/home.mjs`;
 `site/src/lib/home.mjs` reads the core lines, install commands, counts and
 trial numbers from this repository and fails the build when the copy and the
 tree disagree. None of these boundaries requires moving or duplicating method
