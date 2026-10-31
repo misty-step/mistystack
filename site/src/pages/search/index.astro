@@ -11,16 +11,16 @@ const sections = [...new Set(graph.documents.map((document) => document.kind))].
         <h1 class="s-title">Search the method</h1>
         <p class="s-intro">Find names, phrases, prevented failures and the heading to share.</p>
         <form class="field-row" action="/search/" method="get" data-search-form>
-          <label>Search<input name="q" type="search" autocomplete="off" placeholder="Try outside proof or bug fix" /></label>
-          <label>Section<select name="section"><option value="">All sections</option>{sections.map((section) => <option value={section}>{section}</option>)}</select></label>
-          <button class="btn btn-primary" type="submit">Search</button>
+          <div class="sp-field"><label class="sp-label" for="search-q">Search</label><input class="sp-input" id="search-q" name="q" type="search" autocomplete="off" placeholder="Try outside proof or bug fix" /></div>
+          <div class="sp-field"><label class="sp-label" for="search-section">Section</label><select class="sp-input" id="search-section" name="section"><option value="">All sections</option>{sections.map((section) => <option value={section}>{section}</option>)}</select></div>
+          <button class="sp-button" type="submit">Search</button>
         </form>
-        <noscript><p class="s-status">Search needs JavaScript. All content is readable without it: <a href="/library/">browse the library</a> or <a href="/guide/">follow the guide</a>.</p></noscript>
+        <noscript><p class="s-status">Search needs JavaScript. All content is readable without it: <a class="sp-link" href="/library/">browse the library</a> or <a class="sp-link" href="/guide/">follow the guide</a>.</p></noscript>
         <p class="s-status" role="status" aria-live="polite" data-search-status>Enter a term to search this revision.</p>
       </div>
       <ol class="entries search-results" data-search-results></ol>
-      <button class="btn btn-quiet" type="button" data-search-more hidden>Show more results</button>
-      <p class="entry-body"><a href="/library/">Browse the full library</a> · <a href="/guide/">Follow the guide</a></p>
+      <button class="sp-button sp-quiet" type="button" data-search-more hidden>Show more results</button>
+      <p class="entry-body"><a class="sp-link" href="/library/">Browse the full library</a> · <a class="sp-link" href="/guide/">Follow the guide</a></p>
     </section>
   </div>
   <script>import '../../scripts/search.mjs';</script>

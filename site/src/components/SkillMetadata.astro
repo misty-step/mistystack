@@ -4,9 +4,9 @@ const skill = document.skill ?? (document.kind === 'Playbooks' ? undefined : doc
 const inherited = !document.skill && skill;
 ---
 {skill && <section class="skill-metadata" aria-label={inherited ? 'Inherited skill provenance' : 'Skill metadata'}>
-  {inherited && <p>Provenance inherited from <a href={document.parent.url}>{skill.name}</a>. This document has no independent review date.</p>}
+  {inherited && <p>Provenance inherited from <a class="sp-link" href={document.parent.url}>{skill.name}</a>. This document has no independent review date.</p>}
   <dl>
-    <dt data-pagefind-ignore>{inherited ? 'Installed parent' : 'Installed name'}</dt><dd><p><code>{skill.name}</code></p></dd>
+    <dt data-pagefind-ignore>{inherited ? 'Installed parent' : 'Installed name'}</dt><dd><p><code class="sp-code-inline">{skill.name}</code></p></dd>
     {!inherited && <><dt data-pagefind-ignore>When to use</dt><dd><p>{skill.description}</p></dd><dt data-pagefind-ignore>Prevents</dt><dd><p>{skill.prevents}</p></dd></>}
     <dt data-pagefind-ignore>Owner</dt><dd><p>{skill.owner}</p></dd>
     <dt data-pagefind-ignore>Source</dt><dd><p>{skill.source}</p></dd>

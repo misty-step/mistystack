@@ -1,4 +1,5 @@
 import { startBrand } from '@misty-step/brand/runtime';
+import { wire } from '@misty-step/brand/spine';
 
 const root = document.documentElement;
 const THEME_KEY = 'mistystack-theme';
@@ -32,30 +33,8 @@ systemDark.addEventListener('change', () => {
 });
 
 startBrand();
-
-for (const list of document.querySelectorAll('[role="tablist"]')) {
-  const tabs = [...list.querySelectorAll('[role="tab"]')];
-  const select = (selected) => {
-    for (const tab of tabs) {
-      const on = tab === selected;
-      tab.setAttribute('aria-selected', String(on));
-      tab.tabIndex = on ? 0 : -1;
-      document.getElementById(tab.getAttribute('aria-controls')).hidden = !on;
-    }
-  };
-  list.addEventListener('click', (event) => {
-    const tab = event.target instanceof Element && event.target.closest('[role="tab"]');
-    if (tab) select(tab);
-  });
-  list.addEventListener('keydown', (event) => {
-    const index = tabs.indexOf(event.target);
-    if (index < 0 || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-    event.preventDefault();
-    const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
-    select(tabs[next]);
-    tabs[next].focus();
-  });
-}
+// The spine's behaviour, including every [role="tab"]: the home page's install tabs.
+wire();
 
 const copyStatus = document.querySelector('[data-copy-status]');
 for (const button of document.querySelectorAll('.copy')) {
