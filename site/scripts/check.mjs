@@ -242,6 +242,12 @@ async function main() {
   for (const [from] of redirects) checkLink(from, '/', `_redirects ${from}`);
   for (const [file, page] of pages) {
     const base = route(file);
+    if (base.startsWith('/decisions/')) {
+      const html = files.get(file).toString('utf8');
+      for (const badge of html.matchAll(/<p\b[^>]*class="badge"[^>]*>([\s\S]*?)<\/p>/g)) {
+        expect(!decode(badge[1]).includes(']('), `${file}: decision badge must render plain text, not Markdown links`);
+      }
+    }
     for (const { name, attributes } of page.tags) {
       if (name === 'script' && (!attributes.has('type') || ['module', 'text/javascript', 'application/javascript'].includes(attributes.get('type')))) {
         expect(attributes.has('src'), `${file}: executable inline script violates the self-only CSP`);
