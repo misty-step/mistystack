@@ -33,7 +33,7 @@ export const home = {
       core: 'The always-on routing and guardrails.',
       misty: 'Reads the task and chooses the playbook and skills.',
       playbooks: (list) => `${list}.`,
-      skills: 'Specialists such as research and security audit, loaded when a task needs one.',
+      skills: 'Specialists such as research and focused security review, loaded when a task needs one.',
       principles: 'Rules of judgment such as one home per fact, read only when they apply.',
       oracle: 'A check outside the agent that can disprove completion, named before work starts.',
     },
