@@ -31,6 +31,7 @@ Only when the user explicitly commissions a full audit or pen-test, read
 [Cloudflare's upstream skill at c1c8a8c](https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/SKILL.md)
 in place from GitHub. Follow its workflow, companion, schema and validator links
 at that same commit, never a moving branch. Do not install or vendor the skill.
+For a commissioned full audit, fetch `cloudflare/security-audit-skill` at `c1c8a8c1471069fb0e188eeaff69b8e8db6564a8` into the run's scratch folder, verify the checked-out commit, and run its validators there, never from a harness skill folder.
 The local execution-safety contract still applies throughout.
 
 [LICENSE](LICENSE) retains Cloudflare's MIT notice.
