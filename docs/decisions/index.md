@@ -52,3 +52,5 @@ Former decisions remain unchanged; their numbers stay reserved.
 - [008](historical/008-foundations-audits.md): audit organization.
 - [010](historical/010-local-cto-summon-factory.md): local CTO pilot.
 - [011](historical/011-machine-local-preferences.md): portable defaults and local preferences.
+- [0019](0019-entire-is-the-forge.md): Entire as the forge interface, 2026-10-30;
+  superseded by 0020.
