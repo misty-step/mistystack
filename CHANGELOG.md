@@ -1,3 +1,9 @@
+# [0.3.17](https://github.com/misty-step/mistystack/compare/v0.3.16...v0.3.17) (2026-11-02)
+<!-- landmark:protected-release previous=v0.3.16 source=3426766bb758389c40f7f9d7f06be9635a4b938cf1fc24e0a29cb3e286dfcd1d -->
+
+### Features
+
+* **forge:** GitHub hosts code and PRs; Linear tracks work (#645) ([251b67b](https://github.com/misty-step/mistystack/commit/251b67b2e176451f5c88f6a540bb1c2d15cce1bb))
 # [0.3.16](https://github.com/misty-step/mistystack/compare/v0.3.15...v0.3.16) (2026-10-31)
 <!-- landmark:protected-release previous=v0.3.15 source=3a9b28cd63c7c6ea7a2c40159e58aac5f45548db8752805b29ad478e26cf30a7 -->
 
