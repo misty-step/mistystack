@@ -28,7 +28,6 @@ execution on [Boat workers](../../skills/boat-workers/SKILL.md)
 
 ## Hermes
 
-Kaylee and Hermes are being decommissioned.
 [ADR 0017](../decisions/0017-tern-omp-and-boat-workers.md) supersedes
 [ADR 0016](../decisions/0016-harness-agnostic.md)'s former Hermes consumer
 statement: no adapter, dispatcher or consumer role remains for them.

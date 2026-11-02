@@ -15,6 +15,7 @@ export default defineConfig({
   redirects: {
     '/guide/install-and-setup/': '/install/',
     '/install/hermes/': '/install/#hermes',
+    '/library/skills/judge/': '/library/skills/ship-loop/judge/',
     '/library/skills/security-audit/references/AI-AND-LLM/': '/library/skills/security-audit/',
     '/library/skills/security-audit/references/ATTACK-CLASSES/': '/library/skills/security-audit/',
     '/library/skills/security-audit/references/CLIENT-SIDE/': '/library/skills/security-audit/',
