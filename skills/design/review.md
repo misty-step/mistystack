@@ -6,8 +6,8 @@ detector is required. [Sources and licenses](sources.md).
 
 ## Capture named states
 
-1. **Inventory before capture.** Name the affected routes, roles and states:
-   loading, empty, error, success, disabled, permission-limited and long-content
+1. **Inventory before capture.** Declare a named-state matrix of affected routes,
+   roles and states: loading, empty, error, success, disabled, permission-limited and long-content
    where reachable. Include supported widths, light/dark, relevant scroll positions
    and overlays. Use stable names such as `settings-error-narrow-dark-top` and
    record the URL, revision, viewport, theme, data/role and steps to reach each.
@@ -19,21 +19,12 @@ detector is required. [Sources and licenses](sources.md).
    success. Emulation proves the emulated condition, not a physical-device test.
    For native or non-browser artifacts, use the running target surface and its
    native capture tool; a web approximation is not native proof.
+   An unreachable state stays explicitly unverified in the matrix with its reason.
 3. **Inspect every capture.** Look at the image, not just its filename or DOM.
    Check clipping, overlays, overflow, contrast, empty regions, wrong state and
-   copy. Inspect full-size originals: gallery thumbnails crop to a fixed ratio.
+   copy. Inspect every capture at full size.
    Exercise keyboard/focus and the changed behavior in addition to taking images.
    For motion, follow [motion.md](motion.md); static endpoints are insufficient.
-4. **Retain evidence outside Git.** Use [templates/manifest.json](templates/manifest.json)
-   when several states need side-by-side comparison. Resolve the installed skill
-   directory, then run:
-   `python3 <skill-dir>/scripts/gallery.py <manifest> --out <index.html>` and
-   `python3 <skill-dir>/scripts/gallery.py <manifest> --check`. Paths in the
-   manifest are relative to the manifest file. The gallery only checks file
-   presence/extensions and declared status; it does not decode images, judge
-   design or prove backend behavior.
-   A skipped state requires a reason and remains unverified even when `--check`
-   exits zero. Required missing coverage prevents a pass.
 
 ## Critique, then polish
 
@@ -58,8 +49,9 @@ then visual inconsistency. Preserve the incumbent identity during polish.
 
 For each finding: consumer impact, named state, observed evidence, location and
 smallest repair. Follow the core's claim rule; separate code-derived concerns
-from defects observed on the surface. Link the checked
-revision and captures/recordings in the repository's existing evidence channel.
+from defects observed on the surface. Keep capture output outside Git. Link the
+checked revision and captures/recordings in the repository's existing evidence channel.
+Required missing coverage prevents a pass.
 
 Record these outcomes separately, each with its own check and result:
 

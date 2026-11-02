@@ -37,21 +37,14 @@ Do not use Mobbin.
    the result. Review-only work produces findings; polish preserves identity;
    redesign replaces visual structure without silently changing product facts.
    Done: the target surface and affected states are named.
-2. **Debate.** During brainstorming or design thinking, test competing structures
-   through relevant expert lenses: Torvalds (unnecessary complexity), Musk
-   (requirements and subtraction), Carmack (directness and cost), Ousterhout
-   (complexity hidden behind a small interface). Change the lenses to fit the
-   work. These are analytical methods, not personas, impersonations or attributed
-   quotations. Record the decisive tradeoff, not a staged conversation.
-   Done: one direction chosen on user benefit and constraints.
-3. **Build or inspect.** Reuse tokens and components. Alternatives differ in
+2. **Build or inspect.** Reuse tokens and components. Alternatives differ in
    hierarchy or behavior, not merely color. For motion implementation, naming,
    review, performance or opportunity-finding, read [motion.md](motion.md).
    For artifacts, inspect at their actual viewing size; a generated mockup is a
    direction, not evidence of working UI. Any paid generation needs authorization;
    keep private data out of external prompts and generated media out of Git.
    Done: the requested change or review covers the whole affected path.
-4. **Prove.** Follow [review.md](review.md): drive the real surface with your
+3. **Prove.** Follow [review.md](review.md): drive the real surface with your
    harness's browser automation, capture and inspect every named affected state,
    and test existing behavior for regressions. Record **UX**, **DX** and **AX** outcomes separately;
    pass only when all three improve together and existing behavior still works.

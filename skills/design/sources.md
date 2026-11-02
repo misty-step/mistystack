@@ -10,9 +10,9 @@ of this skill. [ATTRIBUTION.md](../../ATTRIBUTION.md) owns third-party notices.
 - [Foundation article 10](../foundation/checklist.md#article-10): finished-face
   rules in `SKILL.md`; UX/DX/AX outcomes and regression checks in `review.md`.
 - [Design defaults and method](SKILL.md): current home of the former Foundation
-  Way of working design procedure, including neutral professional defaults,
-  expert-lens debate and subtraction first. These are Misty Step's rules, not
-  upstream endorsements.
+  Way of working design procedure, including neutral professional defaults and
+  subtraction first. The expert-lens Debate step is not retained; [exemplars](../../docs/exemplars.md)
+  owns the lenses. These are Misty Step's rules, not upstream endorsements.
 
 ## Emil Kowalski — MIT
 
@@ -41,7 +41,7 @@ below are under `.agents/skills/impeccable/reference/`.
 | `polish.md` | `review.md`: preserve identity, prioritize blocked tasks before cosmetics, inspect the whole path and real states. CLI dependencies and snapshot lifecycle cut. |
 | `audit.md` | `review.md`: accessibility, theming, responsive/input and stability checks. Detector wrapper and numeric health scores cut; browser evidence owns claims. |
 
-## Misty Step — retained tools
+## Misty Step — method and cut tools
 
 [misty-step/mistystack@0ccc1a3](https://github.com/misty-step/mistystack/tree/0ccc1a3/agent-config/skills)
 is the source revision for these existing repository files.
@@ -50,6 +50,6 @@ is the source revision for these existing repository files.
 | --- | --- |
 | `design-studio/SKILL.md` | `SKILL.md`: structurally distinct alternatives, product materials, mockup limitations and private-data boundary. Long anti-style catalog, dated model/price leaderboard and redundant defaults cut. |
 | `design-studio/scripts/imagine.py` and `imagine.test.ts` | Not retained: paid-provider image machinery is not the method plugin's job; authorization still applies to any generation. |
-| `design-studio/scripts/contact_sheet.py` | Not retained: the named-state gallery supplies comparison without a second tool. |
+| `design-studio/scripts/contact_sheet.py` | Not retained: comparison uses direct inspection of full-size captures, without a custom tool. |
 | `visual-state-review/SKILL.md` | `review.md`: affected routes, named states, sizes, themes, scroll positions and inspection of each capture. |
-| `visual-state-review/scripts/gallery.py`, `gallery.test.ts`, `templates/manifest.json` | Moved intact into this skill: optional gallery and file-presence check, with existing tests. Neither is a design verdict; skipped coverage remains unverified. |
+| `visual-state-review/scripts/gallery.py`, `gallery.test.ts`, `templates/manifest.json` | Not retained: HTML generation and file-presence checks do not prove visual quality or behavior. `review.md` keeps the named-state matrix, full-size inspection of every capture and explicit reasons for unverified states. |
