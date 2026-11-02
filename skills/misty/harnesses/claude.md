@@ -25,7 +25,7 @@ updates. Content refresh does not require a release-version bump or synchronized
 version changes across adapters. Refresh the catalog and installed plugin, inspect
 the installed revision/content, then start a fresh session; a successful update
 command alone does not prove the intended revision is loaded.
-Use [setup-mistystack](../../setup-mistystack/SKILL.md) for native rigor assignments.
+Explicitly invoke [setup-mistystack](../../setup-mistystack/SKILL.md) for native rigor assignments.
 Preserve unrelated plugins, settings, credentials and runtime data.
 
 ## Core, skills and relative links
@@ -39,10 +39,10 @@ not require `CLAUDE.md` or a duplicate standing-instruction file.
 Invoke `/mistystack:misty` or `/mistystack:<skill-name>` through Claude's native
 skill mechanism. Follow Misty's [bug-fix link](../playbooks/bug-fix.md) relative to
 the installed skill file, not the working directory or a source checkout.
-Principle leaves retain `disable-model-invocation: true`: Claude does not invoke
-them automatically, while a user can invoke them explicitly and the router's
-relative links still expose their maintained files. Check discovery and explicit
-leaf reachability separately.
+Principle leaves, recompile and setup-mistystack retain
+`disable-model-invocation: true`: Claude does not invoke them automatically,
+while a user can invoke them explicitly and the router's relative links still
+expose their maintained files. Check discovery and explicit reachability separately.
 
 ## Dispatch and rigor
 

@@ -357,14 +357,18 @@ test("a missing router is an error even when another valid skill exists", () => 
 	expect(lintPlugin(root).errors).toEqual(["skills/misty/SKILL.md: missing router"]);
 });
 
-test.each(["", "disable-model-invocation: false\n", "disable-model-invocation: 'true'\n"])(
-	"requires boolean true to hide a principle leaf (%j)",
-	invocation => {
+test.each(["principle-proof", "recompile", "setup-mistystack"])(
+	"requires boolean true to keep %s explicit-only",
+	name => {
 		const { root, put, skill } = fixture();
-		put("skills/principle-proof/SKILL.md", skill("principle-proof").replace("disable-model-invocation: true\n", invocation));
-		expect(lintPlugin(root).errors).toEqual([
-			"skills/principle-proof/SKILL.md: disable-model-invocation must be true",
-		]);
+		const file = `skills/${name}/SKILL.md`;
+		const source = skill(name).replace("disable-model-invocation: true\n", "");
+		for (const invocation of ["", "disable-model-invocation: false\n", "disable-model-invocation: 'true'\n"]) {
+			put(file, source.replace("metadata:\n", `${invocation}metadata:\n`));
+			expect(lintPlugin(root).errors).toEqual([`${file}: disable-model-invocation must be true`]);
+		}
+		put(file, source.replace("metadata:\n", "disable-model-invocation: true\nmetadata:\n"));
+		expect(lintPlugin(root).errors).toEqual([]);
 	},
 );
 

@@ -1,6 +1,7 @@
 ---
 name: recompile
 description: "Monthly and on a model-capability jump: review rebuilding from the vision without breaking the record or existing consumers."
+disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "Inherited architecture surviving capability changes, or monthly rewrites breaking accepted contracts; Phaedrus's 2026-10-30 ruling on mistystack#631."

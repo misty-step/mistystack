@@ -45,8 +45,10 @@ not evidence that the method loaded.
    OMP additionally starts a fresh RPC session without inference. Its selector
    comes from the existing `smol` role read before isolation; `--model SELECTOR`
    supplies an override. Require the observed system prompt to contain the
-   installed core and list Misty, the installed skill body to match the candidate,
-   and a principle leaf to remain readable but hidden from the automatic list.
+   installed core and list Misty plus Foundation's narrowed description, the
+   installed skill body to match the candidate, and every explicit-only skill
+   (including recompile and setup-mistystack) to remain readable but hidden from
+   the automatic list.
    Other adapters' no-model inventory checks prove installation and registration,
    not that a model received the core. Follow the matching
    [harness note](../../../skills/misty/SKILL.md) for fresh-session proof: use an

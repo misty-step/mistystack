@@ -3,7 +3,7 @@
 Use a harness's native adapter to load the shared method from this repository;
 there is no custom installer and no separate content tree per harness.
 
-Start with [setup-mistystack](../../skills/setup-mistystack/SKILL.md). It identifies
+Explicitly invoke [setup-mistystack](../../skills/setup-mistystack/SKILL.md). It identifies
 the destination harness, follows its native reference, assigns applicable rigor
 roles in native configuration and requires fresh-session proof:
 

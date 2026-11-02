@@ -213,7 +213,7 @@ export function lintPlugin(root: string, strict = false) {
 			const name = basename(dirname(file));
 			if (frontmatter.name !== name) errors.push(`${file}: name must equal directory ${name}`);
 			if (!nonempty(frontmatter.description)) errors.push(`${file}: description must be non-empty`);
-			if (name.startsWith("principle-") && frontmatter["disable-model-invocation"] !== true) {
+			if ((name.startsWith("principle-") || name === "recompile" || name === "setup-mistystack") && frontmatter["disable-model-invocation"] !== true) {
 				errors.push(`${file}: disable-model-invocation must be true`);
 			}
 			const metadata = isRecord(frontmatter.metadata) ? frontmatter.metadata : {};
@@ -389,20 +389,24 @@ export function verifyInstall(root: string, omp: string, model: string) {
 		if (!installedMisty.includes(document(join(root, "skills/misty/SKILL.md")).body)) {
 			throw new Error("skill://misty did not read the working-tree body");
 		}
-		for (const file of new Bun.Glob("skills/principle-*/SKILL.md").scanSync({ cwd: root })) {
-			const { frontmatter } = document(join(root, file));
-			if (frontmatter["disable-model-invocation"] === true && skillList.includes(basename(dirname(file)))) {
-				throw new Error(`${file}: hidden principle leaked into the model's skill list`);
+		const foundation = document(join(root, "skills/foundation/SKILL.md"));
+		if (!skillList.includes(`- foundation: ${foundation.frontmatter.description}`)) {
+			throw new Error("foundation's installed description is missing from the model's skill list");
+		}
+		let hiddenSkills = 0;
+		for (const file of new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })) {
+			const { frontmatter, body } = document(join(root, file));
+			if (frontmatter["disable-model-invocation"] !== true) continue;
+			const name = basename(dirname(file));
+			if (new RegExp(`^- ${name}:`, "m").test(skillList)) {
+				throw new Error(`${file}: explicit-only skill leaked into the model's skill list`);
 			}
-		}
-		const leaf = [...new Bun.Glob("skills/principle-*/SKILL.md").scanSync({ cwd: root })].sort()[0];
-		if (leaf) {
-			const name = basename(dirname(leaf));
 			const content = checked([omp, "read", `skill://${name}`], project, env);
-			if (!content.includes(document(join(root, leaf)).body)) throw new Error(`skill://${name} is not readable`);
-			console.log("Principles: hidden from the model list and readable through skill://");
+			if (!content.includes(body)) throw new Error(`skill://${name} is not readable`);
+			hiddenSkills++;
 		}
-		console.log(`Discovery: misty listed; ${agents.length} native task agents listed; working-tree skill readable; always-apply core injected`);
+		console.log(`Explicit-only skills: ${hiddenSkills} hidden from the model list and readable through skill://`);
+		console.log(`Discovery: misty and foundation listed; ${agents.length} native task agents listed; working-tree skill readable; always-apply core injected`);
 		console.log(core.split("\n").find(line => line.startsWith("- ")));
 	});
 }

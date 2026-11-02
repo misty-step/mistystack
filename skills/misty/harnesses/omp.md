@@ -22,8 +22,8 @@ omp plugin install --force --scope user mistystack@mistystack
 
 Catalog refresh alone does not upgrade installed files. The forced install
 refreshes content even when the catalog version is unchanged. Confirm the enabled
-user-scope install with `omp plugin list`, then start a fresh OMP session. Use the
-[setup-mistystack](../../setup-mistystack/SKILL.md) skill to assign models and
+user-scope install with `omp plugin list`, then start a fresh OMP session. Explicitly
+invoke [setup-mistystack](../../setup-mistystack/SKILL.md) to assign models and
 reasoning budgets; credentials stay in OMP's credential system. Preserve foreign
 plugins, configuration, credentials and runtime data.
 
@@ -44,11 +44,11 @@ A relative Markdown link is relative to the file containing it, not the session'
 working directory. Follow Misty's [bug-fix routing link](../playbooks/bug-fix.md)
 to that installed file; a checkout copy is not proof of installed content.
 
-Principle leaves retain `disable-model-invocation: true`: OMP omits them from its
-automatic model skill list, while explicit reads still reach them. Routers stay
-model-discoverable. Confirm the installed version's invocation behavior before
-relying on a metadata flag. Discovery and explicit leaf reachability are separate
-consumer checks.
+Principle leaves, recompile and setup-mistystack retain
+`disable-model-invocation: true`: OMP omits them from its automatic model skill
+list, while explicit reads still reach them. Routers stay model-discoverable.
+Confirm the installed version's invocation behavior before relying on a metadata
+flag. Discovery and explicit reachability are separate consumer checks.
 
 OMP loads `rules/core.md` through `alwaysApply: true`. The root package's explicit
 empty `omp` manifest prevents OMP's package loader from falling back to `pi` and

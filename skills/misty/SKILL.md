@@ -41,10 +41,10 @@ Read the matching playbook or skill before acting. Combine rows when the task cr
 | Write, change, review or prune tests | [test-audit](../test-audit/SKILL.md) |
 | Builds, test suites, browser QA, untrusted code or long jobs | [boat-workers](../boat-workers/SKILL.md) |
 | Security review or audit | [security-audit](../security-audit/SKILL.md) |
-| Project quality audit or stack decision | [foundation](../foundation/SKILL.md) |
-| Monthly rebuild review or model-capability jump | [recompile](../recompile/SKILL.md) |
+| Whole-project audit, new project setup or stack decision | [foundation](../foundation/SKILL.md) |
+| User-requested monthly rebuild review or model-capability review | [recompile](../recompile/SKILL.md) |
 | Deployment, release health or recovery | [release-watch](../release-watch/SKILL.md) |
-| Install the method or assign rigor roles | [setup-mistystack](../setup-mistystack/SKILL.md) |
+| User-requested method install or rigor-role assignment | [setup-mistystack](../setup-mistystack/SKILL.md) |
 
 ## Principles
 
