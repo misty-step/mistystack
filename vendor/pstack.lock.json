@@ -1,0 +1,435 @@
+{
+  "repo": "cursor/plugins",
+  "commit": "c742dd61706fbacc1b95f1a20b7b988cf096ce6c",
+  "tree": "4719e1c4b4c43bac85d4206a8b41dd2899769c1c",
+  "generated-at": "2026-11-02T23:55:54.643Z",
+  "inventory-sha256": "731ff23c64fa23b309a9ac197b01e6f5ec7d77e7f7db9f066aa1d7e321ee0966",
+  "include": [
+    {
+      "source": "skills/benchmark-checklist",
+      "destination": "skills/benchmark-checklist",
+      "vendored": false
+    },
+    {
+      "source": "skills/blast-radius",
+      "destination": "skills/blast-radius",
+      "vendored": false
+    },
+    {
+      "source": "skills/bro",
+      "destination": "skills/bro",
+      "vendored": false
+    },
+    {
+      "source": "skills/correct",
+      "destination": "skills/correct",
+      "vendored": false
+    },
+    {
+      "source": "skills/create-verification-skill",
+      "destination": "skills/create-verification-skill",
+      "vendored": false
+    },
+    {
+      "source": "skills/how",
+      "destination": "skills/how",
+      "vendored": false
+    },
+    {
+      "source": "skills/in-your-own-words",
+      "destination": "skills/in-your-own-words",
+      "vendored": false
+    },
+    {
+      "source": "skills/maintain-verification-skill",
+      "destination": "skills/maintain-verification-skill",
+      "vendored": false
+    },
+    {
+      "source": "skills/no-comments",
+      "destination": "skills/no-comments",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/bug-fix.md",
+      "destination": "skills/misty/playbooks/bug-fix.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/eval.md",
+      "destination": "skills/misty/playbooks/eval.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/feature.md",
+      "destination": "skills/misty/playbooks/feature.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/hillclimb.md",
+      "destination": "skills/misty/playbooks/hillclimb.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/investigation.md",
+      "destination": "skills/misty/playbooks/investigation.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/perf-issue.md",
+      "destination": "skills/misty/playbooks/perf-issue.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/prototype.md",
+      "destination": "skills/misty/playbooks/prototype.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/refactoring.md",
+      "destination": "skills/misty/playbooks/refactoring.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/runtime-forensics.md",
+      "destination": "skills/misty/playbooks/runtime-forensics.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/trace-forensics.md",
+      "destination": "skills/misty/playbooks/trace-forensics.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/visual-parity.md",
+      "destination": "skills/misty/playbooks/visual-parity.md",
+      "vendored": false
+    },
+    {
+      "source": "skills/principle-attack-the-premise",
+      "destination": "skills/principle-attack-the-premise",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-boundary-discipline",
+      "destination": "skills/principle-boundary-discipline",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-encode-lessons-in-structure",
+      "destination": "skills/principle-encode-lessons-in-structure",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-experience-first",
+      "destination": "skills/principle-experience-first",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-explain-the-number",
+      "destination": "skills/principle-explain-the-number",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-fix-root-causes",
+      "destination": "skills/principle-fix-root-causes",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-foundational-thinking",
+      "destination": "skills/principle-foundational-thinking",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-guard-the-context-window",
+      "destination": "skills/principle-guard-the-context-window",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-laziness-protocol",
+      "destination": "skills/principle-laziness-protocol",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-make-operations-idempotent",
+      "destination": "skills/principle-make-operations-idempotent",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-migrate-callers-then-delete-legacy-apis",
+      "destination": "skills/principle-migrate-callers-then-delete-legacy-apis",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-minimize-reader-load",
+      "destination": "skills/principle-minimize-reader-load",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-model-the-domain",
+      "destination": "skills/principle-model-the-domain",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-never-block-on-the-human",
+      "destination": "skills/principle-never-block-on-the-human",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-outcome-oriented-execution",
+      "destination": "skills/principle-outcome-oriented-execution",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-prove-it-works",
+      "destination": "skills/principle-prove-it-works",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-redesign-from-first-principles",
+      "destination": "skills/principle-redesign-from-first-principles",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-separate-before-serializing-shared-state",
+      "destination": "skills/principle-separate-before-serializing-shared-state",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-sequence-verifiable-units",
+      "destination": "skills/principle-sequence-verifiable-units",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-subtract-before-you-add",
+      "destination": "skills/principle-subtract-before-you-add",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-test-behavior-not-implementation",
+      "destination": "skills/principle-test-behavior-not-implementation",
+      "vendored": true
+    },
+    {
+      "source": "skills/principle-type-system-discipline",
+      "destination": "skills/principle-type-system-discipline",
+      "vendored": true
+    },
+    {
+      "source": "skills/sharpen",
+      "destination": "skills/sharpen",
+      "vendored": false
+    },
+    {
+      "source": "skills/tdd",
+      "destination": "skills/tdd",
+      "vendored": false
+    },
+    {
+      "source": "skills/technical-writing",
+      "destination": "skills/technical-writing",
+      "vendored": false
+    },
+    {
+      "source": "skills/unslop",
+      "destination": "skills/unslop",
+      "vendored": false
+    }
+  ],
+  "exclude": [
+    {
+      "source": "agents/comment-sicko.md",
+      "reason": "The no-comments skill covers this review discipline."
+    },
+    {
+      "source": "agents/poteto-agent.md",
+      "reason": "Native rigor-* agents own delegated responsibilities."
+    },
+    {
+      "source": "skills/architect",
+      "reason": "Parallel candidates and panels conflict with bounded delegation and one independent judge."
+    },
+    {
+      "source": "skills/arena",
+      "reason": "Parallel candidates and panels conflict with bounded delegation and one independent judge."
+    },
+    {
+      "source": "skills/automate-me",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/create-formal-verification-skill",
+      "reason": "2.9 MB of scripts; reference upstream by URL for commissioned high-stakes flows."
+    },
+    {
+      "source": "skills/figure-it-out",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/interrogate",
+      "reason": "Parallel candidates and panels conflict with bounded delegation and one independent judge."
+    },
+    {
+      "source": "skills/ketchup",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/ketchup-video",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/maintain-formal-verification-skill",
+      "reason": "2.9 MB of scripts; reference upstream by URL for commissioned high-stakes flows."
+    },
+    {
+      "source": "skills/make-bot-ui",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/poteto-help",
+      "reason": "Duplicates misty routing."
+    },
+    {
+      "source": "skills/poteto-mode",
+      "reason": "Misty is the router alongside the pstack foundation."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/authoring-a-skill.md",
+      "reason": "agent-design owns skill authoring; this playbook names Cursor create-skill."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autonomous-run.md",
+      "reason": "Bounded delegation; grill owns plans."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-full.md",
+      "reason": "ship-loop owns delivery."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
+      "reason": "ship-loop owns delivery."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/babysit.md",
+      "reason": "ship-loop owns delivery."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "reason": "Bounded delegation; grill owns plans."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/opening-a-pr.md",
+      "reason": "ship-loop owns delivery."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/orchestrate.md",
+      "reason": "Bounded delegation; grill owns plans."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/pause-safely.md",
+      "reason": "The harness and Linear own these."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/session-pickup.md",
+      "reason": "The harness and Linear own these."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/shipping.md",
+      "reason": "ship-loop owns delivery."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/worktree-cleanup.md",
+      "reason": "The harness and Linear own these."
+    },
+    {
+      "source": "skills/principle-build-the-lever",
+      "reason": "Conflicts with Misty: use tools as shipped; add a mechanism only for a concrete uncovered contract or risk."
+    },
+    {
+      "source": "skills/principle-exhaust-the-design-space",
+      "reason": "Conflicts with code is a liability; design alternatives stay bounded in design."
+    },
+    {
+      "source": "skills/recall",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/reflect",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/setup-pstack",
+      "reason": "setup-mistystack owns native harness configuration."
+    },
+    {
+      "source": "skills/show-me-your-work",
+      "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/statechart",
+      "reason": "2.9 MB of scripts; reference upstream by URL for commissioned high-stakes flows."
+    },
+    {
+      "source": "skills/swarm",
+      "reason": "Parallel candidates and panels conflict with bounded delegation and one independent judge."
+    },
+    {
+      "source": "skills/teach",
+      "reason": "MCP-heavy discovery; investigation and how cover it."
+    },
+    {
+      "source": "skills/typescript-best-practices",
+      "reason": "The stack default is Rust; principle-type-system-discipline covers the idea."
+    },
+    {
+      "source": "skills/why",
+      "reason": "MCP-heavy discovery; investigation and how cover it."
+    }
+  ],
+  "files": {
+    "skills/principle-attack-the-premise/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-attack-the-premise/SKILL.md": "6a932884daad4aa189e9b5d1665226bbc75621d4d2a398fd4003bebd382f4599",
+    "skills/principle-boundary-discipline/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-boundary-discipline/SKILL.md": "62ac2862c2caa22dd14531f51c9c6bb445ceb198ca98a687e25b4d47c1f10a28",
+    "skills/principle-encode-lessons-in-structure/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-encode-lessons-in-structure/SKILL.md": "228963799189f481827d6f28065f278bc2008ffa37030b1234cbd5814d36b9e9",
+    "skills/principle-experience-first/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-experience-first/SKILL.md": "58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b",
+    "skills/principle-explain-the-number/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-explain-the-number/SKILL.md": "3c84fbf9a7d9842abcfcd134010782b32092ac3d3fb4aaf9ed5732dca83aa58c",
+    "skills/principle-fix-root-causes/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-fix-root-causes/SKILL.md": "8df3c8c3fe57eb0055a5c8efab8ab144557fdf301da70b1cdc77a3a3ef3f3052",
+    "skills/principle-foundational-thinking/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-foundational-thinking/SKILL.md": "864b827e8199d946ce58beca0f89c4ed4099ed6e426fb698a3aaa45de2a9eea2",
+    "skills/principle-guard-the-context-window/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-guard-the-context-window/SKILL.md": "af0b9dd70b43628ce4a59a4d332e9d9ad055084e460f430e7a757495c627e81a",
+    "skills/principle-laziness-protocol/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-laziness-protocol/SKILL.md": "1be6e7a435f26a75a76eb848b9c3d611b9977d0f5822361753244da25ca3ca45",
+    "skills/principle-make-operations-idempotent/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-make-operations-idempotent/SKILL.md": "7aa9327cf1f1aa057e95d47a0a78bd88a8f9d556b608866fee939d455a53a019",
+    "skills/principle-migrate-callers-then-delete-legacy-apis/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md": "580ad9bb1a0994ecb924321ba49efc38a2f85c64e22c76fb133f57a78272a2e6",
+    "skills/principle-minimize-reader-load/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-minimize-reader-load/SKILL.md": "1ea2b7fef2391cae5844c4efdbd59031f775e8a52d06b7495d707229a200dcca",
+    "skills/principle-model-the-domain/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-model-the-domain/SKILL.md": "52c0d85e0c3827c41c18299b642657d7b47eaf77b7b31609e42e0df42b84c75f",
+    "skills/principle-never-block-on-the-human/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-never-block-on-the-human/SKILL.md": "05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f",
+    "skills/principle-outcome-oriented-execution/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-outcome-oriented-execution/SKILL.md": "10eb91633aa570355ba4bb37088fcade2b22e498df7a58edc749e65bc5a78e2d",
+    "skills/principle-prove-it-works/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-prove-it-works/SKILL.md": "e323ffb01c635a6065aa364d63ce57b955b06c1ac5dcdc4fa91961c9fa9511af",
+    "skills/principle-redesign-from-first-principles/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-redesign-from-first-principles/SKILL.md": "170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034",
+    "skills/principle-separate-before-serializing-shared-state/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-separate-before-serializing-shared-state/SKILL.md": "05294b40448e927c5da1c7b6f5c6b9fed3744637e3833d2d948b9154a9dd00bb",
+    "skills/principle-sequence-verifiable-units/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-sequence-verifiable-units/SKILL.md": "2ccbbacc56ace5afdfb8670cef19d7bd009fb2a0033b9a741cbdf2b6baf72187",
+    "skills/principle-subtract-before-you-add/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-subtract-before-you-add/SKILL.md": "8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f",
+    "skills/principle-test-behavior-not-implementation/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-test-behavior-not-implementation/SKILL.md": "f7223698623b6a26fea49c751e466b38e6691b1f32ce841d3983e7ffbe2b74a6",
+    "skills/principle-type-system-discipline/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/principle-type-system-discipline/SKILL.md": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106"
+  }
+}

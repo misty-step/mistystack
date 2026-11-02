@@ -5,6 +5,9 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0021](0021-pstack-is-the-foundation.md): pinned, verbatim pstack foundation;
+  Misty's router, extensions and overrides remain separate from upstream bytes.
+
 - [0020](0020-github-and-linear-replace-entire.md): GitHub hosts code and pull
   requests with ship-loop's ledger in PR comments; Misty Step tracks work items
   in Linear. Supersedes [0019](0019-entire-is-the-forge.md), which made Entire

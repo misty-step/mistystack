@@ -12,6 +12,10 @@ import { parseDocument } from 'yaml';
 import { blobUrl, encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 import { historicalSources } from './historical-sources.mjs';
 
+const pstack = JSON.parse(readFileSync(path.join(repoRoot, 'vendor/pstack.lock.json'), 'utf8'));
+const vendoredSkills = new Map(pstack.include
+  .filter((entry) => entry.vendored && pstack.files[`${entry.destination}/SKILL.md`])
+  .map((entry) => [`${entry.destination}/SKILL.md`, `${pstack.repo}@${pstack.commit}/pstack/${entry.source}`]));
 const markdown = unified().use(remarkParse).use(remarkGfm);
 const toHtml = unified().use(remarkRehype, { allowDangerousHtml: true }).use(rehypeRaw);
 const stringify = unified().use(rehypeStringify);
@@ -84,17 +88,24 @@ function validateMetadata(doc) {
       if (typeof data[key] !== 'string' || !data[key].trim()) throw new Error(`${doc.id}: ${key} must be a nonempty string`);
     }
     if (data.name !== doc.id.split('/')[1]) throw new Error(`${doc.id}: name must match its installed directory`);
-    for (const key of ['owner', 'prevents', 'source', 'sunset']) {
-      if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
-    }
-    const review = new Date(`${data.metadata.sunset}T00:00:00Z`);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.metadata.sunset) || Number.isNaN(review.valueOf()) || review.toISOString().slice(0, 10) !== data.metadata.sunset) {
-      throw new Error(`${doc.id}: metadata.sunset must be an ISO review date`);
+    const upstream = vendoredSkills.get(doc.id);
+    if (!upstream) {
+      for (const key of ['owner', 'prevents', 'source', 'sunset']) {
+        if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
+      }
+      const review = new Date(`${data.metadata.sunset}T00:00:00Z`);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(data.metadata.sunset) || Number.isNaN(review.valueOf()) || review.toISOString().slice(0, 10) !== data.metadata.sunset) {
+        throw new Error(`${doc.id}: metadata.sunset must be an ISO review date`);
+      }
     }
     if (data['disable-model-invocation'] !== undefined && typeof data['disable-model-invocation'] !== 'boolean') {
       throw new Error(`${doc.id}: disable-model-invocation must be a boolean`);
     }
-    doc.skill = { name: data.name, description: data.description, ...data.metadata, disableModelInvocation: data['disable-model-invocation'] === true };
+    doc.skill = {
+      name: data.name, description: data.description,
+      ...(upstream ? { vendored: true, source: upstream, provenanceUrl: blobUrl('vendor/pstack.lock.json') } : data.metadata),
+      disableModelInvocation: data['disable-model-invocation'] === true,
+    };
   }
   if (doc.kind === 'Evals') {
     for (const key of ['id', 'date', 'title', 'status', 'sourceRevision', 'harness', 'model', 'thinking', 'judge']) {

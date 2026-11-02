@@ -319,6 +319,16 @@ async function main() {
       } catch (error) { fail(`${label}: cannot read canonical source: ${error.message}`); }
     }
   }
+  const pstack = JSON.parse(await readFile(path.join(root, 'vendor/pstack.lock.json'), 'utf8'));
+  for (const entry of pstack.include.filter((entry) => entry.vendored && pstack.files[`${entry.destination}/SKILL.md`])) {
+    const id = `${entry.destination}/SKILL.md`;
+    const doc = byId.get(id);
+    expect(doc, `${id}: vendored skill is missing from the published library`);
+    const html = doc && files.get(`${doc.url.slice(1)}index.html`)?.toString('utf8');
+    expect(html?.includes('Vendored pstack.'), `${id}: upstream provenance must be disclosed`);
+    expect(html?.includes(`https://github.com/misty-step/mistystack/blob/${expectedCommit}/vendor/pstack.lock.json`), `${id}: provenance must link to the checked lock`);
+    expect(html && !/<dt[^>]*>(Owner|Prevents|Review date)<\/dt>/.test(html), `${id}: do not invent Misty metadata for upstream`);
+  }
   for (const doc of documents.filter((value) => value && typeof value === 'object')) {
     if (doc.parentId !== null) expect(byId.has(doc.parentId), `${doc.id}: unknown parentId ${doc.parentId}`);
     for (const id of Array.isArray(doc.outboundLinks) ? doc.outboundLinks : []) {

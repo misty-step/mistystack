@@ -244,6 +244,30 @@ test("reports every missing metadata field and a mismatched directory name", () 
 	]);
 });
 
+test("lock-listed vendored skills keep upstream metadata but still require names, descriptions and explicit-only principles", () => {
+	const { root, put, json } = fixture();
+	const file = "skills/principle-upstream/SKILL.md";
+	const source = "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n";
+	put(file, source);
+	json("vendor/pstack.lock.json", {
+		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true }],
+		files: { [file]: "a".repeat(64) },
+	});
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, source.replace("name: principle-upstream", "name: other").replace("description: Check the artifact.", "description: ''").replace("disable-model-invocation: true", "disable-model-invocation: false"));
+	expect(lintPlugin(root).errors).toEqual([
+		`${file}: name must equal directory principle-upstream`,
+		`${file}: description must be non-empty`,
+		`${file}: disable-model-invocation must be true`,
+	]);
+	put(file, source);
+	json("vendor/pstack.lock.json", {
+		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: false }],
+		files: {},
+	});
+	expect(lintPlugin(root).errors).toContain(`${file}: metadata.source must be non-empty`);
+});
+
 test.each(["2026-11-27", "2026-11-27 # YAML 1.1 timestamp", "2026-11-27T00:00:00Z", "!!timestamp 2026-11-27"])(
 	"rejects a plain YAML date that YAML 1.1 readers cannot serialize (%s)",
 	value => {

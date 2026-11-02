@@ -18,6 +18,8 @@ Criteria:
 3. A failed test, invalid plugin or failed available-harness proof exits nonzero.
    Missing CLIs and lint-only installation skips are named, never reported passed.
 4. Verification preserves the live profile, credentials and foreign state.
+5. The gate checks the pinned pstack inventory and vendored file hashes offline,
+   rejecting hand edits, missing files and unlisted files.
 
 Proof: `scripts/verify`, `scripts/verify-plugin.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -168,7 +170,8 @@ context serves the task rather than repeating facts.
 Criteria:
 1. The core routes nontrivial work to `misty`; principles and procedures have
    one home and load through its index or the relevant skill.
-2. Skills follow DOMAIN.md's frontmatter and directory-wide source convention.
+2. Skills follow DOMAIN.md's provenance contract: Misty frontmatter or the
+   vendored pstack lock, each covering its owned files.
 3. [Agent design](skills/agent-design/SKILL.md) owns skill-writing and instruction,
    tool and context changes, including comparison against both the prior
    instruction and no instructions through the eval playbook.
@@ -219,9 +222,9 @@ Criteria:
 1. `rules/core.md` stays at most 20 lines; native adapters load that same core.
 2. A fresh native session exposes the installed core in its loaded instructions;
    file presence and a model's self-report alone do not prove loading.
-3. The six principle leaves remain reachable from the mode rather than expanding
-   the always-on core into every procedure; core and task-skill rules have no
-   duplicate leaves.
+3. Vendored and extension principle leaves remain reachable from the mode
+   rather than expanding the always-on core into every procedure. The lock
+   owns upstream provenance; Misty-only deltas stay in extension leaves.
 
 Proof: `scripts/verify-plugin.ts`, `scripts/verify-plugin.test.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).

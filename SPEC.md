@@ -46,9 +46,11 @@ specified in [US-062](USER_STORIES.md#us-062-recompile-from-the-vision).
   changelog and source links remain reachable.
 - The library exposes every canonical core, mode, principle, playbook and task
   skill, including leaves hidden from automatic model discovery and supporting
-  Markdown documents. A skill shows its exact installed name, trigger,
-  prevented failure, owner, provenance and review/sunset date. Supporting
-  documents disclose inherited provenance rather than inventing their own.
+  Markdown documents. A skill shows its exact installed name and trigger.
+  Misty-authored skills also show prevented failure, owner, provenance and
+  review/sunset date; vendored skills show upstream provenance from the lock
+  without invented Misty metadata. Supporting documents disclose inherited
+  provenance rather than inventing their own.
 - Every page identifies its source path and revision. Headings and Foundation
   articles have shareable anchors, including the existing numeric Foundation
   aliases. Earlier decisions preserve their original bodies and disclose their

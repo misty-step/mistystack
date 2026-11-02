@@ -205,6 +205,20 @@ function inside(root: string, target: string) {
 export function lintPlugin(root: string, strict = false) {
 	const errors: string[] = [];
 	const warnings: string[] = [];
+	const vendored = new Set<string>();
+	const lockPath = join(root, "vendor/pstack.lock.json");
+	if (existsSync(lockPath)) {
+		try {
+			const lock = jsonObject(lockPath);
+			if (!Array.isArray(lock.include) || !isRecord(lock.files)) throw new Error("include and files are required");
+			for (const entry of lock.include) {
+				if (isRecord(entry) && entry.vendored === true && nonempty(entry.destination) && isRecord(lock.files)
+					&& nonempty(lock.files[`${entry.destination}/SKILL.md`])) vendored.add(`${entry.destination}/SKILL.md`);
+			}
+		} catch (error) {
+			errors.push(`vendor/pstack.lock.json: ${error instanceof Error ? error.message : String(error)}`);
+		}
+	}
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	if (skills.length === 0) errors.push("skills/: no SKILL.md files found");
 	for (const file of skills) {
@@ -216,11 +230,13 @@ export function lintPlugin(root: string, strict = false) {
 			if ((name.startsWith("principle-") || name === "recompile" || name === "setup-mistystack") && frontmatter["disable-model-invocation"] !== true) {
 				errors.push(`${file}: disable-model-invocation must be true`);
 			}
-			const metadata = isRecord(frontmatter.metadata) ? frontmatter.metadata : {};
-			for (const key of ["owner", "prevents", "source"]) {
-				if (!nonempty(metadata[key])) errors.push(`${file}: metadata.${key} must be non-empty`);
+			if (!vendored.has(file)) {
+				const metadata = isRecord(frontmatter.metadata) ? frontmatter.metadata : {};
+				for (const key of ["owner", "prevents", "source"]) {
+					if (!nonempty(metadata[key])) errors.push(`${file}: metadata.${key} must be non-empty`);
+				}
+				if (!nonempty(metadata.sunset)) errors.push(`${file}: metadata.sunset must be a non-empty string`);
 			}
-			if (!nonempty(metadata.sunset)) errors.push(`${file}: metadata.sunset must be a non-empty string`);
 		} catch (error) {
 			errors.push(`${file}: ${error instanceof Error ? error.message : String(error)}`);
 		}
