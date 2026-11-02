@@ -18,7 +18,7 @@ function fixture() {
 		mkdirSync(dirname(join(root, path)), { recursive: true });
 		writeFileSync(join(root, path), content);
 	};
-	const skill = (name: string, body = "Run the owned check.") => `---\nname: ${name}\ndescription: "When changing the consumer path."\n${name.startsWith("principle-") ? "disable-model-invocation: true\n" : ""}metadata:\n  owner: phaedrus\n  prevents: "A recorded consumer failure."\n  source: "owner/repo@0123456789abcdef/source"\n  sunset: "2026-11-27"\n---\n${body}\n`;
+	const skill = (name: string, body = "Run the owned check.") => `---\nname: ${name}\ndescription: "When changing the consumer path."\n${name.startsWith("principle-") || name === "recompile" || name === "setup-mistystack" ? "disable-model-invocation: true\n" : ""}metadata:\n  owner: phaedrus\n  prevents: "A recorded consumer failure."\n  source: "owner/repo@0123456789abcdef/source"\n  sunset: "2026-11-27"\n---\n${body}\n`;
 	put("skills/misty/SKILL.md", skill("misty"));
 	put("rules/core.md", "---\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
 	const json = (path: string, value: unknown) => put(path, `${JSON.stringify(value)}\n`);
