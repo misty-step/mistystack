@@ -2,9 +2,12 @@
 
 ## 1. Restore
 
-Warn the owning lane of user impact and the recovery path immediately. Check
-intervening releases, migrations and accepted data before changing live state.
-Use the compatible option through the repository's existing pipeline:
+Warn the owner first in the authorized channel: report the live user-facing
+impact, known scope and current recovery action immediately. Preserve the failing
+observation and affected release. Follow the core's ask-first boundary for
+third-party messages or production-data writes. Check intervening releases,
+migrations and accepted data before changing live state. Use the compatible
+option through the repository's existing pipeline:
 
 - **Platform rollback/flag:** identify later merges it removes and why dropping
   them is safe. Also land a source revert/fix so the next deploy stays healthy.
@@ -37,6 +40,9 @@ impact, onset, evidence, suspect revision/range, recovery links, owner and live
 state. The source fix returns as a scoped ticket. A harmless failed deploy or
 precautionary restore records its result/lesson on the PR, without an incident
 or postmortem.
+
+A secret printed only in a local agent session is not an incident and does not
+authorize rotation or revocation.
 
 After a material incident, use [postmortem-template.md](postmortem-template.md) in
 the product's `docs/postmortems/` and link it from the incident. Name one change

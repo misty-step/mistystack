@@ -106,7 +106,7 @@ function build(graph) {
   });
   const skills = graph.documents.filter((doc) => doc.kind === 'Skills');
   const principles = graph.documents.filter((doc) => doc.kind === 'Principles');
-  for (const id of ['skills/research/SKILL.md', 'skills/security-audit/SKILL.md', 'skills/principle-one-home-per-fact/SKILL.md']) need(graph, id);
+  for (const id of ['skills/research/SKILL.md', 'skills/security-audit/SKILL.md', 'skills/principle-deep-modules/SKILL.md']) need(graph, id);
 
   const methodCopy = home.method({ Parts: Cardinal(PARTS.length, 'parts'), playbooks: cardinal(playbooks.length, 'playbooks') });
   const contract = misty.headings.find((heading) => heading.label === 'Briefing contract') ?? fail(`${MISTY} has no Briefing contract heading`);

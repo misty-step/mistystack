@@ -34,7 +34,7 @@ export const home = {
       misty: 'Reads the task and chooses the playbook and skills.',
       playbooks: (list) => `${list}.`,
       skills: 'Specialists such as research and focused security review, loaded when a task needs one.',
-      principles: 'Rules of judgment such as one home per fact, read only when they apply.',
+      principles: 'Rules of judgment such as deep modules, read only when they apply.',
       oracle: 'A check outside the agent that can disprove completion, named before work starts.',
     },
   }),

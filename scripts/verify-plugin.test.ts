@@ -472,6 +472,43 @@ esac
 	}
 });
 
+test.each(["readable", "unreadable", "listed"])("checks every principle's hidden discovery and explicit read (%s)", state => {
+	const { root, put, skill } = fixture();
+	put("skills/principle-alpha/SKILL.md", skill("principle-alpha", "Alpha's independent procedure."));
+	put("skills/principle-omega/SKILL.md", skill("principle-omega", "Omega's independent procedure."));
+	const foundationDescription = "For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.";
+	put("skills/foundation/SKILL.md", skill("foundation").replace("When changing the consumer path.", foundationDescription));
+	const trace = join(root, "omp-commands");
+	const omp = join(root, "omp");
+	const prompt = `# Core\n\n- Load misty.\n<skills>\n- misty: Fixture router.\n- foundation: ${foundationDescription}\n${state === "listed" ? "- principle-omega: Leaked leaf.\n" : ""}</skills>`;
+	const response = JSON.stringify({
+		type: "response", id: "plugin-proof", success: true,
+		data: { systemPrompt: [prompt], dumpTools: [{ name: "task", description: "fixture" }] },
+	});
+	const omega = state === "unreadable" ? "printf '%s\\n' 'Unavailable procedure'" : `cat ${JSON.stringify(join(root, "skills/principle-omega/SKILL.md"))}`;
+	put("omp", `#!/bin/sh
+printf '%s\\n' "$*" >> ${JSON.stringify(trace)}
+case "$1 $2" in
+  "config path") printf '%s\\n' "$PI_CODING_AGENT_DIR" ;;
+  "plugin marketplace"|"plugin install") ;;
+  "launch --mode") printf '%s\\n' ${JSON.stringify(response)} ;;
+  "read skill://misty") cat ${JSON.stringify(join(root, "skills/misty/SKILL.md"))} ;;
+  "read skill://principle-alpha") cat ${JSON.stringify(join(root, "skills/principle-alpha/SKILL.md"))} ;;
+  "read skill://principle-omega") ${omega} ;;
+  *) exit 1 ;;
+esac
+`);
+	chmodSync(omp, 0o700);
+	const verify = () => verifyInstall(root, omp, "fixture/model");
+	if (state === "listed") expect(verify).toThrow("explicit-only skill leaked into the model's skill list");
+	else if (state === "unreadable") expect(verify).toThrow("skill://principle-omega is not readable");
+	else {
+		expect(verify).not.toThrow();
+		const commands = readFileSync(trace, "utf8");
+		for (const name of ["principle-alpha", "principle-omega"]) expect(commands).toContain(`read skill://${name}\n`);
+	}
+});
+
 test.each(["claude", "codex", "pi"] as const)("refuses leaked %s state before installing and removes its scratch home", async harness => {
 	const { root, put } = fixture();
 	const trace = join(root, "native-commands");

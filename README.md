@@ -8,6 +8,12 @@ installer. A small always-on core routes nontrivial work through
 needs them. An Oracle names the outside check that makes completion observable
 before work starts.
 
+[Agent design](skills/agent-design/SKILL.md) owns skill-writing,
+[verification](skills/verification/SKILL.md) owns real-path proof and
+[release-watch](skills/release-watch/SKILL.md) owns live-break recovery. The
+[principle index](skills/misty/SKILL.md#principles) routes to six on-demand leaves;
+core rules and task procedures have no duplicate leaves.
+
 Fleet machinery lives in the private `misty-step/workstation` repository.
 
 ## Harness support
@@ -52,7 +58,7 @@ package.json       pi package resource declarations
 rules/core.md      always-on routing and guardrails
 skills/misty/      mode, principle index and task playbooks
 skills/misty/harnesses/ disclosed native integration references
-skills/principle-* on-demand principle leaves
+skills/principle-* six on-demand principle leaves
 skills/            one Agent Skills content tree
 adapters/          harness-specific agents, hooks and extensions
 agents/            OMP agents at its fixed native discovery path

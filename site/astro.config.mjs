@@ -32,5 +32,13 @@ export default defineConfig({
     '/library/skills/security-audit/references/workflow/': '/library/skills/security-audit/',
     '/install/grok-bot/': '/install/',
     '/library/skills/verification/accounts/': '/library/skills/verification/#qa-sign-in-contract',
+    '/library/principles/one-home-per-fact/': '/library/core/',
+    '/library/principles/finish-the-work/': '/library/core/',
+    '/library/principles/make-operations-idempotent/': '/library/misty/#principles',
+    '/library/principles/prove-it-on-the-real-path/': '/library/skills/verification/',
+    '/library/principles/nothing-fails-silently/': '/library/principles/fix-root-causes/',
+    '/library/principles/skill-diet/': '/library/skills/agent-design/',
+    '/library/playbooks/authoring-a-skill/': '/library/skills/agent-design/',
+    '/library/playbooks/incident/': '/library/skills/release-watch/recovery/',
   },
 });
