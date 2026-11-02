@@ -33,6 +33,12 @@ local Tern+OMP setup and the [Grok Bot note](skills/misty/harnesses/grok-bot.md)
 covers Bots' shared computer and orchestration across Boat workers, Cursor cloud
 agents and native routines ([ADR 0017](docs/decisions/0017-tern-omp-and-boat-workers.md)).
 
+Security questions use the [focused security review](skills/security-audit/SKILL.md)
+and its execution-safety contract. Only an explicitly commissioned full audit
+follows that skill's pinned Cloudflare upstream route, read in place from GitHub;
+the full workflow, companion references, report schema and validators are not bundled.
+Retired reference-page URLs redirect to the focused security review.
+
 ## Layout
 
 ```text
