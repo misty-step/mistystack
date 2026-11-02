@@ -33,14 +33,12 @@ integrity is the feature; neither substitutes for a behavior observation.
 
 ## Retain and deliver
 
-Keep generated output outside the checkout and evidence outside Git. For
-GitHub-backed media, use backing PR attachments under the
-[forge exception](../misty/entire.md#merge-and-forge-exceptions), with a concise
-revision, command, scenario and result summary. Link the uploaded media from the
-trail. Use an appropriate release's assets for retained non-media bundles.
-Proof that must stay private after a repo becomes public uses an existing
-independently Access-protected object store. Use stable canonical links, not
-expiring signed bearer URLs.
+Keep generated output outside the checkout and evidence outside Git. Prefer
+native GitHub PR/issue media attachments with a concise revision, command,
+scenario and result summary. Use an appropriate release's assets for retained
+non-media bundles. Proof that must stay private after a repo becomes public uses
+an existing independently Access-protected object store. Use stable canonical
+links, not expiring signed bearer URLs.
 
 Actions artifacts are temporary diagnostics. Tailnet serving supports active
 review only with an owner retaining proof through review and the relevant
@@ -49,10 +47,8 @@ not ingested again. Gists and committed evidence branches/repos are not archives
 Foundation audits move old bulky proof through focused cleanup, preserving useful
 artifacts and updating links before removal; this run does not widen into cleanup.
 
-Update one Evidence section through the trail's
-[body-update procedure](../misty/entire.md#open-and-describe-a-change):
-claim/scenario, before/after links, revision/runtime identity, commands/results
-and exact gaps. Retain the ticket's intent and acceptance. Open delivered links
+Update one Evidence section on the PR: claim/scenario, before/after links,
+revision/runtime identity, commands/results and exact gaps. Open delivered links
 as a reviewer with repository access. Local paths and hashes alone do not deliver
-review proof; a failed upload leaves readiness blocked, with local proof preserved.
-Without a requested trail/public write, return inspected local paths as unpublished.
+PR proof; a failed upload leaves readiness blocked, with local proof preserved.
+Without a requested PR/public write, return inspected local paths as unpublished.

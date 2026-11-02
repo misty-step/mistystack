@@ -1,8 +1,13 @@
 // Historical ADRs retain their original prose and links. These exact files were
 // removed, not moved to a current procedure. Link their last retained revisions,
 // visibly labelled as archives; never apply this mapping to current guidance.
-// Revisions are the verified parents of removals 26f4a5c and b4833325.
+// Revisions are the verified parents of removals 26f4a5c and b4833325, and
+// aed5ec9, the last master revision holding the Entire forge procedure (ADR 0020).
 export const historicalSources = new Map([
+  ['skills/misty/entire.md', {
+    commit: 'aed5ec9bc7b8ae9b15d7ae373a7890412f9c2509',
+    fragments: ['merge-and-forge-exceptions'],
+  }],
   ['docs/principles/007-braver-engineers-continuous-deployment.md', {
     commit: 'd61f40c849a4fed66347bf060c8e4333ce1bcc91',
     fragments: ['lean-ci-amendment-2026-10-02'],
