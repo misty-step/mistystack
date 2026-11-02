@@ -5,7 +5,7 @@ disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "Retries and crashes that need manual cleanup; Scholar pstack adoption."
-  source: "cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-make-operations-idempotent; Daybook artifacts/2026-10/pstack-vs-mistystack.md (Scholar); Phaedrus t2228u via Maren"
+  source: "cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-make-operations-idempotent; Daybook artifacts/2026-10/pstack-vs-mistystack.md (Scholar); Phaedrus t2228u"
   sunset: "2026-11-27"
 ---
 

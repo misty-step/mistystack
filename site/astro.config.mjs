@@ -30,5 +30,7 @@ export default defineConfig({
     '/library/skills/security-audit/references/VALIDATION-AND-REPORTING/': '/library/skills/security-audit/',
     '/library/skills/security-audit/references/WEB-PROTOCOL-AND-AUTH/': '/library/skills/security-audit/',
     '/library/skills/security-audit/references/workflow/': '/library/skills/security-audit/',
+    '/install/grok-bot/': '/install/',
+    '/library/skills/verification/accounts/': '/library/skills/verification/#qa-sign-in-contract',
   },
 });

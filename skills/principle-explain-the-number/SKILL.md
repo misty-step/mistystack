@@ -5,7 +5,7 @@ disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "False measured claims; Scholar pstack adoption (explain-the-number plus benchmark-checklist)."
-  source: "cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-explain-the-number; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/benchmark-checklist; Daybook artifacts/2026-10/pstack-vs-mistystack.md (Scholar); Phaedrus t2228u via Maren"
+  source: "cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-explain-the-number; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/benchmark-checklist; Daybook artifacts/2026-10/pstack-vs-mistystack.md (Scholar); Phaedrus t2228u"
   sunset: "2026-11-27"
 ---
 

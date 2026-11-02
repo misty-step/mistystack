@@ -71,7 +71,7 @@ Criteria:
 4. A fresh session proves core loading and role discovery, omits setup from the
    automatic model skill list and can read it explicitly. Successful authorized
    dispatch and its actual model identity prove a chosen subagent route; config
-   readback alone proves persistence. Grok Bots establish their runtime contract.
+   readback alone proves persistence. Private runtime setup is fleet machinery.
 
 Proof: `skills/setup-mistystack/`, `agents/`, `adapters/`, [rigor roles](skills/ship-loop/roles.md).
 
@@ -267,9 +267,8 @@ Criteria:
    [boat-workers](skills/boat-workers/SKILL.md) skill for every harness without
    naming one; that skill owns the list of worker cases. Other work stays where
    the agent runs unless its harness note says otherwise: the
-   [OMP note](skills/misty/harnesses/omp.md) names Tern+OMP, and the
-   [Grok Bot note](skills/misty/harnesses/grok-bot.md) keeps Bots on their own
-   computer without adopting Tern+OMP.
+   [OMP note](skills/misty/harnesses/omp.md) names Tern+OMP. Private runtime
+   environments belong to the workstation plugin.
 2. Platform, device, signed-in-session, private-network and
    non-transferable-data checks stay where the agent runs, within any limits its
    harness note states. An agent inside a worker runs its checks there without

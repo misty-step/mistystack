@@ -34,8 +34,7 @@ is not execution. Required skipped or unavailable checks leave proof incomplete.
 
 Use `.agents/skills/verify-<app>/`. If needed proof has no skill, [generate it](generate.md)
 in this change or stack on the PR adding it. A documents-only change does not
-inherit missing product infrastructure. Production sign-in uses the [QA account
-contract](accounts.md), including proof of the required role.
+inherit missing product infrastructure.
 
 Apply misty's delegation boundary. Use authorized disposable data and clean only
 what the run created. Capture action and result, inspect each artifact, and publish proof
@@ -45,6 +44,14 @@ and fix-introduced regressions; link unchanged proof rather than rerun it.
 Done when each criterion has an observed result at the named revision, linked
 proof and owned cleanup, or an exact unproved claim and missing prerequisite.
 Follow the core's claim rule.
+
+### QA sign-in contract
+
+For a journey with sign-in, use a dedicated QA identity. Prove production sign-in
+and the required owner/admin role through the real app. A sent email, HTTP 200
+or login without the required role is not that proof. Missing access is
+`owner sign-in UNPROVEN: needs <access/role>`; continue reachable proof and name
+the blocked criterion.
 
 ## Commissioned upkeep
 

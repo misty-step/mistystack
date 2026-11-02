@@ -14,8 +14,7 @@ Choose the method for the user's outcome, then finish against its outside check.
 
 For harness mechanics and any limits on where you run, read the matching note:
 [OMP](harnesses/omp.md), [Claude Code](harnesses/claude.md),
-[Codex](harnesses/codex.md), [pi](harnesses/pi.md) or
-[Grok Bot](harnesses/grok-bot.md).
+[Codex](harnesses/codex.md) or [pi](harnesses/pi.md).
 
 ## Routing
 

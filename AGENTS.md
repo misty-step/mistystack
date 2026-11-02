@@ -4,7 +4,7 @@ Maintain one harness-neutral method tree in Agent Skills format
 (`skills/<name>/SKILL.md`) and thin native adapters from this repository.
 Read [DOMAIN.md](DOMAIN.md) for terms and [USER_STORIES.md](USER_STORIES.md)
 for the affected consumer contract. Native adapters serve OMP, Claude Code, Codex
-and pi; Grok Bots install the shared tree through their runtime brief.
+and pi; private runtime setup belongs to the workstation plugin.
 
 ## Route the change
 

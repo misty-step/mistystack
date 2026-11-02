@@ -178,7 +178,7 @@ function resolveTarget(doc, href, node, graph, image = false) {
   if (!targetDoc) {
     if (target === '..' || target.startsWith('../') || path.isAbsolute(target)) sourceFailure(doc, node, `link escapes repository: ${href}`);
     let absolute = path.join(repoRoot, target);
-    const historical = ['Historical', 'Workstation'].includes(doc.decision?.group) || doc.id.startsWith('docs/postmortems/');
+    const historical = Boolean(doc.decision) || doc.id.startsWith('docs/postmortems/');
     const archive = historical && (historicalSources.get(`${target}#${decodeURIComponent(fragment)}`) || (!existsSync(absolute) && historicalSources.get(target)));
     if (archive) {
       if (fragment && !archive.fragments.includes(decodeURIComponent(fragment))) sourceFailure(doc, node, `unknown archived fragment: ${href}`);

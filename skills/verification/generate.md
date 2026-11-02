@@ -28,7 +28,7 @@
 | Launch | Exact command; empty-state migrations/seed; usable readiness; owned teardown. Short-lived CLIs build once and use isolated sessions per drive. |
 | Doctor | One read-only check for correct build, owned process/port and usable auth. |
 | Drive | Real entry points and stable selectors/commands, including the actual user prerequisite. |
-| Accounts | Project's exact authorized QA identity references, setup, production login, required role, allowlist/Access and shared-membership ownership from [accounts.md](accounts.md). Mark unauthenticated surfaces n/a. |
+| Accounts | Dedicated QA identity, real production sign-in and required-role proof under the [QA sign-in contract](SKILL.md#qa-sign-in-contract). Mark unauthenticated surfaces n/a. |
 | Evidence | Actions and resulting state, side-effect readback, output outside checkout and reviewer-accessible delivery from [evidence.md](evidence.md). |
 | Cleanup | Only owned processes/data; proof survives. Stop identified children, not every process with the same name. |
 | Helpers | Executable owned scripts with their exact invocation in the skill. |
