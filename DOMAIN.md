@@ -50,17 +50,6 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 - **Workstation plugin:** the separate private `misty-step/workstation` plugin
   for fleet machinery, host configuration, credentials, audio and backup.
   It consumes the method without owning a copy of it.
-- **Entire:** the forge interface for Misty Step work. Agents open, review,
-  merge and track work with the `entire` CLI. The
-  [forge procedure](skills/misty/entire.md) owns command exceptions and scope.
-- **Trail:** Entire's unit of intent, with zero or more delivery changes. An
-  intent-only trail is a ticket; delivery changes stay on that same trail.
-- **Change:** one repository branch on a trail, addressed as `<repo>/<number>`;
-  the counterpart of a pull request. A GitHub-backed change has a backing pull
-  request that Entire manages.
-- **Finding:** a review result an agent records on a change with
-  `entire trail finding`. Unresolved findings at or above the repository's
-  severity threshold block `entire trail merge`.
 
 ## Invariants
 

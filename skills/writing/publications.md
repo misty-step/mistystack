@@ -1,17 +1,12 @@
-# Commits, trails and reports
+# Commits, PRs and reports
 
 ## Titles
 
 Use Conventional Commits: `<type>(<optional scope>): <change>`. Name the changed behavior with a specific verb. Use `feat` for a new capability, `fix` for a defect, and the repository's existing types for other changes. Mark an actual breaking change with `!` or a `BREAKING CHANGE:` footer. A title is not a verification claim.
 
-The [Entire forge procedure](../misty/entire.md#merge-and-forge-exceptions) owns
-the backing PR title rule for GitHub-backed repositories.
+## PR body
 
-## Trail body
-
-Use the repository's required headings in the trail body. For an existing ticket,
-follow the [body-update procedure](../misty/entire.md#open-and-describe-a-change)
-before applying this template. Include these fields even when its template differs:
+Use the repository's required headings. Include these fields even when its template differs:
 
 ```markdown
 ## Why

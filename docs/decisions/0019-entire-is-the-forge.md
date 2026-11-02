@@ -1,6 +1,6 @@
 # 0019: Entire is the forge interface
 
-Status: accepted, 2026-10-30.
+Status: superseded by [0020](0020-github-and-linear-replace-entire.md), 2026-11-02; accepted 2026-10-30.
 
 ## Context
 
