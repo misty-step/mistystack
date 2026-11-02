@@ -1,3 +1,11 @@
+# [0.3.18](https://github.com/misty-step/mistystack/compare/v0.3.17...v0.3.18) (2026-11-02)
+<!-- landmark:protected-release previous=v0.3.17 source=38c12779a0440f86d3f090714a743b42cd64111b5c2393983df0d0e27d082cce -->
+
+### Bug Fixes
+
+* **site:** render decision status badges as plain text (#649) ([cdcd40b](https://github.com/misty-step/mistystack/commit/cdcd40b327401ae8c9b0831c7a6e5a7f7980157c))
+* **skills:** narrow audit triggers and clarify tracker ownership (#652) ([e0277e6](https://github.com/misty-step/mistystack/commit/e0277e6449e261c56dbea014e0e1f47430ba998f))
+* **method:** close step-one audit followups (#655) ([99d5379](https://github.com/misty-step/mistystack/commit/99d5379ccf1b6d63f85e8030df697ecd50424794))
 # [0.3.17](https://github.com/misty-step/mistystack/compare/v0.3.16...v0.3.17) (2026-11-02)
 <!-- landmark:protected-release previous=v0.3.16 source=3426766bb758389c40f7f9d7f06be9635a4b938cf1fc24e0a29cb3e286dfcd1d -->
 
