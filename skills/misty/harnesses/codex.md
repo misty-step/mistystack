@@ -46,10 +46,11 @@ check `hooks/list` trust status again after a refresh.
 Use Codex's native skill mechanism with `mistystack:misty` or
 `mistystack:<skill-name>`. Follow Misty's [bug-fix link](../playbooks/bug-fix.md)
 relative to its installed file, not the working directory or a checkout copy.
-Codex does not enforce `disable-model-invocation`; principle leaves also carry
-`agents/openai.yaml` with `policy.allow_implicit_invocation: false`. Check that
-leaves are excluded from implicit invocation while explicit invocation and reads
-through the router's relative links still reach them.
+Codex does not enforce `disable-model-invocation`; principle leaves, recompile
+and setup-mistystack also carry `agents/openai.yaml` with
+`policy.allow_implicit_invocation: false`. Check that they are excluded from
+implicit invocation while explicit invocation and reads through the router's
+relative links still reach them.
 
 ## Dispatch and rigor
 
@@ -70,7 +71,7 @@ choices in those native fields, not OMP `modelRoles` or skill prose. Shipped
 templates are starting choices, not proof of provider entitlement: review and
 replace their model/reasoning fields as needed for the destination account before
 installing. Preserve the agent instructions while selecting an accessible model
-and supported reasoning level through
+and supported reasoning level by explicitly invoking
 [setup-mistystack](../../setup-mistystack/SKILL.md).
 
 Use Codex's native subagent mechanism to select `rigor-<tier>` according to the

@@ -27,7 +27,7 @@ diff touching no deployed artifact ends here without queries or waiting.
   or update against the authorized destination, recording command, source head,
   destination and exit status. Stop and report a failed step.
 - **Missing mechanism/signal:** report `unwatched`. Reuse one open
-  `release-mechanism` issue, or create it and its label; no implied live claim.
+  `release-mechanism` ticket, or create one in the project's tracker; no implied live claim.
 
 ## 2. Observe
 

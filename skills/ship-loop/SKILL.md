@@ -10,7 +10,8 @@ metadata:
 
 # Ship loop
 
-The tracker owns tickets, PRs and reports. The PR's comments own its review round.
+Use the work-item tracker defined by [Foundation article 2](../foundation/checklist.md#article-2).
+GitHub hosts PRs and their reports; the PR's comments own its review ledger.
 An independent judge's SHIP and passing affected checks are the merge gate;
 generator-only machine release PRs use passing checks alone. Authored changes,
 including documents and measurements, take the ordinary round.

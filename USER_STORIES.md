@@ -61,14 +61,15 @@ rigor roles, so task briefs select risk and responsibility without a second
 model roster in skill prose.
 
 Criteria:
-1. [Setup](skills/setup-mistystack/SKILL.md) assigns `rigor-light`,
+1. The user explicitly invokes [setup](skills/setup-mistystack/SKILL.md), which assigns `rigor-light`,
    `rigor-standard` and `rigor-critical` through the active harness's authority:
    OMP model roles, Claude agent model fields or Codex user-agent TOML.
 2. Native role agents select the tier where subagents exist; the brief supplies
    responsibility. pi runs rigor inline without inventing subagents or model roles.
 3. Setup preserves unrelated config, credentials and runtime state, resolves
    native shadowing and reads assignments back.
-4. A fresh session proves discovery and core loading. Successful authorized
+4. A fresh session proves core loading and role discovery, omits setup from the
+   automatic model skill list and can read it explicitly. Successful authorized
    dispatch and its actual model identity prove a chosen subagent route; config
    readback alone proves persistence. Grok Bots establish their runtime contract.
 
@@ -198,7 +199,7 @@ When I adopt or update mistystack, I want the harness's native lifecycle, so one
 content tree serves my runtime without a host installer or method fork.
 
 Criteria:
-1. Setup detects the harness and follows its native
+1. The user explicitly invokes setup, which detects the harness and follows its native
    [reference](skills/misty/SKILL.md) to install the shared tree.
 2. Refresh follows that harness's rule and verifies installed content; a catalog
    update or success message alone is not an installed-content upgrade.
@@ -292,7 +293,8 @@ system from the vision and durable record, so obsolete implementation can go
 without sacrificing accepted meaning, history or consumer continuity.
 
 Criteria:
-1. Misty routes the review to [recompile](skills/recompile/SKILL.md).
+1. The user explicitly invokes [recompile](skills/recompile/SKILL.md); it stays
+   outside the automatic model skill list and readable through Misty's routing link.
 2. The review reads intent, artifacts, user evidence, decisions and obligations,
    then describes the simplest system achievable with today's capabilities
    before comparing the current implementation.

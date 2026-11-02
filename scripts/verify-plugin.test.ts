@@ -18,7 +18,7 @@ function fixture() {
 		mkdirSync(dirname(join(root, path)), { recursive: true });
 		writeFileSync(join(root, path), content);
 	};
-	const skill = (name: string, body = "Run the owned check.") => `---\nname: ${name}\ndescription: "When changing the consumer path."\n${name.startsWith("principle-") ? "disable-model-invocation: true\n" : ""}metadata:\n  owner: phaedrus\n  prevents: "A recorded consumer failure."\n  source: "owner/repo@0123456789abcdef/source"\n  sunset: "2026-11-27"\n---\n${body}\n`;
+	const skill = (name: string, body = "Run the owned check.") => `---\nname: ${name}\ndescription: "When changing the consumer path."\n${name.startsWith("principle-") || name === "recompile" || name === "setup-mistystack" ? "disable-model-invocation: true\n" : ""}metadata:\n  owner: phaedrus\n  prevents: "A recorded consumer failure."\n  source: "owner/repo@0123456789abcdef/source"\n  sunset: "2026-11-27"\n---\n${body}\n`;
 	put("skills/misty/SKILL.md", skill("misty"));
 	put("rules/core.md", "---\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
 	const json = (path: string, value: unknown) => put(path, `${JSON.stringify(value)}\n`);
@@ -357,14 +357,18 @@ test("a missing router is an error even when another valid skill exists", () => 
 	expect(lintPlugin(root).errors).toEqual(["skills/misty/SKILL.md: missing router"]);
 });
 
-test.each(["", "disable-model-invocation: false\n", "disable-model-invocation: 'true'\n"])(
-	"requires boolean true to hide a principle leaf (%j)",
-	invocation => {
+test.each(["principle-proof", "recompile", "setup-mistystack"])(
+	"requires boolean true to keep %s explicit-only",
+	name => {
 		const { root, put, skill } = fixture();
-		put("skills/principle-proof/SKILL.md", skill("principle-proof").replace("disable-model-invocation: true\n", invocation));
-		expect(lintPlugin(root).errors).toEqual([
-			"skills/principle-proof/SKILL.md: disable-model-invocation must be true",
-		]);
+		const file = `skills/${name}/SKILL.md`;
+		const source = skill(name).replace("disable-model-invocation: true\n", "");
+		for (const invocation of ["", "disable-model-invocation: false\n", "disable-model-invocation: 'true'\n"]) {
+			put(file, source.replace("metadata:\n", `${invocation}metadata:\n`));
+			expect(lintPlugin(root).errors).toEqual([`${file}: disable-model-invocation must be true`]);
+		}
+		put(file, source.replace("metadata:\n", "disable-model-invocation: true\nmetadata:\n"));
+		expect(lintPlugin(root).errors).toEqual([]);
 	},
 );
 
@@ -426,6 +430,46 @@ test("an escaping config path is refused before any install command", () => {
 	chmodSync(omp, 0o700);
 	expect(() => verifyInstall(root, omp, "fixture/model")).toThrow("isolation refused");
 	expect(readFileSync(trace, "utf8")).toBe("config path\n");
+});
+
+test.each([
+	["For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.", true],
+	["For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles…", true],
+	["When working on any project, run every Foundation checklist item.", false],
+	[undefined, false],
+] as const)("checks the named Foundation trigger in the native description (%j)", (description, accepted) => {
+	const { root, put, skill } = fixture();
+	const sourceDescription = "For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.";
+	put("skills/foundation/SKILL.md", skill("foundation").replace("When changing the consumer path.", sourceDescription));
+	for (const name of ["recompile", "setup-mistystack"]) put(`skills/${name}/SKILL.md`, skill(name));
+	const skills = [
+		`- misty: ${sourceDescription}`,
+		...(description === undefined ? [] : [`- foundation: ${description}`]),
+	];
+	const frame = JSON.stringify({
+		type: "response", id: "plugin-proof", success: true,
+		data: {
+			systemPrompt: [`# Core\n\n- Load misty.\n<skills>\n${skills.join("\n")}\n</skills>`],
+			dumpTools: [{ name: "task", description: "fixture" }],
+		},
+	});
+	const trace = join(root, "omp-reads");
+	put("omp", `#!/bin/sh
+case "$1" in
+  config) printf '%s\\n' "$PI_CODING_AGENT_DIR" ;;
+  launch) printf '%s\\n' '${frame}' ;;
+  read) printf '%s\\n' "$2" >> ${JSON.stringify(trace)}; printf 'Run the owned check.\\n' ;;
+  *) printf 'Installed fixture\\n' ;;
+esac
+`);
+	chmodSync(join(root, "omp"), 0o700);
+	if (accepted) {
+		expect(() => verifyInstall(root, join(root, "omp"), "fixture/model")).not.toThrow();
+		expect(readFileSync(trace, "utf8")).toContain("skill://recompile\n");
+		expect(readFileSync(trace, "utf8")).toContain("skill://setup-mistystack\n");
+	} else {
+		expect(() => verifyInstall(root, join(root, "omp"), "fixture/model")).toThrow("foundation's installed trigger is missing");
+	}
 });
 
 test.each(["claude", "codex", "pi"] as const)("refuses leaked %s state before installing and removes its scratch home", async harness => {

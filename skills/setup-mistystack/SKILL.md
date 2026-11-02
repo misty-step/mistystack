@@ -1,6 +1,7 @@
 ---
 name: setup-mistystack
 description: "When installing or refreshing mistystack, or assigning native model, reasoning or rigor settings for the active harness."
+disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "Model choices duplicated in method prose, setup written to the wrong harness, and install readback mistaken for live proof; #533 Q2/Q14 and #591."

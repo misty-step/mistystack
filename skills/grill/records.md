@@ -42,7 +42,7 @@ Use EARS conditions that match the behavior: WHEN for events, WHILE for states, 
 
 ## Tickets and reconciliation
 
-Use the project's native tracker and existing vocabulary. Read the source issue, comments and linked decisions before changing it. For each slice, record the delivered behavior, stable story IDs, acceptance criteria, direct blockers and the full briefing contract from the `misty` skill. Link raw material at its source. Prefer the highest existing consumer boundary for its Oracle.
+Use the project's [owned tracker](../foundation/checklist.md#article-2) and existing vocabulary. Read the source ticket, comments and linked decisions before changing it. For each slice, record the delivered behavior, stable story IDs, acceptance criteria, direct blockers and the full briefing contract from the `misty` skill. Link raw material at its source. Prefer the highest existing consumer boundary for its Oracle.
 
 An infrastructure-only step earns a separate ticket only when it is independently useful and verifiable. A mechanical wide refactor that cannot land in useful vertical slices stays one atomic migration when feasible. If compatibility requires stages, make the stages explicit and end with every caller migrated and the old form deleted; temporary coexistence is a migration constraint, not a permanent second API.
 

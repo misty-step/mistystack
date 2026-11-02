@@ -23,6 +23,11 @@ Install and refresh through the matching native reference:
 Grok Build CLI is not a target; there is no `.grok-plugin` adapter. Runtime and
 credential setup remain in the private workstation repository.
 
+Explicitly invoke [setup-mistystack](skills/setup-mistystack/SKILL.md) to install,
+refresh or assign native rigor roles. Setup and [recompile](skills/recompile/SKILL.md)
+are user-invoked, not automatically discovered by the model; Misty's links keep
+their procedures readable on demand.
+
 ## Operating default
 
 Every harness places builds, test suites, browser QA, untrusted code and long
