@@ -52,7 +52,8 @@ specified in [US-062](USER_STORIES.md#us-062-recompile-from-the-vision).
 - Every page identifies its source path and revision. Headings and Foundation
   articles have shareable anchors, including the existing numeric Foundation
   aliases. Earlier decisions preserve their original bodies and disclose their
-  scope and explicit supersession relationships.
+  scope and explicit supersession relationships. Decision status badges show
+  plain text, with Markdown links reduced to their labels.
 - Search finds canonical documents and headings by name, phrase and prevented
   failure, supports content-type filtering and shareable queries, and provides
   useful empty/error states and browse recovery. If search needs JavaScript,

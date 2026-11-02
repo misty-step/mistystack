@@ -294,7 +294,7 @@ export async function createGraph(entries) {
     };
     if (doc.kind === 'Decisions' && id !== 'docs/decisions/index.md') doc.decision = {
       group: id.includes('/historical/') ? 'Historical' : 'Current',
-      status: /^Status:\s*(.+)$/im.exec(parsed.body)?.[1] ?? 'See original record',
+      status: text(markdown.parse(/^Status:\s*(.+)$/im.exec(parsed.body)?.[1] ?? 'See original record')),
       date: /\b\d{4}-\d{2}-\d{2}\b/.exec(parsed.body)?.[0] ?? null,
       number: /(?:ADR-)?(\d{3,4})/.exec(doc.title)?.[1] ?? null,
     };
