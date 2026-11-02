@@ -432,6 +432,46 @@ test("an escaping config path is refused before any install command", () => {
 	expect(readFileSync(trace, "utf8")).toBe("config path\n");
 });
 
+test.each([
+	["For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.", true],
+	["For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles…", true],
+	["When working on any project, run every Foundation checklist item.", false],
+	[undefined, false],
+] as const)("checks the named Foundation trigger in the native description (%j)", (description, accepted) => {
+	const { root, put, skill } = fixture();
+	const sourceDescription = "For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.";
+	put("skills/foundation/SKILL.md", skill("foundation").replace("When changing the consumer path.", sourceDescription));
+	for (const name of ["recompile", "setup-mistystack"]) put(`skills/${name}/SKILL.md`, skill(name));
+	const skills = [
+		`- misty: ${sourceDescription}`,
+		...(description === undefined ? [] : [`- foundation: ${description}`]),
+	];
+	const frame = JSON.stringify({
+		type: "response", id: "plugin-proof", success: true,
+		data: {
+			systemPrompt: [`# Core\n\n- Load misty.\n<skills>\n${skills.join("\n")}\n</skills>`],
+			dumpTools: [{ name: "task", description: "fixture" }],
+		},
+	});
+	const trace = join(root, "omp-reads");
+	put("omp", `#!/bin/sh
+case "$1" in
+  config) printf '%s\\n' "$PI_CODING_AGENT_DIR" ;;
+  launch) printf '%s\\n' '${frame}' ;;
+  read) printf '%s\\n' "$2" >> ${JSON.stringify(trace)}; printf 'Run the owned check.\\n' ;;
+  *) printf 'Installed fixture\\n' ;;
+esac
+`);
+	chmodSync(join(root, "omp"), 0o700);
+	if (accepted) {
+		expect(() => verifyInstall(root, join(root, "omp"), "fixture/model")).not.toThrow();
+		expect(readFileSync(trace, "utf8")).toContain("skill://recompile\n");
+		expect(readFileSync(trace, "utf8")).toContain("skill://setup-mistystack\n");
+	} else {
+		expect(() => verifyInstall(root, join(root, "omp"), "fixture/model")).toThrow("foundation's installed trigger is missing");
+	}
+});
+
 test.each(["claude", "codex", "pi"] as const)("refuses leaked %s state before installing and removes its scratch home", async harness => {
 	const { root, put } = fixture();
 	const trace = join(root, "native-commands");

@@ -390,8 +390,11 @@ export function verifyInstall(root: string, omp: string, model: string) {
 			throw new Error("skill://misty did not read the working-tree body");
 		}
 		const foundation = document(join(root, "skills/foundation/SKILL.md"));
-		if (!skillList.includes(`- foundation: ${foundation.frontmatter.description}`)) {
-			throw new Error("foundation's installed description is missing from the model's skill list");
+		const foundationEntry = /^- foundation: (.+)$/m.exec(skillList)?.[1];
+		// OMP truncates descriptions; the trigger precedes the first colon.
+		const foundationTrigger = String(foundation.frontmatter.description).split(":")[0];
+		if (!foundationEntry?.startsWith(`${foundationTrigger}:`)) {
+			throw new Error("foundation's installed trigger is missing from the model's skill list");
 		}
 		let hiddenSkills = 0;
 		for (const file of new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })) {
