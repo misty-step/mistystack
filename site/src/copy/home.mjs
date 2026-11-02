@@ -70,7 +70,6 @@ export const home = {
       claude: 'Start a fresh session after installing.',
       codex: 'Review and trust the native SessionStart hook. Rigor agents are installed separately.',
       pi: 'Rigor runs inline; pi has no native subagent mechanism.',
-      'grok-bot': 'No public install command. Follow the runtime-specific self-install and fresh-session proof brief. Grok Build CLI is not a target.',
     },
     source: 'Source:',
   }),

@@ -1,9 +1,11 @@
 // Historical ADRs retain their original prose and links. These exact files were
 // removed, not moved to a current procedure. Link their last retained revisions,
 // visibly labelled as archives; never apply this mapping to current guidance.
-// Revisions are the verified parents of removals 26f4a5c and b4833325, and
-// aed5ec9, the last master revision holding the Entire forge procedure (ADR 0020).
+// Each revision is a verified retained source from before that file's removal.
 export const historicalSources = new Map([
+  ['skills/misty/harnesses/grok-bot.md', {
+    commit: '60ee457367f7e5a5b2370b35452650c5ee900f41', fragments: [],
+  }],
   ['skills/misty/entire.md', {
     commit: 'aed5ec9bc7b8ae9b15d7ae373a7890412f9c2509',
     fragments: ['merge-and-forge-exceptions'],

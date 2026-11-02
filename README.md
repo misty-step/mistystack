@@ -18,10 +18,9 @@ Install and refresh through the matching native reference:
 - [Claude Code](skills/misty/harnesses/claude.md): marketplace plugin, core hook and native agents.
 - [Codex](skills/misty/harnesses/codex.md): marketplace plugin, core hook and user-installed agent templates.
 - [pi](skills/misty/harnesses/pi.md): Git package and core extension; rigor runs inline.
-- [Grok Bot runtime](skills/misty/harnesses/grok-bot.md): each bot installs from a brief and establishes its loading proof.
 
-Grok Build CLI is not a target; there is no `.grok-plugin` adapter. Runtime and
-credential setup remain in the private workstation repository.
+Grok Bot runtime setup is private fleet machinery, not a public adapter.
+Grok Build CLI is not a target; there is no `.grok-plugin` adapter.
 
 Explicitly invoke [setup-mistystack](skills/setup-mistystack/SKILL.md) to install,
 refresh or assign native rigor roles. Setup and [recompile](skills/recompile/SKILL.md)
@@ -34,9 +33,7 @@ Every harness places builds, test suites, browser QA, untrusted code and long
 jobs on Boat workers through the [boat-workers](skills/boat-workers/SKILL.md)
 skill; everything else stays where the agent runs unless its harness note says
 otherwise. The [OMP note](skills/misty/harnesses/omp.md) names the operator's
-local Tern+OMP setup and the [Grok Bot note](skills/misty/harnesses/grok-bot.md)
-covers Bots' shared computer and orchestration across Boat workers, Cursor cloud
-agents and native routines ([ADR 0017](docs/decisions/0017-tern-omp-and-boat-workers.md)).
+local Tern+OMP setup ([ADR 0017](docs/decisions/0017-tern-omp-and-boat-workers.md)).
 
 Security questions use the [focused security review](skills/security-audit/SKILL.md)
 and its execution-safety contract. Only an explicitly commissioned full audit

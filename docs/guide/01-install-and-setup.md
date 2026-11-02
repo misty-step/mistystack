@@ -11,11 +11,11 @@ roles in native configuration and requires fresh-session proof:
 - [Claude Code](../../skills/misty/harnesses/claude.md)
 - [Codex](../../skills/misty/harnesses/codex.md)
 - [pi](../../skills/misty/harnesses/pi.md)
-- [Grok Bot runtime](../../skills/misty/harnesses/grok-bot.md)
 - [Hermes status](#hermes)
 
-Grok Build CLI is not a target. Each harness needs its own native installation
-and loading evidence; an OMP pass does not prove another adapter. Native
+Grok Bot runtime setup is private fleet machinery. Grok Build CLI is not a target.
+Each public adapter needs its own native installation and loading evidence;
+an OMP pass does not prove another adapter. Native
 installation, file inventory and hook/extension registration are not proof that
 a model received the core in a fresh session. Follow the matching reference's
 consumer path and report every skipped or unproved part separately. Fleet

@@ -27,11 +27,10 @@ supply the method to every adapter.
    | Claude Code | [Claude Code](../misty/harnesses/claude.md) |
    | Codex | [Codex](../misty/harnesses/codex.md) |
    | pi | [pi](../misty/harnesses/pi.md) |
-   | Grok Bot: Maren or Shipwright | [Grok Bot self-install brief](../misty/harnesses/grok-bot.md) |
 
+   Grok Bot runtime setup is private fleet machinery, outside this adapter table.
    **Complete when:** the runtime, version, destination scope and matching native
-   contract are known; Grok-specific mechanisms are established by the bots, not
-   inferred from another harness.
+   contract are known.
 
 2. **Inspect and install.** Read existing native settings, plugin/package state,
    role definitions and relevant project/user overrides. Follow the note's native
@@ -51,8 +50,7 @@ supply the method to every adapter.
    usable existing choices; carry settled budget choices forward; ask for missing
    budget or provider choices together. The matching note's dispatch and rigor
    section says what is assignable in that harness, including harnesses that run
-   rigor inline. Grok Bots must first establish their native capability and model
-   authority.
+   rigor inline.
    **Complete when:** every applicable native assignment uses an accessible model
    and supported reasoning setting, and the required independent execution path
    is identified rather than simulated with an inline self-review.
@@ -62,9 +60,8 @@ supply the method to every adapter.
    describes: [OMP](../misty/harnesses/omp.md#dispatch-and-rigor),
    [Claude Code](../misty/harnesses/claude.md#dispatch-and-rigor),
    [Codex](../misty/harnesses/codex.md#dispatch-and-rigor),
-   [pi](../misty/harnesses/pi.md#rigor-inline-without-subagents),
-   [Grok Bot](../misty/harnesses/grok-bot.md). Prove an unfamiliar config
-   mechanism in an isolated home first ([OMP recipe](agents.md)).
+   [pi](../misty/harnesses/pi.md#rigor-inline-without-subagents).
+   Prove an unfamiliar config mechanism in an isolated home first ([OMP recipe](agents.md)).
    **Complete when:** native readback matches the chosen assignments and any
    shadowing is resolved explicitly. Readback proves persistence, not provider
    access or successful inference.
@@ -75,8 +72,7 @@ supply the method to every adapter.
    and its relative bug-fix link reached the installed playbook. Check principle
    discovery policy and explicit reachability separately. Where native rigor
    agents exist, prove their discovery and a short authorized dispatch with actual
-   agent/model identity and result. In pi, prove the main-session path instead;
-   for Grok Bot, require separate fresh-runtime proof from Maren and Shipwright.
+   agent/model identity and result. In pi, prove the main-session path instead.
    **Complete when:** the claimed consumer path has observed evidence. Report
    no-model installation and file/config readback as `artifact verified`, not live
    behavior proven; name missing inference, browser or dispatch proof explicitly.
