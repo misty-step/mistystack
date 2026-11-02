@@ -3,8 +3,8 @@ name: ship-loop
 description: "Ship confirmed scope through builder, independent QA/review, judge, merge and release proof; use for a delivery lane or 'run the loop'."
 metadata:
   owner: phaedrus
-  prevents: "Delivery drift and repeated review rounds: loaded in 15 audited sessions; real-path verification counters 'fix still fails' corrections (36)."
-  source: "misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/ship-loop; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#review"
+  prevents: "Delivery drift and repeated review rounds: loaded in 15 audited sessions; real-path verification counters 'fix still fails' corrections (36). Reviewer-driven fix loops and renewed rounds after retries: bounded behind judge rulings in mistystack PRs #450 and #454."
+  source: "misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/ship-loop; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#review; misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/judge; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/blast-radius"
   sunset: "2026-11-27"
 ---
 
@@ -48,8 +48,9 @@ retry, rebase or changed SHA resumes the same round, never a fresh allowance.
    Dispatch the generated briefs through your harness's mechanism for the selected rigor tier, then
    `record --kind report --file <payload.json>`. One QA owner per SHA; an additional
    independent QA pass needs a concrete critical uncertainty.
-3. **Judge.** `prompt --role judge`, then `record --kind verdict`. Only an
-   independent judge's FIX naming eligible introduced blockers authorizes a fix.
+3. **Judge.** `prompt --role judge` points at [judge.md](judge.md) for the ruling
+   and proof contract, then `record --kind verdict`. Only an independent judge's
+   FIX naming eligible introduced blockers authorizes a fix.
    The builder owns code blockers; the conductor owns missing proof.
 4. **Resolve.** For FIX, use `prompt --role fix-builder`, record the resulting
    head, then dispatch a fresh `recheck` thread in the blocking reporter's role.

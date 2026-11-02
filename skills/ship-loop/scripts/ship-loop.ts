@@ -8,6 +8,7 @@
 // or a retry reads the same state.
 
 import { createHash } from "node:crypto";
+import { resolve } from "node:path";
 
 export const STATUS_SCHEMA = "ship-loop.status.v1";
 const MARKER = "<!-- ship-loop:event v1 -->";
@@ -390,7 +391,7 @@ export function prompt(s: State, prUrl: string, role: PromptRole): string {
     return [
       `You are the independent judge for ${header}`,
       "You did not build, review or test this change. Your thread must not be any of: builder " + s.builder_threads.join(", ") + "; reviewers " + reviewThreads(s).join(", ") + ".",
-      "Read the `judge` skill for the ruling and proof contract.",
+      `Read \`${resolve(import.meta.dir, "../judge.md")}\` for the ruling and proof contract.`,
       "Findings and eligibility:\n" + blockerLines(s),
       "Rule once. SHIP with no blockers after completed QA (PASS or ISSUES) and review at this head; BLOCKED cannot ship. Rule on the findings and name follow-up tickets for worthwhile work. FIX names the exact eligible blockers above from one reporter thread and is the only fix round this PR gets. REVERT or SPLIT drops or divides the unit.",
       `Post your verdict on the PR, then return this JSON:\n\`\`\`json\n{"thread_id": "<your native thread id>", "sha": "${head}", "verdict": "SHIP|FIX|REVERT|SPLIT", "blockers": ["qa:F1"], "tickets": ["<follow-up links>"], "report_url": "<link to your verdict>"}\n\`\`\``,
@@ -426,7 +427,7 @@ export function prompt(s: State, prUrl: string, role: PromptRole): string {
   return [
     `You are the final judge for ${header}`,
     `The fix round is spent. Your thread must not be any of: builder ${s.builder_threads.join(", ")}; reviewers ${reviewThreads(s).join(", ")}.`,
-    "Read the `judge` skill for the ruling and proof contract.",
+    `Read \`${resolve(import.meta.dir, "../judge.md")}\` for the ruling and proof contract.`,
     `Recheck report: ${s.recheck?.report_url ?? "missing"}. Recheck results: ${JSON.stringify(s.recheck?.results ?? [])}`,
     `Regressions introduced by the fix: ${JSON.stringify(s.recheck?.regressions ?? [])}`,
     "Rule once on the named fixes and reported regressions. SHIP only if every named blocker is fixed and no demonstrated blocking regression remains; record worthwhile nonblocking findings as follow-up tickets. REVERT or SPLIT otherwise.",

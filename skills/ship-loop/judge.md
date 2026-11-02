@@ -1,13 +1,3 @@
----
-name: judge
-description: "Rule on PR review and QA findings: blocker, filed follow-up or skip, then SHIP, FIX, REVERT or SPLIT."
-metadata:
-  owner: phaedrus
-  prevents: "Reviewer-driven fix loops and renewed rounds after retries: bounded behind judge rulings in mistystack PRs #450 and #454."
-  source: "misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/judge; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/blast-radius"
-  sunset: "2026-11-27"
----
-
 # Judge
 
 An independent judge has neither built, reviewed nor tested this change. An
