@@ -28,13 +28,15 @@ When I ship a visual change, I want the affected rendered states captured and
 organized, so I can see what was reviewed before the change is called verified.
 
 Criteria:
-1. Design verification declares a named-state matrix and captures each state.
-2. A missing capture fails the gallery check; an unreachable state remains
+1. Design verification declares a named-state matrix, captures each reachable
+   state and inspects every capture at full size.
+2. Missing capture coverage prevents a pass; an unreachable state remains
    explicitly unverified with its reason.
 3. Generated proposals do not count as proof of behavior or accessibility.
 4. Capture output stays outside Git by default.
 
-Proof: `skills/design/scripts/gallery.test.ts`, [design](skills/design/SKILL.md).
+Proof: [design review](skills/design/review.md), the named-state matrix and
+full-size capture inspection evidence from the rendered product.
 
 ## US-011 Explore useful design alternatives
 
