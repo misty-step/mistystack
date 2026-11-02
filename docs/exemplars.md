@@ -13,7 +13,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 - [John Carmack — On Inlined Code, with his 2014 correction](https://number-none.com/blow/john_carmack_on_inlined_code.html): visible sequential execution, explicit dependencies and less unexpected state mutation.
 - [Elon Musk — original Starbase tour interview](https://www.youtube.com/watch?v=t705r8ICkRw): question owned requirements, delete, simplify, accelerate, then automate; the manufacturing examples are not a software-wide instruction to delete tests.
 - [Rich Hickey — Simple Made Easy](https://www.youtube.com/watch?v=LKtk3HCgTa8): reduce entanglement, distinguish simple from familiar and represent information as data.
-- [Lauren Tan / poteto — pstack introduction](https://github.com/cursor/plugins/blob/main/pstack/README.md) and [skills](https://github.com/cursor/plugins/tree/main/pstack/skills): domain-shaped types, outside proof and structural lessons. Already in `misty`, principle leaves, `grill`, `design`, `judge`, `research`, `test-audit` and other adapted skills.
+- [Lauren Tan / poteto — pstack introduction](https://github.com/cursor/plugins/blob/main/pstack/README.md) and [skills](https://github.com/cursor/plugins/tree/main/pstack/skills): domain-shaped types, outside proof and structural lessons. Already in `misty`, principle leaves, `grill`, `design`, ship-loop's judge role, `research`, `test-audit` and other adapted skills.
 - [Kent C. Dodds — The Testing Trophy and Testing Classifications](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications): confidence from use-shaped tests and the right boundary, not a universal ratio.
 - [Robert C. Martin — The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): keep business policy independent of framework and persistence; exchange simple structures across boundaries.
 - [Boris Cherny — Claude Code best practices](https://www.anthropic.com/research/claude-code-best-practices): reusable workflows, independent challenge and real verification feedback. This authored historical essay is no longer maintained; use current documentation for commands.
@@ -21,7 +21,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 
 ## Codebases
 
-- [pstack — Lauren Tan](https://github.com/cursor/plugins/tree/main/pstack): one mode, small principles, playbooks, setup and a human guide. Already in `misty`, principle leaves, setup, writing, verification, design, grill, judge, research and test-audit.
+- [pstack — Lauren Tan](https://github.com/cursor/plugins/tree/main/pstack): one mode, small principles, playbooks, setup and a human guide. Already in `misty`, principle leaves, setup, writing, verification, design, grill, ship-loop's judge role, research and test-audit.
 - [Matt Pocock's skills](https://github.com/mattpocock/skills): shaping, domain language and instructions agents can follow. Already in `grill`, `agent-design`, `research` and `writing`.
 - [Emil Kowalski's skills](https://github.com/emilkowalski/skills): design engineering and purposeful motion. Already in `design`.
 - [Impeccable — Paul Bakaus](https://github.com/pbakaus/impeccable): interface critique, accessibility and polish. Already in `design`.

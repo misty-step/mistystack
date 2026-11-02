@@ -649,6 +649,45 @@ test("a relocated prompt records through its own executable path", async () => {
   expect((await status(h)).doc.review_thread_ids).toContain("relocated-qa");
 });
 
+test("relocated judge briefs point at their own readable supporting file", async () => {
+  const h = harness();
+  await initPr(h);
+  await reportQa(h, [finding("F1")]);
+  await reportReview(h);
+  const movedSkill = join(h.dir, "an agent's plugin", "ship-loop");
+  mkdirSync(join(movedSkill, "scripts"), { recursive: true });
+  const movedCli = join(movedSkill, "scripts", "ship-loop.ts");
+  const movedJudge = join(movedSkill, "judge.md");
+  writeFileSync(movedCli, readFileSync(CLI));
+  writeFileSync(movedJudge, readFileSync(join(import.meta.dir, "..", "judge.md")));
+  for (const role of ["judge", "final-judge"]) {
+    const generated = Bun.spawn(["bun", movedCli, "prompt", "--pr", PR, "--role", role], {
+      cwd: h.dir,
+      env: { ...process.env, HOME: h.dir, SHIP_LOOP_GH: FAKE_GH, SHIP_LOOP_FAKE_STORE: h.store },
+      stdout: "pipe", stderr: "pipe",
+    });
+    const [brief, error, code] = await Promise.all([
+      new Response(generated.stdout).text(), new Response(generated.stderr).text(), generated.exited,
+    ]);
+    expect(code, error).toBe(0);
+    const target = brief.match(/Read `([^`]+)` for the ruling and proof contract/)?.[1];
+    expect(target).toBe(movedJudge);
+    expect(readFileSync(target!, "utf8")).toStartWith("# Judge\n");
+    if (role === "judge") {
+      expect((await cli(h, ["record", "--pr", PR, "--kind", "verdict"], {
+        thread_id: "judge-1", sha: H1, verdict: "FIX", blockers: ["qa:F1"], report_url: `${PR}#verdict`,
+      })).code).toBe(0);
+      expect((await cli(h, ["record", "--pr", PR, "--kind", "head"], {
+        reason: "fix", sha: H2, thread_id: "builder-2",
+      })).code).toBe(0);
+      expect((await cli(h, ["record", "--pr", PR, "--kind", "recheck"], {
+        thread_id: "qa-recheck", reporter_thread_id: "qa-1", sha: H2, report_url: `${PR}#recheck`,
+        results: [{ blocker: "qa:F1", status: "fixed", evidence: `${PR}#fixed` }], regressions: [],
+      })).code).toBe(0);
+    }
+  }
+});
+
 // Render an event exactly as the CLI would: its content key covers everything except seq.
 function renderWithKey(body: Record<string, unknown>): string {
   const { seq, key: _key, ...rest } = body;

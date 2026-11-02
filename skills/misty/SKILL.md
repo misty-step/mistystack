@@ -32,7 +32,7 @@ Read the matching playbook or skill before acting. Combine rows when the task cr
 | Write or change a skill | [Authoring a skill](playbooks/authoring-a-skill.md) |
 | Unsettled outcome, scope or product intent | [grill](../grill/SKILL.md) |
 | Carry a confirmed unit through review and shipping | [ship-loop](../ship-loop/SKILL.md) |
-| Rule on review findings or shipping | [judge](../judge/SKILL.md) |
+| Rule on review findings or shipping | [Ship-loop judge](../ship-loop/judge.md) |
 | Prove the user's journey or build its verification procedure | [verification](../verification/SKILL.md) |
 | Unfamiliar API, dependency, protocol or factual premise | [research](../research/SKILL.md) |
 | Operator prose, commits or PRs | [writing](../writing/SKILL.md) |

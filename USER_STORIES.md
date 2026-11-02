@@ -143,7 +143,7 @@ Criteria:
    unit test. A recorded `no deploy` skips release watching for internal changes.
 
 Proof: `skills/ship-loop/scripts/ship-loop.test.ts`, `skills/ship-loop/roles.md`,
-`skills/judge/SKILL.md`.
+`skills/ship-loop/judge.md`.
 
 ## US-044 Subtract before shipping a designed surface
 
@@ -188,7 +188,7 @@ Criteria:
 2. Each dispatched slice has an Oracle and is useful with main still working.
 3. Independent slices run in parallel; true dependencies sequence or stack.
 4. [Ship-loop](skills/ship-loop/SKILL.md) carries the affected story IDs, risk-scaled proof and an
-   independent judge through delivery.
+   independent [judge](skills/ship-loop/judge.md) through delivery.
 
 Proof: `skills/grill/SKILL.md`, `skills/misty/SKILL.md`, `skills/ship-loop/`.
 

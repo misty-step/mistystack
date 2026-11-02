@@ -8,8 +8,10 @@ bun <skill-dir>/scripts/ship-loop.ts prompt --pr <PR URL> --role <role>
 ```
 
 `<skill-dir>` is the installed directory of the `ship-loop` skill. The helper fills
-revision, ticket, rigor, findings and eligibility from the PR ledger. Record the
-native thread ID and report link actually returned; a retry keeps the same round.
+revision, ticket, rigor, findings and eligibility from the PR ledger. Judge and
+final-judge briefs point at this skill's [judge.md](judge.md) for the ruling and
+proof contract. Record the native thread ID and report link actually returned;
+a retry keeps the same round.
 
 ## Rigor
 
