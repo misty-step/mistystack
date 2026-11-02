@@ -4,7 +4,7 @@ description: "Prove changed behavior on its real consumer path, create a missing
 metadata:
   owner: phaedrus
   prevents: "'Fix still fails / regression' (36 corrections); evidence-packet loaded in 12 audited sessions; changed-path scope repaired in mistystack PR #455."
-  source: "misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/{skills/story-qa,guidance/engineering.md}; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/{create-verification-skill,maintain-verification-skill}; installed Misty ~/.omp/agent/skills/evidence-packet (SKILL.md sha256:08fb52a436fbc663c59648b9b07b87a9c3d3f782c5fd7f55a5568be886f78923); misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#prove"
+  source: "misty-step/mistystack#533; misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/{skills/story-qa,guidance/engineering.md}; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/{create-verification-skill,maintain-verification-skill,principle-prove-it-works}; installed Misty ~/.omp/agent/skills/evidence-packet (SKILL.md sha256:08fb52a436fbc663c59648b9b07b87a9c3d3f782c5fd7f55a5568be886f78923); misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#prove"
   sunset: "2026-11-27"
 ---
 
@@ -12,11 +12,13 @@ metadata:
 
 ## 1. Name the proof
 
-Tie each changed behavior to its story/request criterion, exact scenario and
-outside check before editing. Choose the shortest real consumer path that can
-reject the plausible defect. For fixes, comparisons, persistence and performance,
-capture a baseline with the same fixture; show the check rejecting the relevant
-base defect or an injected fault, then passing on the candidate.
+Tie each changed behavior to its story/request criterion, exact scenario,
+outside check and expected observation before editing. Name the exact command,
+journey or measurement. Choose the shortest real consumer path that can reject
+the plausible defect; a mock, self-report or green unit suite alone is not that
+boundary. For fixes, comparisons, persistence and performance, capture a baseline
+with the same fixture; show the check rejecting the relevant base defect or an
+injected fault, then passing on the candidate.
 
 - Product journey: drive the built artifact through the repo's verification skill
   and feature map, in production-like isolation then on the live surface within
@@ -26,9 +28,14 @@ base defect or an injected fault, then passing on the candidate.
 - Installed guidance/configuration: install, load and read the changed result.
 - CLI/library/internal change: exercise the real consumer or composition boundary.
 
+For a defect, trace its mechanism and fix the failure class at the highest layer
+that can hold it: structure, automated check, guidance, then human review. Use the
+`test-audit` skill to retain one primary proof per consumer contract.
+
 Widen for shared config, lockfiles, auth, migrations or uncertain impact. Changed
 interleavings need the model check, including a broken variant; reading the chart
-is not execution. Required skipped or unavailable checks leave proof incomplete.
+is not execution. Required skipped or unavailable checks leave proof incomplete;
+report the exact limit instead of substituting an easier check.
 
 ## 2. Drive and inspect
 

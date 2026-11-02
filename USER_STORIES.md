@@ -169,15 +169,16 @@ Criteria:
 1. The core routes nontrivial work to `misty`; principles and procedures have
    one home and load through its index or the relevant skill.
 2. Skills follow DOMAIN.md's frontmatter and directory-wide source convention.
-3. [Agent design](skills/agent-design/SKILL.md) guides instruction and tool/context changes; the skill
-   diet compares a proposed instruction against both the prior version and none.
+3. [Agent design](skills/agent-design/SKILL.md) owns skill-writing and instruction,
+   tool and context changes, including comparison against both the prior
+   instruction and no instructions through the eval playbook.
 4. A cutover migrates current callers and removes obsolete method copies.
    Workstation facts remain with the workstation plugin.
 5. Changed instructions are checked through the affected actual consumer, not
    just their word count or installed file bytes.
 
 Proof: `rules/core.md`, `skills/misty/`, `skills/agent-design/`,
-`skills/principle-skill-diet/`, plugin lint and fresh-session proof.
+`skills/misty/playbooks/eval.md`, plugin lint and fresh-session proof.
 
 ## US-053 Lead full-value initiatives through atomic delivery
 
@@ -218,8 +219,9 @@ Criteria:
 1. `rules/core.md` stays at most 20 lines; native adapters load that same core.
 2. A fresh native session exposes the installed core in its loaded instructions;
    file presence and a model's self-report alone do not prove loading.
-3. Principle leaves remain reachable from the mode rather than expanding the
-   always-on core into every procedure.
+3. The six principle leaves remain reachable from the mode rather than expanding
+   the always-on core into every procedure; core and task-skill rules have no
+   duplicate leaves.
 
 Proof: `scripts/verify-plugin.ts`, `scripts/verify-plugin.test.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).

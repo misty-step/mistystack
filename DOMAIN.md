@@ -16,7 +16,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 - **Mode:** `misty`, the skill that routes nontrivial work to the relevant
   principles, playbook and task skills.
 - **Principle leaf:** one on-demand `principle-<slug>` skill reached through the
-  mode's index; the principle has no second always-loaded copy.
+  mode's index, not a duplicate of a core rule or task skill's procedure.
 - **Playbook:** a numbered task-type procedure under `skills/misty/playbooks/`
   whose steps have checkable completion criteria.
 - **Skill:** a directory with a `SKILL.md` entry point and optional supporting
@@ -69,6 +69,11 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
    state. Fleet machinery stays in private `misty-step/workstation`.
 
 ## Skill frontmatter
+
+[Agent design](skills/agent-design/SKILL.md) owns writing and changing skills;
+this contract owns their fields. Names match directories, descriptions are
+non-empty and trigger-first, and `metadata.prevents` cites observed failure
+evidence. The owner and sunset identify who reviews drift and when.
 
 ```yaml
 ---

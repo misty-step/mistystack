@@ -28,7 +28,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 - [Taste — Leon Lin](https://github.com/Leonxlnx/taste-skill): deliberate visual choices rather than generic output.
 - [Hallmark — Nutlope](https://github.com/Nutlope/hallmark): coherent design direction for coding agents.
 - [Kody — Kent C. Dodds](https://github.com/kentcdodds/kody): an agent workflow to study; FSL-1.1 reference only, no copied material.
-- [Nico Bailon, skill-diet](https://github.com/nicobailon/skill-diet): compare instructions with both their earlier form and no skill. Already in `principle-skill-diet` and `agent-design`.
+- [Nico Bailon, skill-diet](https://github.com/nicobailon/skill-diet): compare instructions with both their earlier form and no skill. The method lives in `agent-design`.
 - [Entire](https://entire.com/blog/the-entire-cli-how-it-works-and-where-its-headed): durable checkpoint provenance that links code, agent sessions and attribution to commits instead of copying transcripts into every downstream artifact.
 - [GitHub Spec Kit](https://github.github.com/spec-kit/): portable, agent-independent specifications and acceptance contracts.
 - [Release Please](https://github.com/googleapis/release-please/): let one evolving release PR become the tagged release record; package publication remains a separate responsibility.

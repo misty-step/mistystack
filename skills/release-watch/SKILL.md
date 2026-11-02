@@ -1,6 +1,6 @@
 ---
 name: release-watch
-description: "Watch a merged change through release and early live behavior; recover a failed deploy, smoke or health check."
+description: "Watch a merged change through release and early live behavior; recover a live user-facing break or failed deploy, smoke or health check."
 metadata:
   owner: phaedrus
   prevents: "Merged mistaken for live; incomplete installer/recovery paths repaired in mistystack PR #372; excessive postmortem/watch ceremony cut in #392."
@@ -10,9 +10,10 @@ metadata:
 
 # Release watch
 
-Watch one merge SHA through the repo's release path. For user harm, restore first
-and attribute second. Compatible recovery follows existing authorization and the
-repo's own pipeline; accepted-data risk stops that mutation and is escalated.
+Watch one merge SHA through the repo's release path. For a live user-facing
+break, start with [recovery.md](recovery.md). Compatible recovery follows existing
+authorization and the repo's own pipeline; accepted-data risk stops that mutation
+and is escalated.
 
 ## 1. Find the path
 
