@@ -244,6 +244,54 @@ test("reports every missing metadata field and a mismatched directory name", () 
 	]);
 });
 
+test("lock-listed vendored skills keep upstream metadata but still require names, descriptions and explicit-only principles", () => {
+	const { root, put, json } = fixture();
+	const file = "skills/principle-upstream/SKILL.md";
+	const source = "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n";
+	put(file, source);
+	json("vendor/pstack.lock.json", {
+		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true }],
+		files: { [file]: "a".repeat(64) },
+	});
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, source.replace("name: principle-upstream", "name: other").replace("description: Check the artifact.", "description: ''").replace("disable-model-invocation: true", "disable-model-invocation: false"));
+	expect(lintPlugin(root).errors).toEqual([
+		`${file}: name must equal directory principle-upstream`,
+		`${file}: description must be non-empty`,
+		`${file}: disable-model-invocation must be true`,
+	]);
+	put(file, source);
+	json("vendor/pstack.lock.json", {
+		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: false }],
+		files: {},
+	});
+	expect(lintPlugin(root).errors).toContain(`${file}: metadata.source must be non-empty`);
+});
+
+test("only locked vendored files may refer to classified, unvendored upstream targets", () => {
+	const { root, put, json, skill } = fixture();
+	const file = "skills/principle-upstream/SKILL.md";
+	const notes = "skills/principle-upstream/reference.md";
+	put(file, "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n");
+	put(notes, "[Excluded](../upstream-excluded/SKILL.md) and [pending](../upstream-pending/SKILL.md). Read the `upstream-excluded` skill.\n");
+	json("vendor/pstack.lock.json", {
+		include: [
+			{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true },
+			{ source: "skills/upstream-pending", destination: "skills/upstream-pending", vendored: false },
+		],
+		exclude: [{ source: "skills/upstream-excluded", reason: "Misty override." }],
+		files: { [file]: "a".repeat(64), [notes]: "b".repeat(64) },
+	});
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(notes, "[Typo](../upstream-missing/SKILL.md)\n");
+	expect(lintPlugin(root, true).errors).toContain(`${notes}: missing reference skills/upstream-missing/SKILL.md`);
+	put(notes, "Read the `upstream-missing` skill.\n");
+	expect(lintPlugin(root, true).errors).toContain(`${notes}: unknown skill upstream-missing (missing skills/upstream-missing/SKILL.md)`);
+	put(notes, "[Excluded](../upstream-excluded/SKILL.md)\n");
+	put("skills/misty/SKILL.md", skill("misty", "[Excluded](../upstream-excluded/SKILL.md)"));
+	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: missing reference skills/upstream-excluded/SKILL.md"]);
+});
+
 test.each(["2026-11-27", "2026-11-27 # YAML 1.1 timestamp", "2026-11-27T00:00:00Z", "!!timestamp 2026-11-27"])(
 	"rejects a plain YAML date that YAML 1.1 readers cannot serialize (%s)",
 	value => {

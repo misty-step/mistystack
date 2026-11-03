@@ -20,9 +20,8 @@
 /library/skills/verification/accounts/ /library/skills/verification/#qa-sign-in-contract 301
 /library/principles/one-home-per-fact/ /library/core/ 301
 /library/principles/finish-the-work/ /library/core/ 301
-/library/principles/make-operations-idempotent/ /library/misty/#principles 301
 /library/principles/prove-it-on-the-real-path/ /library/skills/verification/ 301
-/library/principles/nothing-fails-silently/ /library/principles/fix-root-causes/ 301
+/library/principles/vertical-slices/ /library/principles/sequence-verifiable-units/ 301
 /library/principles/skill-diet/ /library/skills/agent-design/ 301
 /library/playbooks/authoring-a-skill/ /library/skills/agent-design/ 301
 /library/playbooks/incident/ /library/skills/release-watch/recovery/ 301

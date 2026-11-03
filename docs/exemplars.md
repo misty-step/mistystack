@@ -39,7 +39,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 ## Writing
 
 - [Felix Rieseberg, “How to be more ambitious”](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/): deepen the method rather than inflate the scope. Already in `principle-deeper-not-bigger`.
-- [Martin Gratzer on slices](https://x.com/mgratzer/status/2114726996869595265): useful vertical slices with independent review and a risk check. Already in `principle-vertical-slices`.
+- [Martin Gratzer on slices](https://x.com/mgratzer/status/2114726996869595265): useful vertical slices with independent review and a risk check. [Ship-loop](../skills/ship-loop/SKILL.md#1-settle-the-unit) owns those delivery requirements; pstack's [sequence-verifiable-units](../skills/principle-sequence-verifiable-units/SKILL.md) owns execution and delivery order.
 - [Kent C. Dodds, “Write tests. Not too many. Mostly integration.”](https://kentcdodds.com/blog/write-tests): confidence through behavior across real boundaries; Dodds credits Guillermo Rauch for the original slogan.
 - [Linus Torvalds, Linux kernel coding style](https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst): simple code, clear ownership and maintainable interfaces.
 - [Jakub Krehel, “Less is more, more or less”](https://jakub.kr/writing/less-is-more): subtraction follows understanding.

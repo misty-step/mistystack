@@ -11,8 +11,10 @@ before work starts.
 [Agent design](skills/agent-design/SKILL.md) owns skill-writing,
 [verification](skills/verification/SKILL.md) owns real-path proof and
 [release-watch](skills/release-watch/SKILL.md) owns live-break recovery. The
-[principle index](skills/misty/SKILL.md#principles) routes to six on-demand leaves;
-core rules and task procedures have no duplicate leaves.
+[principle index](skills/misty/SKILL.md#principles) routes to pstack's vendored
+foundation and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns
+the pin and vendored set; [ADR 0021](docs/decisions/0021-pstack-is-the-foundation.md)
+keeps extensions and overrides outside upstream bytes.
 
 Fleet machinery lives in the private `misty-step/workstation` repository.
 
@@ -58,12 +60,13 @@ package.json       pi package resource declarations
 rules/core.md      always-on routing and guardrails
 skills/misty/      mode, principle index and task playbooks
 skills/misty/harnesses/ disclosed native integration references
-skills/principle-* six on-demand principle leaves
+skills/principle-* vendored principles and Misty extension leaves
 skills/            one Agent Skills content tree
 adapters/          harness-specific agents, hooks and extensions
 agents/            OMP agents at its fixed native discovery path
 .agents/skills/    repository verification
 scripts/           checks, Git hook setup and release protection
+vendor/pstack.lock.json upstream pin, selections, exclusions and file hashes
 docs/guide/        human guide
 ```
 

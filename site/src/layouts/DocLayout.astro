@@ -23,7 +23,7 @@ const kindIndex = { Decisions: '/decisions/', Guide: '/guide/', Install: '/insta
       <details class="browse-mobile" data-pagefind-ignore><summary>Browse documentation</summary><DocNavigation {document} {graph} /></details>
       <header class="doc-header">
         <h1 id={titleHeading.id}>{document.title}<a class="heading-anchor" href={`#${titleHeading.id}`} aria-label={`Link to ${document.title}`} data-pagefind-ignore>#</a></h1>
-        {document.skill && <p>{document.skill.prevents}</p>}
+        {document.skill?.prevents && <p>{document.skill.prevents}</p>}
         {document.lineCounts && <p>{document.lineCounts.total} source lines, {document.lineCounts.body} after frontmatter. This count is derived from this revision.</p>}
         {document.lineCounts && <p>Always applied: <code class="sp-code-inline">{String(document.data.alwaysApply)}</code>.</p>}
         {document.decision && <p class="badge">{document.decision.group} · {document.decision.status}</p>}

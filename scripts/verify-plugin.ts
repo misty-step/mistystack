@@ -2,7 +2,7 @@
 import { YAML } from "bun";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
-import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -205,6 +205,29 @@ function inside(root: string, target: string) {
 export function lintPlugin(root: string, strict = false) {
 	const errors: string[] = [];
 	const warnings: string[] = [];
+	const vendored = new Set<string>();
+	const vendoredSources = new Map<string, string>();
+	const upstreamOnly: string[] = [];
+	const lockPath = join(root, "vendor/pstack.lock.json");
+	if (existsSync(lockPath)) {
+		try {
+			const lock = jsonObject(lockPath);
+			if (!Array.isArray(lock.include) || !isRecord(lock.files)) throw new Error("include and files are required");
+			for (const entry of lock.include) {
+				if (!isRecord(entry) || !nonempty(entry.source) || !nonempty(entry.destination)) continue;
+				if (entry.vendored !== true) { upstreamOnly.push(entry.source); continue; }
+				for (const file of Object.keys(lock.files)) {
+					if (file === entry.destination || file.startsWith(`${entry.destination}/`)) vendoredSources.set(file, entry.source + file.slice(entry.destination.length));
+				}
+				if (vendoredSources.has(`${entry.destination}/SKILL.md`)) vendored.add(`${entry.destination}/SKILL.md`);
+			}
+			if (Array.isArray(lock.exclude)) for (const entry of lock.exclude) {
+				if (isRecord(entry) && nonempty(entry.source)) upstreamOnly.push(entry.source);
+			}
+		} catch (error) {
+			errors.push(`vendor/pstack.lock.json: ${error instanceof Error ? error.message : String(error)}`);
+		}
+	}
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	if (skills.length === 0) errors.push("skills/: no SKILL.md files found");
 	for (const file of skills) {
@@ -216,11 +239,13 @@ export function lintPlugin(root: string, strict = false) {
 			if ((name.startsWith("principle-") || name === "recompile" || name === "setup-mistystack") && frontmatter["disable-model-invocation"] !== true) {
 				errors.push(`${file}: disable-model-invocation must be true`);
 			}
-			const metadata = isRecord(frontmatter.metadata) ? frontmatter.metadata : {};
-			for (const key of ["owner", "prevents", "source"]) {
-				if (!nonempty(metadata[key])) errors.push(`${file}: metadata.${key} must be non-empty`);
+			if (!vendored.has(file)) {
+				const metadata = isRecord(frontmatter.metadata) ? frontmatter.metadata : {};
+				for (const key of ["owner", "prevents", "source"]) {
+					if (!nonempty(metadata[key])) errors.push(`${file}: metadata.${key} must be non-empty`);
+				}
+				if (!nonempty(metadata.sunset)) errors.push(`${file}: metadata.sunset must be a non-empty string`);
 			}
-			if (!nonempty(metadata.sunset)) errors.push(`${file}: metadata.sunset must be a non-empty string`);
 		} catch (error) {
 			errors.push(`${file}: ${error instanceof Error ? error.message : String(error)}`);
 		}
@@ -261,11 +286,16 @@ export function lintPlugin(root: string, strict = false) {
 			if (/^[/\\]/.test(decoded)) continue;
 			const target = resolve(dirname(join(root, file)), decoded);
 			if (!existsSync(target) || !statSync(target).isFile()) {
+				const source = vendoredSources.get(file);
+				const upstreamTarget = source && posix.normalize(posix.join(posix.dirname(source), decoded));
+				if (upstreamTarget && upstreamOnly.some(source => upstreamTarget === source || upstreamTarget.startsWith(`${source}/`))) continue;
 				references.add(`${file}: missing reference ${relative(root, target)}`);
 			}
 		}
 		for (const [, name] of text.matchAll(/\bthe\s+`([a-z0-9-]+)`\s+skill\b/gi)) {
-			if (!names.has(name)) references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
+			if (!names.has(name) && !(vendoredSources.has(file) && upstreamOnly.includes(`skills/${name}`))) {
+				references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
+			}
 		}
 	}
 	(strict ? errors : warnings).push(...[...references].sort((a, b) => a.localeCompare(b)));

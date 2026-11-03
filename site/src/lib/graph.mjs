@@ -12,6 +12,14 @@ import { parseDocument } from 'yaml';
 import { blobUrl, encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 import { historicalSources } from './historical-sources.mjs';
 
+const pstack = JSON.parse(readFileSync(path.join(repoRoot, 'vendor/pstack.lock.json'), 'utf8'));
+const vendoredSkills = new Map(pstack.include
+  .filter((entry) => entry.vendored && pstack.files[`${entry.destination}/SKILL.md`])
+  .map((entry) => [`${entry.destination}/SKILL.md`, `${pstack.repo}@${pstack.commit}/pstack/${entry.source}`]));
+const vendoredSources = new Map(pstack.include.filter((entry) => entry.vendored).flatMap((entry) =>
+  Object.keys(pstack.files).filter((file) => file === entry.destination || file.startsWith(`${entry.destination}/`))
+    .map((file) => [file, entry.source + file.slice(entry.destination.length)])));
+const upstreamOnly = [...pstack.exclude, ...pstack.include.filter((entry) => !entry.vendored)].map((entry) => entry.source);
 const markdown = unified().use(remarkParse).use(remarkGfm);
 const toHtml = unified().use(remarkRehype, { allowDangerousHtml: true }).use(rehypeRaw);
 const stringify = unified().use(rehypeStringify);
@@ -84,17 +92,24 @@ function validateMetadata(doc) {
       if (typeof data[key] !== 'string' || !data[key].trim()) throw new Error(`${doc.id}: ${key} must be a nonempty string`);
     }
     if (data.name !== doc.id.split('/')[1]) throw new Error(`${doc.id}: name must match its installed directory`);
-    for (const key of ['owner', 'prevents', 'source', 'sunset']) {
-      if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
-    }
-    const review = new Date(`${data.metadata.sunset}T00:00:00Z`);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.metadata.sunset) || Number.isNaN(review.valueOf()) || review.toISOString().slice(0, 10) !== data.metadata.sunset) {
-      throw new Error(`${doc.id}: metadata.sunset must be an ISO review date`);
+    const upstream = vendoredSkills.get(doc.id);
+    if (!upstream) {
+      for (const key of ['owner', 'prevents', 'source', 'sunset']) {
+        if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
+      }
+      const review = new Date(`${data.metadata.sunset}T00:00:00Z`);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(data.metadata.sunset) || Number.isNaN(review.valueOf()) || review.toISOString().slice(0, 10) !== data.metadata.sunset) {
+        throw new Error(`${doc.id}: metadata.sunset must be an ISO review date`);
+      }
     }
     if (data['disable-model-invocation'] !== undefined && typeof data['disable-model-invocation'] !== 'boolean') {
       throw new Error(`${doc.id}: disable-model-invocation must be a boolean`);
     }
-    doc.skill = { name: data.name, description: data.description, ...data.metadata, disableModelInvocation: data['disable-model-invocation'] === true };
+    doc.skill = {
+      name: data.name, description: data.description,
+      ...(upstream ? { vendored: true, source: upstream, provenanceUrl: blobUrl('vendor/pstack.lock.json') } : data.metadata),
+      disableModelInvocation: data['disable-model-invocation'] === true,
+    };
   }
   if (doc.kind === 'Evals') {
     for (const key of ['id', 'date', 'title', 'status', 'sourceRevision', 'harness', 'model', 'thinking', 'judge']) {
@@ -184,6 +199,14 @@ function resolveTarget(doc, href, node, graph, image = false) {
       if (fragment && !archive.fragments.includes(decodeURIComponent(fragment))) sourceFailure(doc, node, `unknown archived fragment: ${href}`);
       node.children.push(literal(` (archived source ${archive.commit.slice(0, 7)})`));
       return `${repositoryUrl}/blob/${archive.commit}/${encodePath(target)}${query}${fragment ? `#${fragment}` : ''}`;
+    }
+    if (!existsSync(absolute) && vendoredSources.has(doc.id) && !href.startsWith('/')) {
+      const source = vendoredSources.get(doc.id);
+      const upstream = path.posix.normalize(path.posix.join(path.posix.dirname(source), decodeURIComponent(queryAt < 0 ? beforeHash : beforeHash.slice(0, queryAt))));
+      if (upstreamOnly.some((source) => upstream === source || upstream.startsWith(`${source}/`))) {
+        const kind = upstreamOnly.includes(upstream) && !upstream.endsWith('.md') ? 'tree' : 'blob';
+        return `https://github.com/${pstack.repo}/${kind}/${pstack.commit}/pstack/${encodePath(upstream)}${query}${fragment ? `#${fragment}` : ''}`;
+      }
     }
     if (!existsSync(absolute)) sourceFailure(doc, node, `missing internal target: ${href} (${target})`);
     if (!realpathSync(absolute).startsWith(`${realpathSync(repoRoot)}${path.sep}`) && realpathSync(absolute) !== realpathSync(repoRoot)) sourceFailure(doc, node, `link escapes repository: ${href}`);

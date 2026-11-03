@@ -21,6 +21,10 @@ including documents and measurements, take the ordinary round.
 Carry confirmed intent forward. Unsettled product intent goes to the `grill` skill;
 a builder needs the briefing contract in the `misty` skill and [roles.md](roles.md).
 Split the whole outcome into independently useful PRs, each keeping main working.
+Give each unit a bounded diff and a concrete risk check; infrastructure alone
+earns a slice only when it provides a usable consumer contract. Apply
+[sequence-verifiable-units](../principle-sequence-verifiable-units/SKILL.md)
+to the execution and delivery order.
 Record `Story: <IDs>` from SPEC.md or USER_STORIES.md, or `Story: none`, and
 `Rigor: <tier> — <changed-path risk>` with diff size. The machine-release exception
 also omits the Story line.

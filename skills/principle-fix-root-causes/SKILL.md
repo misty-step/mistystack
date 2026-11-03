@@ -1,30 +1,21 @@
 ---
 name: principle-fix-root-causes
-description: "Debugging, repeated failed fixes or error paths: fix the first wrong decision and expose failures to their owner."
+description: "Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate."
 disable-model-invocation: true
-metadata:
-  owner: phaedrus
-  prevents: "Symptom guards and silent failures that hide faults; Scholar pstack adoption and Foundations article 8."
-  source: "cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-fix-root-causes; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-attack-the-premise; Daybook artifacts/2026-10/pstack-vs-mistystack.md (Scholar); Phaedrus t2228u; misty-step/mistystack#533; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#fail-loudly"
-  sunset: "2026-11-27"
 ---
 
-# Fix root causes
+# Fix Root Causes
 
-The symptom is where a wrong state became visible; the root cause is the first place the system did what it should not, or failed to handle a state it should.
+When debugging, fix the fault, not the place where it surfaced. The symptom is where a wrong state became visible. The root cause is the first place the system did something it should not do, or failed to handle a state it should handle.
 
-Ask why until the answer is the evidenced causal fault (code, configuration, deployment or environment), not a consequence of an earlier one.
+**Why:** A symptom fix hides the evidence and leaves the fault free to surface somewhere else. Each one makes the system harder to reason about, because the code now carries a workaround for a bug that nobody named.
 
-If the triggering state is legitimate, handle it where it broke. If it should never exist, a check there hides the bug; find what produced it. Guards, retries, swallowed errors, clamped values and discarded state are the usual hiding places.
-
-After two fixes on one premise fail the same check, write the premise down and test it with an observation that would differ if it were false before the next fix; if it is false, look for what the failures share that it did not predict.
-
-Failing only after a restart points to persisted state: config, caches, lock files. Fix every instance of the pattern, not one. A workaround that needs a paragraph of justification means the code is wrong.
-
-Choose one direct path; when it fails, expose its cause to the owner. Keep authentication, signature and schema guards at their boundaries and fail visibly. A masking fallback that turns a defect into apparent success is not recovery.
-
-A routing or decision system may need a reasonable default for an unknown case; surface that choice loudly for design iteration. An explicitly chosen, logged operating alternative is a new action: preserve the failed action's result instead of overwriting it.
-
-Emit one terminal outcome per run with enough attribution to distinguish success, rejection and failure. Exercise the failing path, not merely the installed telemetry SDK.
-
-Done when the causal fault is removed, the original path passes and the owner can trace an observed failure.
+**Pattern:**
+- Reproduce first.
+- Ask "why" at each step until the answer is a wrong decision in the code, not a consequence of an earlier one.
+- When stuck, instrument. Read the actual error and the actual state. Do not guess.
+- Ask whether the state that triggered the symptom is legitimate. If the system may be in that state, the code that broke on it is the root cause, and handling the state there is the fix. If the state should never exist, a check where it broke hides the bug. Find what produced the state. Guards, retries, swallowed errors, clamped values, and discarded state are the usual ways to hide a bug.
+- When something fails only after a restart, suspect persisted state first: config files, caches, lock files, serialized state.
+- Check for the pattern, not just the instance. Find every place with the same fault and fix them all.
+- If a workaround needs a paragraph-long comment to justify it, the code is wrong. Fix the code, not the comment.
+- If the deciding fact took a deep dig to find, propose the cheap, always-on signal that would have shown it at first look.

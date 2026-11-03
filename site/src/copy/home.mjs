@@ -64,7 +64,7 @@ export const home = {
     copy: 'Copy',
     copied: 'Copied',
     copyFailed: 'Select the command to copy',
-    // Tab order and one note per harness reference in skills/misty/harnesses/.
+    // Tab order and one note per harness reference with an installation command.
     harnesses: {
       omp: 'Start a fresh OMP session.',
       claude: 'Start a fresh session after installing.',

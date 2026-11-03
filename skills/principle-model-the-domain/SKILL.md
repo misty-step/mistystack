@@ -1,24 +1,24 @@
 ---
 name: principle-model-the-domain
-description: "Consequential state, lifecycle logic or growing branches: model states and transitions before implementation."
+description: "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files."
 disable-model-invocation: true
-metadata:
-  owner: phaedrus
-  prevents: "Invalid-state and interleaving gaps covered by Foundations article 11, initiative #533."
-  source: "misty-step/mistystack#533; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#build; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-model-the-domain; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/statechart"
-  sunset: "2026-11-27"
 ---
 
-# Model the domain
+# Model the Domain
 
-Name states, events, invariants and owners first. Keep one transition table for consequential state rather than scattered booleans and lifecycle branches.
+Encode the real domain in a data structure instead of scattering it across conditionals. A structure that matches the domain makes invalid states unrepresentable and deletes branches. Choosing it at write time is cheap. Recovering it later reads as a refactor and gets deferred.
 
-Use DOMAIN.md terms. Choose a discriminated union, typed model, registry or statechart that makes invalid states unrepresentable and matches actual access patterns.
+Reach for:
 
-Keep simple CRUD simple; prefer native transactions to custom coordination. Use history projections only when audit, replay or recovery is part of the story.
+- A state machine instead of scattered booleans, phases, or lifecycle checks.
+- A typed model instead of loose parameters or repeated shape assumptions.
+- A map, registry, lookup table, or discriminated union instead of branching spread across files.
+- A reducer or command/event model instead of ad hoc state mutations.
+- A module organized around one body of domain knowledge instead of a sequence such as load, validate, transform, and save. Execution order is not ownership.
+- A small module boundary that gathers repeated behavior, ownership, or invariants.
+- A queue, cache, index, graph, tree, or normalized collection where the access pattern calls for it.
+- Any other structure that fits. When none fits, work out what the code must never allow and how the data gets read, then find the structure that encodes exactly that.
 
-Before actors share state, ask what another writer can change concurrently. Isolate their targets unless the domain requires shared ownership.
+Do not force an abstraction. Prefer boring code if the current shape is already clear, local, and unlikely to grow. Be skeptical of an abstraction that adds indirection without removing branches, duplicated rules, invalid states, or lifecycle risk.
 
-Where bad orders hide in interleavings, run a model check (a TLA+ spec only for a commissioned high-stakes flow) and show it rejects a broken variant; reading a chart is not that check.
-
-Done when the shape owns the rules, transitions have one home and the real consumer Oracle passes.
+The sign that you skipped this is a new feature that grows an existing if/else chain by one more branch, or a second boolean that must stay in sync with the first. Temporal decomposition is another sign. Phase-named modules repeat the same domain rules across steps.
