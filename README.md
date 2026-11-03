@@ -38,11 +38,7 @@ their procedures readable on demand.
 
 ## Operating default
 
-Every harness places builds, test suites, browser QA, untrusted code and long
-jobs on Boat workers through the [boat-workers](skills/boat-workers/SKILL.md)
-skill; everything else stays where the agent runs unless its harness note says
-otherwise. The [OMP note](skills/misty/harnesses/omp.md) names the operator's
-local Tern+OMP setup ([ADR 0017](docs/decisions/0017-tern-omp-and-boat-workers.md)).
+Follow [the core's placement rule](rules/core.md); the [OMP note](skills/misty/harnesses/omp.md) owns the operator's local Tern+OMP setup ([ADR 0017](docs/decisions/0017-tern-omp-and-boat-workers.md)).
 
 Security questions use the [focused security review](skills/security-audit/SKILL.md)
 and its execution-safety contract. Only an explicitly commissioned full audit

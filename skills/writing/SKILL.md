@@ -20,7 +20,7 @@ Misty adds these rules:
 2. Write specifications as actor, action, condition and observable result. State the target positively and pair a hard guardrail with what to do instead. Comments explain only a non-obvious why. Let the text carry its register rather than adding persona instructions.
 3. Apply Simplified Technical English to agent-to-operator prose: one instruction per sentence, one meaning per term, active verbs, conditions before steps and complete sentences. Keep articles and verbs. Read [prose.md](prose.md) for Misty's editing qualifications.
 4. Follow the core's claim rule and the `misty` skill's report-link and delivery-state distinctions.
-5. For commits and PRs, [publications.md](publications.md) takes precedence over technical-writing, including its PR-body structure. It owns titles, Story, Rigor, risk and observed verification.
+5. For commits and PRs, [publications.md](publications.md) takes precedence over technical-writing, including its PR-body structure. It owns titles, Story, Rigor, risk and observed verification. Technical-writing's tab-indent convention does not apply; preserve the repository's indentation.
 
 Done when the reader can identify the change, supported evidence and any decision
 or blocker without decoding jargon or opening a transcript. Preserve meaning
