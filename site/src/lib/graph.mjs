@@ -12,6 +12,9 @@ import { parseDocument } from 'yaml';
 import { blobUrl, encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 import { historicalSources } from './historical-sources.mjs';
 
+import { isPstackTemplateTarget, readPstackLock } from '../../../scripts/pstack-lock.mjs';
+
+const { lock: pstack, vendoredSkills, vendoredSources, upstreamOnly } = readPstackLock(repoRoot);
 const markdown = unified().use(remarkParse).use(remarkGfm);
 const toHtml = unified().use(remarkRehype, { allowDangerousHtml: true }).use(rehypeRaw);
 const stringify = unified().use(rehypeStringify);
@@ -38,7 +41,7 @@ function routeFor(id, data) {
     return `/evals/${data.id}/`;
   }
   if (id.startsWith('skills/misty/harnesses/')) return `/install/${path.basename(id, '.md')}/`;
-  if (id.startsWith('skills/misty/playbooks/')) return `/library/playbooks/${path.basename(id, '.md')}/`;
+  if (id.startsWith('skills/poteto-mode/playbooks/')) return `/library/playbooks/${path.basename(id, '.md')}/`;
   const skill = /^skills\/([^/]+)\/(.+)\.md$/.exec(id);
   if (skill) {
     if (skill[1].startsWith('principle-') && skill[2] === 'SKILL') return `/library/principles/${skill[1].slice(10)}/`;
@@ -53,7 +56,7 @@ function kindFor(id) {
   if (/^skills\/principle-[^/]+\/SKILL\.md$/.test(id)) return 'Principles';
   if (/^skills\/[^/]+\/SKILL\.md$/.test(id)) return 'Skills';
   if (id.startsWith('skills/misty/harnesses/')) return 'Install';
-  if (id.startsWith('skills/misty/playbooks/')) return 'Playbooks';
+  if (id.startsWith('skills/poteto-mode/playbooks/')) return 'Playbooks';
   if (id === 'skills/foundation/checklist.md') return 'Foundation';
   if (id.startsWith('skills/')) return 'Supporting documents';
   if (id.startsWith('docs/evals/')) return 'Evals';
@@ -84,17 +87,24 @@ function validateMetadata(doc) {
       if (typeof data[key] !== 'string' || !data[key].trim()) throw new Error(`${doc.id}: ${key} must be a nonempty string`);
     }
     if (data.name !== doc.id.split('/')[1]) throw new Error(`${doc.id}: name must match its installed directory`);
-    for (const key of ['owner', 'prevents', 'source', 'sunset']) {
-      if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
-    }
-    const review = new Date(`${data.metadata.sunset}T00:00:00Z`);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.metadata.sunset) || Number.isNaN(review.valueOf()) || review.toISOString().slice(0, 10) !== data.metadata.sunset) {
-      throw new Error(`${doc.id}: metadata.sunset must be an ISO review date`);
+    const upstream = vendoredSkills.get(doc.id);
+    if (!upstream) {
+      for (const key of ['owner', 'prevents', 'source', 'sunset']) {
+        if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
+      }
+      const review = new Date(`${data.metadata.sunset}T00:00:00Z`);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(data.metadata.sunset) || Number.isNaN(review.valueOf()) || review.toISOString().slice(0, 10) !== data.metadata.sunset) {
+        throw new Error(`${doc.id}: metadata.sunset must be an ISO review date`);
+      }
     }
     if (data['disable-model-invocation'] !== undefined && typeof data['disable-model-invocation'] !== 'boolean') {
       throw new Error(`${doc.id}: disable-model-invocation must be a boolean`);
     }
-    doc.skill = { name: data.name, description: data.description, ...data.metadata, disableModelInvocation: data['disable-model-invocation'] === true };
+    doc.skill = {
+      name: data.name, description: data.description,
+      ...(upstream ? { vendored: true, source: upstream, provenanceUrl: blobUrl('vendor/pstack.lock.json') } : data.metadata),
+      disableModelInvocation: data['disable-model-invocation'] === true,
+    };
   }
   if (doc.kind === 'Evals') {
     for (const key of ['id', 'date', 'title', 'status', 'sourceRevision', 'harness', 'model', 'thinking', 'judge']) {
@@ -185,6 +195,14 @@ function resolveTarget(doc, href, node, graph, image = false) {
       node.children.push(literal(` (archived source ${archive.commit.slice(0, 7)})`));
       return `${repositoryUrl}/blob/${archive.commit}/${encodePath(target)}${query}${fragment ? `#${fragment}` : ''}`;
     }
+    if (vendoredSources.has(doc.id) && !href.startsWith('/')) {
+      const source = vendoredSources.get(doc.id);
+      const upstream = path.posix.normalize(path.posix.join(path.posix.dirname(source), decodeURIComponent(queryAt < 0 ? beforeHash : beforeHash.slice(0, queryAt))));
+      if (upstreamOnly.some((source) => upstream === source || upstream.startsWith(`${source}/`))) {
+        const kind = upstreamOnly.includes(upstream) && !upstream.endsWith('.md') ? 'tree' : 'blob';
+        return `https://github.com/${pstack.repo}/${kind}/${pstack.commit}/pstack/${encodePath(upstream)}${query}${fragment ? `#${fragment}` : ''}`;
+      }
+    }
     if (!existsSync(absolute)) sourceFailure(doc, node, `missing internal target: ${href} (${target})`);
     if (!realpathSync(absolute).startsWith(`${realpathSync(repoRoot)}${path.sep}`) && realpathSync(absolute) !== realpathSync(repoRoot)) sourceFailure(doc, node, `link escapes repository: ${href}`);
     if (statSync(absolute).isDirectory()) {
@@ -219,6 +237,13 @@ function decorateHtml(doc, graph) {
   visit(doc.hast, 'element', (node, index, parent) => {
     const properties = node.properties ?? {};
     if (node.tagName === 'a' && typeof properties.href === 'string') {
+      if (vendoredSources.has(doc.id) && isPstackTemplateTarget(doc.id, properties.href)) {
+        node.tagName = 'code';
+        node.children = [literal(`[${text(node)}](${properties.href})`)];
+        delete properties.href;
+        addClass(node, 'sp-code-inline');
+        return;
+      }
       if (properties.href.startsWith('omp://')) {
         node.children.push(literal(' (Open in OMP)'));
         properties.title = 'Open in OMP';
@@ -279,14 +304,21 @@ export async function createGraph(entries) {
   const documents = [];
   for (const entry of entries) {
     const id = entry.id.replaceAll('\\', '/');
+    const kind = kindFor(id);
     const raw = readFileSync(path.join(repoRoot, id), 'utf8');
     const parsed = parseSource(id, raw);
     const ast = markdown.parse(parsed.body);
-    const h1 = ast.children.find((node) => node.type === 'heading' && node.depth === 1);
+    let h1 = ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
+    if (!h1 && vendoredSources.has(id)) {
+      const title = typeof parsed.data.name === 'string' ? parsed.data.name : path.basename(id, '.md').replaceAll('-', ' ');
+      h1 = { type: 'heading', depth: 1, children: [literal(title)] };
+      ast.children.unshift(h1);
+    }
     if (!h1) throw new Error(`${id}: a document needs an H1 title`);
+    h1.depth = 1; // Normalize the rendered title, not the vendored source bytes.
     const doc = {
       id, raw, ...parsed, ast, hast: await toHtml.run(ast), title: text(h1),
-      kind: kindFor(id), url: routeFor(id, parsed.data), headings: [],
+      kind, url: routeFor(id, parsed.data), headings: [],
       source: { path: id, commit: release.commit, blobUrl: blobUrl(id), lineRange: [1, raw.split('\n').length - (raw.endsWith('\n') ? 1 : 0)] },
       order: Number(/^docs\/guide\/(\d+)/.exec(id)?.[1] ?? 0),
       parentId: id.startsWith('skills/') && !id.endsWith('/SKILL.md') ? `skills/${id.split('/')[1]}/SKILL.md` : null,

@@ -1,0 +1,11 @@
+{
+  "source": "skills/show-me-your-work",
+  "reason": "The audit requires a Cursor transcript path; the same audit must use the destination harness's actual scoped session evidence.",
+  "edits": [
+    {
+      "file": "SKILL.md",
+      "before": "Read this run's transcript under the active workspace's `agent-transcripts/` directory (the system prompt names the path). Don't glob across `~/.cursor/projects/*/`. That reads unrelated private chats.",
+      "after": "Read this run's native session transcript or authorized export through the pstack names adapter. Keep the run's source identity and actual tool events. Do not assume a Cursor directory or read unrelated private chats."
+    }
+  ]
+}

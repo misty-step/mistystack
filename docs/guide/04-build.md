@@ -1,9 +1,9 @@
 # 4. Build
 
-Use [misty's playbooks](../../skills/misty/SKILL.md) for the kind of work in hand. Keep the project's domain names and public behavior intact while changing its implementation.
+Use [Misty's playbook routing](../../skills/misty/SKILL.md#playbooks) for the kind of work in hand. The [pstack playbook index](../../skills/poteto-mode/SKILL.md#playbooks) includes bug fix, feature, refactoring, performance, forensics, prototypes and visual parity. Misty's [harness map](../../skills/misty/harnesses/pstack-names.md) translates upstream names, and the lock records minimal portability patches where a name cannot be mapped.
 
-[Ship-loop](../../skills/ship-loop/SKILL.md) carries a shaped slice through building, proof and review. Rigor roles describe the work independently of a model; model and runtime choices belong in harness-native configuration, not the method. The matching [harness reference](01-install-and-setup.md) owns its adapter's mapping and proof boundary.
+Follow [Misty's rigor-gated delegation](../../skills/misty/SKILL.md) when briefing workers. [Setup](../../skills/setup-mistystack/SKILL.md) assigns native rigor roles. The [names adapter](../../skills/misty/harnesses/pstack-names.md) maps pstack responsibilities and second opinions without a second model roster in this guide.
 
-Give independent workers independent slices with the same outside check and explicit boundaries. Place each slice's execution with [boat-workers](../../skills/boat-workers/SKILL.md). Bring their work together before running shared checks. A blocked part does not stop work that can finish safely.
+Use your environment's isolation skill for execution under [the core's placement rule](../../rules/core.md). The harness or workstation names the isolated disposable environment and owns its provider-specific procedure.
 
 Next: [Verify and ship](05-verify-and-ship.md).

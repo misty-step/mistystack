@@ -4,7 +4,7 @@ description: "Use for every UI or visual task: build, fix, redesign, polish, vis
 metadata:
   owner: phaedrus
   prevents: "Design defaults drifting and state-specific defects escaping review: design-studio loaded only 4 times in the usage audit; Foundations article 10 requires a finished face."
-  source: "Foundations article 10 and way-of-working#design; misty-step/mistystack@0ccc1a3/agent-config/skills/{design-studio,visual-state-review}; emilkowalski/skills@2d228630ba1446365f614a108cb8252f1feda202; pbakaus/impeccable@5adaee704634e9031ec8943721c4ffa1a3c22221; see sources.md; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-experience-first"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
@@ -54,7 +54,7 @@ Do not use Mobbin.
    harness's browser automation, capture and inspect every named affected state,
    and test existing behavior for regressions. Record **UX**, **DX** and **AX** outcomes separately;
    pass only when all three improve together and existing behavior still works.
-   Follow the core's claim rule; an inaccessible or unexercised state remains
+   Follow [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply); an inaccessible or unexercised state remains
    unverified.
 
 [Sources and cut decisions](sources.md) disclose the rewritten upstream material.

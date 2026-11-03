@@ -36,7 +36,7 @@ limits:
   - "Raw transcripts, candidate patches, Oracle outputs and judge artifacts remain private local files; the run-record source review is private too."
   - "Oracle compatibility repairs, a stopped-allowlist specification mismatch and judge errata are disclosed in the report; raw scores are retained."
   - "Successive cohorts and variable shared-host load prevent clean causal wall-time or cap comparisons."
-methodologyPath: "skills/misty/playbooks/eval.md"
+methodologyPath: "skills/agent-design/SKILL.md#instruction-eval"
 evidence:
   - url: "https://github.com/misty-step/mistystack/issues/533#issuecomment-6476093437"
     label: "Public closing report: aggregate measurements and limitations"
@@ -229,7 +229,7 @@ agent naturally finished or that the Oracle failed.
 
 ## Method
 
-The maintained [eval playbook](../../skills/misty/playbooks/eval.md) describes the
+The maintained [instruction-eval rule](../../skills/agent-design/SKILL.md#instruction-eval) describes the
 kernel comparison. This particular trial's private `rubric.json` records its
 rubric as frozen before candidate runs. The recovered full historical prompts
 were replayed against recoverable bases with independent Oracles; no genuine

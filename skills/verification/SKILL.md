@@ -4,7 +4,7 @@ description: "Prove changed behavior on its real consumer path, create a missing
 metadata:
   owner: phaedrus
   prevents: "'Fix still fails / regression' (36 corrections); evidence-packet loaded in 12 audited sessions; changed-path scope repaired in mistystack PR #455."
-  source: "misty-step/mistystack#533; misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/{skills/story-qa,guidance/engineering.md}; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/{create-verification-skill,maintain-verification-skill,principle-prove-it-works}; installed Misty ~/.omp/agent/skills/evidence-packet (SKILL.md sha256:08fb52a436fbc663c59648b9b07b87a9c3d3f782c5fd7f55a5568be886f78923); misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#prove"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
@@ -39,18 +39,21 @@ report the exact limit instead of substituting an easier check.
 
 ## 2. Drive and inspect
 
-Use `.agents/skills/verify-<app>/`. If needed proof has no skill, [generate it](generate.md)
-in this change or stack on the PR adding it. A documents-only change does not
-inherit missing product infrastructure.
+For missing proof, follow [create-verification-skill](../create-verification-skill/SKILL.md); the [names adapter](../misty/harnesses/pstack-names.md#routes) overrides both generators' Cursor paths. Keep one canonical source exposed through the active harness; repository instructions stay in `AGENTS.md`. A documents-only change does not inherit missing product infrastructure.
 
-Apply misty's delegation boundary. Use authorized disposable data and clean only
+Add an Accounts section to the generated skill under the [QA sign-in contract](#qa-sign-in-contract);
+mark unauthenticated surfaces n/a. Its Evidence section follows [evidence.md](evidence.md).
+The vendored generator owns launch, doctor, drive, feature-map seeding, cleanup
+and the end-to-end proof of its generated recipe.
+
+Apply [Misty's rigor-gated delegation](../misty/SKILL.md#misty-deltas). Place execution through your environment's isolation skill. Use authorized disposable data and clean only
 what the run created. Capture action and result, inspect each artifact, and publish proof
 by [evidence.md](evidence.md). After a fix, recheck only the judge's named blockers
 and fix-introduced regressions; link unchanged proof rather than rerun it.
 
 Done when each criterion has an observed result at the named revision, linked
 proof and owned cleanup, or an exact unproved claim and missing prerequisite.
-Follow the core's claim rule.
+Follow [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
 
 ### QA sign-in contract
 
@@ -62,7 +65,12 @@ the blocked criterion.
 
 ## Commissioned upkeep
 
-For a verification-skill/feature-map audit, use [maintenance.md](maintenance.md).
+For a verification-skill/feature-map audit, follow pstack's
+[maintain-verification-skill](../maintain-verification-skill/SKILL.md). Resolve the
+target from the request and repository; ask only if they cannot disambiguate it.
+Apply [Misty's rigor-gated delegation](../misty/SKILL.md#misty-deltas); combine small related source slices instead
+of one agent per sentence. A feature not reached stays unverified, with the
+exact prerequisite and attempted route, never passed.
 For check placement, deletion or schedule repair, use [check-cadence.md](check-cadence.md).
 For recurring product QA, agents use distinct user personas to walk pre-release
 and live SPEC stories and file bugs/friction in the owned backlog. Such walks

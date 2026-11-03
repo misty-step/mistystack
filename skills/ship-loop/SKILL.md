@@ -4,7 +4,7 @@ description: "Ship confirmed scope through builder, independent QA/review, judge
 metadata:
   owner: phaedrus
   prevents: "Delivery drift and repeated review rounds: loaded in 15 audited sessions; real-path verification counters 'fix still fails' corrections (36). Reviewer-driven fix loops and renewed rounds after retries: bounded behind judge rulings in mistystack PRs #450 and #454."
-  source: "misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/ship-loop; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#review; misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/judge; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/blast-radius"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
@@ -12,18 +12,16 @@ metadata:
 
 Use the work-item tracker defined by [Foundation article 2](../foundation/checklist.md#article-2).
 GitHub hosts PRs and their reports; the PR's comments own its review ledger.
-An independent judge's SHIP and passing affected checks are the merge gate;
-generator-only machine release PRs use passing checks alone. Authored changes,
-including documents and measurements, take the ordinary round.
+[Merge preflight](merging.md#merge-preflight) owns the merge gate, including the generator-only exception.
 
 ## 1. Settle the unit
 
-Carry confirmed intent forward. Unsettled product intent goes to the `grill` skill;
+Carry confirmed intent forward. Unsettled product intent goes to [figure-it-out](../figure-it-out/SKILL.md);
 a builder needs the briefing contract in the `misty` skill and [roles.md](roles.md).
-Split the whole outcome into independently useful PRs, each keeping main working.
+Select the task procedure through [Misty's playbook routing](../misty/SKILL.md#playbooks).
+Split the whole outcome into independently useful, atomically shippable PRs that keep existing users working. Give each a bounded diff and risk check; infrastructure earns a slice only with a usable consumer contract. Prove one complete useful path, then scale the demonstrated method. [sequence-verifiable-units](../principle-sequence-verifiable-units/SKILL.md) owns execution and delivery order.
 Record `Story: <IDs>` from SPEC.md or USER_STORIES.md, or `Story: none`, and
-`Rigor: <tier> — <changed-path risk>` with diff size. The machine-release exception
-also omits the Story line.
+`Rigor: <tier> — <changed-path risk>` with diff size; preflight owns exceptions.
 
 The frontier contains tickets whose blockers are closed or have one open PR.
 Apply misty's delegation boundary to disjoint subagent writers through your harness's mechanism. A child
@@ -33,6 +31,10 @@ With two open blocker PRs, wait for one to land.
 
 Done when each unit has an Oracle, a base and the [rigor role](roles.md#rigor)
 assigned by the `setup-mistystack` skill.
+
+For the unit's safety fact, use pstack's [blast-radius](../blast-radius/SKILL.md).
+Its real-code proof belongs in this round's existing QA/review and judge evidence,
+not a second review panel; Misty's rigor-gated delegation and shipping delta still apply.
 
 ## 2. Run the round
 
@@ -70,10 +72,7 @@ or meets the generator-only exception. Missing proof cannot ship.
 
 ## 3. Merge and watch
 
-Confirm fast affected checks at the judged SHA. Squash-merge with a Conventional
-Commit title. [merging.md](merging.md) owns patch-id carries and bottom-first stack
-landing; conflict resolution or any changed patch requires renewed judgment under
-the same round cap.
+Apply [merge preflight](merging.md#merge-preflight), then squash-merge with a Conventional Commit title. That file also owns patch-id carries and bottom-first stack landing.
 
 No deployed artifact changed: the judge records `no deploy`; skip release queries.
 Otherwise dispatch the `release-watch` skill with merge SHA and stories. Report
@@ -84,6 +83,6 @@ A service without a release mechanism stays `merged, not live`; use one
 stories accumulated since the gap began.
 
 Report the outcome, in-flight step and any decision needed, with links and a
-one-line consumer impact under the core's claim rule. Write each principal
+one-line consumer impact under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply). Write each principal
 question in full with options, recommendation
 and the consequence of no answer.

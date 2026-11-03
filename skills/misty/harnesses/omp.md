@@ -41,7 +41,7 @@ intact.
 
 OMP's `read` tool accepts `skill://misty` and `skill://<name>` for installed skills.
 A relative Markdown link is relative to the file containing it, not the session's
-working directory. Follow Misty's [bug-fix routing link](../playbooks/bug-fix.md)
+working directory. Follow Misty's [bug-fix routing link](../../poteto-mode/playbooks/bug-fix.md)
 to that installed file; a checkout copy is not proof of installed content.
 
 Principle leaves, recompile and setup-mistystack retain
@@ -92,8 +92,8 @@ Use OMP's browser tool through `eval`. Read its API instructions at
 through the actual product login and controls, wait for the expected state, then
 capture and inspect it. Do not inject DOM to manufacture success. Emulation proves
 only the emulated condition, not physical-device behavior. When the app's
-services run on a Boat worker, forward the port as the
-[boat-workers](../../boat-workers/SKILL.md) skill describes and drive `localhost`.
+services run in an isolated environment, follow your environment's isolation
+skill to forward its port and drive `localhost`.
 The [design review procedure](../../design/review.md) owns state selection and review.
 
 ## Prove installation and fresh-session loading

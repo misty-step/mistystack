@@ -1,6 +1,6 @@
 ---
 const { graph } = Astro.props;
-const harnesses = graph.documents.filter((document) => document.id.startsWith('skills/misty/harnesses/')).sort((a, b) => a.title.localeCompare(b.title));
+const harnesses = graph.documents.filter((document) => document.id.startsWith('skills/misty/harnesses/') && document.command).sort((a, b) => a.title.localeCompare(b.title));
 const install = graph.byUrl.get('/install/');
 const hermes = install.headings.find((heading) => /hermes/i.test(heading.label));
 ---

@@ -2,7 +2,7 @@
 
 Favourite sources we learned from. An [Exemplar](../DOMAIN.md#terms) is a person, codebase or piece of writing whose perspective we deliberately channel in our workflows, skills, processes, applications and designs. Products show those perspectives in use.
 
-Add an entry with a primary-source link, what to channel and any skill where it already appears. These are selected lenses, not blanket endorsements or requirements to copy a stack. Skills cite their sources in `metadata.source`; adapted material and its licences are recorded in [ATTRIBUTION.md](../ATTRIBUTION.md). None of these upstream packs or tools is installed by mistystack; links are reading material, not dependencies. Entries without an adoption note are references to study.
+Add an entry with a primary-source link, what to channel and any skill where it already appears. These are selected lenses, not blanket endorsements or requirements to copy a stack. Skills cite their sources in `metadata.source`. [ATTRIBUTION.md](../ATTRIBUTION.md) records adapted material and its licences. The [pstack lock](../vendor/pstack.lock.json) owns the installed upstream set. Other packs and tools below are reference material, not dependencies. Entries without an adoption note are references to study.
 
 ## People
 
@@ -13,7 +13,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 - [John Carmack — On Inlined Code, with his 2014 correction](https://number-none.com/blow/john_carmack_on_inlined_code.html): visible sequential execution, explicit dependencies and less unexpected state mutation.
 - [Elon Musk — original Starbase tour interview](https://www.youtube.com/watch?v=t705r8ICkRw): question owned requirements, delete, simplify, accelerate, then automate; the manufacturing examples are not a software-wide instruction to delete tests.
 - [Rich Hickey — Simple Made Easy](https://www.youtube.com/watch?v=LKtk3HCgTa8): reduce entanglement, distinguish simple from familiar and represent information as data.
-- [Lauren Tan / poteto — pstack introduction](https://github.com/cursor/plugins/blob/main/pstack/README.md) and [skills](https://github.com/cursor/plugins/tree/main/pstack/skills): domain-shaped types, outside proof and structural lessons. Already in `misty`, principle leaves, `grill`, `design`, ship-loop's judge role, `research`, `test-audit` and other adapted skills.
+- [Lauren Tan and poteto's pstack introduction](https://github.com/cursor/plugins/blob/main/pstack/README.md) and [skills](https://github.com/cursor/plugins/tree/main/pstack/skills) ground domain-shaped types, outside proof and structural lessons. pstack is the vendored baseline, reached through `misty`, with provenance in the lock.
 - [Kent C. Dodds — The Testing Trophy and Testing Classifications](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications): confidence from use-shaped tests and the right boundary, not a universal ratio.
 - [Robert C. Martin — The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): keep business policy independent of framework and persistence; exchange simple structures across boundaries.
 - [Boris Cherny — Claude Code best practices](https://www.anthropic.com/research/claude-code-best-practices): reusable workflows, independent challenge and real verification feedback. This authored historical essay is no longer maintained; use current documentation for commands.
@@ -21,8 +21,8 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 
 ## Codebases
 
-- [pstack — Lauren Tan](https://github.com/cursor/plugins/tree/main/pstack): one mode, small principles, playbooks, setup and a human guide. Already in `misty`, principle leaves, setup, writing, verification, design, grill, ship-loop's judge role, research and test-audit.
-- [Matt Pocock's skills](https://github.com/mattpocock/skills): shaping, domain language and instructions agents can follow. Already in `grill`, `agent-design`, `research` and `writing`.
+- [pstack by Lauren Tan](https://github.com/cursor/plugins/tree/main/pstack) provides the vendored mode, principles, playbooks and craft skills. [Misty](../skills/misty/SKILL.md) routes that baseline and its remaining deltas.
+- [Matt Pocock's skills](https://github.com/mattpocock/skills) informed shaping, domain language and instructions agents can follow. Current adaptations remain in `agent-design` and `research`. [Attribution](../ATTRIBUTION.md) preserves the sources of retired planning and prose adaptations.
 - [Emil Kowalski's skills](https://github.com/emilkowalski/skills): design engineering and purposeful motion. Already in `design`.
 - [Impeccable — Paul Bakaus](https://github.com/pbakaus/impeccable): interface critique, accessibility and polish. Already in `design`.
 - [Taste — Leon Lin](https://github.com/Leonxlnx/taste-skill): deliberate visual choices rather than generic output.
@@ -39,7 +39,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 ## Writing
 
 - [Felix Rieseberg, “How to be more ambitious”](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/): deepen the method rather than inflate the scope. Already in `principle-deeper-not-bigger`.
-- [Martin Gratzer on slices](https://x.com/mgratzer/status/2114726996869595265): useful vertical slices with independent review and a risk check. Already in `principle-vertical-slices`.
+- [Martin Gratzer on slices](https://x.com/mgratzer/status/2114726996869595265): useful vertical slices with independent review and a risk check. [Ship-loop](../skills/ship-loop/SKILL.md#1-settle-the-unit) owns those delivery requirements; pstack's [sequence-verifiable-units](../skills/principle-sequence-verifiable-units/SKILL.md) owns execution and delivery order.
 - [Kent C. Dodds, “Write tests. Not too many. Mostly integration.”](https://kentcdodds.com/blog/write-tests): confidence through behavior across real boundaries; Dodds credits Guillermo Rauch for the original slogan.
 - [Linus Torvalds, Linux kernel coding style](https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst): simple code, clear ownership and maintainable interfaces.
 - [Jakub Krehel, “Less is more, more or less”](https://jakub.kr/writing/less-is-more): subtraction follows understanding.

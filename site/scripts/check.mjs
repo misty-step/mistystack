@@ -3,6 +3,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
+import { readPstackLock } from '../../scripts/pstack-lock.mjs';
+import astroConfig from '../astro.config.mjs';
 
 // Check the artifact, not Astro's source graph: a valid source link can still be
 // broken by rendering, heading generation, routing, or the search post-build.
@@ -239,6 +241,12 @@ async function main() {
       redirects.set(from, to);
     }
   }
+  const astroRedirects = Object.entries(astroConfig.redirects);
+  expect(redirects.size === astroRedirects.length, '_redirects: must cover exactly the Astro redirects');
+  for (const [from, to] of astroRedirects) {
+    expect(redirects.get(from) === to, `_redirects ${from}: destination must match Astro's ${to}`);
+    required(`${from.slice(1)}index.html`);
+  }
   for (const [from] of redirects) checkLink(from, '/', `_redirects ${from}`);
   for (const [file, page] of pages) {
     const base = route(file);
@@ -268,6 +276,9 @@ async function main() {
     const recovery = pages.get('404.html')?.links.some(({ value }) => /^\/(search|library)\/(?:[?#]|$)/.test(value));
     expect(recovery, '404.html: must link to search or library recovery');
   }
+  const installHTML = required('install/index.html')?.toString('utf8');
+  const chooser = installHTML?.match(/<nav\b[^>]*aria-label="Choose your harness"[^>]*>[\s\S]*?<\/nav>/)?.[0];
+  expect(chooser && !chooser.includes('/install/pstack-names/'), 'install/index.html: the shared pstack names map is documentation, not an installable harness');
 
   const index = json('content-index.json');
   expect(Array.isArray(index) && index.length > 0, 'content-index.json: expected a nonempty document array');
@@ -318,6 +329,28 @@ async function main() {
         expect(raw?.equals(original), `${label}: raw projection differs from canonical repository bytes`);
       } catch (error) { fail(`${label}: cannot read canonical source: ${error.message}`); }
     }
+  }
+  const { lock: pstack, vendoredSkills } = readPstackLock(root);
+  for (const id of vendoredSkills.keys()) {
+    const doc = byId.get(id);
+    expect(doc, `${id}: vendored skill is missing from the published library`);
+    const html = doc && files.get(`${doc.url.slice(1)}index.html`)?.toString('utf8');
+    expect(html?.includes('Vendored pstack.'), `${id}: upstream provenance must be disclosed`);
+    expect(html?.includes(`https://github.com/misty-step/mistystack/blob/${expectedCommit}/vendor/pstack.lock.json`), `${id}: provenance must link to the checked lock`);
+    expect(html && !/<dt[^>]*>(Owner|Prevents|Review date)<\/dt>/.test(html), `${id}: do not invent Misty metadata for upstream`);
+    const raw = await readFile(path.join(root, id), 'utf8');
+    if (!/^#{1,6}\s/m.test(raw)) {
+      const name = id.split('/').at(-2);
+      expect(doc?.title === name, `${id}: a headingless vendored skill must use its installed name as the page title`);
+      expect(doc?.headings.some((heading) => heading.depth === 1 && heading.label === name), `${id}: the generated title must be shareable`);
+    }
+  }
+  for (const entry of pstack.include.filter((entry) => entry.vendored && entry.source.startsWith('skills/poteto-mode/playbooks/'))) {
+    const doc = byId.get(entry.destination);
+    expect(doc?.kind === 'Playbooks', `${entry.destination}: vendored playbook is missing from the published library`);
+    const page = doc && pages.get(`${doc.url.slice(1)}index.html`);
+    expect(page?.tags.filter(({ name }) => name === 'h1').length === 1, `${entry.destination}: render one page title without rewriting the source heading`);
+    expect(['skills/misty/SKILL.md', 'skills/poteto-mode/SKILL.md', 'skills/misty/harnesses/pstack-names.md'].some((id) => byId.get(id)?.outboundLinks.includes(entry.destination)), `${entry.destination}: Misty or its names adapter must route to the vendored playbook`);
   }
   for (const doc of documents.filter((value) => value && typeof value === 'object')) {
     if (doc.parentId !== null) expect(byId.has(doc.parentId), `${doc.id}: unknown parentId ${doc.parentId}`);

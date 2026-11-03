@@ -4,7 +4,7 @@ description: "Watch a merged change through release and early live behavior; rec
 metadata:
   owner: phaedrus
   prevents: "Merged mistaken for live; incomplete installer/recovery paths repaired in mistystack PR #372; excessive postmortem/watch ceremony cut in #392."
-  source: "misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/{release-watch,pokayoke}; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#operate"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
@@ -52,7 +52,7 @@ names one change that removes the error class, not another reminder.
 ## Report
 
 Post once in the owning lane/PR with merge and checked live identity, evidence,
-consumer impact and exact gaps under the core's claim rule; follow misty's report-link duty.
+consumer impact and exact gaps under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
 
 | Outcome | Required observation |
 | --- | --- |

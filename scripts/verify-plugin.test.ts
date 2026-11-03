@@ -23,6 +23,7 @@ function fixture() {
 	put("rules/core.md", "---\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
 	const json = (path: string, value: unknown) => put(path, `${JSON.stringify(value)}\n`);
 	const hooks = (variable: string) => ({ SessionStart: [{ hooks: [{ type: "command", command: `cat "$${variable}/rules/core.md"` }] }] });
+	const lock = (value: object) => json("vendor/pstack.lock.json", { repo: "cursor/plugins", commit: "a".repeat(40), tree: "b".repeat(40), "inventory-sha256": "c".repeat(64), exclude: [], ...value });
 	const marketplace = { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }] };
 	json(".claude-plugin/plugin.json", { name: "mistystack", agents: ["./adapters/claude/agents/fixture.md"], hooks: hooks("CLAUDE_PLUGIN_ROOT") });
 	json(".claude-plugin/marketplace.json", marketplace);
@@ -38,7 +39,7 @@ function fixture() {
 	put("adapters/claude/agents/fixture.md", "---\nname: fixture\ndescription: Fixture worker.\n---\nComplete the assigned task.\n");
 	put("agents/fixture.md", "---\nname: fixture\ndescription: Fixture worker.\n---\nComplete the assigned task.\n");
 	put("adapters/pi/core.ts", 'import { readFileSync } from "node:fs";\nexport default function core(pi) {\nconst core = readFileSync(new URL("../../rules/core.md", import.meta.url), "utf8");\npi.on("before_agent_start", event => ({ systemPrompt: `${event.systemPrompt}\\n${core}` }));\n}\n');
-	return { root, put, skill, json };
+	return { root, put, skill, json, lock };
 }
 
 test.each([
@@ -53,6 +54,11 @@ test.each([
 	expect(lintPlugin(root).errors).toContain(`${file}: must be a JSON object`);
 	rmSync(join(root, file));
 	expect(lintPlugin(root).errors).toContain(`${file}: missing manifest`);
+});
+test("a malformed pstack lock names the file needing repair", () => {
+	const { root, put } = fixture();
+	put("vendor/pstack.lock.json", "{");
+	expect(lintPlugin(root).errors.some(error => error.startsWith("vendor/pstack.lock.json:"))).toBe(true);
 });
 
 test.each([
@@ -173,6 +179,7 @@ function expectStrictWarnings(root: string, warnings: string[]) {
 function runPlugin(root: string, args: string[], path = "") {
 	mkdirSync(join(root, "scripts"), { recursive: true });
 	copyFileSync(join(import.meta.dir, "verify-plugin.ts"), join(root, "scripts/verify-plugin.ts"));
+	copyFileSync(join(import.meta.dir, "pstack-lock.mjs"), join(root, "scripts/pstack-lock.mjs"));
 	const result = Bun.spawnSync([process.execPath, join(root, "scripts/verify-plugin.ts"), ...args], {
 		cwd: root,
 		env: { ...process.env, HOME: root, PATH: path },
@@ -205,6 +212,20 @@ test("accepts relative inline and reference links, supporting files and named sk
 	put("LICENSE", "Repository notice.\n");
 	put("rules/core.md", "---\nalwaysApply: true\n---\nRead [router](../skills/misty/SKILL.md#misty).\n");
 	expect(lintPlugin(root, true)).toEqual({ skillCount: 3, errors: [], warnings: [] });
+});
+
+test("relative directory links stay reachable and missing targets still fail", () => {
+	const { root, put, skill } = fixture();
+	const examples = "skills/misty/references/examples";
+	put("skills/misty/SKILL.md", skill("misty", "[Examples](references/examples/) and [same directory](references/examples)."));
+	put(`${examples}/README.md`, "# Examples\n");
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	rmSync(join(root, examples), { recursive: true });
+	expect(lintPlugin(root, true).errors).toEqual([`skills/misty/SKILL.md: missing reference ${examples}`]);
+	put(`${examples}/fixture.json`, "{}\n");
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put("skills/misty/SKILL.md", skill("misty", "[Missing file](references/examples/missing.md)."));
+	expect(lintPlugin(root, true).errors).toEqual([`skills/misty/SKILL.md: missing reference ${examples}/missing.md`]);
 });
 
 test("does not treat illustrative Markdown, external links or same-file anchors as missing files", () => {
@@ -242,6 +263,119 @@ test("reports every missing metadata field and a mismatched directory name", () 
 		"skills/misty/SKILL.md: metadata.source must be non-empty",
 		"skills/misty/SKILL.md: metadata.sunset must be a non-empty string",
 	]);
+});
+
+test("lock-listed vendored skills keep upstream metadata but still require names, descriptions and explicit-only principles", () => {
+	const { root, put, lock } = fixture();
+	const file = "skills/principle-upstream/SKILL.md";
+	const source = "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n";
+	put(file, source);
+	lock({
+		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true }],
+		files: { [file]: "a".repeat(64) },
+	});
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, source.replace("name: principle-upstream", "name: other").replace("description: Check the artifact.", "description: ''").replace("disable-model-invocation: true", "disable-model-invocation: false"));
+	expect(lintPlugin(root).errors).toEqual([
+		`${file}: name must equal directory principle-upstream`,
+		`${file}: description must be non-empty`,
+		`${file}: disable-model-invocation must be true`,
+	]);
+	put(file, source);
+	lock({
+		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: false }],
+		files: {},
+	});
+	expect(lintPlugin(root).errors).toContain(`${file}: metadata.source must be non-empty`);
+});
+
+test.each(["poteto-mode", "poteto-help"])("wholesale %s remains explicit-only without acquiring Misty metadata", name => {
+	const { root, put, lock } = fixture();
+	const file = `skills/${name}/SKILL.md`;
+	const source = `---\nname: ${name}\ndescription: Upstream entry.\ndisable-model-invocation: true\n---\n# Upstream\n`;
+	put(file, source);
+	lock({ include: [{ source: `skills/${name}`, destination: `skills/${name}`, vendored: true }], files: { [file]: "a".repeat(64) } });
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, source.replace("disable-model-invocation: true", "disable-model-invocation: false"));
+	expect(lintPlugin(root, true).errors).toEqual([`${file}: disable-model-invocation must be true`]);
+});
+
+test("the maintained gate does not execute upstream script-bundle suites", () => {
+	const { root, put, lock } = fixture();
+	const file = "skills/upstream/SKILL.md";
+	const suite = "skills/upstream/bundle.test.ts";
+	put(file, "---\nname: upstream\ndescription: Upstream entry.\n---\n# Upstream\n");
+	put(suite, 'throw new Error("Upstream suite must run through its own toolchain");\n');
+	put("consumer.test.ts", 'import { test, expect } from "bun:test"; test("maintained consumer", () => expect(true).toBe(true));\n');
+	lock({ include: [{ source: "skills/upstream", destination: "skills/upstream", vendored: true }], files: { [file]: "a".repeat(64), [suite]: "b".repeat(64) } });
+	const result = runPlugin(root, ["--strict", "--lint-only"]);
+	expect(result.code).toBe(0);
+	expect(result.err).toContain("maintained consumer");
+	expect(result.err).not.toContain("Upstream suite must run");
+});
+
+test("vendored prompt examples are literals, while actual file links and Misty references remain strict", () => {
+	const { root, put, lock, skill } = fixture();
+	const file = "skills/upstream/SKILL.md";
+	const prompt = "skills/upstream/references/synthesizer-prompt.md";
+	put(file, "---\nname: upstream\ndescription: Upstream entry.\n---\n# Upstream\n");
+	put(prompt, "# Prompt template\n\nSource: [Citation](citation-url).\n");
+	put("skills/misty/harnesses/pstack-names.md", "# Names\n\n| pstack | Native |\n| --- | --- |\n| `deslop` | Native diff review. |\n");
+	lock({ include: [{ source: "skills/upstream", destination: "skills/upstream", vendored: true }], files: { [file]: "a".repeat(64), [prompt]: "b".repeat(64) } });
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(prompt, "# Prompt template\n\n[Broken](missing.md). Read the `deslop` skill.\n");
+	expect(lintPlugin(root, true).errors).toEqual([`${prompt}: missing reference skills/upstream/references/missing.md`]);
+	put(prompt, "# Prompt template\n");
+	put("skills/misty/SKILL.md", skill("misty", "Read the `deslop` skill."));
+	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: unknown skill deslop (missing skills/deslop/SKILL.md)"]);
+});
+
+test("only locked vendored files may refer to classified, unvendored upstream targets", () => {
+	const { root, put, lock, skill } = fixture();
+	const file = "skills/principle-upstream/SKILL.md";
+	const notes = "skills/principle-upstream/reference.md";
+	put(file, "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n");
+	put(notes, "[Excluded](../upstream-excluded/SKILL.md) and [pending](../upstream-pending/SKILL.md). Read the `upstream-excluded` skill.\n");
+	lock({
+		include: [
+			{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true },
+			{ source: "skills/upstream-pending", destination: "skills/upstream-pending", vendored: false },
+		],
+		exclude: [{ source: "skills/upstream-excluded", reason: "Misty override." }],
+		files: { [file]: "a".repeat(64), [notes]: "b".repeat(64) },
+	});
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(notes, "[Typo](../upstream-missing/SKILL.md)\n");
+	expect(lintPlugin(root, true).errors).toContain(`${notes}: missing reference skills/upstream-missing/SKILL.md`);
+	put(notes, "Read the `upstream-missing` skill.\n");
+	expect(lintPlugin(root, true).errors).toContain(`${notes}: unknown skill upstream-missing (missing skills/upstream-missing/SKILL.md)`);
+	put(notes, "[Excluded](../upstream-excluded/SKILL.md)\n");
+	put("skills/misty/SKILL.md", skill("misty", "[Excluded](../upstream-excluded/SKILL.md)"));
+	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: missing reference skills/upstream-excluded/SKILL.md"]);
+});
+
+test("vendored playbook routing resolves local siblings and only classified upstream-only targets", () => {
+	const { root, put, lock, skill } = fixture();
+	const file = "skills/misty/playbooks/bug-fix.md";
+	const refactoring = "skills/misty/playbooks/refactoring.md";
+	put("skills/misty/SKILL.md", skill("misty", "[Bug fix](playbooks/bug-fix.md) and [Refactoring](playbooks/refactoring.md)."));
+	put(file, "### Bug fix\n\nRead [refactoring](refactoring.md), [shipping](shipping.md) and [how](../../how/SKILL.md). Read the `how` skill.\n");
+	put(refactoring, "### Refactoring\n\nPin the behavior.\n");
+	lock({
+		include: [
+			{ source: "skills/poteto-mode/playbooks/bug-fix.md", destination: file, vendored: true },
+			{ source: "skills/poteto-mode/playbooks/refactoring.md", destination: refactoring, vendored: true },
+			{ source: "skills/how", destination: "skills/how", vendored: false },
+		],
+		exclude: [{ source: "skills/poteto-mode/playbooks/shipping.md", reason: "Ship-loop owns delivery." }],
+		files: { [file]: "a".repeat(64), [refactoring]: "b".repeat(64) },
+	});
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, "[Missing](missing.md)\n");
+	expect(lintPlugin(root, true).errors).toEqual([`${file}: missing reference skills/misty/playbooks/missing.md`]);
+	put(file, "### Bug fix\n");
+	put("skills/misty/SKILL.md", skill("misty", "[Retired](playbooks/refactor.md)"));
+	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: missing reference skills/misty/playbooks/refactor.md"]);
 });
 
 test.each(["2026-11-27", "2026-11-27 # YAML 1.1 timestamp", "2026-11-27T00:00:00Z", "!!timestamp 2026-11-27"])(
@@ -293,12 +427,6 @@ test.each([
 	expectStrictWarnings(root, [`${file}: missing reference ${join(dirname(file), "missing.json")}`]);
 });
 
-test("requires link targets to be files rather than existing directories", () => {
-	const { root, put, skill } = fixture();
-	put("skills/misty/SKILL.md", skill("misty", "Read [directory](playbooks/)."));
-	put("skills/misty/playbooks/present.md", "Present file.\n");
-	expectStrictWarnings(root, ["skills/misty/SKILL.md: missing reference skills/misty/playbooks"]);
-});
 
 test.each([
 	["full", "Read [details][guide].\n\n[guide]: missing.md"],

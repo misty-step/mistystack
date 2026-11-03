@@ -44,21 +44,20 @@ Keep: <load-bearing behavior or lines to preserve; 'none' when empty>.
 Effort: <bounded depth and the uncertainty that deserves it>.
 
 Read the `misty` skill for the briefing contract, the ticket/spec and repo AGENTS.md.
-A missing Oracle returns to shaping. Make the acceptance criteria true within
-Scope; length never overrides Keep. Follow misty's delegation boundary.
+Apply misty's briefing contract and rigor-gated delegation; make acceptance true within Scope without overriding Keep.
 
 Run the Oracle and affected checks, then use the `verification` skill for the changed
 consumer path. Its generator owns a missing .agents/skills/verify-<app>/ skill,
 or stack on the PR adding it. Link proof from the PR.
 
 Push and open against <base branch>; use a Conventional Commit title and
-the `writing` skill for the body. Include the ticket's closing reference
-(`Fixes MIS-<n>` for a Linear issue, `Closes #<n>` for a GitHub issue), Story: <IDs|none>,
-Rigor: <tier> — <reason>, diff size, and observed verification results.
+the `technical-writing` and `unslop` skills for the body. Include the ticket's closing reference
+(`Closes #<n>` for a GitHub issue; Linear uses misty's forge adapter), Story: <IDs|none>,
+Rigor: <tier>, its reason, diff size, and observed verification results.
 The conductor owns merge; preserve other writers' commits.
 
 Return PR URL, head SHA, check results, proof links, native thread ID and blockers.
-Follow the core's claim rule.
+Follow pstack's Writing the reply rules.
 ```
 
 ## After the builder

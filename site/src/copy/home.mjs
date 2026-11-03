@@ -14,8 +14,8 @@ export const home = {
   ],
   navCta: { label: 'Install', href: '#install' },
   hero: (facts) => ({
-    headline: 'Before work, name the check.',
-    sub: `mistystack is Misty Step's open method for coding agents. Its core is ${facts.coreLines} lines long and loads in every session; the ${facts.headlineLine} line starts with this headline.`,
+    headline: 'A method for coding agents.',
+    sub: `mistystack is Misty Step's open method for coding agents, built on pstack. Its core is ${facts.coreLines} lines long and loads in every session. Misty routes each task to playbooks and specialist skills.`,
     primary: { label: 'Install for your harness', href: '#install' },
     secondary: { label: `Read all ${facts.coreLines} lines`, href: '#core' },
     proof: `Install commands for ${facts.commandHarnesses}.`,
@@ -35,12 +35,12 @@ export const home = {
       playbooks: (list) => `${list}.`,
       skills: 'Specialists such as research and focused security review, loaded when a task needs one.',
       principles: 'Rules of judgment such as deep modules, read only when they apply.',
-      oracle: 'A check outside the agent that can disprove completion, named before work starts.',
+      oracle: 'A check outside the agent that can disprove completion.',
     },
   }),
   brief: (facts) => ({
     title: 'Every handoff gets a brief.',
-    intro: `When work goes to a subagent, the misty skill lists ${facts.fields} fields for its brief. A brief with no Oracle goes back to shaping.`,
+    intro: `When work goes to a subagent, the misty skill lists ${facts.fields} fields for its brief.`,
     // One body per briefing-contract field in skills/misty/SKILL.md, in its order.
     fields: {
       'Outcome and why': 'The change the consumer gets, with links to its sources.',
@@ -48,7 +48,7 @@ export const home = {
       'Raw material': 'The failing run, logs, data or source to start from, rather than a summary of them.',
       Oracle: 'The check outside the worker that proves the result, with the exact command.',
       'Scope and Keep': 'The change this worker owns, and the behavior that must remain.',
-      Effort: 'How much judgment the unit needs.',
+      Effort: 'How much judgment the unit needs, its rigor tier, and the fan-out that tier permits.',
     },
   }),
   evidence: (facts) => ({
@@ -64,7 +64,7 @@ export const home = {
     copy: 'Copy',
     copied: 'Copied',
     copyFailed: 'Select the command to copy',
-    // Tab order and one note per harness reference in skills/misty/harnesses/.
+    // Tab order and one note per harness reference with an installation command.
     harnesses: {
       omp: 'Start a fresh OMP session.',
       claude: 'Start a fresh session after installing.',

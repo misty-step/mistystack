@@ -5,7 +5,7 @@ disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "Model choices duplicated in method prose, setup written to the wrong harness, and install readback mistaken for live proof; #533 Q2/Q14 and #591."
-  source: "cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/setup-pstack/SKILL.md; OMP 18.13.3 config-usage.md, models.md, task-agent-discovery.md; misty-step/mistystack#533 and #591; native adapter notes in skills/misty/harnesses."
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 

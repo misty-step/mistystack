@@ -4,15 +4,18 @@ Misty Step's harness-neutral engineering method. One content tree uses the open
 Agent Skills format, `skills/<name>/SKILL.md`; thin native adapters from this
 repository connect it to a harness without copying the method or adding a custom
 installer. A small always-on core routes nontrivial work through
-[misty](skills/misty/SKILL.md); principles, playbooks and skills load when the task
-needs them. An Oracle names the outside check that makes completion observable
-before work starts.
+[misty](skills/misty/SKILL.md). pstack supplies the baseline procedures and
+principles, with Misty's remaining deltas loaded when the task needs them.
 
 [Agent design](skills/agent-design/SKILL.md) owns skill-writing,
 [verification](skills/verification/SKILL.md) owns real-path proof and
-[release-watch](skills/release-watch/SKILL.md) owns live-break recovery. The
-[principle index](skills/misty/SKILL.md#principles) routes to six on-demand leaves;
-core rules and task procedures have no duplicate leaves.
+[release-watch](skills/release-watch/SKILL.md) owns live-break recovery.
+The [principle index](skills/misty/SKILL.md#principles) and
+[playbook routing](skills/misty/SKILL.md#playbooks) reach pstack's vendored foundation
+and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns the pin and
+vendored set. [ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md)
+records the owner rulings that supersede the relevant parts of ADR 0020 and
+ADR 0021. Vendored files remain unchanged apart from the documented harness pointer.
 
 Fleet machinery lives in the private `misty-step/workstation` repository.
 
@@ -35,11 +38,7 @@ their procedures readable on demand.
 
 ## Operating default
 
-Every harness places builds, test suites, browser QA, untrusted code and long
-jobs on Boat workers through the [boat-workers](skills/boat-workers/SKILL.md)
-skill; everything else stays where the agent runs unless its harness note says
-otherwise. The [OMP note](skills/misty/harnesses/omp.md) names the operator's
-local Tern+OMP setup ([ADR 0017](docs/decisions/0017-tern-omp-and-boat-workers.md)).
+Follow [the core's placement rule](rules/core.md) through your environment's isolation skill. The [OMP note](skills/misty/harnesses/omp.md) owns the operator's local Tern+OMP setup.
 
 Security questions use the [focused security review](skills/security-audit/SKILL.md)
 and its execution-safety contract. Only an explicitly commissioned full audit
@@ -56,14 +55,15 @@ Retired reference-page URLs redirect to the focused security review.
 .agents/plugins/   Codex marketplace
 package.json       pi package resource declarations
 rules/core.md      always-on routing and guardrails
-skills/misty/      mode, principle index and task playbooks
-skills/misty/harnesses/ disclosed native integration references
-skills/principle-* six on-demand principle leaves
+skills/misty/      mode, principle index and harness references
+skills/poteto-mode/playbooks/ vendored pstack task procedures
+skills/principle-* vendored principles and Misty extension leaves
 skills/            one Agent Skills content tree
 adapters/          harness-specific agents, hooks and extensions
 agents/            OMP agents at its fixed native discovery path
 .agents/skills/    repository verification
 scripts/           checks, Git hook setup and release protection
+vendor/pstack.lock.json upstream pin, selections, exclusions and file hashes
 docs/guide/        human guide
 ```
 
@@ -144,6 +144,6 @@ task table and limitations. Every push to `master` deploys
 - [Guide](docs/guide/): installation and the working method.
 - [Foundation checklist](skills/foundation/checklist.md): the audit rubric;
   [FOUNDATIONS.md](FOUNDATIONS.md) is a pointer, not another standard.
-- [Exemplars](docs/exemplars.md): people, codebases, writing and products whose perspectives we channel, not installed skill packs.
+- [Exemplars](docs/exemplars.md): people, codebases, prose and products whose perspectives we channel. The lock owns which pstack material is installed.
 - [Attribution](ATTRIBUTION.md): sources and license notices.
 - [Decisions](docs/decisions/index.md): boundaries and rejected alternatives.

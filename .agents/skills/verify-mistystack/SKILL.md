@@ -4,7 +4,7 @@ description: "When verifying a mistystack change, plugin installation, fresh-ses
 metadata:
   owner: phaedrus
   prevents: "Installer and file-byte checks reported as loaded method proof; method-plugin cutover #533."
-  source: "misty-step/mistystack #533, docs/decisions/0015-omp-method-plugin.md; scripts/verify-plugin.ts owns the native proof."
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
@@ -66,7 +66,7 @@ not evidence that the method loaded.
    prove provider access, model quality or a completed shipping journey.
 5. **Publish.** Put the checked source and runtime identities, command, exit
    status, observed postcondition and reviewer-open output on the PR.
-   Follow the core's claim rule; list every skipped or unproved criterion.
+   Follow [pstack's reply rules](../../../skills/poteto-mode/SKILL.md#writing-the-reply); list every skipped or unproved criterion.
    Preserve output outside Git. The private workstation repository owns host,
    audio, credential and backup proof.
 

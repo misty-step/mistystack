@@ -1,0 +1,16 @@
+{
+  "source": "skills/poteto-mode",
+  "reason": "The worktree auditor hardcodes Cursor history and treats its absence as inactivity; accept scoped exported history and hold unknown activity for review.",
+  "edits": [
+    {
+      "file": "scripts/worktree-audit.sh",
+      "before": "# Transcripts dir: ~/.cursor/projects/<slugified-repo-path>/agent-transcripts.\nslug=$(printf '%s' \"$main_wt\" | sed 's#^/##; s#/#-#g')\ntranscripts=\"$HOME/.cursor/projects/$slug/agent-transcripts\"",
+      "after": "# An explicitly scoped native history export; no export means activity is unknown.\ntranscripts=\"${PSTACK_TRANSCRIPTS_DIR:-}\""
+    },
+    {
+      "file": "scripts/worktree-audit.sh",
+      "before": "recent=$([ \"$last_ts\" -gt 0 ] 2>/dev/null && [ $(( (now - last_ts) / 86400 )) -le 4 ] && echo yes || echo no)",
+      "after": "if [ ! -d \"$transcripts\" ]; then recent=yes\n\telse recent=$([ \"$last_ts\" -gt 0 ] 2>/dev/null && [ $(( (now - last_ts) / 86400 )) -le 4 ] && echo yes || echo no); fi"
+    }
+  ]
+}

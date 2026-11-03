@@ -15,18 +15,16 @@ const PARTS = ['core', 'misty', 'playbooks', 'skills', 'principles', 'oracle'];
 
 const CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
   'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
-const ORDINALS = ['zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 
 function fail(message) {
   throw new Error(`Home page: ${message}`);
 }
 
-function word(list, n, what) {
-  if (!Number.isInteger(n) || !list[n]) fail(`no word for ${what} ${n}`);
-  return list[n];
+function cardinal(n, what) {
+  if (!Number.isSafeInteger(n) || n < 0) fail(`invalid count for ${what}: ${n}`);
+  return CARDINALS[n] ?? String(n);
 }
 
-const cardinal = (n, what) => word(CARDINALS, n, what);
 const Cardinal = (n, what) => cardinal(n, what).replace(/^./, (c) => c.toUpperCase());
 const series = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`);
 const plain = (node) => node.value ?? (node.children ?? []).map(plain).join('');
@@ -54,7 +52,7 @@ function briefFields(misty) {
 }
 
 function harnesses(graph, copy) {
-  const docs = graph.documents.filter((doc) => doc.id.startsWith(HARNESSES));
+  const docs = graph.documents.filter((doc) => doc.id.startsWith(HARNESSES) && doc.command);
   const ids = docs.map((doc) => path.basename(doc.id, '.md'));
   const order = Object.keys(copy.harnesses);
   if (ids.length !== order.length || !ids.every((id) => order.includes(id))) {
@@ -82,10 +80,6 @@ function build(graph) {
   const misty = need(graph, MISTY);
   const trial = need(graph, TRIAL);
   const lines = coreLines(core);
-  const headline = home.hero({ coreLines: '', headlineLine: '', commandHarnesses: '' }).headline;
-  const opening = headline.replace(/\.$/, '');
-  const at = lines.findIndex((line) => line.replace(/^-\s+/, '').startsWith(opening));
-  if (at < 0) fail(`no line of ${CORE} starts with "${opening}"`);
 
   const installCopy = home.install({ inProgress: '' });
   const tabs = harnesses(graph, installCopy);
@@ -93,13 +87,14 @@ function build(graph) {
   const facts = {
     coreLines: cardinal(lines.length, 'core lines'),
     CoreLines: Cardinal(lines.length, 'core lines'),
-    headlineLine: word(ORDINALS, at + 1, 'core line'),
     commandHarnesses: series(withCommands.map((tab) => tab.name)),
   };
 
-  const playbookIds = [...misty.outboundLinks].filter((id) => id.startsWith('skills/misty/playbooks/'));
+  const baseline = need(graph, 'skills/poteto-mode/SKILL.md');
+  const names = need(graph, 'skills/misty/harnesses/pstack-names.md');
+  const playbookIds = [...new Set([...misty.outboundLinks, ...baseline.outboundLinks, ...names.outboundLinks])].filter((id) => id.startsWith('skills/poteto-mode/playbooks/'));
   const playbooks = graph.documents.filter((doc) => doc.kind === 'Playbooks');
-  if (playbookIds.length !== playbooks.length) fail(`${MISTY} routes to ${playbookIds.length} playbooks; the tree has ${playbooks.length}`);
+  if (playbookIds.length !== playbooks.length) fail(`Misty and its names adapter route to ${playbookIds.length} playbooks; the tree has ${playbooks.length}`);
   const playbookNames = playbookIds.map((id, index) => {
     const title = need(graph, id).title;
     return index ? title.replace(/^./, (c) => c.toLowerCase()) : title;
@@ -123,7 +118,6 @@ function build(graph) {
   const briefCopy = home.brief({ fields: cardinal(fields.length, 'brief fields') });
   const written = Object.keys(briefCopy.fields);
   if (fields.join('|') !== written.join('|')) fail(`${MISTY} lists the brief fields ${fields.join(', ')}; the copy writes ${written.join(', ')}`);
-  if (!misty.body.includes('A brief with no Oracle')) fail(`${MISTY} no longer returns a brief without an Oracle`);
 
   const round = trial.data;
   const evidenceCopy = home.evidence({ Tasks: Cardinal(round.taskCount, 'tasks'), tasks: cardinal(round.taskCount, 'tasks'), limits: cardinal(round.limits.length, 'limits') });

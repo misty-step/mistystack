@@ -1,22 +1,22 @@
 # Mistystack specification
 
-Mistystack gives engineers and coding agents one maintained engineering method:
-a small always-on core, task routing, on-demand procedures and an outside check
-that defines completion. [USER_STORIES.md](USER_STORIES.md) owns the method's
-consumer stories and detailed acceptance criteria; [DOMAIN.md](DOMAIN.md) owns
-its vocabulary. Product intent lives in Linear and changes in GitHub pull
-requests ([ADR 0020](docs/decisions/0020-github-and-linear-replace-entire.md)),
-not a second website backlog.
+Mistystack gives engineers and coding agents one maintained engineering method.
+A small always-on core routes work to pstack's baseline procedures and Misty's
+remaining deltas. [USER_STORIES.md](USER_STORIES.md) owns the method's consumer
+stories and detailed acceptance criteria. [DOMAIN.md](DOMAIN.md) owns its vocabulary.
+Product intent lives in Linear and changes in GitHub pull requests. Git-native
+task state can support session pickup and decision trails without becoming a
+second backlog.
 
 ## Method
 
 Consumers install and refresh one content tree through the destination harness's
 native mechanism, preserve unrelated runtime state, and obtain that harness's
 own installation and fresh-session loading proof. The method exposes its core,
-Misty routing, principle leaves, playbooks, task skills and Oracle-before-dispatch
-contract as specified in US-057–US-060 and the other maintained
-[consumer stories](USER_STORIES.md). Runtime/model configuration and private
-fleet machinery do not become a second copy of the method.
+Misty routing, principle leaves, playbooks, task skills and real-consumer proof
+as specified in US-057 through US-061 and the other maintained
+[consumer stories](USER_STORIES.md). Runtime and model configuration, isolation
+providers and private fleet machinery do not become a second copy of the method.
 
 Project owners can reconsider their implementation from the vision and durable
 record without committing to a rewrite or breaking existing consumers, as
@@ -46,9 +46,11 @@ specified in [US-062](USER_STORIES.md#us-062-recompile-from-the-vision).
   changelog and source links remain reachable.
 - The library exposes every canonical core, mode, principle, playbook and task
   skill, including leaves hidden from automatic model discovery and supporting
-  Markdown documents. A skill shows its exact installed name, trigger,
-  prevented failure, owner, provenance and review/sunset date. Supporting
-  documents disclose inherited provenance rather than inventing their own.
+  Markdown documents. A skill shows its exact installed name and trigger.
+  Misty-authored skills also show prevented failure, owner, provenance and
+  review/sunset date; vendored skills show upstream provenance from the lock
+  without invented Misty metadata. Supporting documents disclose inherited
+  provenance rather than inventing their own.
 - Every page identifies its source path and revision. Headings and Foundation
   articles have shareable anchors, including the existing numeric Foundation
   aliases. Earlier decisions preserve their original bodies and disclose their
@@ -103,3 +105,8 @@ Architecture and operational status belong in [decision records](docs/decisions/
 not in the behavior contract above. The public site's publishing-stack
 exception, its commissioned deployment and its open telemetry and production
 proof are recorded in [ADR 0018](docs/decisions/0018-static-publishing-stack.md).
+
+[ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md) records all nine
+owner rulings on pstack governance and supersedes the relevant parts of
+[ADR 0020](docs/decisions/0020-github-and-linear-replace-entire.md) and
+[ADR 0021](docs/decisions/0021-pstack-is-the-foundation.md).

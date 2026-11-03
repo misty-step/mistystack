@@ -1,24 +1,18 @@
 ---
 name: principle-explain-the-number
-description: "Producing or trusting a performance, eval or other measured number: name the decision, the limiter and the noise before claiming it."
+description: "Apply before you measure, and before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think."
 disable-model-invocation: true
-metadata:
-  owner: phaedrus
-  prevents: "False measured claims; Scholar pstack adoption (explain-the-number plus benchmark-checklist)."
-  source: "cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/principle-explain-the-number; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/benchmark-checklist; Daybook artifacts/2026-10/pstack-vs-mistystack.md (Scholar); Phaedrus t2228u"
-  sunset: "2026-11-27"
 ---
 
-# Explain the number
+# Explain the Number
 
-Before running, write the claim you would ship and the result that would change a decision. Measure run-to-run spread before trusting an effect.
+- **Write the decision before you run.** Name the result that would change a decision, and the noise floor. Stop when the run-to-run spread is larger than the effect.
+- **Ask "why not double?"** Name the resource or code path that bounds the result, such as a core, a lock, the disk, the network, or the load generator itself. Get it from a profile or from system counters taken during a run, then map it to source. A guess from reading the code is not a limiter. If you cannot say why the number is not twice as good, you do not know what you measured.
+- **List what else the number could be measuring, and rule out each one with evidence.** The usual suspects are errors, skipped or cached work, code that never ran, an untuned side (one left on default settings), noise, and a piece too small to matter end to end.
+- **Keep the evidence with the number.** Put the run count, the spread, and the limiter in the notes or a linked artifact.
 
-For performance numbers, ask why not double: name the limiter (a core, lock, disk, network or the load generator) from a profile or counters taken during a run, not from reading code.
+For a performance number, run the full procedure with the [benchmark-checklist](../benchmark-checklist/SKILL.md) skill. For an eval result, ask the same of the trials: did every run do the task, does the gap hold across trials and models, and does the scenario matter.
 
-Rule out what else the number could be: errors or fast rejections, cached or skipped work, code that never ran, an untuned side on defaults, noise, or a piece too small to matter end to end. Check arithmetic against hardware limits; removing a piece that takes 10% of a run makes it at most about 11% faster.
+You skipped this when a run started without the result that would change a decision, when the evidence behind a number has no run count, no spread, or no named limiter, or when the time saved is larger than the time the changed piece took.
 
-For a comparison, run production-tuned sides at least 5 times each, alternating, and report median, range and an uncertainty interval for the difference. Call it no measurable difference only when that interval includes zero. Before a repeated perf loop, freeze a harness that prints error and work counts.
-
-Report the verdict first, then the number with unit, run count, range and limiter. A performance number missing its limiter, an untuned side or unchecked errors makes it inconclusive.
-
-Done when the number carries its run count, spread and, for performance, named limiter.
+Distinct from [Prove It Works](../principle-prove-it-works/SKILL.md), which checks that an output is real.

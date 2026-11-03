@@ -1,0 +1,11 @@
+{
+  "source": "agents/poteto-agent.md",
+  "reason": "The delegate's fallback searches Cursor's plugin cache, which does not exist in the supported native harnesses.",
+  "edits": [
+    {
+      "file": "",
+      "before": "With no path, before any other work, search `~/.cursor/plugins/` for a file whose path ends in `skills/poteto-mode/SKILL.md`. If more than one file matches, use the copy whose `.cursor-plugin/plugin.json` has the highest `version`.",
+      "after": "With no path, before any other work, locate `skills/poteto-mode/SKILL.md` through the destination harness's installed Mistystack skill root, as mapped in the pstack names adapter. Use the active installation, not a different cache entry or a source checkout."
+    }
+  ]
+}

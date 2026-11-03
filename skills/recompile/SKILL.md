@@ -5,7 +5,7 @@ disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "Inherited architecture surviving capability changes, or monthly rewrites breaking accepted contracts; Phaedrus's 2026-10-30 ruling on mistystack#631."
-  source: "Phaedrus, 2026-10-30: make the monthly rebuild review a Mistystack practice; https://github.com/misty-step/mistystack/issues/631; Jacob Sansbury, https://x.com/jsnnsa/status/2115671437575168084; Spawn 6 engine pinning and migration, https://www.spawn.co/about/release-6-0-0 (references, not copied procedure)."
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
@@ -18,8 +18,8 @@ conclude **no rebuild**; the calendar is not a reason to rewrite.
 1. **Recover intent.** Re-read the project's vision and durable record: artifacts,
    actual user evidence, decisions and obligations, including its SPEC and tracker.
    Preserve provenance, accepted history and existing access/retention boundaries.
-   Use [grill](../grill/SKILL.md) for conflicting intent, not code as the deciding
-   authority. **Done when:** the intended outcome and continuity obligations have
+   Use [figure-it-out](../figure-it-out/SKILL.md) to resolve conflicting intent,
+   not code as the deciding authority. **Done when:** the intended outcome and continuity obligations have
    source links, and missing evidence is explicit.
 
 2. **Start blank.** Before inspecting current code, describe the simplest system

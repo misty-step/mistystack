@@ -37,7 +37,7 @@ Code reads repository `AGENTS.md` natively from 2.1.277 onward; this adapter doe
 not require `CLAUDE.md` or a duplicate standing-instruction file.
 
 Invoke `/mistystack:misty` or `/mistystack:<skill-name>` through Claude's native
-skill mechanism. Follow Misty's [bug-fix link](../playbooks/bug-fix.md) relative to
+skill mechanism. Follow Misty's [bug-fix link](../../poteto-mode/playbooks/bug-fix.md) relative to
 the installed skill file, not the working directory or a source checkout.
 Principle leaves, recompile and setup-mistystack retain
 `disable-model-invocation: true`: Claude does not invoke them automatically,
