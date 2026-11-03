@@ -54,7 +54,7 @@ function briefFields(misty) {
 }
 
 function harnesses(graph, copy) {
-  const docs = graph.documents.filter((doc) => doc.id.startsWith(HARNESSES));
+  const docs = graph.documents.filter((doc) => doc.id.startsWith(HARNESSES) && doc.command);
   const ids = docs.map((doc) => path.basename(doc.id, '.md'));
   const order = Object.keys(copy.harnesses);
   if (ids.length !== order.length || !ids.every((id) => order.includes(id))) {

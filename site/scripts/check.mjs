@@ -268,6 +268,9 @@ async function main() {
     const recovery = pages.get('404.html')?.links.some(({ value }) => /^\/(search|library)\/(?:[?#]|$)/.test(value));
     expect(recovery, '404.html: must link to search or library recovery');
   }
+  const installHTML = required('install/index.html')?.toString('utf8');
+  const chooser = installHTML?.match(/<nav\b[^>]*aria-label="Choose your harness"[^>]*>[\s\S]*?<\/nav>/)?.[0];
+  expect(chooser && !chooser.includes('/install/pstack-names/'), 'install/index.html: the shared pstack names map is documentation, not an installable harness');
 
   const index = json('content-index.json');
   expect(Array.isArray(index) && index.length > 0, 'content-index.json: expected a nonempty document array');
