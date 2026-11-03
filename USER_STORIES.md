@@ -148,14 +148,19 @@ Criteria:
 1. `ship-loop` records rigor, its concrete reason and diff size on the PR; light
    work uses combined QA/review and an independent judge, while riskier work
    separates QA, review and judge.
-2. The PR's native ledger survives head changes and new sessions. Only a judge's
-   FIX naming eligible blockers authorizes the one permitted fix round.
+2. Light posts combined QA/review and independent judgment as plain PR comments
+   without a ledger. Standard and critical retain the native PR ledger across
+   head changes and new sessions. Only a judge's FIX naming eligible blockers
+   authorizes the one permitted fix round, in every tier.
 3. The blocking reporter rechecks the named fixes. The next verdict is SHIP with
    tickets or REVERT / SPLIT; new unrelated findings become tickets.
 4. Proof names the checked revision, real path, exact commands and observed
    result. Generated output lives outside the checkout and is reviewer-accessible.
 5. The judge treats a missing real-path proof as missing evidence, not a passing
    unit test. A recorded `no deploy` skips release watching for internal changes.
+6. Pstack's Opening a PR, Babysit and Shipping own delivery. Ship-loop supplies
+   Shipping's verify step. Its SHIP, including final SHIP, maps to PASS. FIX is
+   not landable. REVERT or SPLIT stops the run.
 
 Proof: `skills/ship-loop/scripts/ship-loop.test.ts`, `skills/ship-loop/roles.md`,
 `skills/ship-loop/judge.md`.

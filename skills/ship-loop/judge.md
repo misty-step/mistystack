@@ -44,6 +44,9 @@ named fixes and fix-introduced regressions in a fresh thread. Unrelated findings
 become follow-ups. Final judgment allows SHIP, REVERT or SPLIT; changed SHAs,
 rebases and retries never reset the cap.
 
-Return native thread ID, SHA, outcome, blockers, ticket links and PR report URL to
-the conductor for the helper's `record --kind verdict`. Its schema and state
-machine enforce eligibility and independence. [Merge preflight](merging.md#merge-preflight) owns the merge gate; no additional human review follows.
+Return the native thread ID, SHA, outcome, blockers, ticket links and PR report URL.
+Light posts a plain PR comment without a ledger. Check the linked reports' thread
+IDs and earlier judgments before ruling. For standard and critical, the conductor
+uses `record --kind verdict`. Its state machine enforces eligibility and independence.
+Return the result to [Shipping](../poteto-mode/playbooks/shipping.md) through the
+[verdict mapping](../misty/harnesses/pstack-names.md#routes).
