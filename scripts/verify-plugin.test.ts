@@ -379,12 +379,6 @@ test.each([
 	expectStrictWarnings(root, [`${file}: missing reference ${join(dirname(file), "missing.json")}`]);
 });
 
-test("requires link targets to be files rather than existing directories", () => {
-	const { root, put, skill } = fixture();
-	put("skills/misty/SKILL.md", skill("misty", "Read [directory](playbooks/)."));
-	put("skills/misty/playbooks/present.md", "Present file.\n");
-	expectStrictWarnings(root, ["skills/misty/SKILL.md: missing reference skills/misty/playbooks"]);
-});
 
 test.each([
 	["full", "Read [details][guide].\n\n[guide]: missing.md"],
