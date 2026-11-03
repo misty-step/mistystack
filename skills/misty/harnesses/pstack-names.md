@@ -26,6 +26,18 @@ Read a pstack name as the native route below, not a request to install Cursor. [
 
 Agent reference files are installed under `vendor/pstack-agents/`; they supply briefs, not harness-specific discovery. Read the [poteto-agent reference](../../../vendor/pstack-agents/poteto-agent.md) before dispatching its role through native sessions. The [lock](../../../vendor/pstack.lock.json) owns the pin, destinations and minimal recorded portability patches; upstream documentation outside the installed tree resolves at that pin.
 
+## Bundled playbook files
+
+These newly available files resolve explicit upstream names; the routing and shipping overrides above still apply.
+
+| pstack name | Installed file |
+| --- | --- |
+| `authoring-a-skill` | [Authoring a skill](../../poteto-mode/playbooks/authoring-a-skill.md) |
+| `autonomous-run`, `orchestrate`, `multi-phase-plan` | [Autonomous run](../../poteto-mode/playbooks/autonomous-run.md), [Orchestrate](../../poteto-mode/playbooks/orchestrate.md), [Multi-phase plan](../../poteto-mode/playbooks/multi-phase-plan.md) |
+| `autopilot-full`, `autopilot-stack`, `babysit`, `opening-a-pr`, `shipping` | [Autopilot-full](../../poteto-mode/playbooks/autopilot-full.md), [Autopilot-stack](../../poteto-mode/playbooks/autopilot-stack.md), [Babysit](../../poteto-mode/playbooks/babysit.md), [Opening a PR](../../poteto-mode/playbooks/opening-a-pr.md), [Shipping](../../poteto-mode/playbooks/shipping.md) |
+| `pause-safely`, `session-pickup`, `worktree-cleanup` | [Pause safely](../../poteto-mode/playbooks/pause-safely.md), [Session pickup](../../poteto-mode/playbooks/session-pickup.md), [Worktree cleanup](../../poteto-mode/playbooks/worktree-cleanup.md) |
+
+
 ## Harness mechanisms
 
 | pstack / Cursor name | OMP | Claude Code | Codex | pi |

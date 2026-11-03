@@ -309,8 +309,9 @@ export async function createGraph(entries) {
     const parsed = parseSource(id, raw);
     const ast = markdown.parse(parsed.body);
     let h1 = ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
-    if (!h1 && vendoredSkills.has(id) && typeof parsed.data.name === 'string') {
-      h1 = { type: 'heading', depth: 1, children: [literal(parsed.data.name)] };
+    if (!h1 && vendoredSources.has(id)) {
+      const title = typeof parsed.data.name === 'string' ? parsed.data.name : path.basename(id, '.md').replaceAll('-', ' ');
+      h1 = { type: 'heading', depth: 1, children: [literal(title)] };
       ast.children.unshift(h1);
     }
     if (!h1) throw new Error(`${id}: a document needs an H1 title`);

@@ -96,9 +96,10 @@ function build(graph) {
   };
 
   const baseline = need(graph, 'skills/poteto-mode/SKILL.md');
-  const playbookIds = [...new Set([...misty.outboundLinks, ...baseline.outboundLinks])].filter((id) => id.startsWith('skills/poteto-mode/playbooks/'));
+  const names = need(graph, 'skills/misty/harnesses/pstack-names.md');
+  const playbookIds = [...new Set([...misty.outboundLinks, ...baseline.outboundLinks, ...names.outboundLinks])].filter((id) => id.startsWith('skills/poteto-mode/playbooks/'));
   const playbooks = graph.documents.filter((doc) => doc.kind === 'Playbooks');
-  if (playbookIds.length !== playbooks.length) fail(`Misty and the installed baseline route to ${playbookIds.length} playbooks; the tree has ${playbooks.length}`);
+  if (playbookIds.length !== playbooks.length) fail(`Misty and its names adapter route to ${playbookIds.length} playbooks; the tree has ${playbooks.length}`);
   const playbookNames = playbookIds.map((id, index) => {
     const title = need(graph, id).title;
     return index ? title.replace(/^./, (c) => c.toLowerCase()) : title;

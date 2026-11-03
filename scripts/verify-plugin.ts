@@ -451,7 +451,9 @@ function installedRoot(value: unknown, scratch: string, root?: string) {
 
 function installedContent(root: string, installed: string) {
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
-	for (const file of [...skills, "rules/core.md"]) {
+	const locked = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).lock : undefined;
+	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file)]);
+	for (const file of files) {
 		const target = join(installed, file);
 		if (!existsSync(target) || !readFileSync(target).equals(readFileSync(join(root, file)))) {
 			throw new Error(`${file}: native install does not expose the working-tree content`);
