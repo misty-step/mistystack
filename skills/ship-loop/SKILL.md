@@ -16,7 +16,7 @@ GitHub hosts PRs and their reports; the PR's comments own its review ledger.
 
 ## 1. Settle the unit
 
-Carry confirmed intent forward. Unsettled product intent goes to the `grill` skill;
+Carry confirmed intent forward. Unsettled product intent goes to [figure-it-out](../figure-it-out/SKILL.md);
 a builder needs the briefing contract in the `misty` skill and [roles.md](roles.md).
 Select the task procedure through [Misty's playbook routing](../misty/SKILL.md#playbooks).
 Split the whole outcome into independently useful, atomically shippable PRs that keep existing users working. Give each a bounded diff and risk check; infrastructure earns a slice only with a usable consumer contract. Prove one complete useful path, then scale the demonstrated method. [sequence-verifiable-units](../principle-sequence-verifiable-units/SKILL.md) owns execution and delivery order.
@@ -83,6 +83,6 @@ A service without a release mechanism stays `merged, not live`; use one
 stories accumulated since the gap began.
 
 Report the outcome, in-flight step and any decision needed, with links and a
-one-line consumer impact under the core's claim rule. Write each principal
+one-line consumer impact under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply). Write each principal
 question in full with options, recommendation
 and the consequence of no answer.

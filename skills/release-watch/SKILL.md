@@ -52,7 +52,7 @@ names one change that removes the error class, not another reminder.
 ## Report
 
 Post once in the owning lane/PR with merge and checked live identity, evidence,
-consumer impact and exact gaps under the core's claim rule; follow misty's report-link duty.
+consumer impact and exact gaps under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
 
 | Outcome | Required observation |
 | --- | --- |

@@ -5,6 +5,10 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0022](0022-pstack-governs-owner-rulings.md): pstack governs; Misty keeps only
+  the owner's surviving deltas. Supersedes the relevant 0020/0021 restrictions
+  and 0017's public provider-specific placement rule.
+
 - [0021](0021-pstack-is-the-foundation.md): pinned, verbatim pstack foundation;
   Misty's router, extensions and overrides remain separate from upstream bytes.
 
@@ -16,11 +20,9 @@ Records explain trade-offs; current method guidance lives in the
   Workers Static Assets as a recorded stack exception; deployment commissioned
   2026-10-29 and automated on every master push since 2026-10-30, with telemetry
   and the production Foundation proof still open.
-- [0017](0017-tern-omp-and-boat-workers.md): the operator develops in Tern+OMP;
-  every harness runs isolated execution on Boat workers and keeps any other
-  environment rule in its harness note; Grok Bots orchestrate Boat, Cursor cloud
-  agents and their native routines; Kaylee, Hermes Agent and exe.dev are being
-  exited.
+- [0017](0017-tern-omp-and-boat-workers.md): historical operator setup and exit
+  decisions. [0022](0022-pstack-governs-owner-rulings.md) replaces its public Boat
+  requirement with harness- or workstation-named disposable isolation.
 - [0016](0016-harness-agnostic.md): one harness-neutral Agent Skills content tree
   with thin native adapters; OMP shipped first, remaining integrations in #591.
   Its Kaylee/Hermes consumer statement is superseded by

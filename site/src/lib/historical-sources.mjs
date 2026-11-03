@@ -3,6 +3,9 @@
 // visibly labelled as archives; never apply this mapping to current guidance.
 // Each revision is a verified retained source from before that file's removal.
 export const historicalSources = new Map([
+  ['skills/boat-workers/SKILL.md', {
+    commit: '359de301cd6ccfb4724e771937faef9a083f0ee8', fragments: [],
+  }],
   ['skills/misty/harnesses/grok-bot.md', {
     commit: '60ee457367f7e5a5b2370b35452650c5ee900f41', fragments: [],
   }],
