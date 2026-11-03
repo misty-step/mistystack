@@ -55,6 +55,11 @@ test.each([
 	rmSync(join(root, file));
 	expect(lintPlugin(root).errors).toContain(`${file}: missing manifest`);
 });
+test("a malformed pstack lock names the file needing repair", () => {
+	const { root, put } = fixture();
+	put("vendor/pstack.lock.json", "{");
+	expect(lintPlugin(root).errors.some(error => error.startsWith("vendor/pstack.lock.json:"))).toBe(true);
+});
 
 test.each([
 	[".claude-plugin/plugin.json", "name must be non-empty"],

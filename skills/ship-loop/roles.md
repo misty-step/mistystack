@@ -44,8 +44,7 @@ Keep: <load-bearing behavior or lines to preserve; 'none' when empty>.
 Effort: <bounded depth and the uncertainty that deserves it>.
 
 Read the `misty` skill for the briefing contract, the ticket/spec and repo AGENTS.md.
-A missing Oracle returns to shaping. Make the acceptance criteria true within
-Scope; length never overrides Keep. Follow misty's delegation boundary.
+Apply misty's Oracle and delegation boundaries; make acceptance true within Scope without overriding Keep.
 
 Run the Oracle and affected checks, then use the `verification` skill for the changed
 consumer path. Its generator owns a missing .agents/skills/verify-<app>/ skill,

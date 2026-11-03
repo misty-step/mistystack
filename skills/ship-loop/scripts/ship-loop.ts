@@ -374,7 +374,7 @@ export function prompt(s: State, prUrl: string, role: PromptRole): string {
     const who = QA_ROLE[role as keyof typeof QA_ROLE];
     const scope = role === "review"
       ? "Change nothing. Trace callers, config, migrations, deploy and rollback outside the diff for consequential effects."
-      : "Read the `verification` skill and use the repository's verification skill for the changed real consumer path. Follow its account, evidence and cleanup contract; documents/internal changes need their own composition proof, not an unrelated product journey.";
+      : "Read the `verification` skill and use the repository's verification skill for the changed real consumer path. Follow its account, evidence and cleanup contract; documents/internal changes need their own composition proof, not an unrelated product journey. Use `blast-radius` to identify the one safety fact, run the real code to prove it, and include the result or mark it unproven; misty's names adapter governs excluded routes.";
     return [
       `You are the ${who} for ${header}`,
       "You did not build this change or rule on it. Check out the assigned head under misty's delegation boundary.",

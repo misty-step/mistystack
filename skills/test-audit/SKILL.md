@@ -11,8 +11,8 @@ metadata:
 # Test audit
 
 Use pstack's [test-behavior-not-implementation](../principle-test-behavior-not-implementation/SKILL.md)
-to judge tests and choose assertions. Misty's audit scope is one primary proof
-per consumer contract; another layer needs a distinct consequential failure.
+to judge tests and choose assertions. Inspect existing proof at its owner boundary:
+one primary proof per consumer contract; another layer needs a distinct consequential failure.
 Name that failure before adding or deleting proof, and use history only for
 concrete uncertainty.
 

@@ -323,9 +323,8 @@ async function main() {
       } catch (error) { fail(`${label}: cannot read canonical source: ${error.message}`); }
     }
   }
-  const { lock: pstack } = readPstackLock(root);
-  for (const entry of pstack.include.filter((entry) => entry.vendored && pstack.files[`${entry.destination}/SKILL.md`])) {
-    const id = `${entry.destination}/SKILL.md`;
+  const { lock: pstack, vendoredSkills } = readPstackLock(root);
+  for (const id of vendoredSkills.keys()) {
     const doc = byId.get(id);
     expect(doc, `${id}: vendored skill is missing from the published library`);
     const html = doc && files.get(`${doc.url.slice(1)}index.html`)?.toString('utf8');
@@ -334,7 +333,7 @@ async function main() {
     expect(html && !/<dt[^>]*>(Owner|Prevents|Review date)<\/dt>/.test(html), `${id}: do not invent Misty metadata for upstream`);
     const raw = await readFile(path.join(root, id), 'utf8');
     if (!/^#{1,6}\s/m.test(raw)) {
-      const name = entry.destination.split('/').at(-1);
+      const name = id.split('/').at(-2);
       expect(doc?.title === name, `${id}: a headingless vendored skill must use its installed name as the page title`);
       expect(doc?.headings.some((heading) => heading.depth === 1 && heading.label === name), `${id}: the generated title must be shareable`);
     }

@@ -3,7 +3,7 @@ import { YAML } from "bun";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
-import { readPstackLock } from "./pstack-lock.mjs";
+import { PSTACK_LOCK, readPstackLock } from "./pstack-lock.mjs";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -209,14 +209,14 @@ export function lintPlugin(root: string, strict = false) {
 	let vendored = new Set<string>();
 	let vendoredSources = new Map<string, string>();
 	let upstreamOnly: string[] = [];
-	if (existsSync(join(root, "vendor/pstack.lock.json"))) {
+	if (existsSync(join(root, PSTACK_LOCK))) {
 		try {
 			const parsed = readPstackLock(root);
 			vendored = new Set(parsed.vendoredSkills.keys());
 			vendoredSources = parsed.vendoredSources;
 			upstreamOnly = parsed.upstreamOnly;
 		} catch (error) {
-			errors.push(error instanceof Error ? error.message : String(error));
+			errors.push(error instanceof SyntaxError ? `${PSTACK_LOCK}: ${error.message}` : error instanceof Error ? error.message : String(error));
 		}
 	}
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();

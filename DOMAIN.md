@@ -41,9 +41,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   harness-native configuration.
 - **Task agent:** an independent worker given a brief. The brief sets its
   responsibility; the native adapter supplies dispatch and runtime selection.
-- **Oracle:** a check outside the worker that can disprove completion, named in
-  the brief with the exact command or real user path. A brief without an Oracle
-  returns to shaping rather than dispatch.
+- **Oracle:** a check outside the worker that can disprove completion, named with the exact command or real user path; [misty](skills/misty/SKILL.md#non-negotiables) owns the briefing gate.
 - **Local development environment:** the operator's OMP running in Tern, as the
   [OMP note](skills/misty/harnesses/omp.md) states. Other harnesses work where
   they run unless their harness note says otherwise.
