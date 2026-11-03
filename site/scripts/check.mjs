@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { readPstackLock } from '../../scripts/pstack-lock.mjs';
+import astroConfig from '../astro.config.mjs';
 
 // Check the artifact, not Astro's source graph: a valid source link can still be
 // broken by rendering, heading generation, routing, or the search post-build.
@@ -239,6 +240,12 @@ async function main() {
       expect(!redirects.has(from), `_redirects: duplicate redirect ${from}`);
       redirects.set(from, to);
     }
+  }
+  const astroRedirects = Object.entries(astroConfig.redirects);
+  expect(redirects.size === astroRedirects.length, '_redirects: must cover exactly the Astro redirects');
+  for (const [from, to] of astroRedirects) {
+    expect(redirects.get(from) === to, `_redirects ${from}: destination must match Astro's ${to}`);
+    required(`${from.slice(1)}index.html`);
   }
   for (const [from] of redirects) checkLink(from, '/', `_redirects ${from}`);
   for (const [file, page] of pages) {

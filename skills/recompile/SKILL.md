@@ -18,8 +18,8 @@ conclude **no rebuild**; the calendar is not a reason to rewrite.
 1. **Recover intent.** Re-read the project's vision and durable record: artifacts,
    actual user evidence, decisions and obligations, including its SPEC and tracker.
    Preserve provenance, accepted history and existing access/retention boundaries.
-   Use [grill](../grill/SKILL.md) for conflicting intent, not code as the deciding
-   authority. **Done when:** the intended outcome and continuity obligations have
+   Use [figure-it-out](../figure-it-out/SKILL.md) to resolve conflicting intent,
+   not code as the deciding authority. **Done when:** the intended outcome and continuity obligations have
    source links, and missing evidence is explicit.
 
 2. **Start blank.** Before inspecting current code, describe the simplest system

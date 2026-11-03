@@ -48,7 +48,7 @@ Do not use Mobbin.
    harness's browser automation, capture and inspect every named affected state,
    and test existing behavior for regressions. Record **UX**, **DX** and **AX** outcomes separately;
    pass only when all three improve together and existing behavior still works.
-   Follow the core's claim rule; an inaccessible or unexercised state remains
+   Follow [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply); an inaccessible or unexercised state remains
    unverified.
 
 [Sources and cut decisions](sources.md) disclose the rewritten upstream material.

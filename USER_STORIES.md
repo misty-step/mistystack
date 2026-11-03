@@ -27,7 +27,7 @@ Criteria:
 7. Repeating a pstack update at the same pin leaves the lock and vendored tree unchanged; a real source beneath a symlinked parent remains usable.
 8. The offline gate rejects a detected skill, harness-name or poteto-mode section route without an installed target or explicit names-adapter row.
 9. poteto-mode and poteto-help install as explicit-only skills alongside Misty;
-   the names adapter resolves native mechanisms without changing Misty's nine overrides.
+   the names adapter resolves native mechanisms while Misty keeps only its surviving deltas.
 
 Proof: `scripts/verify`, `scripts/verify-plugin.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -82,6 +82,10 @@ Criteria:
    automatic model skill list and can read it explicitly. Successful authorized
    dispatch and its actual model identity prove a chosen subagent route; config
    readback alone proves persistence. Private runtime setup is fleet machinery.
+5. The [pstack names adapter](skills/misty/harnesses/pstack-names.md) maps code
+   delegates, prose and judgment, and verification or swarm workers to native
+   rigor roles configured by setup. A second opinion uses the same prompt with
+   a different model family. pstack's fresh-subagent rule applies as written.
 
 Proof: `skills/setup-mistystack/`, `agents/`, `adapters/`, [rigor roles](skills/ship-loop/roles.md).
 
@@ -197,13 +201,22 @@ When I commission an initiative, I want the full useful outcome shaped and split
 into independently shippable slices, so small PRs do not conceal a narrowed goal.
 
 Criteria:
-1. [Grill](skills/grill/SKILL.md) records the complete outcome, boundaries and acceptance criteria.
-2. Each dispatched slice has an Oracle and is useful with main still working.
-3. Independent slices run in parallel; true dependencies sequence or stack.
-4. [Ship-loop](skills/ship-loop/SKILL.md) carries the affected story IDs, risk-scaled proof and an
-   independent [judge](skills/ship-loop/judge.md) through delivery.
+1. pstack's [Prototype](skills/poteto-mode/playbooks/prototype.md),
+   [multi-phase-plan](skills/poteto-mode/playbooks/multi-phase-plan.md),
+   [figure-it-out](skills/figure-it-out/SKILL.md) and
+   [orchestrate](skills/poteto-mode/playbooks/orchestrate.md) routes resolve
+   empirical questions, plan phases and coordinate the complete outcome.
+2. Each slice has observable acceptance criteria and is useful with main still working.
+3. Independent slices can run in parallel within the brief's rigor tier.
+   True dependencies sequence or stack.
+4. pstack's Opening a PR, Babysit and Shipping playbooks govern delivery.
+   [Ship-loop](skills/ship-loop/SKILL.md) supplies Shipping's verify step with
+   rigor tiers, an independent judge and one fix round.
+5. [Foundation article 3](skills/foundation/checklist.md#article-3) still requires
+   a living `SPEC.md`. It does not require a particular skill to produce it.
 
-Proof: `skills/grill/SKILL.md`, `skills/misty/SKILL.md`, `skills/ship-loop/`.
+Proof: `skills/poteto-mode/playbooks/`, `skills/figure-it-out/SKILL.md`,
+`skills/misty/SKILL.md`, `skills/ship-loop/` and the initiative's consumer evidence.
 
 ## US-057 Install and refresh the method plugin
 
@@ -233,6 +246,9 @@ Criteria:
 3. Vendored and extension principle leaves remain reachable from the mode
    rather than expanding the always-on core into every procedure. The lock
    owns upstream provenance; Misty-only deltas stay in extension leaves.
+4. The core carries only Misty deltas. pstack's first-message trigger and
+   [prove-it-works](skills/principle-prove-it-works/SKILL.md) govern task
+   framing and proof without a duplicate core outside-check rule or ask-first rule.
 
 Proof: `scripts/verify-plugin.ts`, `scripts/verify-plugin.test.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -246,57 +262,64 @@ Criteria:
 1. The core routes nontrivial work to [misty](skills/misty/SKILL.md).
 2. The mode indexes the principle leaves and selects a task-type playbook and
    relevant shaping, research, design, delivery or verification skills.
-3. A brief carries outcome and why, domain terms, raw material, Oracle, scope
-   and keep, and effort.
+3. A brief carries the user's outcome, relevant domain terms, raw material,
+   owned scope, preserved behavior, rigor and the context needed for verification.
 4. Referenced skills and playbooks resolve to their maintained homes; hidden
    principle leaves remain explicitly reachable.
+5. Light rigor works inline. Standard rigor may use `architect`, `interrogate`
+   and `how`. Critical rigor may also use `arena` and `swarm`. The brief names
+   the tier that permits fan-out, without a numeric spend cap.
+6. pstack's Autonomy governs as written. Merging and deploying through the
+   repository's own pipeline under Foundation article 6 is not a pause-worthy
+   deploy. Misty adds no money or credential pause.
+7. pstack's [unslop](skills/unslop/SKILL.md),
+   [technical-writing](skills/technical-writing/SKILL.md) and
+   [Writing the reply](skills/poteto-mode/SKILL.md#writing-the-reply) govern prose,
+   including their bans on long dashes and mid-sentence connector colons.
+8. The [forge adapter](skills/misty/harnesses/pstack-names.md) uses `gh` for PRs
+   and Linear for work items. Pushed branches, session pickup and committed
+   `show-me-your-work` decision trails can carry Git-native task state when the
+   stakes need it. Origin and Graphite are not required. PRs use the forge
+   adapter's Linear linkage convention.
 
-Proof: `skills/misty/SKILL.md`, `skills/poteto-mode/playbooks/`, plugin reference checks.
+Proof: `skills/misty/SKILL.md`, `skills/poteto-mode/`,
+`skills/misty/harnesses/pstack-names.md`, plugin reference checks and
+[ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md).
 
-## US-060 Require an Oracle before dispatch
+## US-060 Prove completion on the consumer path
 
-When work is delegated, I want a falsifiable outside check named first, so the
+When work changes behavior, I want evidence from the real consumer path, so a
 worker's completion claim is not its own proof.
 
 Criteria:
-1. Shaping supplies the exact check command or real user path and the expected
-   observable result before dispatch.
-2. A brief without an Oracle returns to shaping rather than launching work.
-3. Completion drives that check on the real consumer path and reports the
-   observed result or exact unproved criterion.
+1. pstack's [prove-it-works](skills/principle-prove-it-works/SKILL.md) governs
+   proof, with [verification](skills/verification/SKILL.md) for the consumer journey.
+2. The report names the checked revision, observed result and any exact
+   unproved criterion. A brief need not pass a separate Oracle-before-dispatch gate.
+3. pstack's first-message trigger governs the opening response rather than a
+   duplicate Misty rule requiring an outside check before any work.
 
-Proof: `skills/misty/SKILL.md`, `skills/grill/SKILL.md` and the dispatched brief's
-consumer evidence.
+Proof: `skills/principle-prove-it-works/SKILL.md`, `skills/poteto-mode/SKILL.md`
+and the changed consumer's verification evidence.
 
-## US-061 Run isolated work on Boat workers
+## US-061 Run work in the environment's isolation
 
-When an agent builds, tests, runs browser QA or executes untrusted code, I want
-it placed on a fresh Boat worker dispatched from wherever the agent runs, so the
-machines agents work from stay responsive and isolated work does not depend on
-a retiring coordinator.
+When an agent runs builds, suites, browser QA, untrusted code or long jobs, I
+want an isolated disposable environment named by its harness or workstation,
+so execution does not depend on a particular public provider integration.
 
 Criteria:
-1. The core routes execution placement to the
-   [boat-workers](skills/boat-workers/SKILL.md) skill for every harness without
-   naming one; that skill owns the list of worker cases. Other work stays where
-   the agent runs unless its harness note says otherwise: the
-   [OMP note](skills/misty/harnesses/omp.md) names Tern+OMP. Private runtime
-   environments belong to the workstation plugin.
-2. Platform, device, signed-in-session, private-network and
-   non-transferable-data checks stay where the agent runs, within any limits its
-   harness note states. An agent inside a worker runs its checks there without
-   nesting workers.
-3. Workers withhold stored account secrets by default, carry an explicit size
-   and timeout, and keep exit status and output as evidence.
-4. Cleanup retains the deletion result and confirms each owned ID is absent
-   from all-state inventory; a stopped worker is not deleted.
-5. Workers stay inside the plan's included time. Wallet charges, purchases,
-   plan changes, provider connections and new keys need Phaedrus; a missing
-   Boat credential is a reported prerequisite, not a reason to run less isolated.
+1. The core states the generic placement rule. The harness or workstation names
+   the isolated disposable environment.
+2. Callers use your environment's isolation skill for setup, access and
+   lifecycle rather than requiring a provider-specific skill from this plugin.
+3. Private provider credentials, capacity, pricing and cleanup procedures stay
+   with the environment's owner, not the public method.
+4. The pstack names adapter maps Cursor cloud agents to that environment without
+   requiring Cursor or a particular provider in another harness.
 
-Proof: `rules/core.md`, `skills/boat-workers/SKILL.md`,
-[ADR 0017](docs/decisions/0017-tern-omp-and-boat-workers.md) and a fresh-session
-worker dispatch with all-state cleanup.
+Proof: `rules/core.md`, `skills/misty/harnesses/pstack-names.md` and the
+environment's own isolation procedure and execution evidence.
 
 ## US-062 Recompile from the vision
 

@@ -368,7 +368,7 @@ export function prompt(s: State, prUrl: string, role: PromptRole): string {
   const head = s.head;
   const header = `PR ${prUrl} at head ${head}. Ticket ${s.ticket}. Rigor ${s.rigor} (${s.rigor_reason}). Base ${s.base}.`;
   const reportJson = `{"role": "${role}", "sha": "${head}", "thread_id": "<your native thread id>", "report_url": "<link to your posted report>", "outcome": "PASS|ISSUES|BLOCKED", "findings": [{"id": "F1", "evidence": "file:line, concrete failure, evidence link", "introduced_by_diff": true, "already_on_main": false, "blocker_class": "broken_journey|wrong_data|security_privacy|data_loss|broken_build|irreversible|none"}]}`;
-  const submit = (kind: string) => `Save the JSON payload to a file, then the conductor records it: \`${COMMAND} record --pr ${prUrl} --kind ${kind} --file <payload.json>\`. Use only the thread and report links you actually have. Follow the always-on core's claim rule.`;
+  const submit = (kind: string) => `Save the JSON payload to a file, then the conductor records it: \`${COMMAND} record --pr ${prUrl} --kind ${kind} --file <payload.json>\`. Use only the thread and report links you actually have. Follow pstack's Writing the reply rules.`;
 
   if (role in QA_ROLE) {
     const who = QA_ROLE[role as keyof typeof QA_ROLE];
@@ -406,7 +406,7 @@ export function prompt(s: State, prUrl: string, role: PromptRole): string {
       `You are the builder for the single fix round on ${header}`,
       `Fix only these blockers, named by the judge's ruling:\n${named}`,
       "Do not fix anything else, and do not reopen review. New findings are follow-up tickets. Check out the PR branch, push one commit set, and keep the existing PR.",
-      `When pushed, record the new head: \`${COMMAND} record --pr ${prUrl} --kind head\` with payload \`{"reason": "fix", "sha": "<new head sha>", "thread_id": "<your native thread id>"}\`. Follow the always-on core's claim rule.`,
+      `When pushed, record the new head: \`${COMMAND} record --pr ${prUrl} --kind head\` with payload \`{"reason": "fix", "sha": "<new head sha>", "thread_id": "<your native thread id>"}\`. Follow pstack's Writing the reply rules.`,
     ].join("\n\n");
   }
 

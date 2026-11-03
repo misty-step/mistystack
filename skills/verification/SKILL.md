@@ -46,14 +46,14 @@ mark unauthenticated surfaces n/a. Its Evidence section follows [evidence.md](ev
 The vendored generator owns launch, doctor, drive, feature-map seeding, cleanup
 and the end-to-end proof of its generated recipe.
 
-Apply misty's delegation boundary. Use authorized disposable data and clean only
+Apply [Misty's rigor-gated delegation](../misty/SKILL.md#misty-deltas). Place execution through your environment's isolation skill. Use authorized disposable data and clean only
 what the run created. Capture action and result, inspect each artifact, and publish proof
 by [evidence.md](evidence.md). After a fix, recheck only the judge's named blockers
 and fix-introduced regressions; link unchanged proof rather than rerun it.
 
 Done when each criterion has an observed result at the named revision, linked
 proof and owned cleanup, or an exact unproved claim and missing prerequisite.
-Follow the core's claim rule.
+Follow [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
 
 ### QA sign-in contract
 
@@ -68,7 +68,7 @@ the blocked criterion.
 For a verification-skill/feature-map audit, follow pstack's
 [maintain-verification-skill](../maintain-verification-skill/SKILL.md). Resolve the
 target from the request and repository; ask only if they cannot disambiguate it.
-Apply Misty's bounded delegation: combine small related source slices instead
+Apply [Misty's rigor-gated delegation](../misty/SKILL.md#misty-deltas); combine small related source slices instead
 of one agent per sentence. A feature not reached stays unverified, with the
 exact prerequisite and attempted route, never passed.
 For check placement, deletion or schedule repair, use [check-cadence.md](check-cadence.md).

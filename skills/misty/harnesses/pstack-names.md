@@ -1,17 +1,17 @@
 # pstack names in Mistystack
 
-Read a pstack name as the native route below, not a request to install Cursor. [Misty](../SKILL.md#non-negotiables) owns routing and rigor policy; this adapter maps names, not policy. Every upstream skill is installed at `skills/<name>/SKILL.md`, every playbook at `skills/poteto-mode/playbooks/<name>.md`, and a shortened principle name resolves to `principle-<name>`. `poteto-mode` and `poteto-help` remain explicit-only alongside Misty.
+Read a pstack name as the native route below, not a request to install Cursor. [Misty](../SKILL.md#misty-deltas) owns the surviving deltas; this adapter maps names, not a second method. Every upstream skill is installed at `skills/<name>/SKILL.md`, every playbook at `skills/poteto-mode/playbooks/<name>.md`, and a shortened principle name resolves to `principle-<name>`. `poteto-mode` and `poteto-help` remain explicit-only alongside Misty.
 
 ## Routes
 
 | pstack name | Misty route |
 | --- | --- |
-| `poteto-mode`, `poteto-help`, `Subagents`, `Non-negotiables`, `Autonomy` | Read [poteto-mode](../../poteto-mode/SKILL.md) or [poteto-help](../../poteto-help/SKILL.md) when explicitly requested. Its [Autonomy](../../poteto-mode/SKILL.md#autonomy) section owns ask-first; [Misty](../SKILL.md) owns routing and rigor. |
+| `poteto-mode`, `poteto-help`, `Subagents`, `Non-negotiables`, `Autonomy` | [Poteto-mode](../../poteto-mode/SKILL.md) is the baseline, not only an explicit-request route. Read [poteto-help](../../poteto-help/SKILL.md) for its guide. Apply only [Misty's deltas](../SKILL.md#misty-deltas) and its [pipeline clarification](../SKILL.md#autonomy). |
 | `architect`, `interrogate`, `swarm`, `figure-it-out`, `orchestrate`, `multi-phase-plan` | Read the installed [architect](../../architect/SKILL.md), [interrogate](../../interrogate/SKILL.md), [swarm](../../swarm/SKILL.md) or [figure-it-out](../../figure-it-out/SKILL.md) skill, or the named playbook below. The current rigor tier determines delegation. |
 | `arena` | Read the installed [arena](../../arena/SKILL.md); [agent-design](../../agent-design/SKILL.md#instruction-eval) and [eval](../../poteto-mode/playbooks/eval.md) own instruction-trial evidence. Use native sessions under the current rigor tier. |
 | `why`, `teach` | Read the installed [why](../../why/SKILL.md) or [teach](../../teach/SKILL.md); [research](../../research/SKILL.md) owns source verification and [how](../../how/SKILL.md) explains architecture. |
-| `show-me-your-work`, `autonomous-run`, `/loop` | Continue the owning playbook to its Oracle/stop predicate using native sessions; retain attempt evidence under Misty's forge override, not a TSV log or a new polling service. |
-| `opening-a-pr`, `Opening a PR`, `shipping`, `babysit`, `autopilot-full`, `autopilot-stack`, `Bugbot` | Misty's shipping override; the [ship-loop](../../ship-loop/SKILL.md) owns procedure. |
+| `show-me-your-work`, `autonomous-run`, `/loop` | Read the installed [show-me-your-work](../../show-me-your-work/SKILL.md) or named playbook. Keep Git-native task state and decision trails under [Forge](#forge). |
+| `opening-a-pr`, `Opening a PR`, `shipping`, `babysit`, `autopilot-full`, `autopilot-stack`, `Bugbot` | Read the named pstack playbook. [Misty's shipping delta](../SKILL.md#misty-deltas) maps Shipping's verify step to ship-loop; it does not replace the delivery backbone. |
 | `unslop`, `technical-writing`, `no-comments`, `comment-sicko` | Read the installed [unslop](../../unslop/SKILL.md), [technical-writing](../../technical-writing/SKILL.md) or [no-comments](../../no-comments/SKILL.md) skill. pstack's writing rules govern. The [comment-sicko reference](../../../vendor/pstack-agents/comment-sicko.md) supplies a native agent's brief without a new installer. |
 | `build-the-lever`, `principle-build-the-lever` | Read the installed [build-the-lever](../../principle-build-the-lever/SKILL.md) principle. |
 | `exhaust-the-design-space`, `principle-exhaust-the-design-space` | Read the installed [exhaust-the-design-space](../../principle-exhaust-the-design-space/SKILL.md) principle under the current rigor tier. |
@@ -28,7 +28,7 @@ Agent reference files are installed under `vendor/pstack-agents/`; they supply b
 
 ## Bundled playbook files
 
-These newly available files resolve explicit upstream names; the routing and shipping overrides above still apply.
+These files resolve explicit upstream names. Apply only [Misty's surviving deltas](../SKILL.md#misty-deltas).
 
 | pstack name | Installed file |
 | --- | --- |
@@ -37,12 +37,41 @@ These newly available files resolve explicit upstream names; the routing and shi
 | `autopilot-full`, `autopilot-stack`, `babysit`, `opening-a-pr`, `shipping` | [Autopilot-full](../../poteto-mode/playbooks/autopilot-full.md), [Autopilot-stack](../../poteto-mode/playbooks/autopilot-stack.md), [Babysit](../../poteto-mode/playbooks/babysit.md), [Opening a PR](../../poteto-mode/playbooks/opening-a-pr.md), [Shipping](../../poteto-mode/playbooks/shipping.md) |
 | `pause-safely`, `session-pickup`, `worktree-cleanup` | [Pause safely](../../poteto-mode/playbooks/pause-safely.md), [Session pickup](../../poteto-mode/playbooks/session-pickup.md), [Worktree cleanup](../../poteto-mode/playbooks/worktree-cleanup.md) |
 
+## Native roles
+
+[Setup-mistystack](../../setup-mistystack/SKILL.md) configures native `rigor-*`
+roles and their model assignments. The brief names the rigor tier and the
+responsibility, not a second model roster.
+
+| pstack responsibility | Native mapping |
+| --- | --- |
+| Code delegate, `poteto-agent` | `rigor-<tier>` with a builder or fix-builder brief. |
+| Prose or judgment | `rigor-<tier>` with the author or judge responsibility named in its brief. |
+| Verification or swarm worker | `rigor-<tier>` with its QA, review or verification partition named in the brief. |
+
+A second opinion is the same prompt against a different model family. A repeated
+run from the same family is not a second opinion. Use a separately configured
+native session when the active role mapping cannot provide the different family.
+Pstack's [fresh-subagent rule](../../poteto-mode/SKILL.md#subagents) applies as
+written. Independent judgment still needs independent threads.
+
+## Forge
+
+Use `gh` for PRs and Linear for work items. Git-native task state is welcome,
+including pushed branches, session pickup and
+[show-me-your-work](../../show-me-your-work/SKILL.md) decision trails committed
+when stakes need them. Neither Origin nor Graphite is required.
+[ADR 0022](../../../docs/decisions/0022-pstack-governs-owner-rulings.md) removes
+the no-Git-as-task-state restriction applied under
+[ADR 0020](../../../docs/decisions/0020-github-and-linear-replace-entire.md).
+
+For a Linear issue, include `Fixes MIS-<n>` in the PR body.
 
 ## Harness mechanisms
 
 | pstack / Cursor name | OMP | Claude Code | Codex | pi |
 | --- | --- | --- | --- | --- |
-| `Task`, `subagent_type`, `generalPurpose`, `poteto-agent` | `task`; task workers or `rigor-<tier>` for rigor roles | Native subagent; `mistystack:rigor-<tier>` for rigor roles | Native subagent; separately installed `rigor-<tier>` | Work inline; independent roles need separately briefed sessions |
+| `Task`, `subagent_type`, `generalPurpose`, `poteto-agent` | `task` with native `rigor-<tier>` through [Native roles](#native-roles) | Native `mistystack:rigor-<tier>` subagent | Native subagent with separately installed `rigor-<tier>` | Separately briefed sessions with the configured rigor role; no invented subagent API |
 | `readonly: true`, `readonly/Ask` | Read-only tools and brief | Native tool permissions and brief | Native sandbox/tool permissions and brief | Read-only tools and brief |
 | `run_in_background`, `run_in_background: true`, `resume` | Native handles, messages and completion events | Native background handles and resume | Native handles and completion/wait | Separately briefed sessions; no background/resume flag |
 | `claude-*`, `grok-*`, `gpt-*`, `inherit-parent`, always-applied model rule | Native `modelRoles` | Native agent `model` | Native agent TOML model/reasoning | Native main-session configuration |
@@ -50,7 +79,7 @@ These newly available files resolve explicit upstream names; the routing and shi
 | `todolist`, `file_attachments`, `.cursor/skills/`, `.cursor/plugins/`, `.cursor/rules/` | Native task state, file reads, `.agents/skills/` and installed Agent Skills; models stay in native configuration | Same | Same | Same |
 | `agent-transcripts`, `PSTACK_TRANSCRIPTS_DIR` | Workspace-scoped native history/archive and actual task transcripts; export only the authorized sessions when a file is required | Scoped session transcript/export from the active native project/session | Scoped native session transcript/export | Scoped session transcript/export |
 | `cursor-team-kit`, `deslop`, `control-ui`, `control-cli` | Native diff review and browser/CLI controls, with [design](../../design/SKILL.md) and [verification](../../verification/SKILL.md) | Same | Same | Same |
-| `Origin`, `built-in PR tool`, `Bugbot` | GitHub CLI and Misty's shipping override; unavailable bot integration never replaces independent review | Same | Same | Same |
-| `Automations`, `cloud agents`, `environment: "cloud"`, `environment: "local"`, `cloud_base_branch` | Native task/session handles and isolated worktrees at the named branch/SHA; use the owning task's native execution and isolation contract, not Cursor-only flags. Webhooks use the patched [make-bot-ui](../../make-bot-ui/SKILL.md) contract | Same, through native subagents | Same, through native subagents | Separately briefed native sessions; no invented subagent API |
+| `Origin`, `Graphite`, `built-in PR tool`, `Bugbot` | `gh` through [Forge](#forge) and pstack's delivery playbooks; unavailable bot integration never replaces independent review | Same | Same | Same |
+| `Automations`, `cloud agents`, `environment: "cloud"`, `environment: "local"`, `cloud_base_branch` | Native task/session handles and isolated worktrees at the named branch/SHA. Cursor cloud agents map to the disposable environment named by the harness or workstation through [the core's isolation rule](../../../rules/core.md) and your environment's isolation skill. Webhooks use the patched [make-bot-ui](../../make-bot-ui/SKILL.md) contract | Same, through native subagents | Same, through native subagents | Separately briefed native sessions; no invented subagent API |
 
 Skipped integrations never skip required proof or independent judgment. Codex's exercised plugin runtime does not discover custom agents; pi has no native subagents or rigor-agent discovery. Native details: [OMP](omp.md), [Claude Code](claude.md), [Codex](codex.md), [pi](pi.md).

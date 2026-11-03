@@ -4,9 +4,8 @@
 
 Warn the owner first in the authorized channel: report the live user-facing
 impact, known scope and current recovery action immediately. Preserve the failing
-observation and affected release. Follow the core's ask-first boundary for
-third-party messages or production-data writes. Check intervening releases,
-migrations and accepted data before changing live state. Use the compatible
+observation and affected release. Follow [Misty's Autonomy](../misty/SKILL.md#autonomy).
+Check intervening releases, migrations and accepted data before changing live state. Use the compatible
 option through the repository's existing pipeline:
 
 - **Platform rollback/flag:** identify later merges it removes and why dropping

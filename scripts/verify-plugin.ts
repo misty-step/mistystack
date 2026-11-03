@@ -434,7 +434,7 @@ export function verifyInstall(root: string, omp: string, model: string) {
 		}
 		console.log(`Explicit-only skills: ${hiddenSkills} hidden from the model list and readable through skill://`);
 		console.log(`Discovery: misty and foundation listed; ${agents.length} native task agents listed; working-tree skill readable; always-apply core injected`);
-		console.log(core.split("\n").find(line => line.startsWith("- ")));
+		console.log(core);
 	});
 }
 

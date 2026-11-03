@@ -26,6 +26,8 @@ Edit maintained source, not installed plugin copies. Keep one home per fact;
 migrate callers before deleting an old path. Fleet runtime, credentials, hosts
 and launchers belong to private `misty-step/workstation`. Adapters use
 native harness mechanisms, not a custom installer or duplicated method content.
+Use [the core's isolation rule](rules/core.md) and your environment's isolation
+skill for execution placement.
 
 ## Verify and release
 

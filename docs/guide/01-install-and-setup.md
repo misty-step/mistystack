@@ -21,16 +21,15 @@ a model received the core in a fresh session. Follow the matching reference's
 consumer path and report every skipped or unproved part separately. Fleet
 machinery remains in private `misty-step/workstation`.
 
-Misty Step's operator develops locally in Tern+OMP
-([OMP note](../../skills/misty/harnesses/omp.md)); every harness runs isolated
-execution on [Boat workers](../../skills/boat-workers/SKILL.md)
-([ADR 0017](../decisions/0017-tern-omp-and-boat-workers.md)).
+Follow [the core's placement rule](../../rules/core.md) through your
+environment's isolation skill. The matching harness note names local constraints
+and the harness or workstation names the isolated disposable environment.
 
 ## Hermes
 
 [ADR 0017](../decisions/0017-tern-omp-and-boat-workers.md) supersedes
 [ADR 0016](../decisions/0016-harness-agnostic.md)'s former Hermes consumer
-statement: no adapter, dispatcher or consumer role remains for them.
+statement. No adapter, dispatcher or consumer role remains for them.
 
 This public repository does not supply a general Hermes installer or a
 standalone Hermes native-loading reference. No install command or continuing

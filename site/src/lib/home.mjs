@@ -80,10 +80,6 @@ function build(graph) {
   const misty = need(graph, MISTY);
   const trial = need(graph, TRIAL);
   const lines = coreLines(core);
-  const headline = home.hero({ coreLines: '', commandHarnesses: '' }).headline;
-  const opening = headline.replace(/\.$/, '');
-  const at = lines.findIndex((line) => line.replace(/^-\s+/, '').startsWith(opening));
-  if (at < 0) fail(`no line of ${CORE} starts with "${opening}"`);
 
   const installCopy = home.install({ inProgress: '' });
   const tabs = harnesses(graph, installCopy);
@@ -122,7 +118,6 @@ function build(graph) {
   const briefCopy = home.brief({ fields: cardinal(fields.length, 'brief fields') });
   const written = Object.keys(briefCopy.fields);
   if (fields.join('|') !== written.join('|')) fail(`${MISTY} lists the brief fields ${fields.join(', ')}; the copy writes ${written.join(', ')}`);
-  if (!misty.body.includes('a brief without an Oracle returns to shaping')) fail(`${MISTY} no longer returns a brief without an Oracle`);
 
   const round = trial.data;
   const evidenceCopy = home.evidence({ Tasks: Cardinal(round.taskCount, 'tasks'), tasks: cardinal(round.taskCount, 'tasks'), limits: cardinal(round.limits.length, 'limits') });

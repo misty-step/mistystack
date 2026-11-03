@@ -17,7 +17,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   principles, playbook and task skills.
 - **Principle leaf:** one on-demand `principle-<slug>` skill reached through the
   mode's index, not a duplicate of a core rule or task skill's procedure.
-- **Playbook:** a task-type procedure under `skills/poteto-mode/playbooks/`; Misty's router and the named outside check determine completion.
+- **Playbook:** a task-type procedure under `skills/poteto-mode/playbooks/`, selected through Misty's router.
 - **Skill:** a directory with a `SKILL.md` entry point and optional supporting
   material. References use relative Markdown links or the skill's name; native
   loading mechanics belong to the adapter.
@@ -25,8 +25,8 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   references in `vendor/pstack.lock.json`, including supporting scripts. Bytes
   retain upstream text except the harness pointer and recorded portability
   patches under `vendor/pstack-patches/`; generated sidecars preserve invocation
-  policy. The lock owns provenance, patch reasons and hashes. Misty's nine
-  overrides remain in its router, not in upstream procedures.
+  policy. The lock owns provenance, patch reasons and hashes. Misty's remaining
+  deltas live outside those files.
 - **Recompile review:** the monthly and model-capability-triggered reconsideration
   of a project's implementation from its vision and durable record, owned by
   [recompile](skills/recompile/SKILL.md). Keeping the system is a valid outcome.
@@ -42,14 +42,17 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   harness-native configuration.
 - **Task agent:** an independent worker given a brief. The brief sets its
   responsibility; the native adapter supplies dispatch and runtime selection.
-- **Oracle:** a check outside the worker that can disprove completion, named with the exact command or real user path; [misty](skills/misty/SKILL.md#non-negotiables) owns the briefing gate.
-- **Local development environment:** the operator's OMP running in Tern, as the
-  [OMP note](skills/misty/harnesses/omp.md) states. Other harnesses work where
-  they run unless their harness note says otherwise.
-- **Boat worker:** a fresh Boat sandbox one agent dispatches for one unit's
-  execution. The dispatcher keeps its loop and credentials and deletes the
-  worker after collecting results; [boat-workers](skills/boat-workers/SKILL.md)
-  owns placement and lifecycle.
+- **Oracle:** a check outside the worker that can disprove completion, expressed
+  as an exact command or real user path. It is evidence for
+  [prove-it-works](skills/principle-prove-it-works/SKILL.md), not a core rule or a
+  separate mandatory pre-dispatch gate.
+- **Local development environment:** the environment where the agent runs.
+  Its harness note owns local constraints. The
+  [OMP note](skills/misty/harnesses/omp.md) names the operator's Tern+OMP setup.
+- **Isolated disposable environment:** the execution environment named by a
+  harness or workstation for builds, suites, browser QA, untrusted code and
+  long jobs. Your environment's isolation skill owns provider-specific setup,
+  access and lifecycle.
 - **Workstation plugin:** the separate private `misty-step/workstation` plugin
   for fleet machinery, host configuration, credentials, audio and backup.
   It consumes the method without owning a copy of it.

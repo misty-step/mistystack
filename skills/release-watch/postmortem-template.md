@@ -6,7 +6,7 @@
 
 ## Impact
 
-Who was harmed and what changed for them, under the core's claim rule.
+Who was harmed and what changed for them, under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
 
 ## Timeline and mechanism
 

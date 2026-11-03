@@ -30,7 +30,7 @@ Rule only on QA/review evidence for the atomic unit, not the initiative's remain
 
 Post `Verdict at <head SHA>` with linked QA/review, one outcome and its reason,
 exact blockers with owner and observable fix, useful follow-ups, consequential
-skips and intent calls under the core's claim rule. Omit empty sections.
+skips and intent calls under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply). Omit empty sections.
 
 - **SHIP:** independent completed QA/review cover this SHA; all blockers resolved.
   The `verification` skill defines the required real-path proof, including sign-in
