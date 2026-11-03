@@ -27,7 +27,7 @@ Criteria:
 7. Repeating a pstack update at the same pin leaves the lock and vendored tree unchanged; a real source beneath a symlinked parent remains usable.
 8. The offline gate rejects a detected skill, harness-name or poteto-mode section route without an installed target or explicit names-adapter row.
 9. poteto-mode and poteto-help install as explicit-only skills alongside Misty;
-   the names adapter resolves native mechanisms without changing Misty's nine overrides.
+   the names adapter resolves native mechanisms while Misty keeps only its surviving deltas.
 
 Proof: `scripts/verify`, `scripts/verify-plugin.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).

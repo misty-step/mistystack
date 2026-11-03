@@ -9,8 +9,8 @@ in [0017](0017-tern-omp-and-boat-workers.md).
 
 The owner reviewed the nine Misty overrides on 2026-11-03 for MIS-746. A vendored
 foundation is not the baseline if its router replaces most of its behavior.
-Pstack now governs unless a surviving Misty delta below changes it. Vendored
-bytes remain unchanged at [the lock's pin](../../vendor/pstack.lock.json).
+This ruling changes no vendored bytes. [The lock](../../vendor/pstack.lock.json)
+owns the source pin, provenance and recorded portability transforms.
 Historical decisions, postmortems and evals retain the rules and evidence that
 applied when they were written.
 

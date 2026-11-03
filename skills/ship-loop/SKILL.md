@@ -34,7 +34,7 @@ assigned by the `setup-mistystack` skill.
 
 For the unit's safety fact, use pstack's [blast-radius](../blast-radius/SKILL.md).
 Its real-code proof belongs in this round's existing QA/review and judge evidence,
-not a second review panel; Misty's delegation and shipping overrides still apply.
+not a second review panel; Misty's rigor-gated delegation and shipping delta still apply.
 
 ## 2. Run the round
 
