@@ -17,15 +17,16 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   principles, playbook and task skills.
 - **Principle leaf:** one on-demand `principle-<slug>` skill reached through the
   mode's index, not a duplicate of a core rule or task skill's procedure.
-- **Playbook:** a task-type procedure under `skills/misty/playbooks/`; Misty's router and the named outside check determine completion.
+- **Playbook:** a task-type procedure under `skills/poteto-mode/playbooks/`; Misty's router and the named outside check determine completion.
 - **Skill:** a directory with a `SKILL.md` entry point and optional supporting
   material. References use relative Markdown links or the skill's name; native
   loading mechanics belong to the adapter.
-- **Vendored foundation:** pstack skills and playbooks selected in
-  `vendor/pstack.lock.json`. Active (`vendored: true`) entries retain upstream
-  bytes except the harness pointer; generated sidecars preserve invocation
-  policy. The lock owns provenance and hashes; Misty extensions and overrides
-  live outside those files.
+- **Vendored foundation:** the wholesale pstack skills, playbooks and agent
+  references in `vendor/pstack.lock.json`, including supporting scripts. Bytes
+  retain upstream text except the harness pointer and recorded portability
+  patches under `vendor/pstack-patches/`; generated sidecars preserve invocation
+  policy. The lock owns provenance, patch reasons and hashes. Misty's nine
+  overrides remain in its router, not in upstream procedures.
 - **Recompile review:** the monthly and model-capability-triggered reconsideration
   of a project's implementation from its vision and durable record, owned by
   [recompile](skills/recompile/SKILL.md). Keeping the system is a valid outcome.
@@ -59,8 +60,9 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
    frontmatter. Native adapters load the core; procedures load on demand.
 2. **Skill provenance.** Misty-authored skills follow the frontmatter convention
    below. Its short `metadata.source` points to [ATTRIBUTION.md](ATTRIBUTION.md#skill-provenance), which owns full directory-level provenance, including supporting files. Vendored skills retain upstream frontmatter; `vendor/pstack.lock.json`
-   owns their provenance, inclusion/exclusion decisions and file hashes. Preserve
-   required licence notices for both. Never hand-edit vendored text.
+   owns their provenance, destinations, recorded portability patches and file
+   hashes. Preserve required licence notices for both. Regenerate vendored text
+   and the lock; never hand-edit them.
 3. **Harness-neutral method.** One content tree owns the method. Harness-specific
    tools, configuration, loading behavior and working environments live in
    disclosed native-adapter references, not shared procedures or the core.
@@ -77,7 +79,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 this contract owns their fields. All skill names match directories and all
 descriptions are non-empty. Vendored skills keep upstream's metadata rather
 than acquiring Misty's convention; lint reads their provenance from the lock.
-Principle leaves remain explicit-only, including vendored leaves.
+Principle leaves, poteto-mode and poteto-help remain explicit-only, including vendored leaves.
 
 For Misty-authored skills, descriptions are trigger-first and
 `metadata.prevents` cites observed failure evidence. The owner and sunset

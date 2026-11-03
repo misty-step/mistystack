@@ -338,12 +338,12 @@ async function main() {
       expect(doc?.headings.some((heading) => heading.depth === 1 && heading.label === name), `${id}: the generated title must be shareable`);
     }
   }
-  for (const entry of pstack.include.filter((entry) => entry.vendored && entry.destination.startsWith('skills/misty/playbooks/'))) {
+  for (const entry of pstack.include.filter((entry) => entry.vendored && entry.source.startsWith('skills/poteto-mode/playbooks/'))) {
     const doc = byId.get(entry.destination);
     expect(doc?.kind === 'Playbooks', `${entry.destination}: vendored playbook is missing from the published library`);
     const page = doc && pages.get(`${doc.url.slice(1)}index.html`);
     expect(page?.tags.filter(({ name }) => name === 'h1').length === 1, `${entry.destination}: render one page title without rewriting the source heading`);
-    expect(byId.get('skills/misty/SKILL.md')?.outboundLinks.includes(entry.destination), `${entry.destination}: Misty must route to the vendored playbook`);
+    expect(['skills/misty/SKILL.md', 'skills/poteto-mode/SKILL.md', 'skills/misty/harnesses/pstack-names.md'].some((id) => byId.get(id)?.outboundLinks.includes(entry.destination)), `${entry.destination}: Misty or its names adapter must route to the vendored playbook`);
   }
   for (const doc of documents.filter((value) => value && typeof value === 'object')) {
     if (doc.parentId !== null) expect(byId.has(doc.parentId), `${doc.id}: unknown parentId ${doc.parentId}`);

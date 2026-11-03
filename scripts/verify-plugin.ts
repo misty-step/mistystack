@@ -3,7 +3,7 @@ import { YAML } from "bun";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
-import { PSTACK_LOCK, readPstackLock } from "./pstack-lock.mjs";
+import { PSTACK_LOCK, isPstackTemplateTarget, readPstackLock, readPstackNames } from "./pstack-lock.mjs";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -209,6 +209,7 @@ export function lintPlugin(root: string, strict = false) {
 	let vendored = new Set<string>();
 	let vendoredSources = new Map<string, string>();
 	let upstreamOnly: string[] = [];
+	const nativeNames = readPstackNames(root);
 	if (existsSync(join(root, PSTACK_LOCK))) {
 		try {
 			const parsed = readPstackLock(root);
@@ -227,7 +228,7 @@ export function lintPlugin(root: string, strict = false) {
 			const name = basename(dirname(file));
 			if (frontmatter.name !== name) errors.push(`${file}: name must equal directory ${name}`);
 			if (!nonempty(frontmatter.description)) errors.push(`${file}: description must be non-empty`);
-			if ((name.startsWith("principle-") || name === "recompile" || name === "setup-mistystack") && frontmatter["disable-model-invocation"] !== true) {
+			if ((name.startsWith("principle-") || ["recompile", "setup-mistystack", "poteto-mode", "poteto-help"].includes(name)) && frontmatter["disable-model-invocation"] !== true) {
 				errors.push(`${file}: disable-model-invocation must be true`);
 			}
 			if (!vendored.has(file)) {
@@ -278,6 +279,7 @@ export function lintPlugin(root: string, strict = false) {
 			const target = resolve(dirname(join(root, file)), decoded);
 			const targetStat = existsSync(target) ? statSync(target) : undefined;
 			if (!targetStat?.isFile() && !targetStat?.isDirectory()) {
+				if (vendoredSources.has(file) && isPstackTemplateTarget(file, decoded)) continue;
 				const source = vendoredSources.get(file);
 				const upstreamTarget = source && posix.normalize(posix.join(posix.dirname(source), decoded));
 				if (upstreamTarget && upstreamOnly.some(source => upstreamTarget === source || upstreamTarget.startsWith(`${source}/`))) continue;
@@ -285,7 +287,7 @@ export function lintPlugin(root: string, strict = false) {
 			}
 		}
 		for (const [, name] of text.matchAll(/\bthe\s+`([a-z0-9-]+)`\s+skill\b/gi)) {
-			if (!names.has(name) && !(vendoredSources.has(file) && upstreamOnly.includes(`skills/${name}`))) {
+			if (!names.has(name) && !(vendoredSources.has(file) && (nativeNames.has(name) || upstreamOnly.includes(`skills/${name}`)))) {
 				references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
 			}
 		}
@@ -449,7 +451,9 @@ function installedRoot(value: unknown, scratch: string, root?: string) {
 
 function installedContent(root: string, installed: string) {
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
-	for (const file of [...skills, "rules/core.md"]) {
+	const locked = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).lock : undefined;
+	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file)]);
+	for (const file of files) {
 		const target = join(installed, file);
 		if (!existsSync(target) || !readFileSync(target).equals(readFileSync(join(root, file)))) {
 			throw new Error(`${file}: native install does not expose the working-tree content`);
@@ -707,7 +711,10 @@ if (import.meta.main) {
 		for (const error of report.errors) console.error(`ERROR: ${error}`);
 		console.log(`Plugin structure: ${report.skillCount} skills, ${report.errors.length} errors, ${report.warnings.length} warnings`);
 		if (report.errors.length > 0) process.exit(1);
-		const tests = Bun.spawnSync([process.execPath, "test", "--max-concurrency=1"], {
+		const vendoredTests = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).vendoredSources : new Map<string, string>();
+		const maintainedTests = [...new Bun.Glob("**/*.{test,spec}.{js,jsx,ts,tsx,mjs,cjs}").scanSync({ cwd: root })]
+			.filter(file => !file.split("/").includes("node_modules") && !vendoredTests.has(file)).sort();
+		const tests = Bun.spawnSync([process.execPath, "test", "--max-concurrency=1", ...maintainedTests.map(file => `./${file}`)], {
 			cwd: root, stdout: "inherit", stderr: "inherit",
 		});
 		if (!tests.success) process.exit(tests.exitCode || 1);

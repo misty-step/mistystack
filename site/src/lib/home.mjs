@@ -20,12 +20,11 @@ function fail(message) {
   throw new Error(`Home page: ${message}`);
 }
 
-function word(list, n, what) {
-  if (!Number.isInteger(n) || !list[n]) fail(`no word for ${what} ${n}`);
-  return list[n];
+function cardinal(n, what) {
+  if (!Number.isSafeInteger(n) || n < 0) fail(`invalid count for ${what}: ${n}`);
+  return CARDINALS[n] ?? String(n);
 }
 
-const cardinal = (n, what) => word(CARDINALS, n, what);
 const Cardinal = (n, what) => cardinal(n, what).replace(/^./, (c) => c.toUpperCase());
 const series = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`);
 const plain = (node) => node.value ?? (node.children ?? []).map(plain).join('');
@@ -95,9 +94,11 @@ function build(graph) {
     commandHarnesses: series(withCommands.map((tab) => tab.name)),
   };
 
-  const playbookIds = [...misty.outboundLinks].filter((id) => id.startsWith('skills/misty/playbooks/'));
+  const baseline = need(graph, 'skills/poteto-mode/SKILL.md');
+  const names = need(graph, 'skills/misty/harnesses/pstack-names.md');
+  const playbookIds = [...new Set([...misty.outboundLinks, ...baseline.outboundLinks, ...names.outboundLinks])].filter((id) => id.startsWith('skills/poteto-mode/playbooks/'));
   const playbooks = graph.documents.filter((doc) => doc.kind === 'Playbooks');
-  if (playbookIds.length !== playbooks.length) fail(`${MISTY} routes to ${playbookIds.length} playbooks; the tree has ${playbooks.length}`);
+  if (playbookIds.length !== playbooks.length) fail(`Misty and its names adapter route to ${playbookIds.length} playbooks; the tree has ${playbooks.length}`);
   const playbookNames = playbookIds.map((id, index) => {
     const title = need(graph, id).title;
     return index ? title.replace(/^./, (c) => c.toLowerCase()) : title;

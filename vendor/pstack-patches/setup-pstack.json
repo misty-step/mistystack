@@ -1,0 +1,21 @@
+{
+  "source": "skills/setup-pstack",
+  "reason": "Cursor's always-applied model-rule writer cannot configure OMP, Claude Code, Codex or pi; use their native role configuration.",
+  "edits": [
+    {
+      "file": "SKILL.md",
+      "before": "Write `~/.cursor/rules/pstack-models.mdc`, an always-applied rule that sets pstack's model per role.",
+      "after": "Configure the destination harness through the installed **setup-mistystack** skill. Its harness note owns model discovery, role assignment, reasoning budgets and persistence; do not create a Cursor rule. Use the steps below to discuss the budget and verification offers, not as a second configuration writer."
+    },
+    {
+      "file": "SKILL.md",
+      "before": "Write `~/.cursor/rules/pstack-models.mdc` with `alwaysApply: true`, a `# budget` line with the chosen label and its target effort, and one line per role, using the same labels poteto-mode uses. Overwrite the whole file so re-runs stay idempotent. Shape:",
+      "after": "Persist the confirmed choices with **setup-mistystack** in the destination harness's native configuration, preserving foreign entries, then read them back. The Cursor rule below is an upstream role reference only: never write it outside Cursor, and do not copy its slugs over detected native choices."
+    },
+    {
+      "file": "SKILL.md",
+      "before": "Tell the user the rule was written and that it applies to new sessions. Re-running this skill updates it.",
+      "after": "Tell the user which native configuration was written and which readback passed. Separate persisted configuration from fresh-session discovery and successful inference. Re-running this skill updates only its owned entries."
+    }
+  ]
+}

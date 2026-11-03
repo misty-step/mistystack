@@ -118,16 +118,16 @@ Follow [the core's claim rule](../../rules/core.md) and writing. State the consu
 
 ## Playbooks
 
-Read the matched procedure; combine rows across boundaries. For excluded upstream routes or a missing match, use the names adapter, not the excluded procedure.
+Read the matched procedure; combine rows across boundaries. For an explicitly requested upstream name or a missing match, use the [names adapter](harnesses/pstack-names.md). The complete baseline remains available in the explicit-only [poteto-mode playbook index](../poteto-mode/SKILL.md#playbooks).
 
 | Task | Read |
 | --- | --- |
-| Reported defect / new behavior / structural reshape | [Bug fix](playbooks/bug-fix.md) / [Feature](playbooks/feature.md) / [Refactoring](playbooks/refactoring.md) |
-| Read-only answer / unfamiliar API or dependency | [Investigation](playbooks/investigation.md) / [research](../research/SKILL.md) |
-| Performance defect / sustained metric improvement | [Perf issue](playbooks/perf-issue.md) / [Hillclimb](playbooks/hillclimb.md) |
-| Live-process diagnosis / captured artifact | [Runtime forensics](playbooks/runtime-forensics.md) / [Trace forensics](playbooks/trace-forensics.md) |
-| Throwaway decision probe / pixel-exact equivalence | [Prototype](playbooks/prototype.md) / [Visual parity](playbooks/visual-parity.md) |
-| Experiment / instruction comparison / skill authoring | [Eval](playbooks/eval.md) / [Instruction eval](../agent-design/SKILL.md#instruction-eval) / [agent-design](../agent-design/SKILL.md) |
+| Reported defect / new behavior / structural reshape | [Bug fix](../poteto-mode/playbooks/bug-fix.md) / [Feature](../poteto-mode/playbooks/feature.md) / [Refactoring](../poteto-mode/playbooks/refactoring.md) |
+| Read-only answer / unfamiliar API or dependency | [Investigation](../poteto-mode/playbooks/investigation.md) / [research](../research/SKILL.md) |
+| Performance defect / sustained metric improvement | [Perf issue](../poteto-mode/playbooks/perf-issue.md) / [Hillclimb](../poteto-mode/playbooks/hillclimb.md) |
+| Live-process diagnosis / captured artifact | [Runtime forensics](../poteto-mode/playbooks/runtime-forensics.md) / [Trace forensics](../poteto-mode/playbooks/trace-forensics.md) |
+| Throwaway decision probe / pixel-exact equivalence | [Prototype](../poteto-mode/playbooks/prototype.md) / [Visual parity](../poteto-mode/playbooks/visual-parity.md) |
+| Experiment / instruction comparison / skill authoring | [Eval](../poteto-mode/playbooks/eval.md) / [Instruction eval](../agent-design/SKILL.md#instruction-eval) / [agent-design](../agent-design/SKILL.md) |
 | Unsettled initiative / confirmed delivery / evidence ruling | [grill](../grill/SKILL.md) / [ship-loop](../ship-loop/SKILL.md) / [judge](../ship-loop/judge.md) |
 | Consumer proof / tests / prose | [verification](../verification/SKILL.md) / [test-audit](../test-audit/SKILL.md) / [writing](../writing/SKILL.md) |
 | Interface or interaction / security review | [design](../design/SKILL.md) / [security-audit](../security-audit/SKILL.md) |

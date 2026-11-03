@@ -38,7 +38,7 @@ plus the shared `rules/core.md`; it does not replace pi's system prompt or copy
 the method into an extension. A package on disk is not proof the extension ran.
 
 Invoke `/skill:misty` or `/skill:<skill-name>`, or read the installed skill. Follow its
-[bug-fix link](../playbooks/bug-fix.md) relative to that installed file, not the
+[bug-fix link](../../poteto-mode/playbooks/bug-fix.md) relative to that installed file, not the
 working directory or source checkout. pi enforces skill metadata and
 `disable-model-invocation: true`: principle leaves, recompile and setup-mistystack
 remain out of automatic model invocation while explicit invocation and reads
