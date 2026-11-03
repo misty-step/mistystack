@@ -1,3 +1,9 @@
+# [0.3.20](https://github.com/misty-step/mistystack/compare/v0.3.19...v0.3.20) (2026-11-03)
+<!-- landmark:protected-release previous=v0.3.19 source=472eae2728cd1fbe73579b52815ae4de42b999d860a7efd6f26f03e2de2ff91b -->
+
+### Bug Fixes
+
+* **pstack:** trim portability swaps and harden sync checks (#668) ([1d7a630](https://github.com/misty-step/mistystack/commit/1d7a630e135c82e855eb26b77dc116d138cbc89f))
 # [0.3.19](https://github.com/misty-step/mistystack/compare/v0.3.18...v0.3.19) (2026-11-03)
 <!-- landmark:protected-release previous=v0.3.18 source=0df97ccff7ba90e5185f84a6cba202f2783011a73b6bbb2b8fc583a42d25a30b -->
 
