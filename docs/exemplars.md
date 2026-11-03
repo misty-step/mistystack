@@ -13,7 +13,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 - [John Carmack — On Inlined Code, with his 2014 correction](https://number-none.com/blow/john_carmack_on_inlined_code.html): visible sequential execution, explicit dependencies and less unexpected state mutation.
 - [Elon Musk — original Starbase tour interview](https://www.youtube.com/watch?v=t705r8ICkRw): question owned requirements, delete, simplify, accelerate, then automate; the manufacturing examples are not a software-wide instruction to delete tests.
 - [Rich Hickey — Simple Made Easy](https://www.youtube.com/watch?v=LKtk3HCgTa8): reduce entanglement, distinguish simple from familiar and represent information as data.
-- [Lauren Tan and poteto's pstack introduction](https://github.com/cursor/plugins/blob/main/pstack/README.md) and [skills](https://github.com/cursor/plugins/tree/main/pstack/skills) ground domain-shaped types, outside proof and structural lessons. pstack is the vendored baseline, reached through `misty`, with provenance in the lock.
+- [Lauren Tan (poteto)'s pstack introduction](https://github.com/cursor/plugins/blob/main/pstack/README.md) and [skills](https://github.com/cursor/plugins/tree/main/pstack/skills) ground domain-shaped types, outside proof and structural lessons. pstack is the vendored baseline, reached through `misty`, with provenance in the lock.
 - [Kent C. Dodds — The Testing Trophy and Testing Classifications](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications): confidence from use-shaped tests and the right boundary, not a universal ratio.
 - [Robert C. Martin — The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): keep business policy independent of framework and persistence; exchange simple structures across boundaries.
 - [Boris Cherny — Claude Code best practices](https://www.anthropic.com/research/claude-code-best-practices): reusable workflows, independent challenge and real verification feedback. This authored historical essay is no longer maintained; use current documentation for commands.
@@ -21,7 +21,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 
 ## Codebases
 
-- [pstack by Lauren Tan](https://github.com/cursor/plugins/tree/main/pstack) provides the vendored mode, principles, playbooks and craft skills. [Misty](../skills/misty/SKILL.md) routes that baseline and its remaining deltas.
+- [pstack by Lauren Tan (poteto)](https://github.com/cursor/plugins/tree/main/pstack) provides the vendored mode, principles, playbooks and craft skills. [Misty](../skills/misty/SKILL.md) routes that baseline and its remaining deltas.
 - [Matt Pocock's skills](https://github.com/mattpocock/skills) informed shaping, domain language and instructions agents can follow. Current adaptations remain in `agent-design` and `research`. [Attribution](../ATTRIBUTION.md) preserves the sources of retired planning and prose adaptations.
 - [Emil Kowalski's skills](https://github.com/emilkowalski/skills): design engineering and purposeful motion. Already in `design`.
 - [Impeccable — Paul Bakaus](https://github.com/pbakaus/impeccable): interface critique, accessibility and polish. Already in `design`.

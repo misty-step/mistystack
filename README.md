@@ -14,8 +14,9 @@ The [principle index](skills/misty/SKILL.md#principles) and
 [playbook routing](skills/misty/SKILL.md#playbooks) reach pstack's vendored foundation
 and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns the pin and
 vendored set. [ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md)
-records the owner rulings that supersede the relevant parts of ADR 0020 and
-ADR 0021. Vendored files remain unchanged apart from the documented harness pointer.
+records the owner rulings that supersede ADR 0021's method override restrictions
+and remove the router's Git-as-task-state prohibition, not ADR 0020 itself.
+Vendored files remain unchanged apart from the documented harness pointer.
 
 Fleet machinery lives in the private `misty-step/workstation` repository.
 

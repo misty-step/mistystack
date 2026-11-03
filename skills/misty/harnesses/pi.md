@@ -41,8 +41,11 @@ Invoke `/skill:misty` or `/skill:<skill-name>`, or read the installed skill. Fol
 [bug-fix link](../../poteto-mode/playbooks/bug-fix.md) relative to that installed file, not the
 working directory or source checkout. pi enforces skill metadata and
 `disable-model-invocation: true`: principle leaves, recompile and setup-mistystack
-remain out of automatic model invocation while explicit invocation and reads
-through Misty's links can reach them. Prove discovery and explicit reachability separately.
+remain out of automatic model invocation while explicit invocation and installed-file
+reads can reach them. Misty's links reach its extension leaves and pstack's principle
+index, which names upstream leaves rather than linking each one. Open those through
+`/skill:<skill-name>` or their installed `skills/<name>/SKILL.md` files.
+Prove discovery and explicit reachability separately.
 
 ## Rigor inline, without subagents
 
