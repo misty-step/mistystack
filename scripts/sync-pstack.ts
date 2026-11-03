@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
 import { YAML } from "bun";
 import { createHash } from "node:crypto";
-import { chmodSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, readlinkSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join, posix, resolve } from "node:path";
+import { dirname, join, posix, relative, resolve, sep } from "node:path";
 
 type Inclusion = { source: string; destination: string; vendored: boolean };
 export type PstackLock = {
@@ -38,7 +38,20 @@ const isSkill = (source: string) => /^skills\/[^/]+$/.test(source);
 const isPlaybook = (source: string) => /^skills\/poteto-mode\/playbooks\/[^/]+\.md$/.test(source);
 const owns = (entry: Inclusion, file: string) => isSkill(entry.source) ? file.startsWith(`${entry.destination}/`) : file === entry.destination;
 
+function noSymlinkStat(root: string, target: string) {
+	let path = resolve(root);
+	let stat;
+	for (const component of ["", ...relative(path, resolve(target)).split(sep).filter(Boolean)]) {
+		if (component) path = join(path, component);
+		stat = lstatSync(path, { throwIfNoEntry: false });
+		if (!stat) return;
+		if (stat.isSymbolicLink()) throw new Error(`symlink is not allowed: ${path}`);
+	}
+	return stat;
+}
+
 function load(root: string): PstackLock {
+	noSymlinkStat(root, join(root, LOCK));
 	const lock: PstackLock = JSON.parse(readFileSync(join(root, LOCK), "utf8"));
 	if (lock.repo !== "cursor/plugins" || !/^[a-f0-9]{40}$/.test(lock.commit) || !/^[a-f0-9]{40}$/.test(lock.tree)
 		|| !Array.isArray(lock.include) || !Array.isArray(lock.exclude) || !lock.files || typeof lock.files !== "object" || Array.isArray(lock.files)) {
@@ -70,6 +83,7 @@ function load(root: string): PstackLock {
 }
 
 function walk(root: string): string[] {
+	noSymlinkStat(dirname(root), root);
 	return readdirSync(root).sort().flatMap(name => {
 		const file = join(root, name);
 		const stat = lstatSync(file);
@@ -83,6 +97,8 @@ function walk(root: string): string[] {
 export function checkPstack(root: string): string[] {
 	try {
 		const lock = load(root);
+		for (const entry of lock.include.filter(entry => entry.vendored)) noSymlinkStat(root, join(root, entry.destination));
+		for (const file of Object.keys(lock.files)) noSymlinkStat(root, join(root, file));
 		const errors: string[] = [];
 		const names = [...lock.include, ...lock.exclude].map(entry => entry.source);
 		if (inventoryHash(names) !== lock["inventory-sha256"]) errors.push(`${LOCK}: upstream include/exclude inventory changed; every pinned name must appear exactly once`);
@@ -114,9 +130,10 @@ function gitTree(root: string): Buffer {
 	const entries = readdirSync(root).filter(name => name !== ".git").map(name => {
 		const file = join(root, name);
 		const stat = lstatSync(file);
+		if (stat.isSymbolicLink()) throw new Error(`symlink is not allowed: ${file}`);
 		const directory = stat.isDirectory();
-		const mode = directory ? "40000" : stat.isSymbolicLink() ? "120000" : stat.mode & 0o111 ? "100755" : "100644";
-		const hash = directory ? gitTree(file) : gitHash("blob", stat.isSymbolicLink() ? Buffer.from(readlinkSync(file)) : readFileSync(file));
+		const mode = directory ? "40000" : stat.mode & 0o111 ? "100755" : "100644";
+		const hash = directory ? gitTree(file) : gitHash("blob", readFileSync(file));
 		return { name, directory, bytes: Buffer.concat([Buffer.from(`${mode} ${name}\0`), hash]) };
 	});
 	entries.sort((a, b) => Buffer.compare(Buffer.from(a.name + (a.directory ? "/" : "")), Buffer.from(b.name + (b.directory ? "/" : ""))));
@@ -124,8 +141,9 @@ function gitTree(root: string): Buffer {
 }
 
 function upstreamNames(source: string) {
+	for (const path of ["skills", "skills/poteto-mode/playbooks", "agents"]) noSymlinkStat(source, join(source, path));
 	return [
-		...readdirSync(join(source, "skills")).filter(name => existsSync(join(source, "skills", name, "SKILL.md"))).map(name => `skills/${name}`),
+		...readdirSync(join(source, "skills")).filter(name => noSymlinkStat(source, join(source, "skills", name, "SKILL.md"))?.isFile()).map(name => `skills/${name}`),
 		...readdirSync(join(source, "skills/poteto-mode/playbooks")).filter(name => name.endsWith(".md")).map(name => `skills/poteto-mode/playbooks/${name}`),
 		...readdirSync(join(source, "agents")).filter(name => name.endsWith(".md")).map(name => `agents/${name}`),
 	].sort();
@@ -175,7 +193,8 @@ export async function updatePstack(root: string, commit: string, from?: string) 
 			mkdirSync(source);
 			command(["tar", "-xf", archive, "-C", source]);
 		}
-		if (existsSync(join(source, "pstack/skills"))) source = join(source, "pstack");
+		noSymlinkStat(dirname(source), source);
+		if (noSymlinkStat(source, join(source, "pstack/skills"))?.isDirectory()) source = join(source, "pstack");
 		const actualTree = gitTree(source).toString("hex");
 		if (actualTree !== tree) throw new Error(`source tree ${actualTree} does not match ${lock.repo}@${commit}/pstack ${tree}`);
 		const names = upstreamNames(source);
@@ -189,14 +208,19 @@ export async function updatePstack(root: string, commit: string, from?: string) 
 			for (const child of isSkill(entry.source) ? walk(join(source, entry.source)) : [""]) {
 				const sourceFile = join(source, entry.source, child);
 				const destination = child ? `${entry.destination}/${child}` : entry.destination;
+				const stat = noSymlinkStat(source, sourceFile);
+				if (!stat?.isFile()) throw new Error(`not a regular source file: ${sourceFile}`);
 				const bytes = readFileSync(sourceFile);
-				rendered.set(destination, { bytes: destination.endsWith(".md") ? wrap(bytes, destination, skillNames) : bytes, mode: lstatSync(sourceFile).mode & 0o111 ? 0o755 : 0o644 });
+				rendered.set(destination, { bytes: destination.endsWith(".md") ? wrap(bytes, destination, skillNames) : bytes, mode: stat.mode & 0o111 ? 0o755 : 0o644 });
 			}
 			if (isSkill(entry.source)) {
+				noSymlinkStat(source, join(source, entry.source, "SKILL.md"));
 				const frontmatter = readFileSync(join(source, entry.source, "SKILL.md"), "utf8").match(/^---\n([\s\S]*?)\n---/)?.[1];
 				if (frontmatter && YAML.parse(frontmatter)["disable-model-invocation"] === true) rendered.set(`${entry.destination}/agents/openai.yaml`, { bytes: Buffer.from(SIDECAR), mode: 0o644 });
 			}
 		}
+		const destinations = new Set([LOCK, ...lock.include.filter(entry => entry.vendored).map(entry => entry.destination), ...Object.keys(lock.files), ...rendered.keys()]);
+		for (const path of destinations) noSymlinkStat(root, join(root, path));
 		for (const entry of lock.include.filter(entry => entry.vendored)) rmSync(join(root, entry.destination), { recursive: true, force: true });
 		for (const file of Object.keys(lock.files)) if (!rendered.has(file)) rmSync(join(root, file), { force: true });
 		const files: Record<string, string> = {};

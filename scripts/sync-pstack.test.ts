@@ -1,8 +1,8 @@
 import { afterEach, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { chmodSync, copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, renameSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { checkPstack, type PstackLock, updatePstack } from "./sync-pstack";
 
 const roots: string[] = [];
@@ -54,7 +54,28 @@ async function fixture() {
 	const save = () => put("vendor/pstack.lock.json", `${JSON.stringify(lock)}\n`);
 	save();
 	await updatePstack(root, lock.commit, join(root, "upstream"));
-	return { root, source, put, plain, lock, save };
+	const repin = () => {
+		git("add", "--force", "--all");
+		const current: PstackLock = JSON.parse(readFileSync(join(root, "vendor/pstack.lock.json"), "utf8"));
+		current.tree = git("write-tree");
+		put("vendor/pstack.lock.json", `${JSON.stringify(current)}\n`);
+		return current;
+	};
+	return { root, source, put, plain, lock, save, repin };
+}
+
+function snapshot(path: string): unknown {
+	const stat = lstatSync(path);
+	if (stat.isSymbolicLink()) return { link: readlinkSync(path) };
+	if (stat.isDirectory()) return Object.fromEntries(readdirSync(path).sort().map(name => [name, snapshot(join(path, name))]));
+	return { mode: stat.mode & 0o777, bytes: readFileSync(path).toString("hex") };
+}
+
+function runSync(root: string, args: string[]) {
+	mkdirSync(join(root, "scripts"), { recursive: true });
+	const script = join(root, "scripts/sync-pstack.ts");
+	copyFileSync(join(import.meta.dir, "sync-pstack.ts"), script);
+	return Bun.spawnSync([process.execPath, script, ...args], { cwd: root, stdout: "pipe", stderr: "pipe" });
 }
 
 test("sync preserves upstream bytes, executable support and explicit-only Codex policy", async () => {
@@ -119,4 +140,78 @@ test("CLI check needs no git, network or upstream checkout and fails nonzero on 
 	const failed = run();
 	expect(failed.exitCode).toBe(1);
 	expect(failed.stderr.toString()).toContain("sha256 mismatch");
+});
+
+test.each([
+	["skill directory", "skills/principle-proof"],
+	["playbook file", "skills/poteto-mode/playbooks/bug-fix.md"],
+	["skills directory", "skills"],
+	["playbooks directory", "skills/poteto-mode/playbooks"],
+	["agents directory", "agents"],
+	["agent file", "agents/poteto-agent.md"],
+	["skill entry point", "skills/principle-proof/SKILL.md"],
+	["supporting file and mode", "skills/principle-proof/helper.sh"],
+	["nested directory", "skills/principle-proof/nested"],
+	["source root", "."],
+])("CLI update refuses a symlinked source %s without copying outside bytes", async (name, component) => {
+	const { root, source, put, repin } = await fixture();
+	if (name === "nested directory") put("upstream/pstack/skills/principle-proof/nested/note.md", "# Nested\n");
+	const outside = join(root, "outside");
+	mkdirSync(outside);
+	const path = resolve(source, component);
+	const target = join(outside, "target");
+	const directory = lstatSync(path).isDirectory();
+	renameSync(path, target);
+	writeFileSync(directory ? join(target, "outside-marker.md") : target, "# Outside bytes must not be vendored\n");
+	symlinkSync(target, path);
+	const lock = repin();
+	const skillsBefore = snapshot(join(root, "skills"));
+	const outsideBefore = snapshot(outside);
+	const lockBefore = readFileSync(join(root, "vendor/pstack.lock.json"));
+	const result = runSync(root, ["--update", lock.commit, "--from", source]);
+	expect(result.exitCode).toBe(1);
+	expect(result.stderr.toString()).toContain("symlink");
+	expect(result.stderr.toString()).toContain(path);
+	expect(result.stderr.toString()).not.toContain("does not match");
+	expect(snapshot(join(root, "skills"))).toEqual(skillsBefore);
+	expect(snapshot(outside)).toEqual(outsideBefore);
+	expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(lockBefore);
+});
+
+test.each([
+	"skills",
+	"skills/principle-proof",
+	"skills/misty",
+	"skills/misty/playbooks",
+	"skills/principle-proof/agents",
+	"skills/principle-proof/agents/openai.yaml",
+	"skills/principle-proof/newdir",
+	"vendor",
+	"vendor/pstack.lock.json",
+])("CLI update and offline check refuse symlinked destination %s before any writes", async component => {
+	const { root, source, put, repin } = await fixture();
+	if (component.endsWith("/newdir")) {
+		put("upstream/pstack/skills/principle-proof/newdir/note.md", "# New source file\n");
+		mkdirSync(join(root, component));
+	}
+	const lock = repin();
+	const outside = join(root, "outside");
+	mkdirSync(outside);
+	const path = join(root, component);
+	const target = join(outside, "target");
+	renameSync(path, target);
+	symlinkSync(target, path);
+	const skillsBefore = snapshot(join(root, "skills"));
+	const outsideBefore = snapshot(outside);
+	const lockBefore = readFileSync(join(root, "vendor/pstack.lock.json"));
+	for (const args of [["--check"], ["--update", lock.commit, "--from", source]]) {
+		const result = runSync(root, args);
+		expect(result.exitCode).toBe(1);
+		expect(result.stderr.toString()).toContain("symlink");
+		expect(result.stderr.toString()).toContain(path);
+		expect(result.stderr.toString()).not.toContain("does not match");
+		expect(snapshot(join(root, "skills"))).toEqual(skillsBefore);
+		expect(snapshot(outside)).toEqual(outsideBefore);
+		expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(lockBefore);
+	}
 });

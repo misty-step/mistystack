@@ -20,6 +20,8 @@ Criteria:
 4. Verification preserves the live profile, credentials and foreign state.
 5. The gate checks the pinned pstack inventory and vendored file hashes offline,
    rejecting hand edits, missing files and unlisted files.
+6. pstack sync rejects source symlinks and symlinked destination components
+   before writing. The offline gate rejects symlinked vendored paths and parents.
 
 Proof: `scripts/verify`, `scripts/verify-plugin.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
