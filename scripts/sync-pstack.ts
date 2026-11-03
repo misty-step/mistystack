@@ -54,13 +54,14 @@ function checkRoutes(root: string, lock: PstackLock): string[] {
 	return [...errors];
 }
 
-function walk(root: string): string[] {
+function walk(root: string, ignored?: ReadonlySet<string>): string[] {
 	noSymlinkStat(dirname(root), root);
 	return readdirSync(root).sort().flatMap(name => {
 		const file = join(root, name);
+		if (ignored?.has(file)) return [];
 		const stat = lstatSync(file);
 		if (stat.isSymbolicLink()) throw new Error(`symlink is not a vendored file: ${file}`);
-		if (stat.isDirectory()) return walk(file).map(child => `${name}/${child}`);
+		if (stat.isDirectory()) return walk(file, ignored).map(child => `${name}/${child}`);
 		if (!stat.isFile()) throw new Error(`not a regular file: ${file}`);
 		return [name];
 	});
@@ -100,12 +101,19 @@ export function checkPstack(root: string): string[] {
 			else if (!lstatSync(path).isFile() || lstatSync(path).isSymbolicLink()) errors.push(`${file}: not a regular vendored file`);
 			else if (sha256(readFileSync(path)) !== hash) errors.push(`${file}: sha256 mismatch (do not hand-edit vendored pstack)`);
 		}
+		const ignored = new Set<string>();
+		const git = Bun.which("git");
+		if (git && existsSync(join(root, ".git"))) {
+			const result = Bun.spawnSync([git, "-C", root, "ls-files", "--others", "--ignored", "--exclude-standard", "--directory", "-z"], { stdout: "pipe", stderr: "pipe" });
+			if (!result.success) throw new Error(`git ls-files: ${result.stderr.toString().trim()}`);
+			for (const file of result.stdout.toString().split("\0").filter(Boolean)) ignored.add(join(root, file.replace(/\/$/, "")));
+		}
 		for (const entry of lock.include.filter(entry => entry.vendored)) {
 			const path = join(root, entry.destination);
 			const required = isSkill(entry.source) ? `${entry.destination}/SKILL.md` : entry.destination;
 			if (!lock.files[required]) errors.push(`${required}: missing from vendored file inventory`);
 			if (existsSync(path) && isSkill(entry.source)) {
-				for (const file of walk(path)) if (!lock.files[`${entry.destination}/${file}`]) errors.push(`${entry.destination}/${file}: unlisted vendored file`);
+				for (const file of walk(path, ignored)) if (!lock.files[`${entry.destination}/${file}`]) errors.push(`${entry.destination}/${file}: unlisted vendored file`);
 			}
 		}
 		return [...errors, ...checkRoutes(root, lock)];

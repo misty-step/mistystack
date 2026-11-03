@@ -11,7 +11,7 @@ afterEach(() => {
 	for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
 
-async function fixture(playbookHeading = "#") {
+async function fixture(playbookHeading = "#", gitignore?: string) {
 	const scratch = process.env.TMPDIR ?? join(homedir(), ".cache/tmp");
 	mkdirSync(scratch, { recursive: true });
 	const root = mkdtempSync(join(scratch, "pstack-test-"));
@@ -56,6 +56,11 @@ async function fixture(playbookHeading = "#") {
 	const save = () => put("vendor/pstack.lock.json", `${JSON.stringify(lock)}\n`);
 	save();
 	await updatePstack(root, lock.commit, join(root, "upstream"));
+	if (gitignore !== undefined) {
+		put(".gitignore", gitignore);
+		const result = Bun.spawnSync(["git", "-c", "init.templateDir=", "-C", root, "init", "--quiet"], { stdout: "pipe", stderr: "pipe" });
+		if (!result.success) throw new Error(result.stderr.toString());
+	}
 	const repin = () => {
 		git("add", "--force", "--all");
 		const current: PstackLock = JSON.parse(readFileSync(join(root, "vendor/pstack.lock.json"), "utf8"));
@@ -119,6 +124,38 @@ test.each([
 	expect(checkPstack(root).join("\n")).toContain(failure);
 	await updatePstack(root, lock.commit, source);
 	expect(checkPstack(root)).toEqual([]);
+});
+
+test.each([
+	["dependency file", "scripts/node_modules/dep/index.js", false],
+	["dependency symlink", "scripts/node_modules/.bin/tool", true],
+	["ignored file", "scripts/build.generated", false],
+	["ignored symlink", "scripts/link.generated", true],
+] as const)("offline check ignores git-ignored %s without traversing it", async (_name, file, symlink) => {
+	const { root, put } = await fixture("#", "node_modules/\n*.generated\n");
+	const destination = `skills/principle-proof/${file}`;
+	if (symlink) {
+		put("outside-dependency.js", "Dependency output is not vendored source.\n");
+		mkdirSync(dirname(join(root, destination)), { recursive: true });
+		symlinkSync(join(root, "outside-dependency.js"), join(root, destination));
+	} else put(destination, "Dependency output is not vendored source.\n");
+	const result = runSync(root, ["--check"]);
+	expect(result.exitCode).toBe(0);
+	expect(result.stderr.toString()).toBe("");
+});
+
+test.each(["file", "symlink"])("ignored dependency output does not exempt a non-ignored stray %s", async kind => {
+	const { root, put } = await fixture("#", "node_modules/\n");
+	put("skills/principle-proof/scripts/node_modules/dep/index.js", "Ignored dependency output.\n");
+	const file = "skills/principle-proof/scripts/stray.js";
+	if (kind === "symlink") {
+		put("outside.js", "Not a vendored file.\n");
+		symlinkSync(join(root, "outside.js"), join(root, file));
+	} else put(file, "Not a vendored file.\n");
+	const result = runSync(root, ["--check"]);
+	expect(result.exitCode).toBe(1);
+	expect(result.stderr.toString()).toContain(kind === "symlink" ? "symlink is not a vendored file" : "unlisted vendored file");
+	expect(result.stderr.toString()).toContain(file);
 });
 
 test.each(["duplicate", "omitted"])("offline check rejects an upstream name that is %s", async mode => {
