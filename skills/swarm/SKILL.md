@@ -32,11 +32,11 @@ When a worker must start from a non-default pushed branch, pass `cloud_base_bran
 
 Every brief stands alone. Include the goal, scope, exact slice or race arm, how to verify, and what to report. Reports use `PASS`, `ISSUES`, or `BLOCKED` with evidence. A worker that can prove a defect reports `ISSUES` and lists every issue it can prove, not only the first.
 
-If a worker drops out, proceed with N-1 and note it.
+If a worker drops out, keep independent work moving and use the installed [watchdog](../watchdog/SKILL.md) to recover a required slice. Name any unreachable prerequisite; a missing result is never a pass.
 
 ## Phase C: Aggregate
 
-Read the terminal results. Drop a result that does not record the SHAs and method its brief names, and respawn that worker once. After a second miss, record a gap. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
+Read the terminal results. A result that omits the SHAs or method its brief requires is incomplete. Recover the missing evidence under the installed [watchdog](../watchdog/SKILL.md), without a fixed retry or runtime allowance. For coverage, every required slice needs a result. For a race, apply the declared first-pass, rank-all or best-of selection rule. Report an unreachable prerequisite as a gap, never a pass. Do not paste raw worker dumps.
 
 ## Phase D: Report
 

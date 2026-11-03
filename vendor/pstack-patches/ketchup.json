@@ -1,0 +1,16 @@
+{
+  "source": "skills/ketchup",
+  "reason": "Owner directive 2026-11-03 (ADR0023) leaves already-authorized merge and release work with the agent; a read-only catch-up must not invent a user merge or approval gate.",
+  "edits": [
+    {
+      "file": "SKILL.md",
+      "before": "One call can cover many items, such as each PR in a set awaiting merge. For each item, collect its link, what it changes for users, the evidence behind your pick, its risk, and your pick. Write \"unknown\" for a fact the call needs that you do not know. Leave out a link you do not have.\n",
+      "after": "One owner decision can cover many items, such as a product choice shared by several slices. For each item, collect its link, what it changes for users, the evidence behind your pick, its risk and your pick. Write \"unknown\" for a fact the call needs that you do not know. Leave out a link you do not have.\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "Then list the action items. Ask the call the user owns, such as merge, approve, or pick, and give your pick. A step you would take first goes in your pick. So does anything that must happen first, and anything that cannot be undone. Give the number or link of each PR, issue, or agent a call is about, also in a call between options.\n",
+      "after": "Then list only decisions existing authorization leaves to the user, such as product scope or an irreversible action, and give your pick. Already-authorized delivery stays with the agent under the installed [ship-loop](../ship-loop/SKILL.md) skill. Give the number or link of each PR, issue or agent a genuine owner decision concerns, including a call between options.\n"
+    }
+  ]
+}

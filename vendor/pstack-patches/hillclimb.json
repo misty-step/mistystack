@@ -1,0 +1,11 @@
+{
+  "source": "skills/poteto-mode/playbooks/hillclimb.md",
+  "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+  "edits": [
+    {
+      "file": "",
+      "before": "8. Run **Opening a PR** with the accepted commits stacked in the order they landed.\n",
+      "after": "8. Deliver the accepted changes through the installed [ship-loop](../../ship-loop/SKILL.md) skill, keeping their evidence in the order the experiments established it.\n"
+    }
+  ]
+}

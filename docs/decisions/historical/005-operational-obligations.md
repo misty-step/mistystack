@@ -1,4 +1,4 @@
-# ADR-005: Every application ships on green, alerts loudly, and closes incident classes
+# ADR-005: Every application releases safely, alerts loudly, and closes incident classes
 
 Status: Accepted 2026-09-25 (MIS-150). Operator directive, relayed by Kaylee:
 "a non-negotiable foundation standard, without exception, for every application
@@ -6,22 +6,22 @@ we work on in both orgs." This record adds three obligations to the Foundation
 Standard catalog (version 1.4.0 at acceptance) and to `foundation-check`. It
 amends ADR-003's enforcement and builds on ADR-004's core project documents.
 
-Amended by [ADR-007](../../principles/007-braver-engineers-continuous-deployment.md) on 2026-09-30:
-production-like QA/data, agent walks of every story and automatic rollback
-strengthen the release safety evidence in catalog 1.6.0. Catalog 1.7.0's
-accepted [lean CI amendment](../../principles/007-braver-engineers-continuous-deployment.md#lean-ci-amendment-2026-10-02)
-replaces the blanket candidate gate with exact-candidate targeted preprod proof
-and automatic same-artifact promotion. The full suite moves to owned nightly
-detection; tenant, migration, rollback and approved alert-routing contracts stay.
-Existing pins change only by explicit adoption. The catalog is now 1.8.1;
-these version numbers describe historical decisions, not a repinning instruction.
+[ADR-007](../../principles/007-braver-engineers-continuous-deployment.md) added
+production-like QA/data, story walks and automatic rollback on 2026-09-30.
+Catalog 1.6.0 recorded that decision; 1.7.0 recorded the intermediate
+[lean CI amendment](../../principles/007-braver-engineers-continuous-deployment.md#lean-ci-amendment-2026-10-02).
+Those version numbers and 1.8.1's later catalog state remain historical evidence,
+not repinning instructions. The
+[2026-11-03 delivery decision](../0023-live-verification-and-release-gate.md)
+supersedes the old PR/push CI, merge-review and blanket-gate requirements.
+Tenant, data, rollback and approved alert-routing obligations remain.
 
 ## Context
 
-The directive has three parts:
+The 2026-09-25 directive had three parts:
 
-1. **Continuous deployment.** Green on main ships. CI, automated tests,
-   verification and agentic QA are strong enough to deploy at 5pm on a Friday.
+1. **Continuous deployment.** Automatic delivery backed by strong verification,
+   real journeys and recovery evidence, including confidence to deploy on Friday.
 2. **Deep Sentry integration**, or an equivalent error-logging and health-check
    system, so production incidents alert loudly.
 3. **Incident response** that ends in a postmortem and a fix that rules out the
@@ -62,7 +62,7 @@ Examples it rests on:
 
 | Id | Title | Owed by every application |
 | --- | --- | --- |
-| FND-REL-001 | Continuous deployment | Every merge to trunk (the default branch, whatever its name) that passes the gate deploys to production automatically, through a job that waits on the gate; for a multi-tenant app, it reaches every tenant except those explicitly excluded with a reason in the adoption record. Each tenant's backward-compatible migration runs before its deploy and any failed migration stops rollout; the repository reports every tenant's deployed revision and migration level, and the receipt reads back every non-excluded tenant after deploy. The gate (CI, tests of core journeys, story walks, agentic QA) is strong enough for a Friday 5pm deploy; rollback is exercised. |
+| FND-REL-001 | Continuous deployment | Build and verify the affected real running path, then merge without CI or review gates. Before deployment, fast CI and one critical-correctness/security review gate the landed release candidate; CI does not run on PRs or pushes. Deploy the same checked bytes automatically, then check live identity and a critical journey. Multi-tenant rollout reaches every tenant except those explicitly excluded with an evidenced reason. Each tenant's backward-compatible migration precedes its deploy; a failed migration stops rollout. Read back every non-excluded tenant's deployed revision and migration level, and exercise rollback. |
 | FND-ALR-001 | Loud production alerting | Remote error capture with release and environment (Sentry by default, or an approved equivalent that captures errors, checks health and raises incidents); an outside, scheduled health check; alerts only to an approved agent triage intake, proven by a controlled failure. For Sentry, all alert rule actions target the intake and no alert email goes to org members. |
 | FND-INC-001 | Incident response closes the class | The runbook's `## Incidents` section turns an alert into an owned incident; the triage agent opens its ticket, starts an engineer or escalates to Kaylee only for a real alert; the ticket closes only when it links a postmortem from the pokayoke template under `docs/postmortems/` and the postmortem's structural, class-closing fix with a regression check. |
 
@@ -91,13 +91,14 @@ while the controlled-failure receipt proves actual delivery and handling.
 
 ### Continuous delivery to every tenant (operator decision 2026-09-26)
 
-A merge to trunk — the repository's default branch, whether named `main`,
-`master` or otherwise — deploys to production after the gate succeeds, without
-manual promotion. For a multi-tenant application the rollout covers **every
-tenant** unless `operations.ship.tenancy.excluded` names that tenant and gives a
-non-empty reason. Editing that list is an explicit, reviewable adoption-record
-change, not an implicit deploy filter. The tenant registry enumerates every
-tenant, including excluded tenants.
+A verified change merges to trunk without CI, independent review or a judge.
+The landed release candidate deploys automatically after the pre-deploy fast CI
+and single critical-correctness/security review, without manual promotion.
+The candidate need not equal a later trunk head; promotion preserves lineage and
+accepted data under ADR 0023. For a multi-tenant application the rollout covers
+**every tenant** unless `operations.ship.tenancy.excluded` names it and records
+a non-empty reason. An exclusion is an explicit adoption decision, not an
+implicit deploy filter. The registry enumerates excluded tenants too.
 
 Before the deploy, migrate each non-excluded tenant; migrations must remain
 backward-compatible with the code still running (expand/contract). A failed
@@ -117,12 +118,11 @@ incident handling, not merely a configured destination.
 An application is a repository whose `surfaces` (ADR-004's vocabulary) include
 `ui`, `cli`, `api` or `deployed`: it changes a live system or ships something
 people run. Libraries, content vaults and fixtures are not applications. A
-record without `surfaces` is treated as an application, so opting out takes an
-explicit, reviewable declaration: a change that makes an application's record
-declare a non-application is a third trigger for the designated reviewer
-(ADR-003 Review authority), like a baseline extension. This change adds
-`surfaces` to the adoption record now; ADR-004 stage 1 adds the document checks
-keyed off it.
+record without `surfaces` was treated as an application by the historical
+checker. Declaring a former application out of scope still needs an explicit,
+evidenced owner decision rather than silently dropping its obligations.
+The old designated-review PR trigger is retired. ADR-004 recorded the
+surface-keyed document checks.
 
 For a released artifact without a live service (a CLI, a desktop app, an
 extension), "ships" means an automatic release and "health" means crash and
@@ -135,52 +135,28 @@ error reports from real installs.
 
 ### Enforcement through the ratchet
 
-- **Pending is a gap.** For an application, each of the three that is not
-  `satisfied` is the gap `ops:ship`, `ops:alert` or `ops:incident`. In enforced
-  mode it fails; in bootstrap mode it needs a baseline entry, at most 30 days
-  out, and an extension needs the designated reviewer (ADR-003).
-- **Satisfied must hold up.** The checker verifies the repository's side of each
-  claim; runtime practice lives in the receipt:
-  - FND-REL-001: `operations.ship` names the default branch, which the checker
-    confirms from the CI event or the clone's `origin/HEAD` (unknown fails), and
-    either a platform (a git integration, proved in the receipt) or a workflow
-    that fires on every push to that branch, or on its successful
-    `workflow_run`. Branch filters follow GitHub's globs and `!` exclusions; a
-    `paths` or `paths-ignore` filter, `branches-ignore` covering the branch, or
-    a tag-only trigger does not count, and a `workflow_run` must follow a
-    workflow that itself fires on every push to the branch (a dispatch-only or
-    scheduled upstream is a manual or periodic promotion). The named job must
-    wait on the gate (`needs`, or the `workflow_run` success condition). It and
-    every job it needs, transitively, must exist, and their `if:` may only
-    combine, with `&&`, guards that keep every green push to the default branch:
-    `success()`, `github.event_name == 'push'`, `github.event_name !=
-    'pull_request'`, a `github.ref`/`github.ref_name` test for the default
-    branch, the repository fork guard, and the `workflow_run` conclusion, head
-    branch, event and same-repository tests. Each guard counts only for the event
-    that ships: `github.event_name == 'push'` for a push-triggered workflow, the
-    `workflow_run` tests for one that follows the gate (their fields are empty
-    on a push), and the ship job and every job it needs must run on one common
-    event. Anything else (a promotion branch, a commit-message opt-in, a
-    repository toggle, `always()`) fails closed, and a gate job with
-    `continue-on-error` does not count. Beside such a conjunction,
-    `||` may add only manual re-runs of the default branch
-    (`github.event_name == 'workflow_dispatch'` with a default-branch `ref`
-    test and otherwise allowed guards), and only when no alternative names a
-    status function: GitHub then keeps its implicit `success()`, so a failed
-    gate still stops the job. A ship job that waits through the `workflow_run`
-    success condition rather than `needs` may not add that alternative, because a
-    dispatch run would skip the gate (amended 2026-09-26, MIS-150: Tach's
-    continuous deployment re-runs trunk this way). An all-green aggregator job with `if: always()`
-    (a merge gate that fails unless every upstream succeeded) blocks correctly
-    but cannot be verified from the file, so the ship job needs the checking
-    jobs themselves; a repository using such an aggregator lists them. For
-    `operations.ship.tenancy`, `single` needs only its model; `multi` must name
-    the repository's tenant registry, tenant-state command or workflow, and a
-    migration job that the ship job needs transitively. The checker verifies
-    those files exist, each excluded tenant appears in the registry with a
-    non-empty reason, and the migration job obeys the same job and `if:` guards
-    as every other needed job. A platform-only multi-tenant ship fails closed
-    because its migration order cannot be established from a workflow.
+- **Pending is a gap.** The historical ratchet represented unsatisfied
+  application obligations as `ops:ship`, `ops:alert` or `ops:incident`, with
+  baseline expiries at most 30 days out. Extensions keep a reason and accountable
+  owner decision, not designated PR approval.
+- **Satisfied must hold up.** Repository shape is not runtime practice.
+  The former checker validated push/`workflow_run` trigger syntax and transitive
+  job guards; those trigger rules do not govern current CI or merge. Current
+  release evidence must establish:
+  - FND-REL-001: the selected landed source and artifact identity, real-path proof
+    before merge, and one pre-deploy release gate containing fast CI and the
+    single critical-correctness/security review. No PR/push CI, exact-PR-head
+    approval or aggregator status becomes a merge condition. A failed, skipped
+    or `continue-on-error` check cannot be represented as a successful release
+    gate. Repair slow CI rather than accepting it as delivery latency.
+    The workflow or native deployment facility promotes the same checked bytes;
+    a platform git integration alone is not proof it respected the release gate.
+    For `operations.ship.tenancy`, `single` records its model; `multi` also
+    identifies the tenant registry, state-readback command and migration step.
+    Every non-excluded tenant migrates safely before deploy, and a failure stops
+    rollout. Workflow dependencies or native provider receipts must establish
+    that order; file presence cannot. Excluded tenants remain in the registry
+    with a reason and known live state.
   - FND-ALR-001: `operations.alert` names the file that initialises error
     capture (it must reference the provider), a scheduled health workflow or a
     named external monitor, and an approved agent triage route key as its
@@ -189,8 +165,8 @@ error reports from real installs.
     every postmortem in `docs/postmortems/` has `## Pokayoke` and
     `## Follow-up`; unless its status is `open`, the follow-up links the change
     that closed the class.
-- **The receipt carries practice:** recent green commits reaching production
-  without hand steps, a rollback drill, a controlled failure whose alert was
+- **The receipt carries practice:** the checked artifact reaching production
+  without manual promotion, a rollback drill, a controlled failure whose alert was
   seen and handled, and the regression check a postmortem cites. For multi-tenant
   shipping it carries a **post-deploy readback of every non-excluded tenant's
   deployed revision and migration level** and evidence that migration ran
@@ -236,25 +212,25 @@ appear in `registry`. `health` may be `{ "external": "<named monitor>" }`.
 
 ### Pin bumps
 
-`foundation-check baseline --revision SHA` on an existing record re-pins the
-standard and adds obligations the catalog gained as `pending`. The three
-ADR-005 application gaps retain `ops:ship`, `ops:alert` and `ops:incident`;
-catalog 1.5.0's new obligations add `obl:FND-REV-001`, `obl:FND-SEC-001`
-and `obl:FND-CIT-001` (ADR-006). It keeps existing walk entries and adds none,
-so a re-pin never re-baselines stories that walk. Because the baseline grows,
-the pin-bump PR carries an extension record for the designated reviewer.
+The historical `foundation-check baseline --revision SHA` repinned the catalog
+and added newly introduced obligations as `pending`, preserving existing walk
+entries rather than rebaselining stories already walked. ADR-005 used
+`ops:ship`, `ops:alert` and `ops:incident`; catalog 1.5.0 added
+`obl:FND-REV-001`, `obl:FND-SEC-001` and `obl:FND-CIT-001`.
+The review obligation and designated extension-approval workflow are retired;
+record any real obligation change with its owner and evidence, then use ADR 0023.
 
 ## Consequences
 
-- Every adopted repository fails its next pin bump until the three gaps are
-  baselined or met; the rollout proposal sequences that.
-- Structural checks prove shape, not practice. A dishonest `satisfied` with a
-  well-formed `operations` block would pass the lint; the receipt and the
-  review are the guard, as for every other `satisfied` disposition.
-- A single-tenant platform deploy that does not wait on CI can only be
-  `satisfied` if the receipt shows the platform gates on the checks; otherwise
-  it stays a gap. Multi-tenant deploys require a workflow job so the checker
-  can verify migration order.
+- The original rollout required the three operational gaps to be baselined or
+  met at adoption. That history does not restore PR CI or review merge gates.
+- Structural checks prove shape, not practice. A well-formed `operations` block
+  cannot establish a truthful `satisfied` claim; the real consumer/effect receipt
+  and, at release only, the critical-correctness/security assessment supply
+  meaningful evidence.
+- A platform must respect the pre-deploy release gate before actual deployment;
+  an automatic git integration is not itself that proof. Multi-tenant delivery
+  additionally proves migration order and tenant-state readback.
 - Email-only Sentry alerts are prohibited: every rule targets the agent triage
   intake, no alert email goes to org members, and the controlled-failure receipt
   proves the route was seen and handled.

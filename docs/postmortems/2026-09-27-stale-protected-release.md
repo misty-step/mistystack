@@ -69,36 +69,24 @@ and its repair did not deploy harness configuration to the live workstation.
 
 How can we pokayoke this so this kind of error never happens again?
 
-The failing-closed check now sits **before merge**, not only after it:
+The original repair placed native Landmark validation in required pre-merge CI.
+That deployment placement is retired by
+[ADR 0023](../decisions/0023-live-verification-and-release-gate.md). The durable
+invariant remains: published notes must match the landed candidate and immutable
+tags. Validation now runs at the pre-deploy release gate and publication, not as
+a PR merge requirement.
 
-1. The required `verify` job runs native Landmark `prepare-protected` on the
-   prospective merge checkout with full history. Producer, pre-merge validator,
-   and publisher use the same pinned Landmark revision. There is no second
-   changelog classifier and no error suppression. Any generated file remains
-   in the disposable CI checkout; CI has read-only repository permissions.
-2. The existing required-check ruleset now requires an up-to-date base, with
-   no bypass actors. A base advance invalidates previous green evidence. The
-   release automation refreshes its PR after verified master pushes; stale
-   candidates cannot merge merely because their old checks passed.
-3. `scripts/protected-release.test.ts` guards that required-check configuration
-   and replays the exact docs-only race with the real Landmark binary. It proves
-   a valid candidate is accepted, a docs-only base advance is rejected without
-   rewriting it, regeneration repairs the marker without changing visible
-   notes, and work after a tagged release can prepare the next version.
-   Before the workflow fix, the configuration regression failed because required
-   `verify` had no candidate validator; after it, both tests passed (20 assertions).
+Producer, validator and publisher retain the same pinned Landmark revision.
+The read-only publication replay refuses writes; there is no second changelog
+classifier or error suppression. `scripts/protected-release.test.ts` preserves
+the real Landmark docs-only-race regression and regeneration proof.
 
-Together these close the class **a stale generated candidate can pass the
-required merge gate and first be discovered by publication** (US-015). The
-publish-time check remains defense in depth. No tag is moved and no protected
-publication check is bypassed. Withdrawing only the never-published `0.1.49`
-section repairs the poisoned state; the normal owner generates the replacement
-from all accumulated commits, including #113, for fresh verification and merge.
-
-Residual classes: GitHub/API outages, release-bot authentication failures, and
-an administrator changing the required-check rules are not eliminated by this
-fix. They must fail visibly rather than be described as a successful release.
-This mechanism does not claim arbitrary release infrastructure cannot fail.
+The September checks passed their then-current configuration and 20 assertions;
+those historical observations do not prove today's release workflow. The current
+release needs its own candidate, fast-CI, critical-assessment, immutable-publication
+and live-readback evidence. No tag is moved and no publication check is bypassed.
+GitHub/API outages and release-bot authentication failures remain visible failures,
+not reasons to rewrite notes or claim a release.
 
 ## Follow-up
 

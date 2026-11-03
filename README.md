@@ -13,9 +13,9 @@ principles, with Misty's remaining deltas loaded when the task needs them.
 The [principle index](skills/misty/SKILL.md#principles) and
 [playbook routing](skills/misty/SKILL.md#playbooks) reach pstack's vendored foundation
 and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns the pin and
-vendored set. [ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md)
-records the owner rulings that supersede the relevant parts of ADR 0020 and
-ADR 0021. Vendored files remain unchanged apart from the documented harness pointer.
+vendored set and exact patches/removals. [ADR 0023](docs/decisions/0023-live-verification-and-release-gate.md)
+records author-owned running-product proof before merge, the fast pre-deploy CI
+and single critical assessment, and open-ended watchdog-supervised agents.
 
 Fleet machinery lives in the private `misty-step/workstation` repository.
 
@@ -79,8 +79,8 @@ live in [USER_STORIES.md](USER_STORIES.md). Maintainers start at
 ./scripts/check plugin --strict
 ```
 
-`check` runs the maintained test suites and plugin lint sequentially. CI runs
-`./scripts/check plugin --strict --lint-only`: strict lint checks relative
+`check` runs the maintained test suites and plugin lint sequentially. Release-only
+CI runs `./scripts/check plugin --strict --lint-only`: strict lint checks relative
 Markdown link resolution, named skill references, URI isolation and native
 manifests; installation is explicitly unproved. The full `plugin --strict`
 selection installs in disposable homes through every available OMP, Claude Code,
@@ -135,9 +135,9 @@ labelled with their immutable revision.
 The [publishing decision](docs/decisions/0018-static-publishing-stack.md) records the
 stack exception and production boundaries. The
 [kernel trial](docs/evals/2026-10-28-kernel-trial.md) owns the reported results,
-task table and limitations. Every push to `master` deploys
-<https://stack.mistystep.io> through
-[`site-deploy.yml`](.github/workflows/site-deploy.yml).
+task table and limitations. The dispatched [release workflow](.github/workflows/landmark-release.yml)
+deploys <https://stack.mistystep.io> after its fast gate, using the same checked
+artifact. PRs and pushes do not start CI or deployment.
 
 ## Read
 

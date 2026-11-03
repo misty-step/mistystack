@@ -1,151 +1,108 @@
 # Release convention
 
-Status: accepted 2026-10-14. This is the one implementation convention for
-versions, changelogs and release notes in every repository we ship, client work
-included. The [foundation checklist](../skills/foundation/checklist.md) records
-why we deploy continuously and keep useful notes and maintained versions; this
-page says how. A repository's ADR records its local choices (release units,
-baseline, any existing pre-1.0 policy) and links here instead of restating it.
-Change this convention with a normal pull request to this file.
+Status: accepted 2026-10-14; delivery placement superseded by
+[ADR 0023](decisions/0023-live-verification-and-release-gate.md) on 2026-11-03.
+This is the one convention for versions, changelogs and release notes in the
+repositories we ship. [Ship-loop](../skills/ship-loop/SKILL.md) owns delivery;
+[Foundation](../skills/foundation/checklist.md#article-6) owns releasability.
 
 ## Pipeline
 
 ```text
-reviewed PR with a Conventional Commit title
-  -> squash commit on the protected default branch
-  -> one generator per release unit decides the SemVer bump
-  -> release PR containing only generator output (versions, CHANGELOG.md)
-  -> merged release PR: tag and GitHub Release with the same notes
-  -> deployment, separately: /changelog built from the deployed revision
+build → author proves the running consumer → squash-merge
+  → release: generate notes and merge a generator-only PR
+  → fast CI + one critical-correctness/security assessment
+  → immutable tag / GitHub Release and deploy the checked artifact
+  → live release identity and critical-journey proof
 ```
 
-The formats are [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
-and [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html). Use a maintained
-generator; never build a release service.
+CI and review run only at the pre-deploy release gate, never on PRs or pushes.
+No release or authored PR waits for checks or review to merge. The release
+assessment covers the candidate's changes since live, not one review per PR.
+A critical defect stops deployment and receives a targeted repair and real-path
+proof; noncritical findings go to the owning tracker.
 
-## Rules
+## Versions and notes
 
-1. **One authority.** A release unit is one independently deployable or
-   installable program. Exactly one generator decides its version and notes.
-   Version files and manifests are generator output, never edited by hand. A
-   repository with several release units names them in its ADR and uses the
-   generator's multi-package support, not hand-synchronized copies.
-2. **Commits are the input.** The generator reads the commits merged to the
-   protected default branch since the previous release tag. Release units allow
-   squash merges only, with the pull request title as the commit title
-   (`squash_merge_commit_title: PR_TITLE`) and an empty commit body
-   (`squash_merge_commit_message: BLANK`), so the reviewed title is the
-   generator's entire input. A title check rejects
-   non-conventional titles before merge. It reads only the title, passed
-   through an environment variable rather than interpolated into a script, and
-   builds nothing.
-3. **Titles are the notes.** Write `type(scope): summary` for the person using
-   the program: what changed, and what they gain or must do. Titles are
-   published, so they carry no ticket IDs, internal paths or hosts,
-   credentials or client details. `fix` is a patch, `feat` a minor, and `!` in
-   the title marks a major. Put migration and rollback steps in the PR
-   description; the generated notes link to the PR.
-   `chore`, `docs`, `test`, `build`, `ci`, `refactor` and `style`
-   changes never cut a release on their own.
-4. **Baseline once.** The previous immutable release tag is the baseline. When
-   adopting a generator, record the starting version and baseline commit in
-   the ADR (release-please: the manifest version and `bootstrap-sha`). Never
-   infer them from a package version, the newest-looking tag or an empty
-   checkout, and never reset versions or retag history. Existing pre-1.0
-   products keep their documented policy; new integrations take the generator
-   defaults, so a breaking change takes 0.x to 1.0.0. Set a deliberate version
-   with the generator's override (release-please: a reviewed `Release-As:`
-   commit footer), never by editing version files.
-5. **Release PR, no bypass.** Version and changelog changes land only through a
-   release PR that contains nothing but generator output. The release bot never
-   pushes to the default branch and never uses an admin or ruleset bypass. Fix
-   wrong notes at their source (release-please: a `BEGIN_COMMIT_OVERRIDE` block
-   in the merged PR's body), not by editing the release PR.
-6. **Exact-head checks.** A release PR merges only after the repository's real
-   CI passed on its current head commit. `GITHUB_TOKEN`-created or updated PRs
-   create native `pull_request` runs that require workflow approval. Either
-   open the PR with a release App token the repository already uses, or approve
-   those native runs through GitHub's workflow-approval API. The existing
-   `GITHUB_TOKEN` with `actions: write` can do this; no human shipping gate is
-   needed. Scope approval to the generator's same-repository PR, its current
-   head SHA and the configured CI workflows; refuse missing, foreign or moved
-   runs, and do not restart already-started runs. `workflow_dispatch` and
-   `repository_dispatch` jobs can execute real CI but their checks do not
-   satisfy required PR checks. Never post a passing stand-in, create a PAT or
-   copy credentials for this. See GitHub's [trigger rules](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)
-   and [required-check eligibility](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks).
-7. **Merge promptly.** A release PR lists changes that were reviewed when they
-   merged, so it needs no second review. The merging agent checks that the
-   version matches the included commits and that the notes hold nothing
-   private, then merges as soon as checks pass. An open release PR is
-   unfinished work, not a queue for a person.
-8. **Publish in one run.** Tags and releases created with `GITHUB_TOKEN` trigger
-   no further workflows. Build and attach release artifacts from the tagged
-   commit in the run that created the release (release-please output
-   `release_created`). Serialize release runs with a `concurrency` group that
-   never cancels, so an older run cannot overwrite a newer release.
-9. **Deployment stays separate.** A commit that passes its gates deploys whether
-   or not it has been released. A program has one deploy path, and a hosting
-   provider's Git integration counts as one. A GitHub Release records reviewed
-   source, not a deployment. Rolling back code does not roll back data or
-   credentials. Release and deploy failures alarm through the existing incident
-   path, not a second one.
-10. **Reachable notes.** Every release is a GitHub Release whose notes come from
-    the same version decision as its changelog entry. A program with a site
-    serves `/changelog`, linked from its navigation and rendered at build time
-    from the canonical notes of the deployed revision (CHANGELOG.md, or the
-    generator's existing release record), so it lists the releases inside the
-    serving build. No GitHub credential reaches a browser, and no service
-    exists only to serve notes. An existing `/releases` page may remain as an
-    alias. Private sites keep their access boundary. A program that reports
-    its revision (health endpoint, `--version`) reports its version beside the
-    full commit SHA.
-11. **Verification, not permission.** Green default-branch commits deploy without
-    human approval, a release-hold flag or a custodian handoff. Keep checks that
-    verify the exact candidate, tenant isolation, migration compatibility and
-    recovery, plus rollback. Missing or failed verification stops a release;
-    ownership labels and historical holds do not. Release tooling never touches
-    client data or credentials.
+1. **One generator.** A release unit is one independently deployable or installable
+   program. Exactly one maintained generator owns its semantic version and notes.
+   Version files, manifests and CHANGELOG.md are generator output, never
+   hand-synchronized. Record local release units, baseline and pre-1.0 policy in
+   a repository decision record.
+2. **Conventional Commits.** Squash PRs with `type(scope): summary` as their title.
+   Configure `squash_merge_commit_title: PR_TITLE` and an empty squash body.
+   The generator reads landed commits since the previous immutable release tag.
+   `fix` produces a patch, `feat` a minor and `!` a major under the generator's
+   documented pre-1.0 policy. `docs`, `chore`, `test`, `build`, `ci`, `refactor`
+   and `style` do not alone require a release.
+3. **Useful public titles.** Name the consumer's improvement or required action.
+   Keep ticket IDs, private names, internal hosts and credentials out of published
+   titles. Put migration and rollback detail in the linked PR description.
+4. **Baseline once.** Use the previous immutable release tag. At adoption, record
+   the starting version and baseline commit. Never infer the baseline from a
+   package file or reset versions, retag history or edit published notes. Use the
+   generator's documented override when a deliberate version is needed.
+5. **Generated-notes PR.** Merge only generator output in the release PR, without
+   CI or review. Check that its notes match the included commits and contain no
+   private material. Correct wrong notes at their source through the generator's
+   supported input, not by editing generated history. Publication refuses an
+   unlanded candidate or a tag naming another commit.
 
-## Generators
+## The release gate
 
-New integrations use
-[release-please](https://github.com/googleapis/release-please-action) in
-manifest mode, pinned to the full commit SHA of a reviewed release with the
-version in a trailing comment, with the strategy for the program's language.
+Run one fast CI pass on the landed release candidate. Reuse cached toolchains
+and dependencies; build each artifact once, retain it, and deploy the same bytes.
+Do not add PR workflows, required merge checks or repeated full-suite reruns.
+Measure a slow gate and remove the duplicated work or narrow its owned contracts
+without losing independent consumer coverage.
 
-Working [Landmark](https://github.com/misty-step/landmark),
+One reviewer assesses critical correctness and security at this boundary. Its
+receipt identifies the candidate, scope, evidence and critical findings or none.
+The release owner repairs a critical failure and proves its affected behavior;
+there is no broad review cycle. The repository's native pipeline publishes and
+deploys after the gate without a human approval handoff.
+
+Serialize releases without cancelling an in-flight promotion. A newer release
+must descend from live; a rerun must not overwrite it with an older candidate.
+Use native rollback for an already verified compatible release when a live journey
+fails. A code rollback never implies restoring data or credentials.
+
+A GitHub Release records source publication, not deployment. Serve `/changelog`
+from the deployed revision's canonical generated notes; no separate release-note
+service or browser credential is needed. Report the semantic version beside the
+full source revision wherever the product reports release identity.
+
+## Mistystack's native path
+
+Landmark remains Mistystack's generator. The `Verify and Release` workflow is
+explicitly dispatched after source changes have merged and the single critical
+assessment is recorded on GitHub:
+
+```sh
+gh workflow run landmark-release.yml --ref master \
+  -f source=<landed-full-SHA> \
+  -f critical-review=<GitHub-assessment-URL>
+```
+
+The source must still be the release's selected default-branch revision at
+preparation. The workflow prepares the generated changelog, opens and merges
+its PR immediately, selects the landed candidate, runs cached release CI once,
+publishes the protected immutable release and deploys the already checked site
+artifact. The deploy reads back serving identity and exercises delivery/watchdog
+reading routes. There is no PR, push or standalone site-deploy CI trigger.
+
+After publication, refresh installed consumers with
+[setup-mistystack](../skills/setup-mistystack/SKILL.md). Retain the source PR,
+generated release PR, assessment, CI run, immutable release, serving identity,
+live journey and fresh installed-session evidence. Name an unexercised boundary
+as unverified rather than inferring it from an exit code.
+
+## Other generators
+
+New integrations use pinned
+[release-please](https://github.com/googleapis/release-please-action) in manifest
+mode. Working [Landmark](https://github.com/misty-step/landmark),
 [semantic-release](https://github.com/semantic-release/semantic-release) and
-release-please integrations stay when they meet the rules above; replacing one
-only for uniformity is out of scope. Fix these known gaps in place, never by
-adding a second generator:
-
-- A floating action tag such as `@v4`: pin the full SHA.
-- A release commit pushed straight to the default branch, as semantic-release's
-  git plugin does: publish the tag and GitHub Release only, or move to a release
-  PR.
-- A hand-maintained changelog beside generated notes: keep one artifact.
-- Model-written or paid notes: optional only, with a deterministic fallback
-  that is useful on its own.
-
-## Adoption
-
-Adopt per release unit in one small pull request: generator configuration,
-release workflow, title check, `/changelog` where there is a site, and the
-ADR, with `squash_merge_commit_title: PR_TITLE`,
-`squash_merge_commit_message: BLANK` and default-branch protection applied.
-Before merging it, run the actual generator, not an imitation, on patch,
-minor, breaking and no-release inputs, and show that a repeated run changes
-nothing and that a missing baseline, a moved head and failed or skipped CI
-each refuse. Show the release PR getting exact-head CI.
-Walk the stories in the repository's SPEC.md, recording missing stories as
-gaps rather than inventing them. Prove rollback on a disposable preview, never
-on client data. Inspect desktop and mobile screenshots of `/changelog` built
-from synthetic or public content.
-
-Adoption is complete when a real reviewed merge has produced the expected
-version, a merged release PR (where the generator uses one), an immutable
-GitHub Release, a matching changelog entry and a live `/changelog` at the
-deployed revision. Record the expected and actual version and the PR, head,
-CI, release, provider revision and HTTP readbacks. A dry run or an open pull
-request is not adoption.
+release-please paths remain when they follow this convention; uniformity alone
+does not justify replacing one. Keep existing tag immutability, release-state,
+privacy and rollback protections at publication, not as PR merge requirements.

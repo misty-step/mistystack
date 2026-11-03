@@ -21,12 +21,12 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 - **Skill:** a directory with a `SKILL.md` entry point and optional supporting
   material. References use relative Markdown links or the skill's name; native
   loading mechanics belong to the adapter.
-- **Vendored foundation:** the wholesale pstack skills, playbooks and agent
-  references in `vendor/pstack.lock.json`, including supporting scripts. Bytes
-  retain upstream text except the harness pointer and recorded portability
-  patches under `vendor/pstack-patches/`; generated sidecars preserve invocation
-  policy. The lock owns provenance, patch reasons and hashes. Misty's remaining
-  deltas live outside those files.
+- **Vendored foundation:** the pinned pstack skills, playbooks and agent
+  references in `vendor/pstack.lock.json`. The lock owns source inventory,
+  explicit exclusions, exact patches/removals and generated-file hashes.
+  Recorded owner delivery changes remove obsolete upstream procedures instead
+  of leaving contradictory instructions installed. Unchanged primitives retain
+  upstream bytes apart from the harness pointer and recorded modifications.
 - **Recompile review:** the monthly and model-capability-triggered reconsideration
   of a project's implementation from its vision and durable record, owned by
   [recompile](skills/recompile/SKILL.md). Keeping the system is a valid outcome.
@@ -49,10 +49,16 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 - **Local development environment:** the environment where the agent runs.
   Its harness note owns local constraints. The
   [OMP note](skills/misty/harnesses/omp.md) names the operator's Tern+OMP setup.
-- **Isolated disposable environment:** the execution environment named by a
-  harness or workstation for builds, suites, browser QA, untrusted code and
-  long jobs. Your environment's isolation skill owns provider-specific setup,
-  access and lifecycle.
+- **Slice worker:** one isolated Boat environment, started from a saved clean
+  toolchain snapshot, reused for a slice's portable execution, stopped when idle
+  and deleted after its evidence is retained. [Boat workers](skills/boat-workers/SKILL.md)
+  owns setup, access and lifecycle. Untrusted commands use fresh isolation.
+- **Watchdog:** the active supervisor that periodically compares observed agent
+  work with its brief, steers drift and recovers stalls until acceptance and
+  cleanup finish. It imposes no agent wall-clock deadline.
+- **Release gate:** fast CI and one critical-correctness/security assessment
+  before publication/deployment, followed by live identity and journey proof.
+  Author-owned running-product verification precedes merge without CI or review.
 - **Workstation plugin:** the separate private `misty-step/workstation` plugin
   for fleet machinery, host configuration, credentials, audio and backup.
   It consumes the method without owning a copy of it.
@@ -63,7 +69,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
    frontmatter. Native adapters load the core; procedures load on demand.
 2. **Skill provenance.** Misty-authored skills follow the frontmatter convention
    below. Its short `metadata.source` points to [ATTRIBUTION.md](ATTRIBUTION.md#skill-provenance), which owns full directory-level provenance, including supporting files. Vendored skills retain upstream frontmatter; `vendor/pstack.lock.json`
-   owns their provenance, destinations, recorded portability patches and file
+   owns their provenance, destinations, recorded exact patches/removals and file
    hashes. Preserve required licence notices for both. Regenerate vendored text
    and the lock; never hand-edit them.
 3. **Harness-neutral method.** One content tree owns the method. Harness-specific

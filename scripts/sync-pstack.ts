@@ -73,12 +73,21 @@ function readPatches(root: string, lock: PstackLock) {
 		const file = `${PATCHES}/${name}`;
 		if (!/^[a-z0-9-]+\.json$/.test(name) || !noSymlinkStat(root, join(root, file))?.isFile()) throw new Error(`${file}: expected a primitive JSON patch`);
 		const bytes = readFileSync(join(root, file));
-		const patch = JSON.parse(bytes.toString("utf8")) as { source: string; reason: string; edits: { file: string; before: string; after: string }[] };
+		const patch = JSON.parse(bytes.toString("utf8")) as { source: string; reason: string; edits: { file: string; before: string; after: string }[]; remove?: { file: string; sha256: string }[] };
 		const entry = lock.include.find(entry => entry.vendored && entry.source === patch.source);
-		if (!entry || typeof patch.reason !== "string" || !patch.reason.trim() || !Array.isArray(patch.edits) || !patch.edits.length) throw new Error(`${file}: invalid primitive patch`);
+		if (!entry || typeof patch.reason !== "string" || !patch.reason.trim() || !Array.isArray(patch.edits)
+			|| patch.remove !== undefined && !Array.isArray(patch.remove) || patch.edits.length + (patch.remove?.length ?? 0) === 0) throw new Error(`${file}: invalid primitive patch`);
 		for (const edit of patch.edits) {
 			if (typeof edit.file !== "string" || edit.file && (!/^[a-zA-Z0-9_./-]+$/.test(edit.file) || edit.file.split("/").some(part => !part || part === "." || part === ".."))
 				|| !isSkill(entry.source) && edit.file !== "" || typeof edit.before !== "string" || !edit.before || typeof edit.after !== "string" || edit.before === edit.after) throw new Error(`${file}: invalid exact replacement`);
+		}
+		const removed = new Set<string>();
+		for (const removal of patch.remove ?? []) {
+			if (typeof removal.file !== "string" || !/^[a-zA-Z0-9_./-]+$/.test(removal.file)
+				|| removal.file.split("/").some(part => !part || part === "." || part === "..") || !isSkill(entry.source)
+				|| removal.file === "SKILL.md" || !/^[a-f0-9]{64}$/.test(removal.sha256) || removed.has(removal.file)
+				|| patch.edits.some(edit => edit.file === removal.file)) throw new Error(`${file}: invalid exact removal`);
+			removed.add(removal.file);
 		}
 		return { ...patch, file, sha256: sha256(bytes), destination: entry.destination };
 	});
@@ -237,6 +246,13 @@ export async function updatePstack(root: string, commit: string, from?: string, 
 				const at = text.indexOf(edit.before);
 				if (at < 0 || text.indexOf(edit.before, at + edit.before.length) >= 0) throw new Error(`${patch.file}: expected one exact match in ${destination}`);
 				target.bytes = Buffer.from(text.slice(0, at) + edit.after + text.slice(at + edit.before.length));
+			}
+			for (const removal of patch.remove ?? []) {
+				const destination = `${patch.destination}/${removal.file}`;
+				const sourceFile = join(source, patch.source, removal.file);
+				if (!rendered.has(destination) || !noSymlinkStat(source, sourceFile)?.isFile()
+					|| sha256(readFileSync(sourceFile)) !== removal.sha256) throw new Error(`${patch.file}: removal source changed for ${destination}`);
+				rendered.delete(destination);
 			}
 		}
 		const destinations = new Set([LOCK, ...lock.include.filter(entry => entry.vendored).map(entry => entry.destination), ...Object.keys(previous.files), ...rendered.keys()]);

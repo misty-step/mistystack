@@ -1,4 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
+import { YAML } from "bun";
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createServer, type Socket } from "node:net";
 import { homedir } from "node:os";
@@ -74,19 +75,29 @@ test("US-015 CI replays the same Landmark that publishes", () => {
 	const release = readFileSync(join(workflows, "landmark-release.yml"), "utf8");
 	const pinned = [...release.matchAll(/uses: misty-step\/landmark@[0-9a-f]{40} # v(\S+)/g)].map((match) => match[1]);
 	expect(pinned.length).toBeGreaterThan(0);
-	expect(new Set(pinned)).toEqual(new Set([ci.match(/LANDMARK_VERSION: '(\S+)'/)?.[1]]));
+	expect(new Set(pinned)).toEqual(new Set([ci.match(/landmark\/releases\/download\/v([^/]+)\//)?.[1]]));
 });
 
-test("US-015 master publication does not wait on the live PR check", () => {
+test("US-015 release-only checks precede publication and deploy the same checked artifact", () => {
 	const workflows = join(import.meta.dir, "../.github/workflows");
-	const ci = readFileSync(join(workflows, "ci.yml"), "utf8");
-	const release = readFileSync(join(workflows, "landmark-release.yml"), "utf8");
-	expect(release).toMatch(/verify:\n\s+uses: \.\/\.github\/workflows\/ci\.yml/);
-	const step = ci.split("\n      - ").find((block) => block.includes("protected-release-check.ts"));
-	expect(step?.match(/^\s+if: (.*)$/m)?.[1]).toBe("github.event_name == 'pull_request'");
-	const replays = ci.split("\n      - ").filter((block) => /Install the pinned Landmark|scripts\/check plugin --strict --lint-only/.test(block));
-	expect(replays.length).toBe(2);
-	for (const block of replays) expect(block).not.toContain("if:");
+	const ci = YAML.parse(readFileSync(join(workflows, "ci.yml"), "utf8"));
+	const release = YAML.parse(readFileSync(join(workflows, "landmark-release.yml"), "utf8"));
+	const deploy = YAML.parse(readFileSync(join(workflows, "site-deploy.yml"), "utf8"));
+	expect(Object.keys(release.on)).toEqual(["workflow_dispatch"]);
+	expect(Object.keys(ci.on)).toEqual(["workflow_call"]);
+	expect(Object.keys(deploy.on)).toEqual(["workflow_call"]);
+	expect(release.jobs.verify.needs).toBe("prepare");
+	expect(release.jobs.verify.uses).toBe("./.github/workflows/ci.yml");
+	expect(release.jobs.publish.needs).toEqual(["prepare", "verify"]);
+	expect(release.jobs.deploy.needs).toEqual(["prepare", "verify", "publish"]);
+	expect(release.on.workflow_dispatch.inputs["critical-review"].required).toBe(true);
+	const merge = release.jobs.prepare.steps.find((step: { run?: string }) => step.run?.includes("gh pr merge"));
+	expect(merge.run).not.toMatch(/--auto|gh pr checks/);
+	const upload = ci.jobs.site.steps.find((step: { uses?: string }) => step.uses?.startsWith("actions/upload-artifact@"));
+	const download = deploy.jobs.deploy.steps.find((step: { uses?: string }) => step.uses?.startsWith("actions/download-artifact@"));
+	expect(upload.with.name).toBe("mistystack-site-${{ inputs.revision }}");
+	expect(download.with.name).toBe(upload.with.name);
+	expect(deploy.jobs.deploy.steps.some((step: { run?: string }) => step.run?.includes("npm run build"))).toBe(false);
 });
 
 const check = (repoRoot: string, upstream: string, base?: string, upstreamTimeoutMs?: number, bin = landmark!) =>

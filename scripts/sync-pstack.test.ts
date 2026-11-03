@@ -370,3 +370,39 @@ test.each(["no match", "ambiguous match", "escaping target", "duplicate primitiv
 	expect(snapshot(join(root, "skills"))).toEqual(before);
 	expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(lockBefore);
 });
+
+test("recorded removal deletes a retired upstream helper and remains stable on regeneration", async () => {
+	const { root, source, lock, put } = await fixture();
+	const helper = "skills/principle-proof/helper.sh";
+	const patch = {
+		source: "skills/principle-proof", reason: "The replacement procedure no longer uses this helper.", edits: [],
+		remove: [{ file: "helper.sh", sha256: createHash("sha256").update(readFileSync(join(source, helper))).digest("hex") }],
+	};
+	put("vendor/pstack-patches/principle-proof.json", JSON.stringify(patch));
+	await updatePstack(root, lock.commit, source);
+	expect(existsSync(join(root, helper))).toBe(false);
+	expect(checkPstack(root)).toEqual([]);
+	const artifact = snapshot(join(root, "skills"));
+	const current: PstackLock = JSON.parse(readFileSync(join(root, "vendor/pstack.lock.json"), "utf8"));
+	expect(current.files[helper]).toBeUndefined();
+	await updatePstack(root, lock.commit, source);
+	expect(snapshot(join(root, "skills"))).toEqual(artifact);
+	expect(checkPstack(root)).toEqual([]);
+});
+
+test.each(["changed bytes", "escaping target", "entry point", "duplicate target", "edited target"])("invalid removal %s preserves the installed tree and lock", async mode => {
+	const { root, source, lock, put } = await fixture();
+	const file = mode === "escaping target" ? "../outside.sh" : mode === "entry point" ? "SKILL.md" : "helper.sh";
+	const removal = { file, sha256: mode === "changed bytes" ? "0".repeat(64) : createHash("sha256").update(readFileSync(join(source, "skills/principle-proof", mode === "entry point" ? "SKILL.md" : "helper.sh"))).digest("hex") };
+	const patch = {
+		source: "skills/principle-proof", reason: "Remove a retired helper.",
+		edits: mode === "edited target" ? [{ file, before: "proof", after: "changed" }] : [],
+		remove: mode === "duplicate target" ? [removal, removal] : [removal],
+	};
+	const artifact = snapshot(join(root, "skills"));
+	const lockBefore = readFileSync(join(root, "vendor/pstack.lock.json"));
+	put("vendor/pstack-patches/principle-proof.json", JSON.stringify(patch));
+	await expect(updatePstack(root, lock.commit, source)).rejects.toThrow();
+	expect(snapshot(join(root, "skills"))).toEqual(artifact);
+	expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(lockBefore);
+});

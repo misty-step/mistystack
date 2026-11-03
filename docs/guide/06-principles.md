@@ -1,8 +1,8 @@
 # 6. Principles
 
-[Misty's principle index](../../skills/misty/SKILL.md#principles) lists every vendored pstack principle and Misty extension leaf. Read a leaf only when its trigger applies. The [pstack lock](../../vendor/pstack.lock.json) owns the selected upstream set and provenance; vendored leaves stay verbatim. Misty's extensions add the Grug/Rieseberg lens, deep modules and explicit failure visibility.
+[Misty's principle index](../../skills/misty/SKILL.md#principles) reaches pstack principles and Misty extension leaves. Read a leaf only when its trigger applies. The [pstack lock](../../vendor/pstack.lock.json) owns upstream provenance and recorded exact modifications. Misty's extensions add the Grug/Rieseberg lens, deep modules and explicit failure visibility.
 
-[Ship-loop](../../skills/ship-loop/SKILL.md) owns independent review and useful slice boundaries; pstack's sequence-verifiable-units leaf owns execution and delivery order. The [core](../../rules/core.md) owns Misty's standing guardrails. [Verification](../../skills/verification/SKILL.md), [agent-design](../../skills/agent-design/SKILL.md) and [release-watch](../../skills/release-watch/SKILL.md) own their task procedures, not rewritten copies of upstream principles.
+[Ship-loop](../../skills/ship-loop/SKILL.md) owns author-run proof, merge and the release gate; pstack's sequence-verifiable-units leaf owns useful unit order. The [core](../../rules/core.md) owns standing routing. [Verification](../../skills/verification/SKILL.md), [agent-design](../../skills/agent-design/SKILL.md), [watchdog](../../skills/watchdog/SKILL.md) and [release-watch](../../skills/release-watch/SKILL.md) own their task procedures.
 
 The [Foundation checklist](../../skills/foundation/checklist.md) serves a different purpose: it states what every project must have. The [audit skill](../../skills/foundation/SKILL.md) checks each article against the real project. Recorded deviations are decisions in that repository; unknown evidence remains unverified.
 

@@ -26,17 +26,17 @@ Edit maintained source, not installed plugin copies. Keep one home per fact;
 migrate callers before deleting an old path. Fleet runtime, credentials, hosts
 and launchers belong to private `misty-step/workstation`. Adapters use
 native harness mechanisms, not a custom installer or duplicated method content.
-Use [the core's isolation rule](rules/core.md) and your environment's isolation
-skill for execution placement.
+Use [boat-workers](skills/boat-workers/SKILL.md) for one snapshot-backed worker
+per slice and [watchdog](skills/watchdog/SKILL.md) for open-ended agent supervision.
 
 ## Verify and release
 
-Run `./scripts/check` for the maintained suites. For changed loading or install
-behavior, follow [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
-The gate reports each available harness's isolated install separately; OMP also
-proves loaded instructions without inference. Follow the matching
-[harness note](skills/misty/SKILL.md) for fresh-session proof and report every
-skipped or unproved path separately.
+Prove the changed running consumer through
+[verify-mistystack](.agents/skills/verify-mistystack/SKILL.md), including isolated
+native loading when that path changes. Report skipped/unproved paths separately.
+Merge after your proof passes without CI or review. The dispatched release gate
+runs `./scripts/check`, fast site proof and one critical-correctness/security
+assessment before publishing/deploying. No CI runs on PRs or pushes.
 
 `./scripts/bootstrap` installs repository secret-scanning hooks. Landmark owns
 CHANGELOG.md and release publication; follow

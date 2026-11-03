@@ -1,6 +1,6 @@
 # pstack names in Mistystack
 
-Read a pstack name as the native route below, not a request to install Cursor. [Misty](../SKILL.md#misty-deltas) owns the surviving deltas; this adapter maps names, not a second method. Every upstream skill is installed at `skills/<name>/SKILL.md`, every playbook at `skills/poteto-mode/playbooks/<name>.md`, and a shortened principle name resolves to `principle-<name>`. `poteto-mode` and `poteto-help` remain explicit-only alongside Misty.
+Read a pstack name as the native route below, not a request to install Cursor. [Misty](../SKILL.md#misty-deltas) owns the surviving deltas. The lock records installed primitives and the retired delivery sources replaced by [ship-loop](../../ship-loop/SKILL.md). A shortened principle name resolves to `principle-<name>`. `poteto-mode` and `poteto-help` remain explicit-only alongside Misty.
 
 ## Routes
 
@@ -11,7 +11,7 @@ Read a pstack name as the native route below, not a request to install Cursor. [
 | `arena` | Read the installed [arena](../../arena/SKILL.md); [agent-design](../../agent-design/SKILL.md#instruction-eval) and [eval](../../poteto-mode/playbooks/eval.md) own instruction-trial evidence. Use native sessions under the current rigor tier. |
 | `why`, `teach` | Read the installed [why](../../why/SKILL.md) or [teach](../../teach/SKILL.md); [research](../../research/SKILL.md) owns source verification and [how](../../how/SKILL.md) explains architecture. |
 | `show-me-your-work`, `autonomous-run`, `/loop` | Read the installed [show-me-your-work](../../show-me-your-work/SKILL.md) or named playbook. Keep Git-native task state and decision trails under [Forge](#forge). |
-| `opening-a-pr`, `Opening a PR`, `shipping`, `babysit`, `autopilot-full`, `autopilot-stack`, `Bugbot` | Read the named pstack playbook. [Misty's shipping delta](../SKILL.md#misty-deltas) maps Shipping's verify step to ship-loop; it does not replace the delivery backbone. |
+| `opening-a-pr`, `Opening a PR`, `shipping`, `babysit`, `autopilot-full`, `autopilot-stack`, `Bugbot` | [Ship-loop](../../ship-loop/SKILL.md) owns build, author-run proof and merge, followed by the fast pre-deploy release gate. The obsolete upstream delivery procedures and PR watcher are not installed. |
 | `unslop`, `technical-writing`, `no-comments`, `comment-sicko` | Read the installed [unslop](../../unslop/SKILL.md), [technical-writing](../../technical-writing/SKILL.md) or [no-comments](../../no-comments/SKILL.md) skill. pstack's writing rules govern. The [comment-sicko reference](../../../vendor/pstack-agents/comment-sicko.md) supplies a native agent's brief without a new installer. |
 | `build-the-lever`, `principle-build-the-lever` | Read the installed [build-the-lever](../../principle-build-the-lever/SKILL.md) principle. |
 | `exhaust-the-design-space`, `principle-exhaust-the-design-space` | Read the installed [exhaust-the-design-space](../../principle-exhaust-the-design-space/SKILL.md) principle under the current rigor tier. |
@@ -34,7 +34,7 @@ These files resolve explicit upstream names. Apply only [Misty's surviving delta
 | --- | --- |
 | `authoring-a-skill` | [Authoring a skill](../../poteto-mode/playbooks/authoring-a-skill.md) |
 | `autonomous-run`, `orchestrate`, `multi-phase-plan` | [Autonomous run](../../poteto-mode/playbooks/autonomous-run.md), [Orchestrate](../../poteto-mode/playbooks/orchestrate.md), [Multi-phase plan](../../poteto-mode/playbooks/multi-phase-plan.md) |
-| `autopilot-full`, `autopilot-stack`, `babysit`, `opening-a-pr`, `shipping` | [Autopilot-full](../../poteto-mode/playbooks/autopilot-full.md), [Autopilot-stack](../../poteto-mode/playbooks/autopilot-stack.md), [Babysit](../../poteto-mode/playbooks/babysit.md), [Opening a PR](../../poteto-mode/playbooks/opening-a-pr.md), [Shipping](../../poteto-mode/playbooks/shipping.md) |
+| `autopilot-full`, `autopilot-stack`, `babysit`, `opening-a-pr`, `shipping` | [Ship-loop](../../ship-loop/SKILL.md) |
 | `pause-safely`, `session-pickup`, `worktree-cleanup` | [Pause safely](../../poteto-mode/playbooks/pause-safely.md), [Session pickup](../../poteto-mode/playbooks/session-pickup.md), [Worktree cleanup](../../poteto-mode/playbooks/worktree-cleanup.md) |
 
 ## Native roles
@@ -45,15 +45,15 @@ responsibility, not a second model roster.
 
 | pstack responsibility | Native mapping |
 | --- | --- |
-| Code delegate, `poteto-agent` | `rigor-<tier>` with a builder or fix-builder brief. |
-| Prose or judgment | `rigor-<tier>` with the author or judge responsibility named in its brief. |
-| Verification or swarm worker | `rigor-<tier>` with its QA, review or verification partition named in the brief. |
+| Code delegate, `poteto-agent` | `rigor-<tier>` with a builder brief. |
+| Prose or evaluation judgment | `rigor-<tier>` with author or blind-evaluation responsibility named in the brief. |
+| Verification, swarm worker or release reviewer | `rigor-<tier>` with its verification partition or the single critical release assessment named in the brief. |
 
 A second opinion is the same prompt against a different model family. A repeated
 run from the same family is not a second opinion. Use a separately configured
 native session when the active role mapping cannot provide the different family.
 Pstack's [fresh-subagent rule](../../poteto-mode/SKILL.md#subagents) applies as
-written. Independent judgment still needs independent threads.
+written. An evaluation judge and the release reviewer use separate threads; PRs need neither.
 
 ## Forge
 
@@ -79,7 +79,7 @@ For a Linear issue, include `Fixes MIS-<n>` in the PR body.
 | `todolist`, `file_attachments`, `.cursor/skills/`, `.cursor/plugins/`, `.cursor/rules/` | Native task state, file reads, `.agents/skills/` and installed Agent Skills; models stay in native configuration | Same | Same | Same |
 | `agent-transcripts`, `PSTACK_TRANSCRIPTS_DIR` | Workspace-scoped native history/archive and actual task transcripts; export only the authorized sessions when a file is required | Scoped session transcript/export from the active native project/session | Scoped native session transcript/export | Scoped session transcript/export |
 | `cursor-team-kit`, `deslop`, `control-ui`, `control-cli` | Native diff review and browser/CLI controls, with [design](../../design/SKILL.md) and [verification](../../verification/SKILL.md) | Same | Same | Same |
-| `Origin`, `Graphite`, `built-in PR tool`, `Bugbot` | `gh` through [Forge](#forge) and pstack's delivery playbooks; unavailable bot integration never replaces independent review | Same | Same | Same |
-| `Automations`, `cloud agents`, `environment: "cloud"`, `environment: "local"`, `cloud_base_branch` | Native task/session handles and isolated worktrees at the named branch/SHA. Cursor cloud agents map to the disposable environment named by the harness or workstation through [the core's isolation rule](../../../rules/core.md) and your environment's isolation skill. Webhooks use the patched [make-bot-ui](../../make-bot-ui/SKILL.md) contract | Same, through native subagents | Same, through native subagents | Separately briefed native sessions; no invented subagent API |
+| `Origin`, `Graphite`, `built-in PR tool`, `Bugbot` | `gh` through [Forge](#forge) and [ship-loop](../../ship-loop/SKILL.md); no bot, check or review is a PR merge requirement | Same | Same | Same |
+| `Automations`, `cloud agents`, `environment: "cloud"`, `environment: "local"`, `cloud_base_branch` | Native task/session handles and isolated worktrees at the named branch/SHA. [Boat workers](../../boat-workers/SKILL.md) owns a snapshot-backed worker per slice and [watchdog](../../watchdog/SKILL.md) owns open-ended supervision. Webhooks use patched [make-bot-ui](../../make-bot-ui/SKILL.md) | Same, through native subagents | Same, through native subagents | Separately briefed native sessions; no invented subagent API |
 
-Skipped integrations never skip required proof or independent judgment. Codex's exercised plugin runtime does not discover custom agents; pi has no native subagents or rigor-agent discovery. Native details: [OMP](omp.md), [Claude Code](claude.md), [Codex](codex.md), [pi](pi.md).
+Skipped integrations never skip the real consumer proof. Codex's exercised plugin runtime does not discover custom agents; pi has no native subagents or rigor-agent discovery. Native details: [OMP](omp.md), [Claude Code](claude.md), [Codex](codex.md), [pi](pi.md).

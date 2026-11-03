@@ -20,9 +20,9 @@ Ground first, then commit. Don't start the run until you can state:
 
 - The definition of done as a falsifiable predicate (the **prove-it-works** principle skill).
 - Scope, quantified: rough units and effort, plus the blockers grounding surfaced.
-- The rigor level, biased high. One-way doors and high blast radius get more. Reversible low-stakes steps get less. Rigor is gates and artifacts, not "try harder".
+- The implementation and proof depth the risk needs. Rigor changes that depth, not the delivery gates owned by [ship-loop](../ship-loop/SKILL.md).
 
-Present the framing and tradeoffs before committing to a long run. Reversible work proceeds (the **never-block-on-the-human** principle skill), but a multi-hour run earns one checkpoint.
+State the framing and tradeoffs, then proceed with authorized reversible work under the **never-block-on-the-human** principle skill. Use the installed [watchdog](../watchdog/SKILL.md) for open-ended supervision rather than a time-based approval checkpoint.
 
 ## Phase B: Design the workflow
 
@@ -40,7 +40,7 @@ Then execute the design. Add its steps to the todolist as concrete items between
 Each unit is an experiment. State the hypothesis, make the smallest change, measure against the predicate on the real artifact, keep it if it advanced, revert it if it didn't. Apply the **sequence-verifiable-units** principle skill, verifying each unit before starting the next instead of batching checks at the end.
 
 - Verify by inspecting the artifact, never a self-report. When something passes too easily, suspect the observation method before the system.
-- Pair delegated work with a judge. If a worker games the gate, reset and harden the contract. If the gate itself is wrong, fix the gate in its own change rather than routing around it.
+- The author proves the unit on the real running path and uses the installed [ship-loop](../ship-loop/SKILL.md) skill for delivery. Independent blind judges belong to instruction evaluation, not merge approval.
 - A verdict is VERIFIED, NOT VERIFIED, or INCONCLUSIVE. Inconclusive is not a pass. Don't hide a negative.
 
 ## Phase D: Keep the audit trail
@@ -49,6 +49,6 @@ Log the run via the **show-me-your-work** skill. figure-it-out's work is usually
 
 ## Phase E: Verify and hand back
 
-Check the whole against the Phase A predicate on the real product, not just the harness. Encode any recurring correction as a gate, a lint rule, a check, or a script (the **encode-lessons-in-structure** principle skill).
+Check the whole against the Phase A predicate on the real running product, not just the harness. Deliver changed artifacts through the installed [ship-loop](../ship-loop/SKILL.md) skill. Encode a recurring correction structurally when the evidence warrants it under **encode-lessons-in-structure**.
 
 **Reply:** the playbook you designed, the rigor level and why, the decision-trail path, what's verified against the predicate, and what's still open.

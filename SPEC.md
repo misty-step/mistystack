@@ -22,6 +22,12 @@ Project owners can reconsider their implementation from the vision and durable
 record without committing to a rewrite or breaking existing consumers, as
 specified in [US-062](USER_STORIES.md#us-062-recompile-from-the-vision).
 
+Authors prove each changed running consumer and merge without CI or review.
+One pre-deploy release gate combines fast CI and a single critical-correctness/
+security assessment, then deploys the checked artifact and proves a live journey.
+Agents run open-ended under periodic native supervision, reusing one prepared
+snapshot-backed Boat worker per slice with idle stop/resume and final deletion.
+
 ## Public site
 
 ### Understand and adopt
@@ -53,9 +59,9 @@ specified in [US-062](USER_STORIES.md#us-062-recompile-from-the-vision).
   provenance rather than inventing their own.
 - Every page identifies its source path and revision. Headings and Foundation
   articles have shareable anchors, including the existing numeric Foundation
-  aliases. Earlier decisions preserve their original bodies and disclose their
-  scope and explicit supersession relationships. Decision status badges show
-  plain text, with Markdown links reduced to their labels.
+  aliases. Earlier decisions disclose their scope and explicit supersession.
+  Retired executable delivery instructions are removed; Git retains original
+  history. Decision status badges show plain text with links reduced to labels.
 - Search finds canonical documents and headings by name, phrase and prevented
   failure, supports content-type filtering and shareable queries, and provides
   useful empty/error states and browse recovery. If search needs JavaScript,
@@ -106,7 +112,7 @@ not in the behavior contract above. The public site's publishing-stack
 exception, its commissioned deployment and its open telemetry and production
 proof are recorded in [ADR 0018](docs/decisions/0018-static-publishing-stack.md).
 
-[ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md) records all nine
-owner rulings on pstack governance and supersedes the relevant parts of
-[ADR 0020](docs/decisions/0020-github-and-linear-replace-entire.md) and
-[ADR 0021](docs/decisions/0021-pstack-is-the-foundation.md).
+[ADR 0023](docs/decisions/0023-live-verification-and-release-gate.md) records the
+current delivery, supervision and worker-lifecycle decision. It supersedes the
+corresponding provisions of [ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md)
+and earlier delivery instructions; pstack remains the baseline elsewhere.

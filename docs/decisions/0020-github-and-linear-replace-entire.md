@@ -1,6 +1,8 @@
 # 0020: GitHub hosts code and pull requests; Linear tracks work
 
 Status: accepted, 2026-11-02. Supersedes [0019](0019-entire-is-the-forge.md).
+The PR-ledger mechanism recorded here is superseded and removed by
+[0023](0023-live-verification-and-release-gate.md), 2026-11-03.
 
 ## Context
 
@@ -22,11 +24,10 @@ requests to Linear issues.
 
 ## Decision
 
-GitHub hosts code and pull requests. Ship-loop keeps its review ledger in PR
-comments again, using the helper that ran before the Entire cutover. Misty Step
-tracks work items in Linear, and a pull request names its Linear issue so the
-integration links it. Projects outside Misty Step keep their established
-tracker. R90 work stays in Habitat.
+GitHub hosts code and pull requests. Misty Step tracks work items in Linear,
+and a pull request names its Linear issue so the integration links it.
+Projects outside Misty Step keep their established tracker. R90 work stays
+in Habitat. Current delivery follows [0023](0023-live-verification-and-release-gate.md).
 
 The revert of [#636](https://github.com/misty-step/mistystack/pull/636) and
 [#637](https://github.com/misty-step/mistystack/pull/637) restores the
@@ -35,8 +36,6 @@ the repository's Entire capture hooks are deleted.
 
 ## Consequences
 
-- The six v1 review rounds that ADR 0019's bounded path covered continue on the
-  restored helper; no new round starts for them.
 - The method names no Entire command. A historical record, changelog or
   postmortem that mentions Entire stays unchanged.
 - Revisit if Linear or GitHub stops linking pull requests to work items, or a

@@ -7,7 +7,8 @@ an OS-enforced sandbox with every control below:
 - no external network; isolated loopback only for a local fixture;
 - empty explicitly allowlisted environment; scratch-local HOME, temp and caches;
 - read-only target/toolchain; writes confined to the assigned `scratch/`;
-- explicit low CPU, memory, process, file-size, disk and wall-clock limits.
+- explicit low CPU, memory, process, file-size, disk and wall-clock limits on
+  each hostile target subprocess, never a deadline on the supervising agent.
 
 A parent may prepare a disposable source copy in scratch for builds writing beside
 source. Use present local tools/dependencies; no fetching/installing. Exclude host

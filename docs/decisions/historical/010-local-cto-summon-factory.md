@@ -14,6 +14,14 @@ does not delete separate active factory/atlas worktrees, assets or launch
 dependencies. The historical commission/design context below is retained, not
 a directive to reinstall retired machinery or create a replacement scheduler.
 
+Current delivery and agent supervision follow
+[ADR 0023](../0023-live-verification-and-release-gate.md), not this record's
+former reviewer/CI landing choreography. Build and verify the real running
+consumer path before merge; fast CI and one critical-correctness/security review
+gate deployment, followed by live readback. Open-ended agents receive periodic
+watchdog supervision, not wall-clock termination caps. Actual account, cash,
+credential, permission and individual-probe limits remain distinct.
+
 ## Scope precedence
 
 The governing parent was reread at Glass revision 4359 after Kaylee's revision
@@ -29,10 +37,11 @@ K-20261003-factory-stays-simple-and-survives-changi constrain the current contra
 their Later placement is not an unrelated rollout or tracker-migration grant.
 CTO owns technical discovery, detailed engineering briefs, sequencing and
 artifacts. Kaylee owns rank, commitments, strategy and acceptance. Preserve the
-three material source-review landing stops, actual account/cash/provider limits,
-unapproved credential relocation and the unanswered Claude visual exception.
-After source fixes/proof/independent re-review, drive the next named authorized
-shipping boundary; do not ask for generic hosting approval again.
+three material source-correctness findings and prove their repairs, along with
+actual account/cash/provider limits, credential-location restrictions and the
+unanswered Claude visual exception. After source repairs and real-path proof,
+drive the authorized merge and pre-deploy release boundary under ADR 0023;
+do not ask for generic hosting approval again or add independent re-review.
 
 ## Four different claims
 
@@ -54,10 +63,10 @@ shipping boundary; do not ask for generic hosting approval again.
 
 The current local candidate excludes Jev integration, shared subscription/cash
 admission, hosted native execution and external release effects. Those are
-remaining delivery work, not permanent scope exclusions. Land reviewed slices,
-but do not close the parent on fixtures, workerd or a rollout brief: completion
-requires independently reviewed, merged exact deployed bytes and real remote
-native/client, negative-path and recovery evidence.
+remaining delivery work, not permanent scope exclusions. Land slices proved on
+their own running path, but do not close the parent on fixtures, workerd or a
+rollout brief: completion requires the verified bytes to be merged and deployed,
+with real remote native/client, negative-path and recovery evidence.
 The three historical probes remain bounded study evidence; this commission is
 ordinary engineering and authorizes no further formal comparison batch.
 
@@ -78,11 +87,11 @@ actual artifact delivery; neither contact nor delivery is implied here.
 | --- | --- | --- |
 | Glass / current project commitment owner | Commitments, decisions, reviewed marks and original acceptance | Kaylee can read/write commitments with CTO or Summon unavailable; Glass reads external facts, failed readers show unknown |
 | COO (Kaylee on Hermes) | Priority, commitment writes, business decisions and accountability to Phaedrus | Strategy/conversation does not wait for an engineer or change her identity/profile |
-| CTO | Scoped engineering dispatch, technical dispositions, independent review, verification and authorized landing | Native persistent session receives acknowledged commissions and bounded completion/decision reports |
+| CTO | Scoped engineering dispatch, technical dispositions, real-path verification, authorized merge and the single pre-deploy critical assessment | Native persistent session receives acknowledged commissions and concise completion/decision reports; watchdog supervision does not impose an agent deadline |
 | Mage | Executive client and communication transport | Submit/read/acknowledge messages without becoming a scheduler, incident or run ledger; another executive can use the same contracts |
 | Summon | Run/input/attempt/hold/proof records, including the Cloudflare object | A standalone task works without Glass, Git or Mage; source reference and Git revision are optional |
 | Native runtime / Pi-specific extension | Actual session, message, receipt, completion and process observations | Start/resume/observe/request abort using supported native APIs and existing authentication; no transcript import into Summon |
-| Project checks, reviewer and consumer walk | Their actual evidence | Exercise the affected contract against the exact candidate; Summon binds receipts rather than inventing their truth |
+| Project checks, running consumer and release assessment | Their actual evidence at the relevant phase | The author exercises the affected real path before merge; fast CI and one critical-correctness/security review gate deployment; Summon binds evidence rather than inventing its truth |
 | GitHub and each deployment/data owner | Applied external effects and accepted writes | Reconcile these owners before retrying a possibly non-idempotent action |
 | Existing scheduler / ADR-009 intake | Expected occurrences / machinery outcomes and cause incidents | Stable occurrence → one commissioned run; failed/missed machinery uses the existing cause-deduplicated route |
 
@@ -118,9 +127,9 @@ cannot write machine transitions; Glass remains a replaceable viewer/client.
 
 A packet is a versioned immutable manifest plus retained evidence/artifacts,
 not a green completion badge: brief/acceptance, authored rationale/decisions,
-observable receipt/execution trace, exact candidate/deliverable, independent
-review and real consumer evidence, holds/authority and applicable release/
-observation receipts, with immutable child packet references. Bind revisions,
+observable receipt/execution trace, exact candidate/deliverable, real consumer
+evidence, holds/authority and applicable release assessment/observation receipts,
+with immutable child packet references. Bind revisions,
 digests and original receipts. Reopening verifies available bytes and exposes
 current binding/freshness separately from historical archive integrity. Retain
 failed/interrupted/incomplete outcomes too. Do not export or reconstruct private
@@ -137,8 +146,9 @@ export/reopen and restart. Nested reopening preserves original archives at every
 depth. Native, lineage and deep/archive content in that walk was synthetic;
 those receipts are not authenticated native turns, hosted recovery or exact-HEAD
 proof for a different integration revision. Actual source/native consumer and
-exported/reopened packet receipts must establish their delivered boundary. Prior review rounds stay
-immutable; a small current link may select a newer round without erasing history.
+exported/reopened packet receipts must establish their delivered boundary.
+Existing historical assessments remain immutable; current evidence links the
+actual source and consumer observations without creating a review-round ledger.
 
 ## Modules, replacement contracts and earned complexity
 
@@ -157,7 +167,7 @@ a reason to make the reducer, tracker or runtime own another module's facts.
 | Tracker adapter | Glass, Habitat or another tracker supplies priority/accepted brief/source provenance; normalize before intake, never rewrite existing tasks, phases or proofs | A tracker can be replaced without migrating execution authority; no tracker migration is commissioned here |
 | Shared read/evidence modules | Owner-stamped recursive projection and content-addressed manifests/objects; original child archive references, not copied descendant payloads | One reusable inspection path exposes missing/stale/failed/uncertain/inaccessible work, deduplicates dependencies and preserves failed archives |
 | Jev judgment adapter | Bounded revision-bound typed semantic advice among code-eligible choices; explicit uncertainty/defaults, no authority/check override | Semantic routing/context/escalation without a workflow DSL or model-generated status ledger; actual integration remains unimplemented |
-| Project verifier / external-effect adapter | Existing checks, independent reviewer and real consumer supply exact-candidate receipts; GitHub/deployment/data owner supplies applied-effect readback | The factory cannot prove its own correctness by writing green or assert an external effect from a successful tool exit |
+| Project verifier / external-effect adapter | The author drives real consumer checks before merge; fast CI and one critical assessment run before deploy; GitHub/deployment/data owners supply applied-effect readback | The factory cannot prove its own correctness by writing green or assert an external effect from a successful tool exit |
 
 No universal workflow DSL, new event bus, service/dashboard per agent or second
 portfolio/run/incident ledger is needed. Identity, revision, input ordering,
@@ -228,7 +238,7 @@ ledger or proof of fleet-wide admission.
 **Not solved by per-run objects:** account/resource reservations across runs,
 portfolio ordering, calendar occurrences and dead-man coverage. The local pilot
 has CTO-controlled bounded admission using existing fleet/account readers, with
-reserved COO/review capacity; the kernel does not enforce fleet-wide admission.
+reserved COO and release-assessment capacity; the kernel does not enforce fleet-wide admission.
 Intake acceptance is not authorization to launch a model or spend money.
 
 Future cross-run admission belongs inside Summon's execution machinery, consuming
@@ -249,7 +259,7 @@ implicit paid/model/account fallback. The current candidate does not yet prove
 this full route/entitlement binding or shared admission.
 
 Summon admission owns account/resource/cash reservations across runs, including
-reserved COO/reviewer headroom, without copying their phases into another fleet
+reserved COO and release-assessment headroom, without copying their phases into another fleet
 ledger. Consume current owner-supplied usage at its actual account/window/task
 grain. Keep actual API spend, subscription quota and informational list-price
 equivalents separate; reconcile matching observations rather than summing unlike
@@ -272,9 +282,10 @@ native ACK. No credential copying or new integration grant follows here.
 | --- | --- | --- |
 | Admit | Kaylee commission/ticket; CTO reads native Glass and existing `ai-usage`/Herdr; frozen `TaskSpec` via `POST /v1/intake` | Original scope/roster/action authority, current exact-account/resource facts; DO validates shape/identity, not Linux confinement, entitlement or cross-run capacity |
 | Execute | Fresh `POST .../claim`; native adapter starts/resumes the exact session and returns `POST .../observe` | Durable send-intent before native dispatch; `replayed:true` permits observation only; ordered input, exact attempt/payload/session, native permissions; runtime consumer must be actually exercised |
-| Assess/correct | Separate exact-head reviewer; CTO dispositions; `POST .../input` for one correction brief | Review evidence and independence are observed, not authenticated by an issuer name; correction invalidates current proof; budgets are commissioned, not infinite critics |
+| Repair | Slice owner reproduces an actual defect; `POST .../input` carries the targeted correction | A changed candidate invalidates affected proof and needs real-path re-verification, not a separate exact-head reviewer, judge or correction-round ledger |
 | Verify consumer | Project-owned affected check and real consumer walk on immutable isolated candidate; `POST .../proof` binds its receipt | Complete relevant source/artifact coverage, actual allowed/denied/data/recovery postconditions; declared snapshot/hash alone is not a pass; supplied checks vary by task |
-| Release | CTO normal `gh pr checks` / exact-head merge for this source; project-owned release adapter for deployment | Independent review/current affected evidence and repository's actual change route; hosted resource/action approval; kernel has no merge/deploy effect endpoint |
+| Merge | CTO uses the normal supported native merge path after the author verifies the real consumer | CI, independent review and exact-head approvals are not merge gates; hosted resource/action authority remains separate |
+| Release gate and deploy | Project-owned release workflow/adapter for the landed candidate | Fast CI and one critical-correctness/security review gate deployment; promote the same checked bytes; the kernel has no merge/deploy effect endpoint |
 | Observe | GitHub/deployment identity readback, product health/critical journey, accepted writes/recovery owner | Merge or kernel `verified_delivery` is not deployment/Done; automated promotion/health/rollback and ADR-009 integration must be exercised before being claimed |
 
 Run **phase**, input **delivery**, action **holds** and proof **freshness** remain
@@ -288,7 +299,7 @@ Lost ACK/disconnected host/expired lease is uncertainty, never retry authority.
 
 Stage one standalone immutable task (optional tracker/Git source), one fresh
 local workerd claim, one admitted actual native Pi turn and its exact persisted
-receipt/session, an independently exercised candidate/verifier result, and a
+receipt/session, an observed real candidate/verifier result, and a
 required-evidence packet exported/reopened through the shared reader. Inspect
 or steer from another supported client without creating a second run. This is
 a local composition boundary, not the full hosted factory or writable native
@@ -304,10 +315,10 @@ archives remain exportable; archive byte integrity is not current correctness.
 Use the existing real boundary proof for duplicate/mismatched replay, ordered
 steering, restart/recovery, uncertainty and stale candidate/child refusal. Add
 only checks that reject the actual plausible failure. Follow with the real native
-consumer and independent exact-revision review at the integrated candidate.
-Normal repository checks, materialized artifact bytes and actual consumer/effect
-owners are external truth. Summon only binds their receipts; loopback caller or
-issuer strings authenticate neither hosted access nor an independent verifier.
+consumer at the integrated candidate. Normal repository checks, materialized
+artifact bytes and actual consumer/effect owners are external truth. Summon only
+binds their receipts; loopback callers or issuer strings do not authenticate
+hosted access or verifier identity.
 
 Hosted multi-principal auth, shared account/cash admission, cloud-native harness
 compatibility, deep Jev, actual Grok Bot transport, remote restore/PITR and
@@ -316,25 +327,28 @@ slice must not be called completion or substituted for those parent obligations.
 
 ## Where foundations and operating principles enter
 
-Project-owned recipes select that project's **actually adopted** foundation
-catalog/pin, live stories/invariants, checks, accepted release/recovery path and
-allowed actions. Existing older pins remain their adopted contracts until an
-explicit migration. Do not silently apply a new universal gate to every project
-or turn an ordinary fix into repository-wide foundation adoption.
+Project-owned recipes retain their source catalog/pin, live stories/invariants,
+accepted data, release/recovery contracts and allowed actions. A historical pin
+does not restore review or PR/push CI merge requirements superseded by ADR 0023.
+An ordinary fix still does not require repository-wide foundation adoption.
 
-The current shared constitution/catalog's lean cadence is the direction:
+The current delivery cadence is:
 
-- Before merge: exercise affected contracts, obtain independent review and run
-  cheap secret/privacy scans. Expand proof for shared or uncertain impact.
-- Build one immutable candidate; run isolated production-like preprod with
-  representative privacy-safe data and affected real journeys. Mandatory access,
-  accepted data, migration, artifact identity and recovery stay on this path.
-- Promote the same tested bytes without rebuilding; serialize promotions and
-  read back deployment identity and a critical consumer journey. Safe rollback
-  must preserve accepted writes and be rehearsed.
-- Full suite/every story runs nightly and on demand at a recorded revision, not
-  on every change. Nightly breadth is delayed detection, not an unrelated veto;
-  missing/failed candidate proof never authorizes promotion.
+- Build and verify the affected real running path before merge, expanding proof
+  for shared or uncertain impact. Use production-like isolation and representative
+  privacy-safe data; preserve access, accepted-data, migration, artifact-identity
+  and recovery checks.
+- Merge the verified slice without CI, independent review or a judge as merge
+  gates.
+- Before deployment, run fast CI and one review limited to critical correctness
+  and security. Repair actual release blockers with targeted real-path proof,
+  not another broad review cycle. Slow CI is a defect to repair.
+- Promote the same checked bytes without rebuilding; serialize promotions and
+  read back deployment identity and a critical live consumer journey. Exercise
+  safe rollback without losing accepted writes.
+- Give broader regression checks explicit useful triggers and source identity
+  outside the fast gate; CI runs only in the pre-deploy release workflow, not
+  on PRs or pushes. Missing or failed candidate proof never authorizes promotion.
 - Failures and missed machinery runs go through existing scheduler-owned
   expected runs and ADR-009's one outcome per run / one incident per cause, not a
   new factory incident ledger or notifier.
@@ -342,13 +356,14 @@ The current shared constitution/catalog's lean cadence is the direction:
 Foundations also cover actual backup/restore, safe secrets/access, docs/stories/
 ranked backlog and applicable website/portfolio requirements and approved
 exceptions. An internal-tool website exception is not a blanket security,
-recoverability or other catalog exception. The present local source slice does
-not claim these operational obligations satisfied. Existing Harness CI and
-project pins are unchanged by this ADR.
+recoverability or other catalog exception. This record's source slice did not
+establish those operational obligations. Its historical CI/pin statements do not
+override ADR 0023's current delivery and supervision rules.
 
 Evolve the factory by observed failure → narrow invariant/transition repair →
-exact-source tests and affected real consumer proof → independent review →
-controlled adoption/readback/rollback. Attribute the project recipe/catalog/pin
+exact-source checks and affected running-consumer proof → merge → fast CI and
+one critical-correctness/security release assessment → controlled deployment,
+live readback and proven recovery. Attribute the project recipe/catalog/pin
 and any amended acceptance to their actual owner/source revision. A new rule
 does not reinterpret a historical run, mutate its frozen brief/proof policy or
 migrate every project. Preserve historical evidence and explicit adoption

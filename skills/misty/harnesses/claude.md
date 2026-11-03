@@ -55,8 +55,8 @@ The explicit `adapters/claude/agents/` manifest array replaces Claude's default
 root `agents/` scan, so OMP's fixed-scan root agents do not collide with Claude's
 agents. Select the matching agent for
 the [rigor tier](../../ship-loop/roles.md#rigor), and put the worker's responsibility
-in the brief. Builder, QA/review and judge remain independent threads even when
-they select the same tier.
+in the brief. The author proves the running path and merges. A separately briefed
+reviewer performs the single critical-correctness/security assessment at release.
 
 The native agent frontmatter's `model` field is the model authority: the supplied
 light, standard and critical agents use `haiku`, `sonnet` and `opus`, respectively.

@@ -59,8 +59,8 @@ loading pi's core extension a second time.
 Dispatch independent units with OMP's `task` tool. Pass the briefing contract in
 the [misty](../SKILL.md) skill, not the parent transcript. Give writers isolated
 worktrees and one branch each; keep shared resources single-writer. The method's
-[rigor tiers and responsibilities](../../ship-loop/roles.md#rigor) decide the
-review shape, not a model roster in a prompt.
+[rigor tiers and responsibilities](../../ship-loop/roles.md#rigor) select work
+depth, not a PR approval process or a model roster in a prompt.
 
 OMP 18.13.3 ignores a manifest `agents` array and scans root `agents/`, so the
 OMP-native agent files must remain at that fixed root.
@@ -69,10 +69,10 @@ The plugin supplies [rigor-light](../../../agents/rigor-light.md),
 [rigor-standard](../../../agents/rigor-standard.md) and
 [rigor-critical](../../../agents/rigor-critical.md). Select `rigor-<tier>` in each
 task's `agent` field. The worker's model comes from the matching OMP `modelRoles`
-key, not a `task.model` parameter. The brief selects builder, QA/review, judge,
-fix-builder, recheck or final-judge; using the same tier does not waive independent
-threads. For source-only security work, use `scout` for read-only reconnaissance
-and critics, and `security-reviewer` for source/local hunting and verification.
+key, not a `task.model` parameter. The brief selects builder, verification,
+supervisor or the release's single critical reviewer. The author verifies and
+merges without a reviewer. For source-only security work, use `scout` for read-only
+reconnaissance and `security-reviewer` for source/local hunting and verification.
 
 Setup writes only `modelRoles`, not agent files. Run `omp config path` in the
 intended profile, preserve existing entries, merge chosen mappings with
@@ -84,6 +84,11 @@ readback proves persistence, not provider entitlement or successful inference.
 Consult the installed OMP [configuration](omp://config-usage.md),
 [model roles](omp://models.md) and [agent discovery](omp://task-agent-discovery.md)
 contracts when configuring a version you have not verified.
+
+Use [watchdog](../../watchdog/SKILL.md) to supervise open-ended tasks through
+`proc://`, `history://<id>`, completion probes and agent messages. Native request
+budgets must not force wrap-up or termination; inspect the destination OMP
+configuration when a run stops without meeting its brief.
 
 ## Drive the real UI
 

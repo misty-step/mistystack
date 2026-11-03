@@ -4,12 +4,14 @@ The maintained recipe is
 [verify-mistystack](../.agents/skills/verify-mistystack/SKILL.md).
 
 ```sh
-./scripts/check
-./scripts/check plugin
+# Choose the affected path; do not run both and duplicate maintained suites.
+./scripts/check plugin --strict --lint-only  # portable structure/contracts only
+# Or, when installation/loading changed:
+./scripts/check plugin --strict             # same checks plus native consumer
 ```
 
 The default gate runs release-protection and secret-scanner tests, skill tests
-and plugin structure checks sequentially. CI runs
+and plugin structure checks sequentially. Release-only CI runs
 `./scripts/check plugin --strict --lint-only`: tests and strict manifest/link
 lint, with installation explicitly skipped and no model call.
 Relative links may target files or directories; directory links retain their

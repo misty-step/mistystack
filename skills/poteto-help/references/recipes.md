@@ -27,27 +27,27 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 ## Design and plan
 
 - `/poteto-mode prototype a few options for <feature>. take screenshots or videos for me to compare.`
-- `/poteto-mode we need <feature>. /architect it first, and answer open questions with prototypes. let me review before proceeding.`
+- `/poteto-mode we need <feature>. settle the design from prototype evidence, then implement the smallest shape that meets the goal.`
 - `/poteto-mode write a tutorial for how i would use <new package> first. then /teach me why it beats the current one.`
 - `ask /arena for a second opinion on this thread and our approach.`
 - `/poteto-mode turn this design into a plan. small verifiable PRs, each with its own verification steps.`
 - `/poteto-mode plan the migration of <library> to <target>. small verifiable PRs. the result must match the original exactly, bugs included.`
 
-## Review and ship
+## Inspect and deliver
 
 - `/interrogate the whole branch, but skeptically. don't change anything yet. no nitpicks unless it's a real bug or regression.` Read the Dropped list too.
 - `/create-formal-verification-skill prove <property> holds in <module>, even when <steps> interleave or retry.` After merges or refactors in that code: `/maintain-formal-verification-skill`.
 - `/swarm check every package under <dir> against its check script. one worker per package. one report.`
-- `/poteto-mode open the pr. small ordered commits, evidence in the description.`
-- `/poteto-mode babysit this pr. get it green.` For status only: `/poteto-mode check on pr <number>. anything outstanding?`
-- `/poteto-mode land the stack.`
+- `/ship-loop deliver <confirmed scope>. prove the changed journey on the running app and retain the evidence.`
+- `/poteto-mode check on pr <number>. report its observed state and any concrete failure, without starting an approval loop.`
+- `/ship-loop finish this queue through merge, the release gate and the live journey check.`
 
 ## Away and back
 
-- `/poteto-mode im going to bed. <goal> in a fresh worktree off <base>. done means <checks>. keep a decision log. don't ask me before committing. /loop until done. if you're truly stuck after a few hours, stop and write up why.`
+- `/poteto-mode im going to bed. <goal> in a fresh worktree off <base>. done means <checks>. keep a decision trail and use the watchdog until done. if a prerequisite is unreachable, preserve evidence, name it exactly and finish the unblocked work.`
 - `/show-me-your-work catch me up on what you did last night.` Read its Attention section first.
 - `/ketchup` catches you up on this chat since your last message and lists every call that waits on you.
-- `/poteto-mode full autopilot on this queue. each item is independent.`
-- `/poteto-mode autopilot these changes, but don't merge. i'll land them.`
+- `/ship-loop deliver this queue. each slice is independent and keeps one author through real-app proof, merge and release.`
+- `/poteto-mode build and prove these changes, but stop before merge. this is an explicit hold; i will land them.`
 - `/reflect capture what we learned so the next run doesn't repeat it.` Approve only edits that change a future decision.
 - `/bro` restates the last reply in plain words.

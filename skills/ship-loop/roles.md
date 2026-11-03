@@ -1,74 +1,69 @@
 # Role briefs
 
-The `misty` skill owns the briefing contract. The builder receives the completed
-brief below. Every later role receives only the helper's phase-checked brief:
-
-```sh
-bun <skill-dir>/scripts/ship-loop.ts prompt --pr <PR URL> --role <role>
-```
-
-`<skill-dir>` is the installed directory of the `ship-loop` skill. The helper fills
-revision, ticket, rigor, findings and eligibility from the PR ledger. Judge and
-final-judge briefs point at this skill's [judge.md](judge.md) for the ruling and
-proof contract. Record the native thread ID and report link actually returned;
-a retry keeps the same round.
+[Misty](../misty/SKILL.md#briefing-contract) owns the self-contained brief.
+The role selects implementation depth, not an approval process. The author
+builds, proves the running path and merges. The release has one separate
+critical-correctness/security assessment.
 
 ## Rigor
 
-Classify the changed path, not the initiative. Record tier, concrete reason and
-diff size in the PR. Size prompts a light-tier check; a concrete risk can raise
-it. Generator-only machine release PRs keep the checks-only exception.
+Classify the changed path and record the concrete risk in the PR.
 
-| Tier | Changed path | Rigor role and review shape |
+| Tier | Changed path | Native role |
 | --- | --- | --- |
-| light | Documents, briefs, config JSON, constants, bounded cosmetics and verification tooling without a production runtime path | `rigor-light`: builder, one independent combined QA/review, then independent judge |
-| standard | Runtime behavior or operational rules beyond a bounded light change | `rigor-standard`: builder, separate independent QA and review, then independent judge |
-| critical | Authentication, authorization, money, persisted-data integrity, migrations, security controls, deploy behavior, shared-infrastructure runtime or irreversible operations | `rigor-critical`: builder, separate independent QA and review, then independent judge; name the changed-path risk |
+| light | Documents, config, constants, bounded cosmetics or verification tooling without a production runtime path | `rigor-light` |
+| standard | Runtime behavior or operational rules beyond a bounded light change | `rigor-standard` |
+| critical | Authentication, authorization, money, persisted-data integrity, migrations, security controls, deployment, shared infrastructure or irreversible operations | `rigor-critical` |
 
-Dispatch through your harness's subagent mechanism, selecting the `rigor-<tier>` role.
-The `setup-mistystack` skill assigns models and reasoning budgets through native
-harness configuration. The brief determines the work:
-builder, QA/review, judge, fix-builder, recheck or final-judge. A recheck uses the
-original reporter's scope in a fresh thread. Judge independence is from both
-implementation and QA/review, even when all use the same rigor role.
+[Setup-mistystack](../setup-mistystack/SKILL.md) assigns models and reasoning
+through the harness's native configuration. Select `rigor-<tier>` where native
+agents exist; name the responsibility in the brief. Risk does not add PR reviewers,
+judges, or CI. The [ship loop](SKILL.md) owns delivery order.
 
 ## Builder
 
 ```text
-Outcome and why: <consumer change, ticket URL, parent spec URL>.
-Terms: <DOMAIN.md terms involved>.
-Raw material: <failing run, logs, data or source links; not a summary>.
-Oracle: <check outside the worker, exact command and expected result>.
-Scope: <owned paths, acceptance criteria, branch and base SHA, PR target>.
-Keep: <load-bearing behavior or lines to preserve; 'none' when empty>.
-Effort: <bounded depth and the uncertainty that deserves it>.
+Outcome and why: <consumer change and owning issue/spec links>.
+Terms: <DOMAIN.md terms>.
+Raw material: <failing run, logs, data or source links>.
+Oracle: <real consumer path and exact affected checks>.
+Scope: <owned paths, acceptance criteria, base branch and PR target>.
+Keep: <load-bearing behavior to preserve>.
+Effort: <uncertainty and changed-path risk>.
 
-Read the `misty` skill for the briefing contract, the ticket/spec and repo AGENTS.md.
-Apply misty's briefing contract and rigor-gated delegation; make acceptance true within Scope without overriding Keep.
+Read the repository instructions, Misty and ship-loop. Use one snapshot-backed
+Boat worker for this slice and the watchdog for open-ended supervision.
+Implement the complete scope, migrate callers and delete obsolete paths.
 
-Run the Oracle and affected checks, then use the `verification` skill for the changed
-consumer path. Its generator owns a missing .agents/skills/verify-<app>/ skill,
-or stack on the PR adding it. Link proof from the PR.
+Prove the affected running-app journey through the verification skill. For
+ordering, concurrency or durability, use the formal verification generator.
+Retain the observed result and narrow affected native-check evidence.
 
-Push and open against <base branch>; use a Conventional Commit title and
-the `technical-writing` and `unslop` skills for the body. Include the ticket's closing reference
-(`Closes #<n>` for a GitHub issue; Linear uses misty's forge adapter), Story: <IDs|none>,
-Rigor: <tier>, its reason, diff size, and observed verification results.
-The conductor owns merge; preserve other writers' commits.
+Open a PR with a Conventional Commit title, owning issue reference,
+Story: <IDs|none>, Rigor: <tier> — <risk>, and concrete observed verification.
+Once your real-path proof passes, squash-merge yourself without CI or review.
+Do not rebase merely to catch up; resolve actual conflicts and repeat the
+affected path. Preserve other writers' commits.
 
-Return PR URL, head SHA, check results, proof links, native thread ID and blockers.
-Follow pstack's Writing the reply rules.
+Return merged PR URL, revision, actual checks, real-path evidence and any
+remaining release prerequisite. Do not claim deployment from a merge.
 ```
 
-## After the builder
+## Release reviewer
 
-| Work | Helper role | Recorded event |
-| --- | --- | --- |
-| QA/review | `qa-review` or `qa` and `review` | `report` |
-| Initial judgment | `judge` | `verdict` |
-| Authorized fix | `fix-builder` | `head` with reason `fix` |
-| Named-blocker verification | `recheck` | `recheck` |
-| Final judgment | `final-judge` | `verdict` |
+```text
+Outcome: assess one release candidate for critical correctness and security.
+Raw material: <candidate revision, diff since live release, invariants,
+real-path receipts and formal specs/proofs>.
+Scope: <critical user/data/security failure modes and release identity>.
 
-Use `record --kind <event> --file <payload.json>`. The helper owns eligibility,
-one-fix-round enforcement and retained evidence; do not duplicate its state.
+Do not perform a style, architecture or general improvement review. A blocker
+needs a reproducible critical failure or a source-backed security violation.
+State the concrete impact and evidence. Noncritical findings become tickets.
+This is the release's single assessment, not a PR approval or another round.
+
+Return candidate identity, critical findings or none, proof consulted and
+unproved critical boundaries. The release owner repairs any critical defect,
+proves its affected path and owns the decision to deploy. Keep fast CI and
+live-journey evidence distinct from this source assessment.
+```

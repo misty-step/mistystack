@@ -1,0 +1,11 @@
+{
+  "source": "skills/principle-guard-the-context-window",
+  "reason": "Owner directive 2026-11-03 (ADR0023) keeps agents open-ended under supervision; context management must not impose turn or runtime caps.",
+  "edits": [
+    {
+      "file": "SKILL.md",
+      "before": "- **Size phases and cap scope.** Limit files per phase, set turn budgets, account for mechanism costs.\n",
+      "after": "- **Keep the active context small.** Separate independent slices, pass raw inputs by reference and retain concise recovery state. Use the installed [watchdog](../watchdog/SKILL.md) for open-ended supervision instead of turn or time caps.\n"
+    }
+  ]
+}

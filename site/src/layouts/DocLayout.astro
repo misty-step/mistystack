@@ -28,7 +28,7 @@ const kindIndex = { Decisions: '/decisions/', Guide: '/guide/', Install: '/insta
         {document.lineCounts && <p>Always applied: <code class="sp-code-inline">{String(document.data.alwaysApply)}</code>.</p>}
         {document.decision && <p class="badge">{document.decision.group} · {document.decision.status}</p>}
       </header>
-      {document.supersession.map((relationship) => <aside class="callout sp-panel sp-panel-aside" aria-label="Decision context"><p><a class="sp-link" href={graph.byId.get(relationship.id).url}>{graph.byId.get(relationship.id).title}</a> records this explicit relationship. The original text below is preserved.</p><blockquote>{relationship.context}</blockquote></aside>)}
+      {document.supersession.map((relationship) => <aside class="callout sp-panel sp-panel-aside" aria-label="Decision context"><p><a class="sp-link" href={graph.byId.get(relationship.id).url}>{graph.byId.get(relationship.id).title}</a> records this explicit relationship. Source history remains available in Git.</p><blockquote>{relationship.context}</blockquote></aside>)}
       <SkillMetadata {document} />
       <div class="source-provenance" data-pagefind-ignore><p><code class="sp-code-inline">{document.id}</code></p><a class="sp-link" href={document.source.blobUrl}>Source at <code class="sp-code-inline">{release.commit.slice(0, 7)}</code></a> · <a class="sp-link" href={`${repositoryUrl}/edit/master/${encodePath(document.id)}`}>Edit on GitHub</a> · <a class="sp-link" href={`/source/${encodePath(document.id)}`}>Raw Markdown</a></div>
       {document.url === '/install/' && <HarnessChooser {graph} />}

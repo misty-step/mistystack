@@ -9,4 +9,4 @@ disable-model-invocation: true
 **Why:** Context overflow degrades reasoning quality, creates compression artifacts, and halts progress.
 
 **Pattern:**
-- **Size phases and cap scope.** Limit files per phase, set turn budgets, account for mechanism costs.
+- **Keep the active context small.** Separate independent slices, pass raw inputs by reference and retain concise recovery state. Use the installed [watchdog](../watchdog/SKILL.md) for open-ended supervision instead of turn or time caps.

@@ -53,11 +53,11 @@ current session, keeping the [Misty briefing contract](../SKILL.md) explicit.
 Choose the main session's model and reasoning budget through pi's native model
 configuration, not a fictional per-agent assignment or skill prose.
 
-Rigor does not make a self-review independent. Where the method requires an
-independent QA/review or judge, use separately briefed, authorized sessions and
-retain their actual identities and results; sequential roles in the same context
-do not satisfy independence. Report a missing independent execution path rather
-than inventing subagent support.
+The author verifies the running path and merges without a reviewer. For the
+release's single critical-correctness/security assessment, use a separately
+briefed authorized session and retain its evidence. Use native observations and
+steering for [watchdog](../../watchdog/SKILL.md) supervision rather than inventing
+a subagent API or imposing an agent deadline.
 
 ## Drive the real UI
 
