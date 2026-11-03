@@ -6,11 +6,13 @@ Records explain trade-offs; current method guidance lives in the
 ## Current
 
 - [0022](0022-pstack-governs-owner-rulings.md): pstack governs; Misty keeps only
-  the owner's surviving deltas. Supersedes the relevant 0020/0021 restrictions
-  and 0017's public provider-specific placement rule.
+  the owner's surviving deltas. Supersedes 0021's method override restrictions
+  and 0017's public provider-specific placement rule. Removes the router's
+  Git-as-task-state prohibition without superseding 0020.
 
-- [0021](0021-pstack-is-the-foundation.md): pinned, verbatim pstack foundation;
-  Misty's router, extensions and overrides remain separate from upstream bytes.
+- [0021](0021-pstack-is-the-foundation.md): pinned wholesale pstack foundation,
+  native mappings and minimal portability patches. [0022](0022-pstack-governs-owner-rulings.md)
+  supersedes its method override restrictions, not its vendoring decisions.
 
 - [0020](0020-github-and-linear-replace-entire.md): GitHub hosts code and pull
   requests with ship-loop's ledger in PR comments; Misty Step tracks work items

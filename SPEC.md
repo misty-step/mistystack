@@ -107,6 +107,7 @@ exception, its commissioned deployment and its open telemetry and production
 proof are recorded in [ADR 0018](docs/decisions/0018-static-publishing-stack.md).
 
 [ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md) records all nine
-owner rulings on pstack governance and supersedes the relevant parts of
-[ADR 0020](docs/decisions/0020-github-and-linear-replace-entire.md) and
-[ADR 0021](docs/decisions/0021-pstack-is-the-foundation.md).
+owner rulings on pstack governance. It supersedes the method override restrictions
+in [ADR 0021](docs/decisions/0021-pstack-is-the-foundation.md) and removes the
+router's Git-as-task-state prohibition, not
+[ADR 0020](docs/decisions/0020-github-and-linear-replace-entire.md) itself.
