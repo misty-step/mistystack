@@ -1,6 +1,8 @@
 # 0021: pstack is the foundation
 
-Status: accepted, 2026-11-02; wholesale adoption directed 2026-11-03.
+Status: accepted, 2026-11-02; wholesale adoption directed 2026-11-03. Method
+override restrictions superseded by [0022](0022-pstack-governs-owner-rulings.md),
+2026-11-03; vendoring and portability decisions remain in force.
 
 ## Context
 
@@ -43,8 +45,9 @@ reason and edits. Sync applies those replacements after copying and adding the
 pointer; it fails before writing if a replacement has no unique match.
 Generated Codex sidecars preserve explicit-only invocation.
 
-Misty's nine overrides, core, ship-loop and routing policy are unchanged.
-Availability of the complete baseline does not authorize an override change.
+Wholesale availability alone did not change Misty's nine overrides, core,
+ship-loop or routing policy. [0022](0022-pstack-governs-owner-rulings.md)
+subsequently changes those method restrictions through the owner's rulings.
 
 [The lock](../../vendor/pstack.lock.json) is the one home for the source pin,
 complete source/destination inventory, patch reasons and patch hashes, and the

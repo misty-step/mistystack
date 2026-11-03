@@ -7,7 +7,7 @@ critical-correctness/security assessment.
 
 ## Rigor
 
-Classify the changed path and record the concrete risk in the PR.
+Default to light; raise the tier for the concrete changed-path risk and record it in the PR.
 
 | Tier | Changed path | Native role |
 | --- | --- | --- |

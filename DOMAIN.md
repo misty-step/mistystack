@@ -40,6 +40,13 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 - **Rigor role:** one of `rigor-light`, `rigor-standard` and `rigor-critical`,
   independent of a particular model. Model and reasoning choices belong in
   harness-native configuration.
+- **Verify step:** the independent proof and judgment for one PR in pstack's
+  [Shipping](skills/poteto-mode/playbooks/shipping.md) playbook.
+  [Ship-loop](skills/ship-loop/SKILL.md) adds rigor tiers and one fix round.
+- **Review ledger:** the standard and critical verify step's append-only events
+  in native PR comments, maintained by the ship-loop helper. Light keeps its
+  combined QA/review report and independent judgment in plain PR comments,
+  without a ledger.
 - **Task agent:** an independent worker given a brief. The brief sets its
   responsibility; the native adapter supplies dispatch and runtime selection.
 - **Oracle:** a check outside the worker that can disprove completion, expressed

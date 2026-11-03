@@ -17,8 +17,8 @@ release gate, not a PR or push. Use the owning tracker from
 
 ## 1. Settle and build the slice
 
-Carry confirmed intent forward; unresolved product intent goes to
-[figure-it-out](../figure-it-out/SKILL.md). Give the builder
+Carry confirmed intent forward. Resolve unsettled product intent with the owner;
+[figure-it-out](../figure-it-out/SKILL.md) plans execution of a settled outcome. Give the builder
 [Misty's briefing contract](../misty/SKILL.md#briefing-contract), owned paths,
 a base branch, acceptance criteria and the [risk-appropriate role](roles.md#rigor).
 Keep independently useful slices separate and sequence only genuine dependencies.

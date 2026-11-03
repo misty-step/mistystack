@@ -28,6 +28,11 @@ rather than finish their own real-product verification:
   200 requests and forced stop at 300. The coordinator set it to `0`. No written
   forty-minute agent limit was found. This is a reported native-runtime cause,
   not a newly measured benchmark or a reason to invent another timer.
+- While this repair was in flight, the published
+  [d450f02 delivery defaults](https://github.com/misty-step/mistystack/blob/d450f02e46527717c35db9b8436b3a778284d58a/skills/ship-loop/SKILL.md#delivery-defaults)
+  explicitly told agents to give each role a deadline. That is a measured
+  written agent cap even though it names no forty-minute duration. The cutover
+  removes this intervening instruction as well as the earlier native budget.
 
 The repeated behavior followed executable instructions and enforced tools.
 Replacing a summary alone would leave those causes in the agent's next path.

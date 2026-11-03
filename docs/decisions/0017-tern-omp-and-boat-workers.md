@@ -1,7 +1,8 @@
 # 0017: Tern+OMP locally, Boat workers for isolated execution
 
 Status: accepted, 2026-10-28; amended 2026-10-29 (working environments per
-harness, below).
+harness, below). The public Boat placement requirement is superseded by
+[0022](0022-pstack-governs-owner-rulings.md), 2026-11-03.
 
 ## Context
 

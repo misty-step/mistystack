@@ -49,8 +49,11 @@ relative to its installed file, not the working directory or a checkout copy.
 Codex does not enforce `disable-model-invocation`; principle leaves, recompile
 and setup-mistystack also carry `agents/openai.yaml` with
 `policy.allow_implicit_invocation: false`. Check that they are excluded from
-implicit invocation while explicit invocation and reads through the router's
-relative links still reach them.
+implicit invocation while explicit invocation and installed-file reads still
+reach them. Misty's relative links reach its extension leaves and pstack's
+principle index, which names upstream leaves rather than linking each one.
+Open those through `mistystack:<skill-name>` or their installed
+`skills/<name>/SKILL.md` files.
 
 ## Dispatch and rigor
 

@@ -1,6 +1,8 @@
 # 6. Principles
 
-[Misty's principle index](../../skills/misty/SKILL.md#principles) reaches pstack principles and Misty extension leaves. Read a leaf only when its trigger applies. The [pstack lock](../../vendor/pstack.lock.json) owns upstream provenance and recorded exact modifications. Misty's extensions add the Grug/Rieseberg lens, deep modules and explicit failure visibility.
+[Misty's Principles section](../../skills/misty/SKILL.md#principles) links its extension leaves and [pstack's principle index](../../skills/poteto-mode/SKILL.md#principles). The upstream index names leaves and their triggers, rather than linking every leaf. Open a named leaf through your harness's explicit skill invocation or installed `skills/<name>/SKILL.md` file. Read it only when its trigger applies.
+
+The [pstack lock](../../vendor/pstack.lock.json) owns the selected upstream set, provenance and recorded exact modifications. Misty's extensions add the Grug/Rieseberg lens, deep modules and explicit failure visibility.
 
 [Ship-loop](../../skills/ship-loop/SKILL.md) owns author-run proof, merge and the release gate; pstack's sequence-verifiable-units leaf owns useful unit order. The [core](../../rules/core.md) owns standing routing. [Verification](../../skills/verification/SKILL.md), [agent-design](../../skills/agent-design/SKILL.md), [watchdog](../../skills/watchdog/SKILL.md) and [release-watch](../../skills/release-watch/SKILL.md) own their task procedures.
 

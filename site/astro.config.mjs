@@ -16,6 +16,7 @@ export default defineConfig({
     '/guide/install-and-setup/': '/install/',
     '/install/hermes/': '/install/#hermes',
     '/library/skills/judge/': '/library/skills/ship-loop/#3-release-gate',
+    '/library/skills/ship-loop/merging/': '/library/skills/ship-loop/',
     '/library/skills/grill/': '/library/playbooks/prototype/',
     '/library/skills/grill/records/': '/library/playbooks/multi-phase-plan/',
     '/library/skills/writing/': '/library/skills/technical-writing/',

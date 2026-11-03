@@ -41,8 +41,11 @@ skill mechanism. Follow Misty's [bug-fix link](../../poteto-mode/playbooks/bug-f
 the installed skill file, not the working directory or a source checkout.
 Principle leaves, recompile and setup-mistystack retain
 `disable-model-invocation: true`: Claude does not invoke them automatically,
-while a user can invoke them explicitly and the router's relative links still
-expose their maintained files. Check discovery and explicit reachability separately.
+while a user can invoke them explicitly or read their installed files. Misty's
+relative links reach its extension leaves and pstack's principle index. That
+index names upstream leaves rather than linking each one. Open those through
+`/mistystack:<skill-name>` or their installed `skills/<name>/SKILL.md` files.
+Check discovery and explicit reachability separately.
 
 ## Dispatch and rigor
 
