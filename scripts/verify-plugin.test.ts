@@ -23,7 +23,7 @@ function fixture() {
 	put("rules/core.md", "---\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
 	const json = (path: string, value: unknown) => put(path, `${JSON.stringify(value)}\n`);
 	const hooks = (variable: string) => ({ SessionStart: [{ hooks: [{ type: "command", command: `cat "$${variable}/rules/core.md"` }] }] });
-	const lock = (value: object) => json("vendor/pstack.lock.json", { repo: "cursor/plugins", commit: "a".repeat(40), tree: "b".repeat(40), "inventory-sha256": "c".repeat(64), exclude: [], ...value });
+	const lock = (value: object) => json("vendor/pstack.lock.json", { repo: "cursor/plugins", commit: "a".repeat(40), tree: "b".repeat(40), "inventory-sha256": "c".repeat(64), exclude: [], executables: [], ...value });
 	const marketplace = { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }] };
 	json(".claude-plugin/plugin.json", { name: "mistystack", agents: ["./adapters/claude/agents/fixture.md"], hooks: hooks("CLAUDE_PLUGIN_ROOT") });
 	json(".claude-plugin/marketplace.json", marketplace);

@@ -102,13 +102,29 @@ export function checkPstack(root: string): string[] {
 		const errors: string[] = [];
 		const names = [...lock.include, ...lock.exclude].map(entry => entry.source);
 		if (inventoryHash(names) !== lock["inventory-sha256"]) errors.push(`${LOCK}: upstream include/exclude inventory changed; every pinned name must appear exactly once`);
-		const patches = readPatches(root, lock).map(({ source, file, reason, sha256 }) => ({ source, file, reason, sha256 }));
-		if (JSON.stringify(patches) !== JSON.stringify(lock.patches ?? [])) errors.push(`${LOCK}: primitive patches changed; regenerate with --update`);
+		const patches = readPatches(root, lock);
+		if (JSON.stringify(patches.map(({ source, file, reason, sha256 }) => ({ source, file, reason, sha256 }))) !== JSON.stringify(lock.patches ?? [])) errors.push(`${LOCK}: primitive patches changed; regenerate with --update`);
+		const executables = new Set(lock.executables);
 		for (const [file, hash] of Object.entries(lock.files)) {
 			const path = join(root, file);
-			if (!existsSync(path)) errors.push(`${file}: missing vendored file`);
-			else if (!lstatSync(path).isFile() || lstatSync(path).isSymbolicLink()) errors.push(`${file}: not a regular vendored file`);
-			else if (sha256(readFileSync(path)) !== hash) errors.push(`${file}: sha256 mismatch (do not hand-edit vendored pstack)`);
+			const stat = lstatSync(path, { throwIfNoEntry: false });
+			if (!stat) errors.push(`${file}: missing vendored file`);
+			else if (!stat.isFile() || stat.isSymbolicLink()) errors.push(`${file}: not a regular vendored file`);
+			else {
+				if (sha256(readFileSync(path)) !== hash) errors.push(`${file}: sha256 mismatch (do not hand-edit vendored pstack)`);
+				if (Boolean(stat.mode & 0o111) !== executables.has(file)) errors.push(`${file}: executable bit mismatch (regenerate with --update)`);
+			}
+		}
+		for (const patch of patches) for (const edit of patch.edits) {
+			const destination = edit.file ? `${patch.destination}/${edit.file}` : patch.destination;
+			if (!lock.files[destination]) errors.push(`${patch.file}: missing patch target ${destination}`);
+			else if (existsSync(join(root, destination))) {
+				const text = readFileSync(join(root, destination), "utf8");
+				const at = text.indexOf(edit.after);
+				if (edit.after ? at < 0 || text.indexOf(edit.after, at + edit.after.length) >= 0 || !edit.after.includes(edit.before) && text.includes(edit.before) : text.includes(edit.before)) {
+					errors.push(`${patch.file}: patched content mismatch in ${destination}; regenerate with --update`);
+				}
+			}
 		}
 		const ignored = new Set<string>();
 		const git = Bun.which("git");
@@ -177,7 +193,7 @@ function command(args: string[]) {
 	return result.stdout.toString().trim();
 }
 
-export async function updatePstack(root: string, commit: string, from?: string, all = false) {
+export async function updatePstack(root: string, commit: string, from?: string) {
 	if (!/^[a-f0-9]{7,40}$/.test(commit)) throw new Error("--update requires a commit SHA");
 	const { lock: previous } = readPstackLock(root);
 	const lock = structuredClone(previous);
@@ -208,10 +224,6 @@ export async function updatePstack(root: string, commit: string, from?: string, 
 		const actualTree = gitTree(source).toString("hex");
 		if (actualTree !== tree) throw new Error(`source tree ${actualTree} does not match ${lock.repo}@${commit}/pstack ${tree}`);
 		const names = upstreamNames(source);
-		if (all) {
-			lock.include = names.map(source => ({ source, destination: source.startsWith("agents/") ? `vendor/pstack-agents/${posix.basename(source)}` : source, vendored: true }));
-			lock.exclude = [];
-		}
 		const declared = [...lock.include, ...lock.exclude].map(entry => entry.source).sort();
 		if (names.join("\n") !== declared.join("\n")) {
 			throw new Error(`classify every upstream name in ${LOCK}; unclassified: ${names.filter(name => !declared.includes(name)).join(", ") || "none"}; absent upstream: ${declared.filter(name => !names.includes(name)).join(", ") || "none"}`);
@@ -228,11 +240,6 @@ export async function updatePstack(root: string, commit: string, from?: string, 
 				const bytes = readFileSync(sourceFile);
 				copiedSources.add(posix.join(entry.source, child));
 				rendered.set(destination, { bytes: destination.endsWith(".md") ? wrap(bytes, destination, skillNames) : bytes, mode: stat.mode & 0o111 ? 0o755 : 0o644 });
-			}
-			if (isSkill(entry.source)) {
-				noSymlinkStat(source, join(source, entry.source, "SKILL.md"));
-				const frontmatter = readFileSync(join(source, entry.source, "SKILL.md"), "utf8").match(/^---\n([\s\S]*?)\n---/)?.[1];
-				if (frontmatter && YAML.parse(frontmatter)["disable-model-invocation"] === true) rendered.set(`${entry.destination}/agents/openai.yaml`, { bytes: Buffer.from(SIDECAR), mode: 0o644 });
 			}
 		}
 		const patches = readPatches(root, lock);
@@ -255,6 +262,10 @@ export async function updatePstack(root: string, commit: string, from?: string, 
 				rendered.delete(destination);
 			}
 		}
+		for (const entry of lock.include.filter(entry => entry.vendored && isSkill(entry.source))) {
+			const frontmatter = rendered.get(`${entry.destination}/SKILL.md`)!.bytes.toString("utf8").match(/^---\n([\s\S]*?)\n---/)?.[1];
+			if (frontmatter && YAML.parse(frontmatter)["disable-model-invocation"] === true) rendered.set(`${entry.destination}/agents/openai.yaml`, { bytes: Buffer.from(SIDECAR), mode: 0o644 });
+		}
 		const destinations = new Set([LOCK, ...lock.include.filter(entry => entry.vendored).map(entry => entry.destination), ...Object.keys(previous.files), ...rendered.keys()]);
 		for (const path of destinations) noSymlinkStat(root, join(root, path));
 		for (const entry of lock.include.filter(entry => entry.vendored)) rmSync(join(root, entry.destination), { recursive: true, force: true });
@@ -267,7 +278,8 @@ export async function updatePstack(root: string, commit: string, from?: string, 
 			files[file] = sha256(bytes);
 		}
 		const references = walk(source).filter(file => !file.startsWith(".git/") && !copiedSources.has(file));
-		writeFileSync(join(root, LOCK), `${JSON.stringify({ ...lock, commit, tree, "inventory-sha256": inventoryHash(names), patches: patches.map(({ source, file, reason, sha256 }) => ({ source, file, reason, sha256 })), references, files }, null, 2)}\n`);
+		const executables = [...rendered].filter(([, target]) => target.mode & 0o111).map(([file]) => file).sort();
+		writeFileSync(join(root, LOCK), `${JSON.stringify({ ...lock, commit, tree, "inventory-sha256": inventoryHash(names), patches: patches.map(({ source, file, reason, sha256 }) => ({ source, file, reason, sha256 })), references, executables, files }, null, 2)}\n`);
 		return files;
 	} finally {
 		rmSync(scratch, { recursive: true, force: true });
@@ -277,18 +289,16 @@ export async function updatePstack(root: string, commit: string, from?: string, 
 if (import.meta.main) {
 	try {
 		const args = process.argv.slice(2);
-		const all = args.includes("--all");
-		if (all) args.splice(args.indexOf("--all"), 1);
 		const root = resolve(import.meta.dir, "..");
-		if (!all && args.length === 1 && args[0] === "--check") {
+		if (args.length === 1 && args[0] === "--check") {
 			const errors = checkPstack(root);
 			if (errors.length) throw new Error(errors.join("\n"));
-			console.log("pstack: pinned inventory and vendored sha256 files match (offline)");
+			console.log("pstack: pinned inventory, vendored hashes, executable bits and patch content match (offline)");
 		} else if (args[0] === "--update" && (args.length === 2 || args.length === 4 && args[2] === "--from")) {
-			const files = await updatePstack(root, args[1], args[3], all);
+			const files = await updatePstack(root, args[1], args[3]);
 			console.log(`pstack: synchronized ${Object.keys(files).length} files; commit the vendored files and ${LOCK}`);
 		} else {
-			throw new Error("Usage: bun scripts/sync-pstack.ts --check | --update <commit> [--from <dir>] [--all]");
+			throw new Error("Usage: bun scripts/sync-pstack.ts --check | --update <commit> [--from <dir>]");
 		}
 	} catch (error) {
 		console.error(error instanceof Error ? error.message : String(error));

@@ -5,7 +5,7 @@
     {
       "file": "",
       "before": "Read each candidate's local transcript under the active workspace's `agent-transcripts/` directory (the system prompt names this path). Do not glob across `~/.cursor/projects/*/`. That crosses workspace boundaries and reads private chats from unrelated projects.",
-      "after": "Read each candidate's native session transcript or authorized export identified in its brief, using the pstack names adapter. Retain actual file-read events and source identity. Do not assume a Cursor directory or read unrelated workspaces. Missing transcript evidence leaves chain-following unproven."
+      "after": "Read each candidate's local transcript through the active workspace's native session history or supplied export, using the pstack names adapter. Do not search unrelated workspaces; that reads private chats from unrelated projects."
     }
   ]
 }

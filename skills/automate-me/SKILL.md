@@ -28,7 +28,7 @@ Update mode changes the rest of the flow:
 
 ### 1. Mine their history
 
-Locate the active workspace's native session history before fanning out, using the pstack names adapter. Give each reader the scoped session IDs or explicitly authorized transcript exports and their time range. Do not assume a Cursor directory or search unrelated workspaces. If no history is available, name that limitation and continue with the user's answers in step 2 rather than inventing recurring patterns.
+Locate the active workspace's native session history through the pstack names adapter before fanning out. Use only that workspace's sessions. Don't search unrelated workspaces; that reads private chats from unrelated projects.
 
 Survey recent agent conversations within that scope for recurring patterns. Run multiple parallel subagents across slices of history (e.g. last 2-4 weeks, split into 3 slices so each has enough material). Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill. Each slice mining subagent reads transcripts from the workspace-scoped path the parent provides, looks for the signals below, and returns a short structured list of patterns it saw with evidence pointers. Default signals worth hunting:
 

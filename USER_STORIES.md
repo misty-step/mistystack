@@ -18,9 +18,11 @@ Criteria:
 3. A failed test, invalid plugin or failed available-harness proof exits nonzero.
    Missing CLIs and lint-only installation skips are named, never reported passed.
 4. Verification preserves the live profile, credentials and foreign state.
-5. The gate checks the pinned pstack inventory and vendored file hashes offline,
-   including agent references, formal-verification scripts and recorded exact
-   patches/removals. It rejects hand edits, missing or unlisted files and patch drift.
+5. The gate checks the pinned pstack inventory, vendored file hashes and
+   executable bits offline, including agent references, formal-verification
+   scripts and recorded exact patches/removals. It rejects hand edits, missing
+   or unlisted files, patch drift and stale patched content even when the
+   patch-file hash was updated.
 6. pstack sync rejects source symlinks and symlinked destination components
    before writing. The offline gate rejects symlinked vendored paths and parents.
 7. Repeating a pstack update at the same pin leaves the lock and vendored tree unchanged; a real source beneath a symlinked parent remains usable.

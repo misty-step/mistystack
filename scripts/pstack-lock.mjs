@@ -3,7 +3,7 @@ import { join, relative, resolve, sep } from 'node:path';
 
 /** @typedef {{source: string, destination: string, vendored: boolean}} Inclusion */
 /** @typedef {{source: string, file: string, reason: string, sha256: string}} Patch */
-/** @typedef {{repo: string, commit: string, tree: string, 'inventory-sha256': string, include: Inclusion[], exclude: {source: string, reason: string}[], patches?: Patch[], references?: string[], files: Record<string, string>}} PstackLock */
+/** @typedef {{repo: string, commit: string, tree: string, 'inventory-sha256': string, include: Inclusion[], exclude: {source: string, reason: string}[], patches?: Patch[], references?: string[], executables: string[], files: Record<string, string>}} PstackLock */
 
 export const PSTACK_LOCK = 'vendor/pstack.lock.json';
 export const PSTACK_NAMES = 'skills/misty/harnesses/pstack-names.md';
@@ -76,6 +76,8 @@ export function readPstackLock(root) {
     if (!portable(file) || !owner || !/^[a-f0-9]{64}$/.test(hash)) throw new Error(`${PSTACK_LOCK}: invalid vendored file ${file}`);
     vendoredSources.set(file, owner.source + file.slice(owner.destination.length));
   }
+  if (!Array.isArray(lock.executables) || new Set(lock.executables).size !== lock.executables.length
+    || lock.executables.some((file) => !Object.hasOwn(lock.files, file))) throw new Error(`${PSTACK_LOCK}: invalid executable inventory`);
   const vendoredSkills = new Map(lock.include.filter((entry) => entry.vendored && lock.files[`${entry.destination}/SKILL.md`])
     .map((entry) => [`${entry.destination}/SKILL.md`, `${lock.repo}@${lock.commit}/pstack/${entry.source}`]));
   const upstreamOnly = [...lock.exclude, ...lock.include.filter((entry) => !entry.vendored)].map((entry) => entry.source).concat(lock.references ?? []);

@@ -51,7 +51,7 @@ async function fixture(playbookHeading = "#", gitignore?: string) {
 	const lock: PstackLock = {
 		repo: "cursor/plugins", commit: "a".repeat(40), tree: git("write-tree"),
 		"inventory-sha256": createHash("sha256").update(`${names.join("\n")}\n`).digest("hex"),
-		include, exclude, files: {},
+		include, exclude, executables: [], files: {},
 	};
 	const save = () => put("vendor/pstack.lock.json", `${JSON.stringify(lock)}\n`);
 	save();
@@ -118,10 +118,15 @@ test.each([
 	["hand edit", "sha256 mismatch", (root: string) => writeFileSync(join(root, "skills/principle-proof/SKILL.md"), "# Hand edited\n")],
 	["unlisted file", "unlisted vendored file", (root: string) => writeFileSync(join(root, "skills/principle-proof/extra.md"), "# Extra\n")],
 	["missing file", "missing vendored file", (root: string) => rmSync(join(root, "skills/principle-proof/SKILL.md"))],
-] as const)("offline check rejects a %s and sync restores the pinned bytes", async (_case, failure, mutate) => {
+	["missing executable bit", "executable bit mismatch", (root: string) => chmodSync(join(root, "skills/principle-proof/helper.sh"), 0o644)],
+	["unexpected executable bit", "executable bit mismatch", (root: string) => chmodSync(join(root, "skills/principle-proof/SKILL.md"), 0o755)],
+] as const)("offline check rejects %s and sync restores the pinned bytes and modes", async (_case, failure, mutate) => {
 	const { root, source, lock } = await fixture();
 	mutate(root);
 	expect(checkPstack(root).join("\n")).toContain(failure);
+	const result = runSync(root, ["--check"]);
+	expect(result.exitCode).toBe(1);
+	expect(result.stderr.toString()).toContain(failure);
 	await updatePstack(root, lock.commit, source);
 	expect(checkPstack(root)).toEqual([]);
 });
@@ -312,24 +317,22 @@ test("offline check rejects a missing harness key or cited router-section route"
 	expect(checkPstack(root)).toEqual([]);
 });
 
-test("wholesale adoption installs every primitive with one playbook home and agent references", async () => {
+test("routine sync preserves recorded exclusions, reference-only entries and non-default destinations", async () => {
 	const { root, source, lock } = await fixture();
-	await updatePstack(root, lock.commit, source, true);
+	const before = readFileSync(join(root, "vendor/pstack.lock.json"));
+	await updatePstack(root, lock.commit, source);
 	const current: PstackLock = JSON.parse(readFileSync(join(root, "vendor/pstack.lock.json"), "utf8"));
-	expect(current.exclude).toEqual([]);
-	expect(current.include.every(entry => entry.vendored)).toBe(true);
-	expect(existsSync(join(root, "skills/workflow/SKILL.md"))).toBe(true);
-	expect(existsSync(join(root, "skills/poteto-mode/playbooks/bug-fix.md"))).toBe(true);
-	expect(existsSync(join(root, "skills/misty/playbooks/bug-fix.md"))).toBe(false);
-	expect(readFileSync(join(root, "vendor/pstack-agents/poteto-agent.md"), "utf8")).toBe("# Agent\n");
-	expect(current.references?.some(file => file.startsWith(".git/"))).toBe(false);
-	expect(checkPstack(root)).toEqual([]);
-	const before = { lock: readFileSync(join(root, "vendor/pstack.lock.json")), skills: snapshot(join(root, "skills")) };
-	for (let run = 0; run < 2; run++) {
-		await updatePstack(root, lock.commit, source, true);
-		expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(before.lock);
-		expect(snapshot(join(root, "skills"))).toEqual(before.skills);
-	}
+	expect(current.include).toEqual(lock.include);
+	expect(current.exclude).toEqual(lock.exclude);
+	expect(existsSync(join(root, "skills/workflow"))).toBe(false);
+	expect(existsSync(join(root, "skills/poteto-mode/playbooks/bug-fix.md"))).toBe(false);
+	expect(existsSync(join(root, "skills/misty/playbooks/bug-fix.md"))).toBe(true);
+	expect(current.references).toContain("skills/workflow/SKILL.md");
+	expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(before);
+	const obsolete = runSync(root, ["--update", lock.commit, "--from", source, "--all"]);
+	expect(obsolete.exitCode).toBe(1);
+	expect(obsolete.stderr.toString()).toContain("Usage:");
+	expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(before);
 });
 
 test("recorded primitive patches hash final bytes and reject changed or removed patch definitions offline", async () => {
@@ -352,7 +355,79 @@ test("recorded primitive patches hash final bytes and reject changed or removed 
 	expect(checkPstack(root).join("\n")).toContain("primitive patches changed");
 });
 
-test.each(["no match", "ambiguous match", "escaping target", "duplicate primitive", "symlink"])("invalid patch %s fails before changing the vendored artifact", async mode => {
+test("offline CLI rejects a stale patched file even when the patch hash in the lock was updated", async () => {
+	const { root, source, lock, put } = await fixture();
+	const file = "vendor/pstack-patches/principle-proof.json";
+	const patch = { source: "skills/principle-proof", reason: "Native history.", edits: [{ file: "SKILL.md", before: "Keep these bytes.", after: "Read native history." }] };
+	put(file, JSON.stringify(patch));
+	await updatePstack(root, lock.commit, source);
+	patch.edits[0].after = "Read the active native session.";
+	const bytes = JSON.stringify(patch);
+	put(file, bytes);
+	const current: PstackLock = JSON.parse(readFileSync(join(root, "vendor/pstack.lock.json"), "utf8"));
+	current.patches![0].sha256 = createHash("sha256").update(bytes).digest("hex");
+	put("vendor/pstack.lock.json", JSON.stringify(current));
+	const result = runSync(root, ["--check"]);
+	expect(result.exitCode).toBe(1);
+	expect(result.stderr.toString()).toContain("patched content mismatch");
+	await updatePstack(root, lock.commit, source);
+	expect(runSync(root, ["--check"]).exitCode).toBe(0);
+});
+
+test("owner text-deletion patches reject restored text even when its file hash was updated", async () => {
+	const { root, source, lock, put } = await fixture();
+	const target = "skills/principle-proof/SKILL.md";
+	const original = readFileSync(join(root, target));
+	put("vendor/pstack-patches/principle-proof.json", JSON.stringify({ source: "skills/principle-proof", reason: "Retire an owner-superseded instruction.", edits: [{ file: "SKILL.md", before: "Keep these bytes.", after: "" }] }));
+	await updatePstack(root, lock.commit, source);
+	expect(runSync(root, ["--check"]).exitCode).toBe(0);
+	put(target, original.toString());
+	const current: PstackLock = JSON.parse(readFileSync(join(root, "vendor/pstack.lock.json"), "utf8"));
+	current.files[target] = createHash("sha256").update(original).digest("hex");
+	put("vendor/pstack.lock.json", JSON.stringify(current));
+	const result = runSync(root, ["--check"]);
+	expect(result.exitCode).toBe(1);
+	expect(result.stderr.toString()).toContain("patched content mismatch");
+	await updatePstack(root, lock.commit, source);
+	expect(runSync(root, ["--check"]).exitCode).toBe(0);
+});
+
+test.each(["agent", "playbook"])("exact file-target patches support an empty child path for a %s", async kind => {
+	const { root, source, lock, put, save } = await fixture();
+	const entry = kind === "agent"
+		? { source: "agents/poteto-agent.md", destination: "vendor/pstack-agents/poteto-agent.md", vendored: true }
+		: lock.include.find(entry => entry.source.endsWith("bug-fix.md"))!;
+	if (kind === "agent") {
+		lock.exclude = lock.exclude.filter(item => item.source !== entry.source);
+		lock.include.push(entry);
+		save();
+	}
+	put("vendor/pstack-patches/file-target.json", JSON.stringify({ source: entry.source, reason: "Native file lookup.", edits: [{ file: "", before: kind === "agent" ? "# Agent" : "Bug fix", after: kind === "agent" ? "# Native agent" : "Native bug fix" }] }));
+	await updatePstack(root, lock.commit, source);
+	expect(checkPstack(root)).toEqual([]);
+	expect(readFileSync(join(root, entry.destination), "utf8")).toContain(kind === "agent" ? "# Native agent" : "Native bug fix");
+});
+
+test("a patch changing invocation also generates the installed Codex explicit-only policy", async () => {
+	const { root, source, lock, put, save } = await fixture();
+	lock.include.find(entry => entry.source === "skills/workflow")!.vendored = true;
+	save();
+	put("vendor/pstack-patches/workflow.json", JSON.stringify({ source: "skills/workflow", reason: "Native setup is explicit-only.", edits: [{ file: "SKILL.md", before: "description: Work.", after: "description: Configure native roles.\ndisable-model-invocation: true" }] }));
+	await updatePstack(root, lock.commit, source);
+	expect(readFileSync(join(root, "skills/workflow/agents/openai.yaml"), "utf8")).toBe("policy:\n  allow_implicit_invocation: false\n");
+	expect(checkPstack(root)).toEqual([]);
+});
+
+test.each(["stray patch file", "unregistered patch", "unknown primitive", "missing target"])("offline check rejects %s", async mode => {
+	const { root, put } = await fixture();
+	const patch = { source: mode === "unknown primitive" ? "skills/unknown" : "skills/principle-proof", reason: "Native lookup.", edits: [{ file: mode === "missing target" ? "missing.md" : "SKILL.md", before: "Keep these bytes.", after: "Read native history." }] };
+	put(`vendor/pstack-patches/${mode === "stray patch file" ? "notes.txt" : "proof.json"}`, mode === "stray patch file" ? "Not a primitive JSON patch.\n" : JSON.stringify(patch));
+	const result = runSync(root, ["--check"]);
+	expect(result.exitCode).toBe(1);
+	expect(result.stderr.toString()).toContain(mode === "stray patch file" ? "expected a primitive JSON patch" : mode === "unknown primitive" ? "invalid primitive patch" : mode === "missing target" ? "missing patch target" : "primitive patches changed");
+});
+
+test.each(["no match", "ambiguous match", "escaping target", "duplicate primitive", "symlink", "stray patch file", "unknown primitive", "missing target"])("invalid patch %s fails before changing the vendored artifact", async mode => {
 	const { root, source, lock, put } = await fixture();
 	const before = snapshot(join(root, "skills"));
 	const lockBefore = readFileSync(join(root, "vendor/pstack.lock.json"));
@@ -360,6 +435,9 @@ test.each(["no match", "ambiguous match", "escaping target", "duplicate primitiv
 	const patch = { source: "skills/principle-proof", reason: "Port the primitive.", edits: [{ file: "SKILL.md", before: mode === "no match" ? "Absent bytes." : mode === "ambiguous match" ? "\n" : "Keep these bytes.", after: "Portable bytes." }] };
 	if (mode === "escaping target") patch.edits[0].file = "../outside.md";
 	put(file, JSON.stringify(patch));
+	if (mode === "stray patch file") put("vendor/pstack-patches/notes.txt", "Not a primitive JSON patch.\n");
+	if (mode === "unknown primitive") put(file, JSON.stringify({ ...patch, source: "skills/unknown" }));
+	if (mode === "missing target") put(file, JSON.stringify({ ...patch, edits: [{ ...patch.edits[0], file: "missing.md" }] }));
 	if (mode === "duplicate primitive") put("vendor/pstack-patches/duplicate.json", JSON.stringify(patch));
 	if (mode === "symlink") {
 		put("outside-patch.json", JSON.stringify(patch));

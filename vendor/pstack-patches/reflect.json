@@ -5,7 +5,7 @@
     {
       "file": "SKILL.md",
       "before": "Before fanning out, find this conversation's transcript in the `agent-transcripts/` directory the system prompt names. Do not glob across `~/.cursor/projects/*/`. That crosses workspace boundaries and reads private chats from unrelated projects.\n\n```bash\nls -t <agent-transcripts>/*.jsonl <agent-transcripts>/*/*.jsonl <agent-transcripts>/*/subagents/*.jsonl 2>/dev/null | head -10\n```\n\nThat covers the legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`) layouts. For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt. If none matches, pass a tight digest of the session instead.",
-      "after": "Before fanning out, locate this conversation through the destination harness's native session history, as mapped in the pstack names adapter. Match its session identity and opening user prompt, not a Cursor filename or JSONL field. Pass the scoped transcript or an authorized export to reviewers. If no transcript is available, pass a tight digest of this session and name the evidence limitation. Do not search unrelated workspaces."
+      "after": "Before fanning out, find this conversation's transcript through the native session history in the pstack names adapter. Do not search unrelated workspaces; that reads private chats from unrelated projects. Match the conversation's opening user prompt. If none matches, pass a tight digest of the session instead."
     }
   ]
 }

@@ -1,13 +1,14 @@
 ---
 name: setup-pstack
-description: Configure which models pstack uses per role and at what reasoning budget. Detects your available models and writes an always-applied rule that overrides the skill defaults. Use for /setup-pstack, "configure pstack models", "pstack budget", or changing pstack's model choices.
+description: Configure native harness model roles and reasoning budgets through setup-mistystack, then offer project verification skills. Use explicitly for /setup-pstack.
+disable-model-invocation: true
 ---
 
 # Setup pstack
 
 In Mistystack, read [the pstack names adapter](../misty/harnesses/pstack-names.md) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.
 
-Configure the destination harness through the installed **setup-mistystack** skill. Its harness note owns model discovery, role assignment, reasoning budgets and persistence; do not create a Cursor rule. Use the steps below to discuss the budget and verification offers, not as a second configuration writer.
+For OMP, Claude Code, Codex or pi, explicitly invoke the installed [setup-mistystack](../setup-mistystack/SKILL.md) skill for native model roles and reasoning budgets, then continue at step 7. This replaces the Cursor-only rule writer in steps 1–6 below.
 
 ## Steps
 
@@ -38,7 +39,7 @@ Every real slug written must be in the detected set. `inherit-parent` and `auto`
 
 ### 5. Write the rule
 
-Persist the confirmed choices with **setup-mistystack** in the destination harness's native configuration, preserving foreign entries, then read them back. The Cursor rule below is an upstream role reference only: never write it outside Cursor, and do not copy its slugs over detected native choices.
+Write `~/.cursor/rules/pstack-models.mdc` with `alwaysApply: true`, a `# budget` line with the chosen label and its target effort, and one line per role, using the same labels poteto-mode uses. Overwrite the whole file so re-runs stay idempotent. Shape:
 
 ```
 ---
@@ -69,7 +70,7 @@ interrogate reviewers: claude-opus-5-5-xhigh, grok-4.7-xhigh-fast
 
 ### 6. Confirm
 
-Tell the user which native configuration was written and which readback passed. Separate persisted configuration from fresh-session discovery and successful inference. Re-running this skill updates only its owned entries.
+Tell the user the rule was written and that it applies to new sessions. Re-running this skill updates it.
 
 ### 7. Offer a verification skill (optional)
 

@@ -426,7 +426,7 @@
     "skills/arena/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/arena/SKILL.md": "2cbaf7381ffce590c9b879680f4c7a9c1ffa699234e4eb592b77e20088e8f6c3",
     "skills/automate-me/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/automate-me/SKILL.md": "e8045601fe249dac38aba0d98ff1ef38e0f597385b2162088e51dc7ba3a273ec",
+    "skills/automate-me/SKILL.md": "1f2aa9fb4bf635876e804dd8146f3ed92e451da33bbf1173901cd54c4f22cbc2",
     "skills/benchmark-checklist/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/benchmark-checklist/SKILL.md": "058ab093f02c07ec9a6d762dda4dc7acd85d6549af8bc55d707ccc0e42e56666",
     "skills/blast-radius/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -461,18 +461,18 @@
     "skills/maintain-verification-skill/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/maintain-verification-skill/SKILL.md": "9cf8813bfa8c2add3af5803ba1eeeb7b0cf208f26b6160ec727e1c69547f9d69",
     "skills/make-bot-ui/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/make-bot-ui/SKILL.md": "db384ae015c4d82ffdd1a6e6371262d47108911fab5321fa1d184e86c23a1a8a",
+    "skills/make-bot-ui/SKILL.md": "a5f6df91bd05ad6231ff93e3b26f1f0f91db4fb9614f4a6c27bf76dfb2b277b5",
     "skills/no-comments/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/no-comments/SKILL.md": "f860c91b4a75669c1e4d8270c2dadd4743d74968724d3ad54bf88648f6170ee6",
     "skills/poteto-help/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/poteto-help/references/prompting.md": "a4fb310e13a59a4a57a79857536a1f1226b033e814f0c7cfa099f266cedc7184",
     "skills/poteto-help/references/recipes.md": "4a7a2d72d0d2135d24d2cec8ffa4be29b9bad2f12dc2d7278155734804e97e05",
-    "skills/poteto-help/SKILL.md": "0917c79dba5f08cce20520c5711dd91e847e71ff72950d147c8db5902c012026",
+    "skills/poteto-help/SKILL.md": "428cdf431625bdecbadcc762a204bc72db659ca99b3fb308ab8e74f7eded8245",
     "skills/poteto-mode/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/poteto-mode/playbooks/authoring-a-skill.md": "811f31c86f586b4b01101841f14614800e99d1cdfba8f4b0b7bd60c0bdcb8a66",
     "skills/poteto-mode/playbooks/autonomous-run.md": "09b7db7ef9bd44db7c78c51c0dd4ed4abf30bbd7a3f70d2c32ac034d28330f4b",
     "skills/poteto-mode/playbooks/bug-fix.md": "c67feaf4be3f1e1192d196779e35a6a37b48a985b2337ae181559054d9695f93",
-    "skills/poteto-mode/playbooks/eval.md": "65184041012cf470be8f27e4ea79ce2a5236081c567b82c721b55147e8ea62eb",
+    "skills/poteto-mode/playbooks/eval.md": "aa6568b13e6478cf164f8f5727815b34192ea313cf2b0d438afd586713704f3e",
     "skills/poteto-mode/playbooks/feature.md": "620e3d4538adaac6769215216c542482798b685e7553e3848092db2ca320e520",
     "skills/poteto-mode/playbooks/hillclimb.md": "121f92acaa09d01f8c337f41ba74f35801b19e7ad4ffe89a70080e0f4162f22d",
     "skills/poteto-mode/playbooks/investigation.md": "0cf65a654d30142c7ec4bc118bb65ab517fcbb179aa43f42dc69d0e76f7b89fd",
@@ -539,20 +539,21 @@
     "skills/principle-type-system-discipline/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-type-system-discipline/SKILL.md": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106",
     "skills/recall/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/recall/SKILL.md": "c26fd4979d42ea1b75896a981fe755144190537208088bd55c106036e919b4ad",
+    "skills/recall/SKILL.md": "2a5d7eed614d4404706d90a9e2002c35c4f391bada0c9aa8e6d6044fc044ee90",
     "skills/reflect/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/reflect/references/divergent-reviewer.md": "f548ca2c5c803972127fa15b4ce06f008220c7baeb29dfb9dcf0d5fe8f24622b",
     "skills/reflect/references/judgment-reviewer.md": "885774e2d2db01d227c6267e591c89af8684d69db1c009b610ad616d2f489a32",
     "skills/reflect/references/synthesizer.md": "91e5cc3fdd928d122ad666bf49764c214559cc11676918ddd664b049dc3ade85",
     "skills/reflect/references/tooling-reviewer.md": "f71a5b4185c8d57d983d9c498298dd444507b36bbe6e2413dd738d9db6445404",
-    "skills/reflect/SKILL.md": "d00b7eaff51de1bc317bbf03e2f05b4141b7223c608054ef2235fe89dd1bca70",
-    "skills/setup-pstack/SKILL.md": "c0b356b38d565bafb3defca72c91a31b63d96655358e8bba6841ca714300f3a6",
+    "skills/reflect/SKILL.md": "15ab3167a462b5986659fe24266650dfccd31df77a3271c84f0c3679a6adc659",
+    "skills/setup-pstack/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/setup-pstack/SKILL.md": "516e3f423d14932aa7c76e08563bc63b9788e460d0cbe500a90a5278eddf534a",
     "skills/sharpen/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/sharpen/SKILL.md": "563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2",
     "skills/show-me-your-work/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/show-me-your-work/references/decision-log-template.tsv": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76",
     "skills/show-me-your-work/scripts/log.sh": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e",
-    "skills/show-me-your-work/SKILL.md": "0ea7734af228898ad9e853cd96b22b2fe14d5ed5fed01d429db8e9c4465b29b4",
+    "skills/show-me-your-work/SKILL.md": "445910adcf60efba1b8462b4ddf0816f8fd67e3efa9be346961f5f5646a141fc",
     "skills/statechart/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/statechart/references/render.md": "8cca446eb0c8f87f2ef7b97c4b149f59aacdc153134b4217c4bcde09b10ac3c4",
     "skills/statechart/scripts/backends/cfg.ts": "aea4d8766d214e7fa08f4881f1037319655e75eb56652e1b6d5d4f13a162e3e1",
@@ -1002,7 +1003,7 @@
       "source": "skills/automate-me",
       "file": "vendor/pstack-patches/automate-me.json",
       "reason": "The mining pass requires Cursor's system-provided transcript directory; other harnesses expose scoped native history instead.",
-      "sha256": "227cbadfa5f4a858b078613e6970b34334eec86d18473393907e2c7b9fa13a1c"
+      "sha256": "4f1513a5c518bc044a98ae9f38eeea62c6875095fbae07723cabb0dd7aa5853f"
     },
     {
       "source": "skills/poteto-mode/playbooks/autonomous-run.md",
@@ -1026,7 +1027,7 @@
       "source": "skills/poteto-mode/playbooks/eval.md",
       "file": "vendor/pstack-patches/eval.json",
       "reason": "Cursor's system-named transcript directory is unavailable outside Cursor; inspect the actual candidate native-session evidence.",
-      "sha256": "e56963b0bf6ed9d4b8265b65e7689bb12ac496d165f93b5ba2258c6f24aae250"
+      "sha256": "b08f2d433d5f5c29e6c62b7a6b2ee9e8b3778b993f0a2a87948595995437a0d1"
     },
     {
       "source": "skills/poteto-mode/playbooks/feature.md",
@@ -1061,8 +1062,8 @@
     {
       "source": "skills/make-bot-ui",
       "file": "vendor/pstack-patches/make-bot-ui.json",
-      "reason": "Cursor's update_state routine, secret-request card and webhook wake envelope are unavailable in OMP, Claude Code, Codex and pi; use an authorized native webhook receiver and credential injection.",
-      "sha256": "55cbff980a332070d9ad49cc86d89d0eefa85a154f9cd8a9330be5bc9395c475"
+      "reason": "Cursor's webhook routines, secret-request cards and routine wake turns have no native equivalent in the supported harnesses; skip the unavailable integration.",
+      "sha256": "dd1dc3a749066e06bf1c7b89410260789af7e5aa3187629da2d56bc8717ffab8"
     },
     {
       "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
@@ -1092,7 +1093,7 @@
       "source": "skills/poteto-help",
       "file": "vendor/pstack-patches/poteto-help.json",
       "reason": "Preserve native installation portability; owner directive 2026-11-03 (ADR0023) removes inherited PR approval/CI workflows and time-cap recipes in favor of native ship-loop and watchdog.",
-      "sha256": "7ddc7ff8a361fb857d1658cc5d579346288ae40b14370e131d0d2d99ab7099b6"
+      "sha256": "2e6a2f66302c2305a514dc7f19abc13ab2128e3dc8da0a100372b22bde0ccd69"
     },
     {
       "source": "skills/poteto-mode",
@@ -1116,7 +1117,7 @@
       "source": "skills/recall",
       "file": "vendor/pstack-patches/recall.json",
       "reason": "Cursor's workspace-slug transcript layout is not a portable history source; use the destination harness's scoped history.",
-      "sha256": "21949110d98563eae52834d98ac64232b84b55362933a5f8054fbc39f4e86b9d"
+      "sha256": "2bd70653b3950d25f20b941126d029d85d64367f5f072384850564734e83f443"
     },
     {
       "source": "skills/poteto-mode/playbooks/refactoring.md",
@@ -1128,7 +1129,7 @@
       "source": "skills/reflect",
       "file": "vendor/pstack-patches/reflect.json",
       "reason": "Cursor's transcript discovery command and JSONL schema cannot identify the active session in other harnesses.",
-      "sha256": "c363bdc4164e4c9a6c44a02eee94ae90b4fee8d3b7ecd858b2912a4c51a6cf8e"
+      "sha256": "656e2c4ddfb353ab6b8e2a10d65dec24edbe89682d435fdc6983d00a6a9a2c99"
     },
     {
       "source": "skills/poteto-mode/playbooks/session-pickup.md",
@@ -1140,13 +1141,13 @@
       "source": "skills/setup-pstack",
       "file": "vendor/pstack-patches/setup-pstack.json",
       "reason": "Cursor's always-applied model-rule writer cannot configure OMP, Claude Code, Codex or pi; use their native role configuration.",
-      "sha256": "2f949e8eb8fa24ecae72f3912f5a5ea129d74d6b043675c48a36cb15ed65967a"
+      "sha256": "c29d38f578938872981137e9e5790f27823ce3c35af6e81876fff874c47bd527"
     },
     {
       "source": "skills/show-me-your-work",
       "file": "vendor/pstack-patches/show-me-your-work.json",
       "reason": "The audit requires a Cursor transcript path; the same audit must use the destination harness's actual scoped session evidence.",
-      "sha256": "4bb93a04ed5086ed7b1b79109365a97cff57bd2d53d2141addcdffd69ace18ff"
+      "sha256": "753300bbfc630fa834908304a867c4e890b8cb7a52160d66416175599c8f2a48"
     },
     {
       "source": "skills/swarm",
@@ -1198,5 +1199,11 @@
     "docs/guide/images/verification.jpg",
     "docs/harness/claude-code.md",
     "plugin.json"
+  ],
+  "executables": [
+    "skills/poteto-mode/scripts/worktree-audit.sh",
+    "skills/show-me-your-work/scripts/log.sh",
+    "skills/statechart/scripts/statechart",
+    "skills/statechart/scripts/test/java.ts"
   ]
 }

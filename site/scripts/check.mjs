@@ -167,6 +167,7 @@ function checkLink(value, base, label) {
 
 function publicSource(source) {
   if (!nonempty(source) || source.includes('\\') || source.split('/').some((part) => !part || part === '.' || part === '..' || part.startsWith('.'))) return false;
+  if (source.startsWith('skills/statechart/scripts/test/corpus/')) return false;
   if (!/\.(md|json)$/.test(source)) return false;
   return /^(docs|skills)\//.test(source) || source === 'rules/core.md' || /^(README|DOMAIN|USER_STORIES|ATTRIBUTION|CHANGELOG|CONTRIBUTING|FOUNDATIONS|SPEC)\.md$/.test(source);
 }
@@ -230,6 +231,7 @@ async function main() {
   for (const [file, bytes] of files) {
     if (/\.(html|svg)$/.test(file)) pages.set(file, parseHTML(file, bytes.toString('utf8')));
   }
+  for (const file of pages.keys()) expect(!file.startsWith('library/skills/statechart/scripts/test/corpus/'), `${file}: test corpus must not be published as a library page`);
   for (const line of (files.get('_redirects')?.toString('utf8') ?? '').split('\n')) {
     const clean = line.trim();
     if (!clean || clean.startsWith('#')) continue;
@@ -430,6 +432,7 @@ function checkPagefind(documents) {
         const file = `pagefind/fragment/${hash}.pf_fragment`;
         const fragment = JSON.parse(unpack(file).toString('utf8'));
         expect(nonempty(fragment.content), `${file}: empty indexed content`);
+        expect(!new URL(fragment.url, origin).pathname.startsWith('/library/skills/statechart/scripts/test/corpus/'), `${file}: test corpus must not enter Pagefind`);
         const resolved = checkLink(fragment.url, '/', file);
         const url = resolved ? route(resolved.file) : fragment.url;
         for (const anchor of fragment.anchors ?? []) checkLink(`${fragment.url}#${encodeURIComponent(anchor.id)}`, '/', `${file} anchor`);
