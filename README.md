@@ -16,6 +16,8 @@ and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns the pin a
 vendored set and exact patches/removals. [ADR 0023](docs/decisions/0023-live-verification-and-release-gate.md)
 records author-owned running-product proof before merge, the fast pre-deploy CI
 and single critical assessment, and open-ended watchdog-supervised agents.
+Other vendored changes are limited to the documented harness pointer,
+recorded Cursor-mechanism swaps and generated Codex invocation sidecars.
 
 Fleet machinery lives in the private `misty-step/workstation` repository.
 
@@ -63,7 +65,7 @@ adapters/          harness-specific agents, hooks and extensions
 agents/            OMP agents at its fixed native discovery path
 .agents/skills/    repository verification
 scripts/           checks, Git hook setup and release protection
-vendor/pstack.lock.json upstream pin, selections, exclusions and file hashes
+vendor/pstack.lock.json upstream pin, destinations, patches, references, hashes and executable files
 docs/guide/        human guide
 ```
 

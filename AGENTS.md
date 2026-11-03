@@ -12,7 +12,8 @@ and pi; private runtime setup belongs to the workstation plugin.
 | --- | --- |
 | `.omp-plugin/`, `.claude-plugin/`, `.codex-plugin/`, `.agents/plugins/`, `package.json` | Native plugin, marketplace and pi package manifests |
 | `rules/core.md` | Always-on core; keep it at most 20 lines |
-| `skills/misty/` | Mode routing, brief contract and task playbooks |
+| `skills/misty/` | Mode routing, brief contract and native harness references |
+| `skills/poteto-mode/playbooks/` | Vendored pstack task playbooks; regenerate through the lock |
 | `skills/principle-*/` | One principle per on-demand leaf |
 | `skills/` | Task procedures; frontmatter follows DOMAIN.md |
 | `adapters/` | Claude/Codex role agents and native hooks/extensions; model choices stay in harness-native configuration |

@@ -5,17 +5,12 @@
     {
       "file": "SKILL.md",
       "before": "Write `~/.cursor/rules/pstack-models.mdc`, an always-applied rule that sets pstack's model per role.",
-      "after": "Configure the destination harness through the installed **setup-mistystack** skill. Its harness note owns model discovery, role assignment, reasoning budgets and persistence; do not create a Cursor rule. Use the steps below to discuss the budget and verification offers, not as a second configuration writer."
+      "after": "For OMP, Claude Code, Codex or pi, explicitly invoke the installed [setup-mistystack](../setup-mistystack/SKILL.md) skill for native model roles and reasoning budgets, then continue at step 7. This replaces the Cursor-only rule writer in steps 1–6 below."
     },
     {
       "file": "SKILL.md",
-      "before": "Write `~/.cursor/rules/pstack-models.mdc` with `alwaysApply: true`, a `# budget` line with the chosen label and its target effort, and one line per role, using the same labels poteto-mode uses. Overwrite the whole file so re-runs stay idempotent. Shape:",
-      "after": "Persist the confirmed choices with **setup-mistystack** in the destination harness's native configuration, preserving foreign entries, then read them back. The Cursor rule below is an upstream role reference only: never write it outside Cursor, and do not copy its slugs over detected native choices."
-    },
-    {
-      "file": "SKILL.md",
-      "before": "Tell the user the rule was written and that it applies to new sessions. Re-running this skill updates it.",
-      "after": "Tell the user which native configuration was written and which readback passed. Separate persisted configuration from fresh-session discovery and successful inference. Re-running this skill updates only its owned entries."
+      "before": "description: Configure which models pstack uses per role and at what reasoning budget. Detects your available models and writes an always-applied rule that overrides the skill defaults. Use for /setup-pstack, \"configure pstack models\", \"pstack budget\", or changing pstack's model choices.",
+      "after": "description: Configure native harness model roles and reasoning budgets through setup-mistystack, then offer project verification skills. Use explicitly for /setup-pstack.\ndisable-model-invocation: true"
     }
   ]
 }

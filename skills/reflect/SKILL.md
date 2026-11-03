@@ -14,7 +14,7 @@ Invoke when the user says "reflect" or "/reflect". Skip when the conversation is
 
 ## 1. Locate the active transcript
 
-Before fanning out, locate this conversation through the destination harness's native session history, as mapped in the pstack names adapter. Match its session identity and opening user prompt, not a Cursor filename or JSONL field. Pass the scoped transcript or an authorized export to reviewers. If no transcript is available, pass a tight digest of this session and name the evidence limitation. Do not search unrelated workspaces.
+Before fanning out, find this conversation's transcript through the native session history in the pstack names adapter. Do not search unrelated workspaces; that reads private chats from unrelated projects. Match the conversation's opening user prompt. If none matches, pass a tight digest of the session instead.
 
 ## 2. Spawn three reviewers in parallel
 

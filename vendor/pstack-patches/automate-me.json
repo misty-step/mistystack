@@ -5,7 +5,7 @@
     {
       "file": "SKILL.md",
       "before": "Locate the active workspace's transcripts before fanning out. The system prompt names the workspace's `agent-transcripts/` directory. Use only that path. Don't glob across `~/.cursor/projects/*/`. That crosses workspace boundaries and reads private chats from unrelated projects.",
-      "after": "Locate the active workspace's native session history before fanning out, using the pstack names adapter. Give each reader the scoped session IDs or explicitly authorized transcript exports and their time range. Do not assume a Cursor directory or search unrelated workspaces. If no history is available, name that limitation and continue with the user's answers in step 2 rather than inventing recurring patterns."
+      "after": "Locate the active workspace's native session history through the pstack names adapter before fanning out. Use only that workspace's sessions. Don't search unrelated workspaces; that reads private chats from unrelated projects."
     }
   ]
 }

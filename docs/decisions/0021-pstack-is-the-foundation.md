@@ -50,12 +50,15 @@ ship-loop or routing policy. [0022](0022-pstack-governs-owner-rulings.md)
 subsequently changes those method restrictions through the owner's rulings.
 
 [The lock](../../vendor/pstack.lock.json) is the one home for the source pin,
-complete source/destination inventory, patch reasons and patch hashes, and the
-hashes of final patched bytes. There are no excluded primitives.
+complete source/destination inventory, patch reasons and patch hashes,
+executable files, and hashes of final patched bytes. There are no excluded
+top-level primitives. Upstream documentation and Cursor-only
+`automations/benny/` (including its nested skills) remain lock references.
 [The sync command](../../scripts/sync-pstack.ts) verifies the source tree, copies
-the foundation, applies recorded patches and regenerates the lock. Its offline
-`--check` rejects edits, missing or unlisted files, changed patches, inventory
-drift and uncovered native-name routes. Never hand-edit the generated lock.
+the recorded foundation, applies patches and regenerates the lock. Its offline
+`--check` rejects edits, missing or unlisted files, executable-bit drift, changed
+patches, stale patch output, inventory drift and uncovered native-name routes.
+Never hand-edit the generated lock.
 
 Playbooks have one home under `skills/poteto-mode/playbooks/`; Misty's routes and
 the public site's existing playbook URLs point there. Upstream documentation
@@ -64,10 +67,12 @@ outside the installed primitives resolves against the pinned source inventory.
 ## Consequences
 
 - Upstream sync has a visible cost: select a commit and run
-  `bun scripts/sync-pstack.ts --update <commit> --all`
+  `bun scripts/sync-pstack.ts --update <commit>`
   (optionally `--from <checkout-or-pstack-directory>`), review changed bytes,
   then prove the native consumers. Two updates at the same pin converge.
   A patch that no longer matches blocks sync instead of silently disappearing.
+  The recorded include/exclude inventory is the only sync model; routine updates
+  preserve it and its destinations instead of resetting them with `--all`.
 - The foundation includes large script bundles. Record the plugin byte delta
   and observed install-time impact in the PR's native proof, not a size-based
   exclusion.

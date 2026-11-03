@@ -10,9 +10,9 @@ In Mistystack, read [the pstack names adapter](../misty/harnesses/pstack-names.m
 
 Answer the user's question about pstack, hand them a prompt they can send, and link the file the answer came from. For a help question, don't start the work. The user asked how, and a pstack run spends real tokens, so let them send the prompt.
 
-A message that asks for work, such as "use pstack to fix this bug", is not a help question. Read [`poteto-mode`](../poteto-mode/SKILL.md), do the work under it, and mention once that a Custom Mode keeps it on.
+A message that asks for work, such as "use pstack to fix this bug", is not a help question. Read [`poteto-mode`](../poteto-mode/SKILL.md), do the work under it, and mention once that native skill invocation starts each task.
 
-This file maps questions to the skills and guide pages that hold the answers. Those files own the details. Read the file you route to before you quote it, and trust it when it disagrees with this map. The links here point into the installed plugin, which the user may not be able to open, so give the user the file's public copy: `https://github.com/cursor/plugins/blob/main/pstack/` followed by its path.
+This file maps questions to the skills and guide pages that hold the answers. Those files own the details. Read the file you route to before you quote it, and trust it when it disagrees with this map. For a public copy, use the installed skill's source path in the Mistystack repository at the reviewed revision. Upstream guide and README links resolve at the pstack pin through the pstack names adapter.
 
 ## Find out what they need
 
@@ -26,11 +26,11 @@ Infer the need from the message and the conversation. A named situation, such as
 
 Check the state that changes the answer, and mention it only when it does:
 
-- Inspect the destination harness's native role configuration through **setup-mistystack**; absence of a Cursor rule says nothing about native setup.
+- No native role configuration means `/setup-pstack` hasn't run for this user, so every role uses its native default model.
 - No `verify-*` skill or other app harness in the project means agents have no scripted way to drive the app. Mention `/create-verification-skill` when the question is about proving a change works.
 - No formal verification skill in the project means no property is checked past what tests reach. Mention `/create-formal-verification-skill` when the question is about a race, an invariant, or another case tests rarely hit. When one exists and the code it covers changed after the commit it records as last in sync, mention `/maintain-formal-verification-skill` if the question touches that code.
 
-When the model rule is missing and it matters, ask whether the user wants to pick a model for each role and a reasoning budget now. It matters when the user is new, the question is about setup or cost, or the answer depends on which models run. Ask at most once per chat. If the need is also unclear, ask both questions together. Offer two choices:
+When native model configuration is missing and it matters, ask whether the user wants to pick a model for each role and a reasoning budget now. It matters when the user is new, the question is about setup or cost, or the answer depends on which models run. Ask at most once per chat. If the need is also unclear, ask both questions together. Offer two choices:
 
 - Now: give them `/setup-pstack` to type, and answer their question too.
 - Later: answer their question, and add one line saying every role keeps its default model until they run `/setup-pstack`.
@@ -38,14 +38,14 @@ When the model rule is missing and it matters, ask whether the user wants to pic
 ## Get set up
 
 1. Install Mistystack through the destination harness's native lifecycle in the pstack names adapter; the full pstack foundation is bundled.
-2. Run [`/setup-pstack`](../setup-pstack/SKILL.md). It uses **setup-mistystack** for native model and reasoning configuration, then offers verification and formal-verification skills when the project has none.
+2. Explicitly run [`/setup-pstack`](../setup-pstack/SKILL.md). It uses **setup-mistystack** to ask for a reasoning budget, map a model to each native role, and write native configuration. Then it offers once each to generate a verification skill and a formal verification skill for the project, unless the project already has one.
 3. Start a real task with `/poteto-mode`, a goal, and a check that can pass or fail.
 
-Installing changes nothing until the user invokes a skill. Only `/setup-pstack` loads from the user's words. The [README](../../README.md) and [guide page 1](../../docs/guide/01-setup.md) have the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).
+Installing changes nothing until the user invokes a skill. `/setup-pstack` is explicit-only, like the other pstack skills. The [README](../../README.md) and [guide page 1](../../docs/guide/01-setup.md) have the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).
 
 If cost is the worry, say where the tokens go and how to spend fewer. pstack spends extra tokens on subagents and review panels. Rerun `/setup-pstack` and pick a smaller budget or cheaper models. A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model. A shorter panel list runs fewer subagents, one for each entry. Save `/poteto-mode` for work that needs rigor.
 
-Mistystack installs this foundation in OMP, Claude Code, Codex and pi. Use the pstack names adapter for native invocation, subagents, models, history and event handling. A missing integration never skips required proof or independent judgment.
+Mistystack installs pstack in OMP, Claude Code, Codex and pi through each harness's native plugin mechanism. The pstack names adapter maps invocation, subagents, model configuration and session history. A step that needs a Cursor-only feature with no native equivalent, such as webhook routines, is skipped with a one-line note.
 
 ## Start a task with `/poteto-mode`
 
@@ -53,10 +53,9 @@ Mistystack installs this foundation in OMP, Claude Code, Codex and pi. Use the p
 
 Whether `/poteto-mode` stays on depends on how the user starts it:
 
-- Enter on `/poteto-mode` attaches the skill to one message. It fades as the chat moves on.
-- Custom Mode keyboard shortcuts are Cursor-only. In OMP, Claude Code, Codex and pi, invoke the installed skill explicitly at the start of each new task through the native skill mechanism in the pstack names adapter.
+- Invoke the installed `/poteto-mode` skill at the start of each new task through the native skill mechanism in the pstack names adapter; the supported harnesses have no Cursor Custom Mode.
 
-Link [Cursor's skills docs](https://cursor.com/docs/skills) when this comes up. Mid-chat, "new task" makes the mode match a fresh playbook. `/poteto-mode` already uses `poteto-agent` for the subagents its playbook steps spawn. To get the same style from a subagent of your own, spawn it with `subagent_type: "poteto-agent"`.
+Link the destination harness's skill instructions in the pstack names adapter when this comes up. Mid-chat, "new task" makes the mode match a fresh playbook. `/poteto-mode` already uses `poteto-agent` for the subagents its playbook steps spawn. To get the same style from a subagent of your own, spawn it with `subagent_type: "poteto-agent"`.
 
 ## Pick a skill
 
@@ -76,7 +75,7 @@ The default answer is `/poteto-mode`, which runs most of the others when its ste
 | Know what a small diff could break outside itself | [`/blast-radius`](../blast-radius/SKILL.md) |
 | Settle types and module shape before code that crosses a function boundary | [`/architect`](../architect/SKILL.md) |
 | Get several attempts at one brief, merged into the best one | [`/arena`](../arena/SKILL.md) |
-| Run parallel checks over slices, or race workers, as cloud agents | [`/swarm`](../swarm/SKILL.md) |
+| Run parallel checks over slices, or race workers, through native agents or separately briefed sessions | [`/swarm`](../swarm/SKILL.md) |
 | Have different models review a diff and try to break it | [`/interrogate`](../interrogate/SKILL.md) |
 | Fix a bug test-first when a cheap local test exists | [`/tdd`](../tdd/SKILL.md) |
 | Apply TypeScript rules to `.ts` or `.tsx` work | [`/typescript-best-practices`](../typescript-best-practices/SKILL.md) |
@@ -137,12 +136,12 @@ Principles are one-rule skills that `/poteto-mode` reads and cites in its replie
 
 | Symptom | Fix |
 |---|---|
-| The mode stopped applying after a few turns | It was started with Enter. Start it as a Custom Mode, or start each task with `/poteto-mode`. |
+| The mode stopped applying after a few turns | Invoke `/poteto-mode` through the native skill mechanism at the start of each task. |
 | A question got treated as the next step of the last task | Say "new task", or say the turn doesn't need the mode. |
-| A new model choice had no effect | The rule from `/setup-pstack` applies to new chats. Start one. |
+| A new model choice had no effect | Follow the destination harness's native configuration activation instructions in `setup-mistystack`. |
 | Runs cost more than expected | See the cost paragraph under Get set up. |
-| A skill didn't load on its own | Only `/setup-pstack` loads from the user's words. The others load when the user types them or when `/poteto-mode` runs them, and it doesn't run every skill. |
-| Parallel agents overwrote each other | Give each agent its own worktree, or run them as cloud agents, which each get their own machine. |
+| A skill didn't load on its own | Invoke `/setup-pstack` explicitly. The skills load when the user types them or when `/poteto-mode` runs them, and it doesn't run every skill. |
+| Parallel agents overwrote each other | Give each native agent or separately briefed session its own worktree. |
 | An overnight run moved but finished nothing | `/loop` needs a check that can pass or fail, not a duration. See [guide page 7](../../docs/guide/07-overnight.md). |
 | The reply claims success from a green build | Ask for the real command, flow, stored value, or profile. That's the prove-it-works principle. |
 
