@@ -16,9 +16,9 @@ Read your harness note: [OMP](harnesses/omp.md), [Claude Code](harnesses/claude.
 
 ## Misty deltas
 
-- **Shipping.** Follow pstack's [Opening a PR](../poteto-mode/playbooks/opening-a-pr.md), [ship-loop](../ship-loop/SKILL.md) for Shipping's verify step, then [Shipping](../poteto-mode/playbooks/shipping.md) to land. [Babysit](../poteto-mode/playbooks/babysit.md) stays upstream. Apply ship-loop's [delivery defaults](../ship-loop/SKILL.md#delivery-defaults), [rigor tiers](../ship-loop/roles.md#rigor) and [blockers-only review](../ship-loop/judge.md#2-rule). After SHIP, arm `gh pr merge <url> --auto --squash --match-head-commit <verified-sha>` once.
-- **Delegation.** At light rigor, run fan-out skills inline. Standard may use [architect](../architect/SKILL.md), [interrogate](../interrogate/SKILL.md) and [how](../how/SKILL.md). Critical may also use [arena](../arena/SKILL.md) and [swarm](../swarm/SKILL.md). The brief names the rigor tier that permits its fan-out. Ship-loop's independent QA/review and judge remain required at every tier, including light. Instruction trials retain [agent-design's defined arms and blind judge](../agent-design/SKILL.md#instruction-eval).
-- **Placement.** Apply [the core's isolation rule](../../rules/core.md) through your environment's isolation skill.
+- **Shipping.** [Ship-loop](../ship-loop/SKILL.md) owns delivery: build, author verifies the real running app, merge without CI or review, then fast CI and one critical-correctness/security review at the pre-deploy release gate. Deploy the checked artifact and prove a live journey. Pstack's non-delivery methods remain the baseline.
+- **Delegation.** Light rigor works inline. Standard may use [architect](../architect/SKILL.md), [interrogate](../interrogate/SKILL.md) and [how](../how/SKILL.md). Critical may also use [arena](../arena/SKILL.md) and [swarm](../swarm/SKILL.md). The brief names the rigor tier that permits its fan-out. Instruction trials retain [agent-design's defined arms and blind judge](../agent-design/SKILL.md#instruction-eval).
+- **Placement and supervision.** [Boat workers](../boat-workers/SKILL.md) owns one snapshot-backed worker per slice, idle stop/resume and final deletion. [Watchdog](../watchdog/SKILL.md) supervises open-ended agent runs through native observations and steering, not agent time caps.
 - **Planning.** Unsettled or conflicting product intent belongs to the owner. [figure-it-out](../figure-it-out/SKILL.md) plans execution of a settled outcome; it does not decide product intent.
 
 ## Principles
@@ -45,7 +45,7 @@ to the accountable agent. Provider wiring and fleet policy belong in the private
 workstation plugin, not this method.
 
 A validated, qualified classification may select an existing authorized handler;
-it cannot expand permissions or bypass review, release or resource gates.
+it cannot expand permissions or bypass release or resource gates.
 Uncertainty and invalid, missing or failed inference return to the existing
 agent/default path once, with an explicit reason. Deterministic health and
 admission checks remain independent of inference. A skill called after an agent
@@ -67,7 +67,7 @@ wakes explain that outcome; they do not replace consumer-path verification.
 
 ## Subagents
 
-Apply the rigor gate in [Misty deltas](#misty-deltas) and the role mapping in the [names adapter](harnesses/pstack-names.md#native-roles). Pstack's [fresh-subagent rule](../poteto-mode/SKILL.md#subagents) applies as written. Give each writer one isolated worktree and branch and each shared resource one writer. Readers use that writer's result; sequence only genuine dependencies. Keep child work within the assigned outcome. The parent integrates and owns the result.
+Apply the rigor gate in [Misty deltas](#misty-deltas) and the role mapping in the [names adapter](harnesses/pstack-names.md#native-roles). Pstack's [fresh-subagent rule](../poteto-mode/SKILL.md#subagents) applies as written. Give each writer one isolated worktree and branch and each shared resource one writer. Readers use that writer's result; sequence only genuine dependencies. Keep child work within the assigned outcome. The parent integrates, supervises through [watchdog](../watchdog/SKILL.md), and owns the result.
 
 ### Briefing contract
 
@@ -103,8 +103,8 @@ Read the matched procedure; combine rows across boundaries. The [names adapter](
 | Empirical decision probe / pixel-exact equivalence | [Prototype](../poteto-mode/playbooks/prototype.md) / [Visual parity](../poteto-mode/playbooks/visual-parity.md) |
 | Experiment / instruction comparison / skill authoring | [Eval](../poteto-mode/playbooks/eval.md) / [Instruction eval](../agent-design/SKILL.md#instruction-eval) / [Authoring a skill](../poteto-mode/playbooks/authoring-a-skill.md) with [agent-design](../agent-design/SKILL.md) |
 | Multi-phase plan / cross-cutting task / standing program | [Multi-phase plan](../poteto-mode/playbooks/multi-phase-plan.md) / [figure-it-out](../figure-it-out/SKILL.md) / [Orchestrate](../poteto-mode/playbooks/orchestrate.md) |
-| Open a PR / make it merge-ready / ship | [Opening a PR](../poteto-mode/playbooks/opening-a-pr.md) / [Babysit](../poteto-mode/playbooks/babysit.md) / [Shipping](../poteto-mode/playbooks/shipping.md) |
-| Autonomous task / independent PR queue / unmerged PR queue | [Autonomous run](../poteto-mode/playbooks/autonomous-run.md) / [Autopilot-full](../poteto-mode/playbooks/autopilot-full.md) / [Autopilot-stack](../poteto-mode/playbooks/autopilot-stack.md) |
+| Open a PR / prove and merge a slice / release | [Ship-loop](../ship-loop/SKILL.md), [verification](../verification/SKILL.md) and [release-watch](../release-watch/SKILL.md) |
+| Autonomous task / independent delivery queue / long-running agents | [Autonomous run](../poteto-mode/playbooks/autonomous-run.md), [Ship-loop](../ship-loop/SKILL.md) and [watchdog](../watchdog/SKILL.md) |
 | Resume / pause / reclaim owned worktrees | [Session pickup](../poteto-mode/playbooks/session-pickup.md) / [Pause safely](../poteto-mode/playbooks/pause-safely.md) / [Worktree cleanup](../poteto-mode/playbooks/worktree-cleanup.md) |
 | Consumer proof / tests / prose | [verification](../verification/SKILL.md) / [test-audit](../test-audit/SKILL.md) / [unslop](../unslop/SKILL.md) and [technical-writing](../technical-writing/SKILL.md) |
 | Interface or interaction / security review | [design](../design/SKILL.md) / [security-audit](../security-audit/SKILL.md) |

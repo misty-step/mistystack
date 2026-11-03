@@ -1,95 +1,90 @@
 ---
 name: ship-loop
-description: "Verify a PR inside pstack's Shipping playbook through risk-scaled independent QA, review and judgment with one fix round."
+description: "For confirmed delivery scope: build, prove the real running path, merge, then release through fast CI and one critical review."
 metadata:
   owner: phaedrus
-  prevents: "Delivery drift and repeated review rounds: loaded in 15 audited sessions; real-path verification counters 'fix still fails' corrections (36). Reviewer-driven fix loops and renewed rounds after retries: bounded behind judge rulings in mistystack PRs #450 and #454."
+  prevents: "Per-PR review and CI queues displaced real-app proof, repeated rebases and duplicated work; owner correction, 2026-11-03."
   source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
 # Ship loop
 
-Pstack's [Opening a PR](../poteto-mode/playbooks/opening-a-pr.md),
-[Babysit](../poteto-mode/playbooks/babysit.md) and
-[Shipping](../poteto-mode/playbooks/shipping.md) own delivery. This skill supplies
-Shipping's verify step, not another PR-opening, babysit or landing procedure.
+Build → verify on the running product → merge → release gate → deploy → verify live.
+The author owns the first proof. CI and review belong only to the pre-deploy
+release gate, not a PR or push. Use the owning tracker from
+[Foundation article 2](../foundation/checklist.md#article-2).
 
-## Delivery defaults
+## 1. Settle and build the slice
 
-- Work from master and target master, not an integration branch. Prefer larger
-  useful slices with explicit file ownership over many narrow PRs.
-- CI owns the suite. Verify once at the final head. The verifier reruns only
-  the check tied to the main risk and retains existing proof. Run native proof
-  once before release, not after every commit or review.
-- Use `sync-pstack --check` for verbatim vendored bytes. Humans and agents review
-  the Misty delta, not unchanged upstream text.
-- Give each role a deadline in its brief. Replace a stalled agent after stopping
-  its thread. [Roles](roles.md#rigor) owns risk selection and
-  [judge.md](judge.md#2-rule) owns the blockers-only review policy.
+Carry confirmed intent forward. Resolve unsettled product intent with the owner;
+[figure-it-out](../figure-it-out/SKILL.md) plans execution of a settled outcome. Give the builder
+[Misty's briefing contract](../misty/SKILL.md#briefing-contract), owned paths,
+a base branch, acceptance criteria and the [risk-appropriate role](roles.md#rigor).
+Keep independently useful slices separate and sequence only genuine dependencies.
+Use [boat-workers](../boat-workers/SKILL.md) for one snapshot-backed worker per
+slice and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
 
+Implement the smallest complete change. Migrate every caller and delete obsolete
+paths. Record `Story: <IDs|none>` and `Rigor: <tier> — <changed-path risk>` in the
+PR, with its observed proof. A generator-only release PR contains only generator
+output and needs no invented product story.
 
-## 1. Choose rigor
+**Complete when:** the specified behavior exists and its real consumer can run.
 
-Start with the PR from Opening a PR, its base, head, builder thread and proof.
-Record `Story: <IDs|none>` from SPEC.md or USER_STORIES.md and
-`Rigor: <tier>, <changed-path risk>, <diff size>` on the PR.
-[Roles](roles.md#rigor) owns the tiers and independent role sets.
-Use [blast-radius](../blast-radius/SKILL.md) to identify the safety fact for this
-round's existing proof, not a second review panel.
+## 2. Prove and merge
 
-Generator-only machine release PRs need passing affected checks alone and omit
-Story. Authored changes, including documents and measurements, take this round.
+Follow [verification](../verification/SKILL.md). Start the actual app or installed
+artifact and exercise the affected user journey, including its relevant rejection
+and recovery. Use the pstack verification generator when the repository lacks
+that procedure. For ordering, concurrency or durability, use its formal-verification
+generator and retain the properties, assumptions, bounds and proof result.
+Run the narrow affected native checks on the slice's worker; a unit test alone
+is not real-path proof. Fix a failed acceptance criterion and repeat its affected
+path until it works. Record what actually ran and what remains unproved.
 
-## 2. Verify and judge
+Once that proof passes, squash-merge the PR yourself with a Conventional Commit
+title. Do not request a review, start CI, wait for checks, or add a judge.
+Do not rebase merely because trunk advanced. If the forge reports a conflict,
+merge the target branch into the owned branch, resolve it, and repeat the affected
+real path before merging. Prefer independent branches to stacked-merge choreography.
+Confirm the PR reads `MERGED` against the intended target; queued is not merged.
 
-Use this skill's installed directory as `<skill-dir>` and read
-`bun <skill-dir>/scripts/ship-loop.ts --help` before its first use.
+**Complete when:** the author has exercised the changed behavior and the PR is merged.
 
-- **Light.** Keep no ledger. Generate `prompt --pr <url> --rigor light --role qa-review`,
-  then `judge`. Post the combined QA/review report and independent judgment as
-  plain PR comments with their actual thread IDs, checked SHA and evidence links.
-  Do not run `init` or `record`. The conductor and judge read the comment history
-  to preserve independence and the one-fix-round cap.
-- **Standard or critical.** Use `init --pr <url> ...` once to record the builder,
-  base, head, ticket and rigor. Generate `prompt --pr <url> --role qa` and `review`,
-  then `judge`. Record their returned payloads with
-  `record --pr <url> --kind report|verdict --file <payload.json>`.
-  The helper is the sole ledger writer. It accepts the PR author's events,
-  ignores other authors' markers and stops on unreadable trusted events.
-  `status --pr <url> --json` resumes the existing phase and round.
+## 3. Release gate
 
-Each role follows [roles.md](roles.md). QA uses the
-[verification skill](../verification/SKILL.md) for the changed consumer path,
-within the verify-once rule above. One QA owner covers each SHA.
-The [judge](judge.md) is independent of implementation, QA and review.
-Only its FIX naming eligible introduced blockers authorizes a fix.
-Missing required proof cannot pass.
+For a deployable or installable change, run the repository's release path on one
+candidate. CI runs here only: fast, focused checks with cached toolchains and
+reused build artifacts. Remove duplicated setup and redundant reruns; repair a
+slow gate instead of normalizing its delay. No CI runs on PRs or pushes.
 
-## 3. Use at most one fix round
+Commission **one** review of the release candidate, limited to critical correctness
+and security. Give that reviewer the release diff, invariants, real-path and formal
+proof, and concrete risk. It is one release assessment, not a per-PR review cycle.
+Noncritical findings go to the owning tracker. A critical defect stops deployment:
+repair it and prove the affected behavior; do not restart a broad review process.
 
-For FIX, dispatch `fix-builder` for only the judge's named blockers.
-The builder owns code blockers. The conductor owns missing proof.
-Then dispatch a fresh `recheck` thread in the blocking reporter's role for those
-blockers and fix-introduced regressions. Retain unchanged evidence.
-The final judge chooses SHIP, REVERT or SPLIT.
-Non-blocking findings follow the [cleanup policy](judge.md#2-rule), not another fix round.
+Publish and deploy the candidate that passed the fast checks and critical review,
+using the repository's native release/version/rollback mechanism. Generated notes
+remain the generator's output; [the release convention](../../docs/release-convention.md)
+owns that path. An internal change with no published artifact records `no deploy`
+and skips release queries rather than inventing a service.
 
-Light uses `prompt --rigor light --role fix-builder|recheck|final-judge` and plain
-comments throughout. Standard and critical record the fix head, recheck and
-final verdict through the helper. A new session, retry, rebase or changed SHA
-never resets the cap.
+**Complete when:** the release candidate has fast CI evidence and its single
+critical-correctness/security assessment, and the native pipeline deployed it.
 
-## 4. Return the verify result
+## 4. Verify live and finish
 
-Use the [names adapter](../misty/harnesses/pstack-names.md#routes) to translate
-the judgment for [Shipping](../poteto-mode/playbooks/shipping.md).
-Return the checked SHA, judgment and evidence. Shipping owns verdict validity
-and landing of the contiguous verified run.
-Apply [Misty's auto-merge delta](../misty/SKILL.md#misty-deltas) after SHIP.
+Use [release-watch](../release-watch/SKILL.md) to read back the serving release
+identity and run a critical live journey. Follow its authorized recovery path if
+that fails. Collect evidence, stop idle workers and delete each slice's worker
+when its deliverables are retained. The watchdog ends only after owned work and
+resource cleanup finish, not after elapsed time.
 
-For standard and critical, a head change updates the ledger through
-`record --kind head` as documented by `--help`, without resetting the round.
-Shipping owns the decision to carry a verdict, not a second landing procedure here.
-After delivery, use [release-watch](../release-watch/SKILL.md) when a deployed
-artifact changed. The judge records `no deploy` otherwise.
+Report the consumer outcome, merged PRs, release, exercised checks and remaining
+blockers under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
+Distinguish `merged`, `released`, `artifact verified` and `live behavior proven`.
+
+**Complete when:** live identity and the critical journey pass, or the exact
+unreachable prerequisite is reported without claiming the unproved boundary.

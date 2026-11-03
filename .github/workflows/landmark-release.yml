@@ -1,53 +1,45 @@
 name: Verify and Release
 on:
-  push:
-    branches: [master]
   workflow_dispatch:
+    inputs:
+      source:
+        description: Full landed source revision covered by the release assessment
+        required: true
+        type: string
+      critical-review:
+        description: URL of the single critical-correctness/security release assessment
+        required: true
+        type: string
 concurrency:
-  group: release-${{ github.ref }}
+  group: mistystack-release
   cancel-in-progress: false
 permissions:
   contents: read
 jobs:
-  verify:
-    uses: ./.github/workflows/ci.yml
-  publish-landed-release:
-    if: github.ref == 'refs/heads/master'
-    needs: verify
+  prepare:
     runs-on: [self-hosted, hetzner-ci, mistystack-ci]
-    timeout-minutes: 15
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Publish only a landed, verified changelog
-        uses: misty-step/landmark@0be932f9fd775f826427eb5ada2f24efb9a393d8 # v0.28.9
-        with:
-          mode: publish-protected
-          github-token: ${{ github.token }}
-          target-sha: ${{ github.sha }}
-          synthesis: 'false'
-  prepare-release-pr:
-    if: github.ref == 'refs/heads/master'
-    needs: [verify, publish-landed-release]
-    runs-on: [self-hosted, hetzner-ci, mistystack-ci]
-    timeout-minutes: 15
+    outputs:
+      candidate: ${{ steps.candidate.outputs.sha }}
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Install GitHub CLI
-        run: sudo apt-get update && sudo apt-get install -y gh
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.source }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Prepare candidate changelog
+      - name: Record release assessment and source
+        env:
+          SOURCE: ${{ inputs.source }}
+          REVIEW: ${{ inputs.critical-review }}
+        run: |
+          [[ "$SOURCE" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$REVIEW" == https://github.com/misty-step/mistystack/* ]]
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          test "$(git rev-parse origin/master)" = "$SOURCE"
+          printf 'Release source: `%s`\n\nSingle critical assessment: %s\n' "$SOURCE" "$REVIEW" >> "$GITHUB_STEP_SUMMARY"
+      - name: Prepare generated notes
         id: prepare
         uses: misty-step/landmark@0be932f9fd775f826427eb5ada2f24efb9a393d8 # v0.28.9
         with:
@@ -55,23 +47,14 @@ jobs:
           release-branch: landmark/release
           github-token: ${{ github.token }}
           synthesis: 'false'
-      - name: Bootstrap release branch
-        if: steps.prepare.outputs.released == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if ! gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/landmark/release" --silent; then
-            gh api -X POST "repos/${GITHUB_REPOSITORY}/git/refs" \
-              -f ref=refs/heads/landmark/release -f sha="${GITHUB_SHA}" --silent
-          fi
-      - name: Mint release-bot token
+      - name: Mint existing release-bot token
         if: steps.prepare.outputs.released == 'true'
         id: bot-token
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
-      - name: Open or update verified release pull request
+      - name: Open generated-notes pull request
         if: steps.prepare.outputs.released == 'true'
         id: release-pr
         uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
@@ -84,13 +67,50 @@ jobs:
           title: ${{ steps.prepare.outputs.pull-request-title }}
           commit-message: ${{ steps.prepare.outputs.commit-message }}
           body: |
-            Automated changelog for `${{ steps.prepare.outputs.release-tag }}` (US-015).
-      - name: Merge generated release after required checks
-        if: steps.release-pr.outputs.pull-request-number != ''
+            Generated notes for `${{ steps.prepare.outputs.release-tag }}` (US-015).
+            Source verification and the critical assessment belong to this release run.
+      - name: Merge generated notes and select candidate
+        id: candidate
         env:
           GH_TOKEN: ${{ steps.bot-token.outputs.token }}
           RELEASE_PR: ${{ steps.release-pr.outputs.pull-request-number }}
-          RELEASE_HEAD: ${{ steps.release-pr.outputs.pull-request-head-sha }}
+          SOURCE: ${{ inputs.source }}
         run: |
-          gh pr merge "$RELEASE_PR" --repo "$GITHUB_REPOSITORY" \
-            --auto --squash --match-head-commit "$RELEASE_HEAD"
+          candidate="$SOURCE"
+          if [ -n "$RELEASE_PR" ]; then
+            gh pr merge "$RELEASE_PR" --repo "$GITHUB_REPOSITORY" --squash
+            test "$(gh pr view "$RELEASE_PR" --repo "$GITHUB_REPOSITORY" --json state --jq .state)" = MERGED
+            candidate="$(gh pr view "$RELEASE_PR" --repo "$GITHUB_REPOSITORY" --json mergeCommit --jq .mergeCommit.oid)"
+          fi
+          echo "sha=$candidate" >> "$GITHUB_OUTPUT"
+          printf 'Candidate: `%s`\n' "$candidate" >> "$GITHUB_STEP_SUMMARY"
+  verify:
+    needs: prepare
+    uses: ./.github/workflows/ci.yml
+    with:
+      revision: ${{ needs.prepare.outputs.candidate }}
+  publish:
+    needs: [prepare, verify]
+    runs-on: [self-hosted, hetzner-ci, mistystack-ci]
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.candidate }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Publish landed candidate after release CI
+        uses: misty-step/landmark@0be932f9fd775f826427eb5ada2f24efb9a393d8 # v0.28.9
+        with:
+          mode: publish-protected
+          github-token: ${{ github.token }}
+          target-sha: ${{ needs.prepare.outputs.candidate }}
+          synthesis: 'false'
+  deploy:
+    needs: [prepare, verify, publish]
+    uses: ./.github/workflows/site-deploy.yml
+    with:
+      revision: ${{ needs.prepare.outputs.candidate }}
+    secrets: inherit

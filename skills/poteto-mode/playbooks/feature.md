@@ -2,22 +2,21 @@
 
 In Mistystack, read [the pstack names adapter](../../misty/harnesses/pstack-names.md) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.
 
-**You own the design. Plan, review, verify.** Delegate implementation. Stay in the lead.
+**You own the design and outcome. Plan, build, verify.** Keep each slice useful to its consumer and main working.
 
 1. `how` over the affected subsystem.
 2. `architect` for parallel design exploration.
 3. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
-   - **Blocking first steps.** Gates run before fan-out.
+   - **Blocking first steps.** Resolve shared prerequisites before fan-out; CI and independent review are not merge gates.
    - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.
    - **Shared mutable state.** Default to splitting the target (the **separate-before-serializing-shared-state** principle skill). Serialize only for real invariants.
    - **Smallest safe decomposition.** If one worker is best, name why.
-4. Delegate code-writing to a subagent using your configured feature model (default `grok-4.7-xhigh-fast`) with a specific scope (file paths, named data shape and its organizing structure per **principle-model-the-domain**, a state machine over scattered booleans, a table/registry over branching, a typed model over repeated shape assumptions, chosen before the delegate writes logic, and success criteria). Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section. When the implementation admits multiple valid shapes (error handling, abstraction layer, test structure), delegate via the **arena** skill instead so the runners surface the alternatives and the cross-judge guards the pick. Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. Comments per **Comments**. Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
-5. Verify on the matching surface. "Inconclusive" or wrong-surface is not a pass. Flag it.
-6. Rebase into small, ordered commits. Stack follow-ups.
-   Use the **sequence-verifiable-units** principle skill, building, verifying, and committing each small unit before the next.
-7. If the design is contested, `interrogate` before shipping.
-8. Run **Opening a PR**.
+4. Assign one code-writing owner per independent slice through [Misty's delegation procedure](../../misty/SKILL.md). Give the owner explicit file paths, acceptance criteria, the real-path Oracle, preserved behavior, and a named data shape and organizing structure per **principle-model-the-domain** before logic: a state machine over scattered booleans, a table/registry over branching, a typed model over repeated shape assumptions. Use native model configuration and one [Boat worker](../../boat-workers/SKILL.md) per slice. The slice owner builds and verifies its own path; a worker forbidden to spawn owns the diff directly. Comments per **Comments**. Make surgical edits, re-ground upstream-derived changes in their source, migrate every shared-primitive consumer and verify affected behavior.
+5. Build and drive the real running app through the repository's [verification procedure](../../verification/SKILL.md) before merge. If that recipe is missing, generate it with canonical pstack [create-verification-skill](../../create-verification-skill/SKILL.md) and execute it. For ordering, concurrency or durability promises, also use [create-formal-verification-skill](../../create-formal-verification-skill/SKILL.md): state the property, map it to real code, show the check rejecting a broken variant, and report assumptions and bounds. Tests, mocks, a self-report, inconclusive output or the wrong surface do not replace real-path proof.
+6. Order commits so the argument can be replayed: behavior pin before reshape, failing check before repair, proven shared primitive before consumers. Use the **sequence-verifiable-units** principle skill. Each complete slice must be worth merging alone and carry its own real-path proof; sequence actual dependencies rather than blocking independent work.
+7. Follow [ship-loop](../../ship-loop/SKILL.md) to publish the observed proof and merge the verified slice without CI, independent reviewers or a judge as merge gates. Resolve design uncertainty while shaping; do not add a final review round.
+8. At the pre-deploy release gate, run fast CI and one review limited to critical correctness and security. Repair release-blocking failures, deploy the verified candidate, then check the changed live journey.
 
-Code-coupled work (one feature, one migration) goes to a single owner with the checkpoint inline. That owner fans out internally after the blocking phase. Parent-level fan-out is for slices that produce independent artifacts (audits, cross-subsystem investigations, competing experiments). Rewrite the checkpoint at phase boundaries. Spawn a fresh owner rather than chaining interrupts.
+Code-coupled work (one feature, one migration) stays with one owner. Fan out only genuinely independent slices with disjoint ownership; sequence shared prerequisites. Supervise open-ended owners with periodic watchdog checks of observed progress, blockers and worker state. Do not end an agent solely because elapsed time reached a cap. Follow the Boat worker procedure for snapshot, idle stop/resume and slice-end deletion.
 
 **Reply:** what you built, what you chose and why, the throughput checkpoint, open decisions. Tables for design alternatives.

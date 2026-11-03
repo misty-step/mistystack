@@ -10,6 +10,8 @@ In Mistystack, read [the pstack names adapter](../../misty/harnesses/pstack-name
    Sequence the work via the **sequence-verifiable-units** principle skill, verifying each unit before the next instead of batching checks at the end.
 4. Mid-run discoveries that support the goal are yours. Address broken skills, related bugs, flaky verifiers, review noise, tooling failures, orphaned follow-ups, and fixable drift yourself via poteto-mode. Put out-of-band fixes in their own PR. Do not park reversible work for the human or use `AskQuestion`. Surface only irreversible actions, genuine product or preference calls no experiment can settle, or a real dead end. Keep the predicate as the main drive, and return to it after each side fix.
 5. Checkpoint every iteration via the **show-me-your-work** skill, a row for what changed and whether the predicate moved.
-6. Stop when the predicate is met. A plateau is not a stop, so keep going and pivot your approach to push past it. Surface a genuine dead end rather than spinning, and never relax the predicate to declare victory.
+6. Stop when the predicate is met. A plateau is not a stop: keep going and change the approach while actionable work remains. Use the installed [watchdog](../../watchdog/SKILL.md) for supervision and recovery, not a time or turn cap. Surface an unreachable prerequisite without relaxing the predicate.
+
+7. When the task changes a shipped artifact, finish through the installed [ship-loop](../../ship-loop/SKILL.md) skill.
 
 **Reply:** the exit condition, iterations run, what landed, what was discarded, final predicate state.

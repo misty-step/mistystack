@@ -52,8 +52,8 @@ supply the method to every adapter.
    section says what is assignable in that harness, including harnesses that run
    rigor inline.
    **Complete when:** every applicable native assignment uses an accessible model
-   and supported reasoning setting, and the required independent execution path
-   is identified rather than simulated with an inline self-review.
+   and supported reasoning setting. Builder, supervision and release-review
+   responsibilities follow ship-loop; setup does not add PR approval roles.
 
 4. **Persist through native authority.** Apply and read back only the selected
    harness's owned assignments, exactly as its note's dispatch and rigor section

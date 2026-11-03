@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
-// Runs master's protected publication check on the checked-out commit, so a stale
-// or stranded CHANGELOG.md entry turns the pull request red instead of master.
+// Runs protected publication read-only on the landed release candidate.
+// Stale/stranded generated notes stop publication, never an authored PR merge.
 // Landmark sees a local GitHub API: reads go to GitHub, writes are refused.
 
 import { mkdtempSync, rmSync } from "node:fs";

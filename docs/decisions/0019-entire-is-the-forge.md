@@ -1,6 +1,9 @@
 # 0019: Entire is the forge interface
 
 Status: superseded by [0020](0020-github-and-linear-replace-entire.md), 2026-11-02; accepted 2026-10-30.
+Its executable ledger/ruling procedure was later removed by
+[0023](0023-live-verification-and-release-gate.md), 2026-11-03. The observations
+below describe the retired interface, not a current delivery method.
 
 ## Context
 
@@ -59,21 +62,6 @@ Measured on trail 140 and change `workstation/6` with Entire CLI 0.12.2:
   only after its last change merges and acceptance is delivered. Release-watch
   reopens intent removed by recovery. Report/body updates retain acceptance
   and dependency lines.
-- **ship-loop's ledger lives in findings.** Each event is a low-severity finding
-  carrying a marker and JSON, keyed by sequence and content, resolved at once.
-  Full-history replay and content hashes provide durable retry identity after
-  the server's client-id window expires. Resolution is part of the write's
-  success contract; a failed resolution exits nonzero and a rerun repairs it.
-  The helper takes `--change <URL>` and reports `ship-loop.status.v2`.
-- **Existing v1 rounds keep their authority.** A trusted PR-comment ledger
-  makes the new helper exit 2 with its legacy path, never return a new round.
-  The forge procedure names the six open rounds and their immutable-helper
-  completion path, including PRs without Entire mirrors. There is no installed
-  compatibility writer and no reset of the one-fix-round limit.
-- **The ledger owns the verdict.** Reviewers record findings at real severity.
-  The conductor resolves or dismisses them according to the independent ruling.
-  The judge returns the verdict for the helper, not a duplicate verdict finding
-  or account approval.
 
 ## Trust and limits
 
@@ -95,8 +83,6 @@ trust boundary rather than claiming protection against its owner.
 
 The core points to the forge procedure instead of duplicating its exceptions.
 Historical records and provenance citations keep their original meaning.
-New review rounds use Entire findings only; finishing a named old round does not
-create a second live store for the same round.
 
 Revisit when Entire adds agent principals, editable backing PR titles,
 attachments or an agent-writable append-only event store.

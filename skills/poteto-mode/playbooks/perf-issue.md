@@ -20,7 +20,7 @@ In Mistystack, read [the pstack names adapter](../../misty/harnesses/pstack-name
    Apply the **sequence-verifiable-units** principle skill, verifying each attempt before trying the next.
 4. Parse and compare the artifacts (JSON to sqlite, diff). "Inconclusive" or wrong-surface is not a pass. Flag it.
 5. Cite the measurement in the PR.
-6. Run **Opening a PR**.
+6. Deliver the measured improvement through the installed [ship-loop](../../ship-loop/SKILL.md) skill.
 
 For sustained improvement against a metric rather than a one-off fix, use the Hillclimb playbook (`playbooks/hillclimb.md`).
 

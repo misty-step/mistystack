@@ -5,6 +5,12 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0023](0023-live-verification-and-release-gate.md): author-owned running-product
+  proof, merge without CI/review, fast CI and one critical assessment at release;
+  one snapshot-backed Boat worker per slice and open-ended watchdog supervision.
+  Supersedes older delivery/review/lifecycle instructions, including 0022's
+  shipping and placement provisions and the historical Foundation PR obligations.
+
 - [0022](0022-pstack-governs-owner-rulings.md): pstack governs; Misty keeps only
   the owner's surviving deltas. Supersedes 0021's method override restrictions
   and 0017's public provider-specific placement rule. Removes the router's
@@ -15,16 +21,16 @@ Records explain trade-offs; current method guidance lives in the
   supersedes its method override restrictions, not its vendoring decisions.
 
 - [0020](0020-github-and-linear-replace-entire.md): GitHub hosts code and pull
-  requests with ship-loop's ledger in PR comments; Misty Step tracks work items
-  in Linear. Supersedes [0019](0019-entire-is-the-forge.md), which made Entire
-  the forge on 2026-10-30.
+  requests; Misty Step tracks work items in Linear. Its retired PR-ledger
+  mechanism is removed by 0023. Supersedes [0019](0019-entire-is-the-forge.md),
+  which made Entire the forge on 2026-10-30.
 - [0018](0018-static-publishing-stack.md): Astro static publishing, Pagefind and
   Workers Static Assets as a recorded stack exception; deployment commissioned
-  2026-10-29 and automated on every master push since 2026-10-30, with telemetry
-  and the production Foundation proof still open.
+  2026-10-29. The pre-deploy release gate and checked-artifact deployment now
+  follow 0023; telemetry and production Foundation proof remain open.
 - [0017](0017-tern-omp-and-boat-workers.md): historical operator setup and exit
-  decisions. [0022](0022-pstack-governs-owner-rulings.md) replaces its public Boat
-  requirement with harness- or workstation-named disposable isolation.
+  decisions. [0023](0023-live-verification-and-release-gate.md) owns the current
+  snapshot-backed Boat slice lifecycle.
 - [0016](0016-harness-agnostic.md): one harness-neutral Agent Skills content tree
   with thin native adapters; OMP shipped first, remaining integrations in #591.
   Its Kaylee/Hermes consumer statement is superseded by
@@ -48,7 +54,8 @@ historical evidence, not current mistystack instructions.
 
 ## Historical
 
-Former decisions remain unchanged; their numbers stay reserved.
+Historical numbers remain reserved. Retired executable delivery instructions
+are removed; their source history and evidence remain available in Git.
 
 - [001](historical/001-monorepo.md): one repository, three components.
 - [002](historical/002-design-toolkit-trial.md): design toolkit trial.

@@ -17,7 +17,7 @@ option through the repository's existing pipeline:
   default HEAD, omitting the forward-ancestry check. Assess lost later merges as
   for platform rollback, then land the source revert and reinstall default HEAD.
 
-Compatible authorized recovery does not wait for an ordinary review round.
+Compatible authorized recovery proceeds through the native rollback path.
 Accepted-data risk or an unsafe restore is `escalated`: preserve the live state,
 name the recovery owner and recommended path, and keep the incident open. A
 reviewer wait alone is not escalation. Repeat deploy, identity, smoke and relevant

@@ -9,12 +9,13 @@ DOMAIN.md, retain source notices, and migrate every caller when a fact moves.
 Human instructions belong in [docs/guide/](docs/guide/); upstream reading belongs
 in [docs/exemplars.md](docs/exemplars.md), not an installed skill pack.
 
-Run `./scripts/bootstrap` once for repository secret-scanning hooks, then
-`./scripts/check`. Changes to installation or loading also use the isolated
-fresh-session proof in
-[verify-mistystack](.agents/skills/verify-mistystack/SKILL.md). Keep generated
-proof outside the checkout and put the checked revision, commands and observed
-results on the PR.
+Run `./scripts/bootstrap` once for repository secret-scanning hooks. Prove the
+affected running consumer through
+[verify-mistystack](.agents/skills/verify-mistystack/SKILL.md), using a snapshot-backed
+Boat worker for portable checks. Keep generated proof outside the checkout and
+link the checked revision, actions and observed results from the PR. Merge when
+your proof passes, without CI or review. Fast CI and one critical assessment run
+only at the pre-deploy release gate.
 
 Use a Conventional Commit title and include `Story:` IDs, the rigor tier and
 reason, and diff size in the PR. Keep CHANGELOG.md generated; Landmark owns the

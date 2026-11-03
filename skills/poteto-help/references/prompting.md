@@ -10,7 +10,7 @@ A prompt states the intent and the check for done. The playbook supplies the ste
 - The done check. It can pass or fail. "Make it better" and a duration are not checks.
 - The proof to show. Ask for the real command output, a video of the flow, the stored value, or a before and after number.
 - What the user already knows. A symptom, a repro step, a log, or a link saves the agent a search.
-- The real constraints. "repro first", "don't change any code yet", "zero behavior change", and "let me review before proceeding" each change what the agent does.
+- The real constraints. "repro first", "don't change any code yet" and "zero behavior change" each change what the agent does. State an owner hold only when it is actually required.
 
 ## Leave out
 
@@ -44,7 +44,7 @@ A prompt states the intent and the check for done. The playbook supplies the ste
 - Ask for a fresh worktree off a named base.
 - Pre-answer what the agent would stop for, such as "don't ask me before committing".
 - Ask for a decision log to audit later.
-- Give an exit: "if you're truly stuck after a few hours, stop and write up why".
+- Keep work open-ended under the installed [watchdog](../../watchdog/SKILL.md). Name an unreachable prerequisite exactly, preserve recovery evidence and finish every unblocked part instead of stopping at an elapsed-time limit.
 
 ## Steer in one line
 

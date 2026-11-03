@@ -79,10 +79,10 @@ and supported reasoning level by explicitly invoking
 
 Use Codex's native subagent mechanism to select `rigor-<tier>` according to the
 [rigor contract](../../ship-loop/roles.md#rigor). Supply the
-[Misty briefing contract](../SKILL.md), with builder, QA/review or judge as the
-responsibility. Those responsibilities require independent threads even when the
-tier is the same. Confirm discovery and actual model identity in a fresh session;
-a TOML file on disk is not dispatch proof.
+[Misty briefing contract](../SKILL.md), naming builder, verification, supervisor
+or release reviewer as the responsibility. The author proves and merges the PR;
+the release receives one critical assessment. Confirm discovery and actual model
+identity in a fresh session; a TOML file on disk is not dispatch proof.
 
 ## Drive the real UI
 

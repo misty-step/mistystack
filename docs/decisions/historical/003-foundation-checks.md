@@ -3,18 +3,18 @@
 Accepted 2026-09-25 (MIS-150): the operator approved all three decisions below,
 relayed by Kaylee, with two changes to who approves (see Review authority).
 
-Packaging update (2026-10-05): GitHub App posting, designated-review choreography,
-the review template and `foundation-check review` are retired. The historical
-bootstrap/cadence/review instructions below are not current setup commands.
-Local `check`/`baseline`/`affected`/`receipt`, independent engineering review and
-each adopted repository's existing gates remain; no bulk pin migration is implied.
+The 2026-10-05 packaging update retired GitHub App posting, the review
+template and `foundation-check review`. The
+[2026-11-03 delivery decision](../0023-live-verification-and-release-gate.md)
+also supersedes independent review and CI as merge gates, including
+`FND-REV-001`. Build and verify the affected real running path before merge;
+fast CI and one critical-correctness/security review occur only before deploy.
+CI does not run on PRs or pushes. Historical tool contracts and measurements
+below do not restore the retired workflow or require bulk adopter repinning.
 
-The accepted [2026-10-02 lean CI amendment](../../principles/007-braver-engineers-continuous-deployment.md#lean-ci-amendment-2026-10-02)
-supersedes the automatic PR cadence below for deliberately migrated pins:
-engineer proof/review and cheap pre-main scans, one main build with targeted
-preprod proof and automatic same-artifact promotion, full suite nightly through
-the existing owned alert route. Glass is first; this historical rollout and other
-repositories' pinned contracts are not silently migrated.
+The [2026-10-02 lean CI amendment](../../principles/007-braver-engineers-continuous-deployment.md#lean-ci-amendment-2026-10-02)
+was an intermediate delivery policy. Its earlier cadence and review requirements
+are superseded by ADR 0023.
 Pilot repository: Scry.
 
 ## Context
@@ -28,52 +28,58 @@ chicken-and-egg), and who may approve the steps an agent cannot self-approve.
 
 ## Checks
 
-All checks use `foundation-check`, which a repository's CI pins to a harness
-revision. Deterministic checks are the gate. Jev drafts and advises but never
-gates. CI runs the pinned checker from its own directory with `--repo` pointing
-at the checkout, never with the checkout as Bun's working directory: Bun loads a
-`bunfig.toml` preload from there, which a PR could use to skip the gate.
+The historical implementation used a pinned `foundation-check`. Its isolation
+boundary remains relevant: a checker running against untrusted repository
+content must not load that checkout's `bunfig.toml` preload as trusted checker
+configuration. The old required-check placement is retired. Current execution
+and release placement follow ADR 0023; Jev advice never authorizes a merge.
 
-| Check | Verifies | Tool | Gate |
+| Check | Retained contract or historical observation | Historical tool | Current placement |
 | --- | --- | --- | --- |
-| Adoption record | `foundation.json` names every Foundation Standard obligation. Unknown or missing ids and a wrong catalog digest reject. Under [ADR-006](006-foundation-decisions.md) and catalog 1.5.0, applicable `pending` items have dated `obl:` gaps (ADR-005's `ops:` keys remain), `satisfied` needs a candidate-bound payload receipt, and `not_applicable`/`exception` need a matching approval record. | `foundation-check check` | required |
-| Documents (FND-DOC-001) | [ADR-004](004-core-project-documents.md) stage 1: root README, AGENTS, DOMAIN ledger and USER_STORIES plus surface-specific files, aliases, references, ADR integrity, and executable `scripts/check`; no ADR count or postmortem template. | `foundation-check check` | required |
-| User stories | Unique ids, a non-empty statement, SHALL criteria, resolvable supersede targets, no TODO text | `check-stories.sh`, via `check` | required |
-| Feature map (FND-MAP-001) | Every live story is in ≥1 feature. Every `Source:` glob matches tracked files. Each feature has its four sections. | `foundation-check check` | required |
-| Feature map, first draft | Jev decides per (story, source area) whether the area implements the story. Code writes one draft feature per capability. | `feature-map draft` (pilot, source-only) | advisory; reviewed by a human or agent |
-| Verification surface (FND-WS-001) | A verify skill with Launch/Doctor/Drive/Evidence/Cleanup; a credential-free `.exe/setup.sh`; a walk runner that emits receipts. Proven by the walk jobs booting the app, not by file presence. | `check` + walk jobs | required |
-| Story-walk evidence (FND-WLK-001) | For stories a PR affects: a same-job receipt bound to HEAD and its tree, every numbered criterion of each walked story passing, artifacts matching digests. A story with no walk yet (a valid `walk:` baseline entry) may be `unwalked`: the receipt reports it as advisory and passes, affected or not (operator decision 2026-09-26). A walk that ran and failed, or an `unwalked` story without an entry, fails. The repository's walk runner reports what it could not walk as `unwalked` and exits non-zero only when a walk failed or it crashed; the receipt is the judge. | `affected`, repo walk runner, `receipt` | required |
-| Full walk | Every live story on master | nightly workflow | owned: opens or updates one issue on failure |
-| Operations (FND-REL-001, FND-ALR-001, FND-INC-001) | Added by [ADR-005](005-operational-obligations.md): every application ships on green to every non-excluded tenant, alerts loudly and closes incident classes, with no exception. Each one still pending is the gap `ops:ship`, `ops:alert` or `ops:incident`; a `satisfied` claim must name its ship job and tenancy, alerting and runbook, which the checker verifies structurally; the receipt proves the live tenant fan-out. | `foundation-check check` | required |
-| Independent review, security and story citation (FND-REV-001, FND-SEC-001, FND-CIT-001) | [ADR-006](006-foundation-decisions.md): an independent reviewer approves the head, the gate scans secrets and safely merges bot updates on green, applications test authorization, and mapped-source PRs cite affected stories. File and review metadata checks are structural; receipts show actual execution and judgement. | `foundation-check check` + `review` | required |
+| Adoption record | `foundation.json` named every catalog obligation and rejected unknown ids or a wrong digest. Catalog 1.5.0 added dated `obl:` gaps, candidate-bound receipts and recorded applicability/exception decisions. | `foundation-check check` | Evidence of adherence, not a PR merge gate |
+| Documents (FND-DOC-001) | ADR-004 stage 1 checked README, AGENTS, DOMAIN, USER_STORIES, surface files, aliases, references, ADR integrity and `scripts/check`; it imposed no ADR count or per-repository postmortem template. | `foundation-check check` | Relevant local proof and fast release checks |
+| User stories | Unique ids, a non-empty statement, SHALL criteria, resolvable supersede targets and no TODO text | `check-stories.sh`, via `check` | Relevant local proof and fast release checks |
+| Feature map (FND-MAP-001) | Every live story maps to a feature; source globs match tracked files and feature entries have their four sections. | `foundation-check check` | Maintained verification recipe, not a CI merge condition |
+| Feature map, first draft | The source-only Jev pilot drafted feature mappings; it did not establish correctness or user benefit. | `feature-map draft` | Advisory |
+| Verification surface (FND-WS-001) | Launch/Doctor/Drive/Evidence/Cleanup and a usable empty-state launch are proved by driving the running app, not file presence. The original packaging used `.exe/setup.sh` and walk receipts. | `check` + walk jobs | Author's real-path proof before merge, using the current verification and Boat procedures |
+| Story-walk evidence (FND-WLK-001) | Historical receipts bound numbered story criteria and artifacts to the walked candidate. The 2026-09-26 checker allowed baselined `unwalked` stories as advisory; that historical allowance is not proof of an affected criterion. | `affected`, repository walk runner, `receipt` | Before merge, drive affected real paths; unavailable required proof stays unproved |
+| Full walk | The Scry pilot exercised every live story and retained receipts. | Nightly workflow at acceptance | Broader checks need a useful named trigger, not an inherited PR/push CI job |
+| Operations (FND-REL-001, FND-ALR-001, FND-INC-001) | ADR-005 established automatic releases, every non-excluded tenant, loud alerts and class-closing incident repairs. Receipts, not declared configuration, establish the live effects. | `foundation-check check` | Real-path proof, the pre-deploy release gate and live readback |
+| Review, security and story citation (FND-REV-001, FND-SEC-001, FND-CIT-001) | FND-REV-001's every-PR independent approval is retired. Secret scanning, dependency maintenance, authorization tests and affected-story citation remain meaningful contracts. | Former `check` + `review` integration | No reviewer, judge or CI merge gate; one critical-correctness/security review at release |
 
 ## Cadence
 
-- **Local pre-push hook (sub-second).** Runs `foundation-check check` and prints the stories required CI will walk, with the `ws run` command. Nothing heavy runs on the desktop. Measured on Scry: 74 ms.
-- **PR CI (minutes, required).**
-  - `foundation`: structural. Scry: 7–8 s.
-  - `story-walk`: affected stories only. Scry: about 1 min including setup.
-  - The repository's own gate is unchanged.
-- **Nightly (owned).** Full walk and receipt with 30-day retention, plus a failure issue. Scry's first run: 11/11 walked, receipt PASS, about 1 min of walking.
-- **On demand.** The full host gate runs on the project VM via `ws run -- <gate>`. Scry: 56 s.
+- **Before merge:** the author builds and exercises the changed real consumer
+  path, including relevant native checks. CI and independent review do not gate
+  merge.
+- **Before deploy:** fast CI and one critical-correctness/security review gate
+  the release candidate. Slow CI is a defect to repair, not accepted waiting.
+- **After deploy:** read back release identity and exercise the critical live
+  journey. Broader regression checks have explicit useful triggers outside the
+  fast gate, not inherited PR/push CI schedules.
+
+Recorded Scry measurements from the original rollout remain historical
+evidence: pre-push structural checking took 74 ms; the `foundation` job took
+7–8 s; affected-story setup/walking took about 1 min; the first full walk
+reported 11/11, receipt PASS, about 1 min of walking; the host gate took 56 s.
+These are not new measurements or targets for acceptable CI delay.
 
 ## Bootstrap: solving the chicken-and-egg
 
-| Problem | Resolution |
+| Historical rollout problem | Retained outcome and current boundary |
 | --- | --- |
-| A required check cannot be required before it exists and passes, and the PR that adds it would have to pass it | Two steps. The bootstrap PR adds the checks as non-required. After the first green run on master, branch protection adds `foundation` and `story-walk` as required contexts. Scry followed this sequence. Repositories that cannot have branch protection run the checks as advisory (see Enforcement by plan). |
-| Full compliance in one PR is large, and blocking every PR until the repository is compliant stalls work | Ratchet mode (US-027). `foundation-check baseline --owner NAME --write` records the current gaps as a bootstrap baseline, with or without an existing `foundation.json`: missing documents (`doc:`), story format (`stories:format`), map gaps (`map:`), the verify skill (`skill:verify`), and one `walk:US-nnn` per live story. Each entry has an owner and an expiry at most 30 days out. `check` passes only if (1) every current gap has an unexpired entry, (2) no entry has expired or outlived its gap: an expired entry fails until its gap is fixed and the entry removed, and (3) with `--base`, the baseline only shrinks versus the base branch. A new entry or a later expiry fails unless the PR adds a `foundation/extensions/` record (reason, gap, expiry) that the designated agent reviewer approves (see Review authority). A story the PR edits must be mapped, and a change's receipt accepts `unwalked` only for mapped, unaffected stories with an unexpired walk entry (an unmapped story's impact is unknown, so it is walked), so coverage grows where work happens. An empty baseline means mode `enforced`, and a bootstrap repository cannot stay in bootstrap past its latest expiry without an approved extension. |
-| No `USER_STORIES.md` | An agent drafts stories in `user-stories` init mode. The designated agent reviewer, not the operator, approves the PR that first adds them (see Review authority). |
-| The review gate only judges PRs once it is on the base branch (`pull_request_target` runs the base copy) | The adoption PR adds `foundation-review.yml` and nothing that needs review: no first stories and no extension record. First stories and extensions follow in later PRs, once the gate is on the default branch; on misty-step it becomes a required check with the others. |
-| No feature map | `feature-map draft` gives the starting map. Feature files added by the change that first creates it (no `features/` files at all at the merge base) mark no story, since adding the map changes no behaviour; changed source and edited stories still do, and once any map file exists every touched feature file counts. So the adoption PR can map every story while unwalked ones stay under their `walk:` entries. On Scry: area precision 0.75, recall 0.87, identical across two runs, 286 questions in 26 calls, 6.8 s. An agent completes the prose, and the deterministic check gates. |
-| No walk runner | Baseline stories stay `unwalked`, reported as advisory, until the repository's runner walks them or their `walk:` entry expires; unrelated PRs are never blocked by a story nobody can walk yet. Scry's `qa/walk` is the template. |
-| New checker rules could break master | Repositories pin a harness revision. Stricter rules land only through an explicit pin-bump PR, as Scry #194 did for exact criteria. |
-| Jev is unavailable in CI | Jev never sits on the required path. |
+| Bootstrapping checks | Scry first introduced non-required checks, then used branch protection. That enforcement sequence is retired; adoption changes now prove their affected running path and merge under ADR 0023 without required status contexts. |
+| Compliance gaps | Ratchet mode (US-027) represented missing documents, story format, map coverage, the verify skill and individual walks as owned gaps with expiries at most 30 days out. Extensions retain an evidenced reason and accountable owner's decision, not a designated-review or CI merge requirement. A missing affected journey is not a passing receipt. |
+| No `USER_STORIES.md` | Draft from actual product intent and resolve a real direction change with the owner. The former first-story PR approval is retired. |
+| Former review bootstrap | The historical rollout installed `foundation-review.yml` before designated-trigger PRs. That integration is retired and supplies no current setup step. |
+| No feature map | The Scry source-only pilot reported area precision 0.75, recall 0.87, identical across two runs, 286 questions in 26 calls, 6.8 s. Its drafts needed grounded completion; the figures do not prove a running journey or authorize merge. |
+| No walk runner | The original baseline reported stories as `unwalked` until a runner existed or the entry expired. Current affected real-path proof cannot be replaced by that historical advisory disposition. |
+| New checker rules | Repositories pinned a revision; Scry #194 adopted exact-criterion reporting explicitly. An old pin does not restore retired review or CI merge rules. |
+| Jev unavailable | Advice was never a substitute for deterministic or real-consumer proof. |
 
-At catalog 1.5.0, a first adoption declares `--surfaces` explicitly, and
-every applicable pending non-ADR-005 obligation also has a dated `obl:` gap.
-FND-REV-001's independent review applies to every subsequent PR, even when
-none of the five designated-review triggers below fires (ADR-006).
+Catalog 1.5.0's rollout declared surfaces and dated pending gaps.
+Its `FND-REV-001` every-PR requirement and five designated-review triggers are
+superseded by [ADR 0023](../0023-live-verification-and-release-gate.md).
 
 ## Pilot evidence (Scry)
 
@@ -90,226 +96,133 @@ none of the five designated-review triggers below fires (ADR-006).
 
 ## Review authority
 
-**Historical/retired (2026-10-05).** The following records the former
-GitHub-App posting/approval choreography and `foundation-check review --pr`
-server workflow. It is not current guidance: these APIs, workflows and templates
-have been removed. It does not create a review gate. Independent engineering
-review remains required by FND-REV-001, and the catalog/local
-check-baseline-affected-receipt validator contracts remain distinct from the
-retired server integration.
+The 2026-09-25 to 2026-10-05 implementation below is diagnostic history, not a
+command recipe or current approval requirement. Its catalog versions and pins
+record decisions then made; ADR 0023 owns current delivery.
 
-The authority decisions below describe the historical adoption rollout. Their
-records remain diagnostic history, not today's server merge policy. The uniform
-2026-09-30 amendment superseded the plan- and owner-specific server gates; the
-2026-10-05 scope decision retired the posting/approval integration.
+The former designated triggers covered first user stories, baseline extensions,
+declaring a former application out of scope, DOMAIN invariant changes and
+`not_applicable`/`exception` records. The delegated agent handled those decisions;
+actual changes in product direction still belonged to the operator. These
+historical triggers do not require a PR reviewer today.
 
-Historical catalog references to 1.5.0 and historical version pins below are
-evidence of the decisions then made. The catalog is now 1.8.1; this record does
-not direct bulk repinning adopters.
+The retired server integration used the following mechanics:
 
-**Historical detail follows.**
+- `foundation-check review` read GitHub reviews through the API and ran the base
+  branch's `foundation-review` workflow on `pull_request_target`. It checked out
+  the base and fetched candidate commits as objects, avoiding execution of PR
+  files. A static-analysis finding had rejected an earlier head checkout on
+  2026-09-25.
+- On misty-step, the designated identity was `kaylee-agent[bot]`, App 4978618.
+  The shared author account was not an independently attributed reviewer.
+  r90group had no reviewer App; its `moomooskycow` records carried
+  `foundation-review: approved <head sha>` or escalation/resolution markers.
+  Timestamp ordering distinguished later resolution; a tie remained escalated.
+  Those records identified decisions, not independently authenticated authors.
+  The misty-step App could not safely serve r90group with its organization-level
+  permission model.
+- The former escalation record used
+  `foundation-escalation: product-direction` and
+  `foundation-escalation: resolved` as first-line markers. A 2026-09-25 drill
+  exposed that an escalated PR authored under the operator account could not
+  pass when only that account's own approval counted. The App recorded the
+  operator's answer in the historical design.
+- Review events did not trigger the old workflow. Label changes and base
+  retargeting re-ran it; a dismissal could otherwise leave an old check result.
+  This was a limitation of that implementation, not a current re-review step.
 
-Three steps need an approval the PR author cannot give: a repository's first
-user stories, any baseline extension (a new baseline entry or a later expiry),
-and declaring that an application's record is not an application, which drops
-its ADR-005 obligations. The operator delegated both to an agent reviewer on 2026-09-25.
-ADR-006 (2026-09-26) adds two more: a change to a repository's `DOMAIN.md`
-invariants ledger, and a `not_applicable` or `exception` disposition, whose
-`foundation-approval/1` record the designated reviewer approves. Both take
-effect with the catalog and checker change that cites ADR-006.
+The 2026-09-29 `agent-review` implementation selected Sonnet 5.5 high for an
+OpenAI author and Sol medium for an Anthropic author, refusing same-family
+overrides. A fresh process received the PR title, description, immutable diff
+and available image inspections. Disposable OMP configuration disabled fallback
+and emptied wildcard/default/reviewer selector chains. Completed native
+response identities were compared with selected models. The processes used
+`--no-tools` and no saved session; an empty `--tools` list could be read as unset.
 
-- **Who approves.** Each organisation has one designated reviewer, written into
-  `foundation-check` itself at the revision a repository's CI pins; neither the
-  repository nor a flag can name another. Where it is a GitHub App (misty-step),
-  the PR author never counts, whoever it is. Where the organisation has no
-  reviewer App (r90group), the decision is recorded instead; see Designated
-  reviewers.
-- **What counts.** An approving GitHub review on the PR's head commit from that
-  App, read by CI through the GitHub API. Text in the repository grants no
-  authority, per the Foundation Standard. The App is the only identity CI
-  trusts: agent sessions also act under the operator's GitHub account, so an
-  approval from that account cannot show who gave it, and it never counts.
-- **First stories.** The PR in which `USER_STORIES.md` gains its first stories
-  needs that approval; a placeholder file with no stories counts as none. Later
-  changes to a story's intent stay with the operator.
-- **Baseline extensions.** The PR adds a decision record naming each extended
-  entry, its new expiry, and the reason; the same approval makes it valid.
-- **Escalation.** The agent reviewer approves on its own authority, then merges
-  the PR through its existing process (Kaylee's factory merges as
-  `app/kaylee-agent` on misty-step), unless the change is a real change in
-  product direction. Then it does not approve: it leaves a review on the head
-  commit marked `foundation-escalation: product-direction` and asks the operator
-  through its usual channel. The operator's answer clears the escalation only as
-  a later approving review from the same App, on the head, that records the
-  decision and opens with `foundation-escalation: resolved` as its exact first
-  line, so quoted PR text below it or behind markup cannot count; an earlier or
-  routine approval does not. CI authenticates the App, not the operator: the decision is
-  a process step the agent reviewer records (operator choice, 2026-09-25, after
-  the first drill showed an escalated PR authored under the operator's account
-  could never pass when only that account's approval counted).
-**Historical/retired GitHub-App gate.** `foundation-check review --pr N` ran as
-the `foundation-review` workflow (template formerly at
-[`agent-config/review/foundation-review.yml`](https://github.com/misty-step/harness/blob/24405fde88cf6119012f2f21d7d98a486903b69e/agent-config/review/foundation-review.yml))
-on `pull_request_target`, so the base branch's copy judged every PR. The job
-checked out only the base branch and fetched PR commits as git objects, so none
-of the PR's files were checked out or run (a static-analysis rule flagged the
-earlier head checkout, 2026-09-25). Review events could not trigger it, so after
-any review action (approve, request changes, escalate) the agent reviewer added
-or removed a label to re-run it; retargeting the base re-ran it too. Residual: a
-dismissal by anyone else left the last result until the next trigger, so the
-agent reviewer, which merged, re-ran the gate before merging. It read the PR's
-base, head, author and reviews through the GitHub API, decided from the PR's own
-revisions whether review was needed, and passed at once when it was not.
-- **Designated reviewers (2026-09-25).**
-  - misty-step: `kaylee-agent[bot]` (App 4978618), as above.
-  - r90group: no reviewer App (operator decision, 2026-09-25). Agents act as the
-    operator's user `moomooskycow` there, so the agent reviewer records its
-    decision as a review or comment from that user whose exact first line is
-    `foundation-review: approved <head sha>`. An escalation is such an entry
-    whose first line is `foundation-escalation: product-direction`; only a later
-    entry whose first line is `foundation-escalation: resolved <head sha>`
-    clears it (strictly later by timestamp, so a tie stays escalated; pending
-    reviews record nothing), and Kaylee records the operator's decision that way. Every marker
-    must be a first line because the shared account writes much other text, and
-    a decision names its head because a comment is not tied to a commit. The
-    record shows what was decided, not who decided it: CI cannot tell the author
-    from the reviewer there, which is why r90group's checks stay advisory.
-  - `kaylee-agent` could not serve r90group: it is private to misty-step, and its
-    organization-level permissions would apply to all of r90group whatever
-    repositories were selected.
-- **Independent review by the agent reviewer (2026-09-29).** Operator rule of
-  2026-09-28: model review plus green CI is the gate; no human approval gates a
-  pull request. Agents author under the operator's account, so FND-REV-001's
-  approval "from someone other than the author" needs another identity. On
-  misty-step that identity is the designated reviewer `kaylee-agent[bot]`: the
-  reviewing agent runs `agent-review --repo misty-step/NAME --pr N
-  --author-model provider/model` (`agent-config/bin/agent-review.ts`, under
-  `pass-env` with `KAYLEE_GITHUB_APP_ID` and `KAYLEE_GITHUB_APP_PEM`). The
-  dispatcher selects Sonnet 5.5 high for an OpenAI author and Sol medium for
-  an Anthropic author, refuses same-family overrides, and records the caller's
-  declared author selector. A fresh reviewer process sees the PR title,
-  description, immutable diff and any complete vision
-  inspections and returns a JSON verdict. Both model processes use a disposable
-  supported OMP config with fallback disabled and selected model/effort/provider-
-  wildcard/default/reviewer chains empty; native completed response identities
-  must match their selected models and end successfully without fallback. The
-  App approves the exact head when it is `correct` with no priority 0 or 1
-  finding, else requests changes, then toggles the `agent-reviewed` label so the
-  base branch's `foundation-review` re-runs. A model failure, an unusable
-  verdict, an oversized diff (a partial diff is not a review), a head that moved
-  during the review, or a PR the App authored posts nothing: no approval is ever
-  a fallback. In an organisation with a reviewer App, FND-REV-001 now counts only
-  that App's approval of the head: another person's approval does not, and the
-  latest explicit change request or dismissal stands in its own review stream.
-  A dismissed model record never revives an older approval. What the gate trusts
-  is that approval, and
-  so the reviewer's judgement of the title, description and diff alone; a
-  persuasive PR can sway a model, and the approval says nothing about code the
-  diff does not show. CodeRabbit is advisory everywhere: it reports `success` even when it
-  reviewed nothing (rate limited or skipped on 49 of 119 recent merged heads,
-  2026-09-29), so it never gates. r90group has no reviewer App and free-plan
-  private repositories cannot enforce rules, so its checks stay advisory and
-  `agent-review` refuses it. GitHub keeps an approval on a head after the PR is
-  retargeted, edited or its base moved, so the review records the base, the merge
-  base, and a hash of the title and of the description the model judged
-  (`agent-review-state:` line) and the gate, which re-runs on `edited`, refuses an
-  App approval that names a different one. The diff is the head against the
-  merge base, so the head and merge base together cover it. Every PR, a
-  designated-review trigger included, needs that record. The exact-head model
-  approval also supplies the delegated agent decision; requiring a second App
-  approval adds no independent judgment and is removed by the uniform cutover.
-  A bare approval cannot replace the model record. The latest binding change
-  request or dismissal on the head stands even after a clean metadata comment.
-  `agent-review` also refuses to post if any
-  of these changed during its own review, and exits 4 when the review is
-  recorded but the gate could not be re-run, because review events cannot
-  trigger it and the old check result would keep standing. Its model processes
-  run with `--no-tools` (an empty `--tools` list may read as unset) and no
-  session. The record binds the complete PR description without provider-specific
-  stripping. Any edit, including generated release notes, requires fresh review.
-  r90group ordinary PRs never had an independent-approver check, since the
-  recorded-decision path returns first, and that is unchanged.
+That retired implementation bound its record to the head, base, merge base and
+hashes of the complete title/description, without provider-specific stripping.
+It refused partial diffs, unusable verdicts, model failures, moved bindings and
+App-authored PRs. It posted approval only for a `correct` verdict without
+priority 0/1 findings, otherwise requested changes. Its `agent-reviewed` label
+re-triggered the old workflow; exit 4 reported a posted record whose gate
+re-trigger failed. Its metadata and re-review requirements are retired, including
+the requirement to rerun review after generated-note edits. A persuasive PR could
+still sway the model; an approval never established unseen code correctness.
 
-  Content a text model cannot read: classification comes from immutable Git raw
-  entry modes/object IDs and blob-based root numstats, not diff text. NUL records
-  preserve quoted/tab paths, rename-only images and opaque files, and regular text
-  replacing a gitlink. Ordinary text beginning `Subproject commit` is not a pointer.
-  The two standalone launchers retain this same contract independently because
-  the installer does not allow launcher-to-launcher imports.
-  Git's author-controlled NUL-byte heuristic is not enough for opaque status:
-  recognized assets additionally require mode `100644`, a matching suffix and
-  header signature (WOFF/WOFF2, TTF/OTF/TTC, wasm, ZIP/gzip/7z/RAR). Headers are
-  recognized within the 64 MB Git output bound; payloads are not security-audited.
-  NUL-bearing source/config, unknown formats and executable artifacts refuse
-  rather than obtain metadata-only review. This does not add a human approval.
+CodeRabbit reported `success` even when it reviewed nothing: rate limiting or
+skips affected 49 of 119 recent merged heads in the 2026-09-29 inspection. It was
+advisory. Ordinary r90group PRs had no independent-approver check in this
+implementation because its recorded-decision path returned first.
 
-  PNG, JPEG, GIF and WebP head blobs (at most six of at most 5 MB) are read by the
-  vision role (Opus, `anthropic/claude-opus-5-5` high) in a separate no-tools
-  process on the attached blob bytes. Neither a mutable PR file list nor a
-  temporary A → B → A push can substitute another image, and discovery has no
-  PR-file pagination limit. Its complete written inspection reaches the reviewer
-  as untrusted data; a vision failure, mismatched native identity, fallback,
-  incomplete response or inspection over 20,000 characters posts nothing, never
-  a cut-short account. The review body names only the images actually inspected.
+Historical image/opaque-content handling established these scope limits:
 
-  Gitlink pointers and other binaries (fonts, archives, wasm) have no native
-  content review surface. An opaque-only PR still receives a model review of its
-  description and immutable pointer/blob metadata. A clean verdict posts a
-  `COMMENT` carrying the exact head/state record and the marker
-  `agent-review-scope: metadata-only`; it disclaims opaque byte/submodule inspection.
-  A defect posts `REQUEST_CHANGES` and remains blocking. The checker reports
-  content advisory only after a clean current metadata record: a missing, stale
-  or dismissed record or later explicit blocking decision fails, never waiving
-  defects. A metadata-only comment cannot approve inspectable text/images or
-  supply a delegated approval. Mixed opaque/reviewable changes still
-  refuse with exit 3 and must be split.
-  A clean metadata comment intentionally cannot clear a binding request or
-  dismissal on the same head. Recovery requires a corrected candidate/new
-  head, not a description-only edit; no second approval producer is introduced.
+- Classification used immutable Git raw modes/object ids and blob-root numstats,
+  not author-controlled diff text or Git's NUL-byte heuristic alone. NUL records
+  preserved quoted/tab paths, rename-only images, opaque files and regular text
+  replacing a gitlink. Text starting `Subproject commit` was not itself a pointer.
+  Two standalone launchers carried the contract because installer isolation
+  prevented launcher-to-launcher imports.
+- Recognized assets used mode `100644`, a matching suffix and a header signature
+  for WOFF/WOFF2, TTF/OTF/TTC, wasm or ZIP/gzip/7z/RAR. Header recognition was
+  limited by 64 MB of Git output and was not a payload security audit.
+  NUL-bearing source/configuration, unknown formats and executable artifacts
+  were refused rather than assigned a metadata-only content inspection.
+- PNG, JPEG, GIF and WebP head blobs were inspected by the separate
+  `anthropic/claude-opus-5-5` high vision process, at most six images of at most
+  5 MB each. Immutable blobs, not mutable PR file lists or temporary A → B → A
+  pushes, supplied the bytes; discovery had no PR-file pagination limit.
+  A failed, incomplete, identity-mismatched, fallback or over-20,000-character
+  inspection yielded no posting. Only actually inspected images were named.
+- Gitlinks and other binaries had no native content-review surface.
+  `agent-review-scope: metadata-only` explicitly disclaimed byte/submodule
+  inspection. Mixed opaque/reviewable changes were refused with exit 3 in that
+  implementation. A clean metadata comment did not establish text/image
+  correctness or clear a historical explicit defect.
+
+Those process/output bounds describe retired individual probes, not agent
+wall-clock limits. Preserve the original records and unresolved material
+findings; prove any repair through the affected real consumer path. Current
+releases receive one critical-correctness/security assessment at the pre-deploy
+gate, not another independent PR approval producer.
 
 ## Enforcement by plan
 
-**Historical and superseded.** This describes the adoption rollout, not current
-merge policy. The amendment below supersedes both owners' server-required gates.
-
-- **misty-step:** `foundation` and `story-walk` become required checks after
-  the first green run on master, as on Scry.
-- **r90group:** stays on GitHub's free plan (operator decision 2026-09-25).
-  Private repositories there cannot have branch protection or rulesets, so the
-  same jobs run as advisory: they run on every PR, fail visibly, and the nightly
-  failure issue stays owned, but no check is required.
+The original rollout made `foundation` and `story-walk` required on misty-step
+after a successful default-branch run. r90group's private free-plan repositories
+could not enforce those settings and used advisory jobs instead. These are
+historical rollout facts, not current schedules or plan-specific exceptions.
+ADR 0023 removes required checks and reviews as merge conditions uniformly;
+CI runs only at the pre-deploy release gate, not on PRs or pushes.
 
 ## Decisions (2026-09-25)
 
-1. Approved: the checks and cadence above are the standard for every foundation repository.
-2. Approved: build ratchet mode (`foundation-check baseline` and `mode: bootstrap`) next. Wave one of the rollout census (Tach, Habitat, Nopalito in `r90group/infrastructure`, Linejam, Sploot) is the first proof.
-3. Approved: Jev drafts first maps only. Revisit drift detection when a holdout repository shows area precision ≥ 0.9.
-4. Operator changes: the designated agent reviewer, not the operator, approves first user stories and baseline extensions, escalating only a real change in product direction.
+1. The operator approved the original checks and cadence on 2026-09-25; ADR 0023 supersedes their merge/review and CI placement.
+2. The operator commissioned ratchet mode (`foundation-check baseline` and `mode: bootstrap`). The first proof was the census's wave one: Tach, Habitat, Nopalito in `r90group/infrastructure`, Linejam and Sploot.
+3. Jev drafted first maps only. Drift detection awaited holdout evidence of area precision ≥ 0.9.
+4. The operator delegated first-story and baseline-extension decisions to an agent reviewer, retaining real product-direction decisions. The former PR-approval choreography is retired.
 
 ## Uniform merge-policy amendment (2026-09-30)
 
-The operator's rule is uniform across **misty-step, r90group and moomooskycow**:
-agents merge normally, without `--admin`, after independent model review,
-green checks and the affected real product/CLI flow. Human approval and
-server-required CI are not merge gates. Removing those GitHub settings does not
-make review or verification optional, erase an explicit change request, or
-permit an approval to claim image/opaque inspection that never happened.
+The 2026-09-30 amendment removed human approvals and server-required checks
+across misty-step, r90group and moomooskycow but retained an agent review process.
+That remaining review/green-check merge condition is now superseded by
+[ADR 0023](../0023-live-verification-and-release-gate.md): verify the real running
+path, then merge normally without CI, review or a judge; gate deployment with
+fast CI and one critical-correctness/security review.
 
-There is no plan upgrade and no per-repository exemption. Use GitHub's supported
-branch-protection/ruleset settings to remove the gates instead of building a new
-reviewer App or permission workaround. A platform response requiring GitHub Pro
-or a public repository is recorded as unsupported enforcement, not a policy
-waiver; the same agent review, green-check and real-flow procedure still applies.
-Credentials are not rotated or revoked by this cutover.
+Use supported GitHub settings, not `--admin`, a reviewer App or permission
+workarounds, for the authorized policy. Unsupported GitHub Pro/public-only
+settings are reported as such, not bypassed. This cutover does not authorize
+credential rotation or revocation.
 
 Historical `--admin` merges
 [#137](https://github.com/misty-step/harness/pull/137),
 [#138](https://github.com/misty-step/harness/pull/138) and
 [#169](https://github.com/misty-step/harness/pull/169) are not precedents.
 [#173](https://github.com/misty-step/harness/pull/173) records that #169 merged
-with the App's changes requested still outstanding. The binary/image repair
-requires a new exact-head independent review and real Scry proofs; this amendment
-does not retroactively clear those findings.
+with the App's changes requested still outstanding. Superseding the review
+workflow does not erase those material findings; any still-relevant binary/image
+repair needs real Scry behavior proof, not a new exact-head PR approval.
 
 ### Settings census and cutover (2026-10-01)
 
@@ -334,8 +247,8 @@ The after-census recorded zero classic approval/status blockers and zero gate
 rulesets. Eighty private repositories returned the explicit GitHub Pro/public
 403 (51 r90group, 29 personal); those unsupported capabilities are not exemptions.
 The `includes_parents=true` endpoints disclosed no inherited organisation rule.
-Settings evidence is separate from execution proof: source checks, exact-head
-model review and normal live merges own the latter.
+Settings evidence is separate from execution proof: the current real-path
+verification, applied merge/deploy effects and live readback establish the latter.
 
 ## Story-capability deletion amendment (2026-10-02, US-051)
 
@@ -348,19 +261,20 @@ own implementation removal. Deleted bytes without capability loss do not earn
 a gate.
 
 The operator's delegate selected **Kaylee-owned release**, not a server-required
-check or a settings change. `story-deletion-check` uses one bounded Jev Decisions
-request over immutable base stories and the complete proposal. Choice removal
-probability ≥0.80 holds with story criteria and patch evidence. Confidence and
-probabilities remain visible; uncertainty, outages and incomplete evidence stay
-non-blocking and reach the existing independent reviewer, not a fabricated pass.
-This changes neither the ordinary merge procedure nor unrelated semantic rules.
+check or settings change. The historical `story-deletion-check` design used one
+bounded Jev Decisions request over immutable base stories and the proposal, with
+a ≥0.80 loss-probability threshold. Probabilities and uncertainty remained
+visible; those judgments are advisory evidence, not current merge verdicts.
+Unknown, unavailable or incomplete advice reaches the slice owner without a
+fabricated pass.
 
-`agent-review` records supported loss as `REQUEST_CHANGES` and refuses to erase
-an existing exact-head/base capability hold on a model rerun. Dismissals, labels,
-PR text, bot approvals, and Phaedrus's shared GitHub account do not prove his
-authorization. Repair at a new head is reassessed. Kaylee obtains his direct
-approval for any intentional removal and owns that authorized merge outside the
-automatic approval command; this command provides no bypass.
+The retired `agent-review` integration recorded capability holds as
+`REQUEST_CHANGES`. Its exact-head markers and rerun requirements are not current
+delivery steps. The substantive authority boundary remains: an intentional
+removal or weakening of the owner's promised user action needs Phaedrus's direct
+approval. A dismissal, label, bot approval, PR text or shared-account identity
+does not prove that authorization. Preserve capability or obtain the real owner
+decision, then prove affected behavior and use ADR 0023's normal delivery path.
 
 The two public historical replays, model identity, timing and measured cost are
 recorded in [verification](../../verification.md#story-deletion-replays-us-051).

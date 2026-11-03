@@ -18,7 +18,7 @@ Keep this turn read-only. Make visuals only from what you already have: do not c
 
 An action item is a call or step only the user can take, such as a product choice, an approval, an irreversible action, or access you lack. Include any still waiting on the user, even one raised before their last message. Work you can still do yourself is not an action item. Never make up a call to fill the reply. A step the user did not ask for and the work does not need is not an action item, unless it is irreversible and waiting on the user: give it one line and no visual.
 
-One call can cover many items, such as each PR in a set awaiting merge. For each item, collect its link, what it changes for users, the evidence behind your pick, its risk, and your pick. Write "unknown" for a fact the call needs that you do not know. Leave out a link you do not have.
+One owner decision can cover many items, such as a product choice shared by several slices. For each item, collect its link, what it changes for users, the evidence behind your pick, its risk and your pick. Write "unknown" for a fact the call needs that you do not know. Leave out a link you do not have.
 
 ## Write the reply
 
@@ -28,7 +28,7 @@ Open with one short sentence that names what waits on the user, or says nothing 
 
 Then show what happened, pictures first. Embed inline the screenshots and videos the work produced, then any diagram that explains a change. Then sum up in one short bullet per thing the user asked for: what came of it, and whether it is done, still running, failed, or not checked. Write each line the way you would say it out loud: "Search was slow from a missing index", not "Search review: done" or "Slow search: missing index". Name any bug found and fixed on the way. Each line must stay true when read alone. Never mark something done that still waits on the user, and leave out anything the action items say. Under the summary, give at most three short lines that change what the user knows or must do. Then name in one line any work left that you can do yourself.
 
-Then list the action items. Ask the call the user owns, such as merge, approve, or pick, and give your pick. A step you would take first goes in your pick. So does anything that must happen first, and anything that cannot be undone. Give the number or link of each PR, issue, or agent a call is about, also in a call between options.
+Then list only decisions existing authorization leaves to the user, such as product scope or an irreversible action, and give your pick. Already-authorized delivery stays with the agent under the installed [ship-loop](../ship-loop/SKILL.md) skill. Give the number or link of each PR, issue or agent a genuine owner decision concerns, including a call between options.
 
 Fit the shape to the call. A call about one item is one bullet: the call, your pick, what it changes for users, the evidence behind your pick, and its risk, with the item named once. When items share a call, write the call and your pick once, then give each item its own bullet, riskiest first: its link and name, what it changes for users, the evidence behind your pick, and its risk. Name an item's pick only where it differs from the call's. Give each item's risk even when it is low, such as "Low risk: only the colors change." Say what waiting costs only when it is more than a delay, such as a deadline or lost data.
 

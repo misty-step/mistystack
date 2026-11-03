@@ -18,10 +18,9 @@ Criteria:
 3. A failed test, invalid plugin or failed available-harness proof exits nonzero.
    Missing CLIs and lint-only installation skips are named, never reported passed.
 4. Verification preserves the live profile, credentials and foreign state.
-5. The gate checks the wholesale pinned pstack inventory and vendored file hashes
-   offline, including both agents as references, every skill and playbook,
-   formal-verification scripts, and recorded portability patches. It rejects
-   hand edits, missing or unlisted files and patch drift.
+5. The gate checks the pinned pstack inventory and vendored file hashes offline,
+   including agent references, formal-verification scripts and recorded exact
+   patches/removals. It rejects hand edits, missing or unlisted files and patch drift.
 6. pstack sync rejects source symlinks and symlinked destination components
    before writing. The offline gate rejects symlinked vendored paths and parents.
 7. Repeating a pstack update at the same pin leaves the lock and vendored tree unchanged; a real source beneath a symlinked parent remains usable.
@@ -96,8 +95,9 @@ publication, so an unverified default-branch candidate cannot be published.
 
 Criteria:
 1. Landmark stages generated notes in a PR rather than pushing to protected master.
-2. A generator-only PR merges through native GitHub auto-merge after required
-   exact-head checks pass, without another authored-policy review round.
+2. A generator-only PR merges immediately without CI or review. One fast CI pass
+   and one critical-correctness/security assessment gate publication and deployment,
+   not merging. No CI runs on PRs or pushes.
 3. Publication refuses an unlanded candidate or a tag pointing to another commit.
 4. Retries preserve an already published version without duplicate notes or
    moving its tag.
@@ -139,34 +139,28 @@ Criteria:
 
 Proof: `skills/verification/SKILL.md` and the consumer's verification evidence.
 
-## US-023 Keep review and verification useful
+## US-023 Prove a slice and gate its release
 
-When work reaches review, I want risk-scaled independent proof and a bounded fix
-round, so a new thread cannot restart review or turn an unrelated finding into scope.
+When I ship work, I want my proof on the running product to precede a prompt
+merge, so release safety does not become a queue of PR approvals.
 
 Criteria:
-1. `ship-loop` records rigor, its concrete reason and diff size on the PR.
-   Light is the default with combined QA/review and an independent judge.
-   Runtime code, security boundaries or data justify separate QA, review and judge.
-2. Light posts combined QA/review and independent judgment as plain PR comments
-   without a ledger. Standard and critical retain the native PR ledger across
-   head changes and new sessions. Only a judge's FIX naming eligible blockers
-   authorizes the one permitted fix round, in every tier.
-3. Reviewers report blockers only. The blocking reporter rechecks named fixes.
-   The next verdict is SHIP or REVERT / SPLIT. Worthwhile non-blocking findings
-   go to one running cleanup issue, not new review gates.
-4. CI owns the suite. The verifier reruns only the main-risk check at the final
-   head, with native proof once before release. Proof names the checked revision,
-   real path, exact commands and observed result. Generated output lives outside
-   the checkout and is reviewer-accessible.
-5. The judge treats a missing real-path proof as missing evidence, not a passing
-   unit test. A recorded `no deploy` skips release watching for internal changes.
-6. Pstack's Opening a PR, Babysit and Shipping own delivery. Ship-loop supplies
-   Shipping's verify step. Its SHIP, including final SHIP, maps to PASS. FIX is
-   not landable. REVERT or SPLIT stops the run.
+1. The author builds the slice and proves the actual running-app or installed-artifact
+   consumer path through [verification](skills/verification/SKILL.md), with narrow
+   affected native checks and formal specs/proofs for ordering, concurrency or durability.
+2. A proven PR squash-merges without CI, independent review or a judge.
+   An actual conflict requires resolution and proof of its affected path; trunk
+   movement alone does not require a rebase.
+3. The pre-deploy release gate runs fast CI once and one review limited to critical
+   correctness/security. Noncritical findings become tickets. Critical failures
+   receive targeted repair and affected proof, not broad reassessment cycles.
+4. Evidence names the candidate, real path, exact checks and observed results.
+   Publication/deployment uses the checked artifact and proves live identity and
+   a critical journey. An internal change may record `no deploy`.
+5. Obsolete PR-comment approval machinery, review helpers and their tests are absent.
 
-Proof: `skills/ship-loop/scripts/ship-loop.test.ts`, `skills/ship-loop/roles.md`,
-`skills/ship-loop/judge.md`.
+Proof: [ship-loop](skills/ship-loop/SKILL.md), [roles](skills/ship-loop/roles.md),
+[release convention](docs/release-convention.md) and observed consumer evidence.
 
 ## US-044 Subtract before shipping a designed surface
 
@@ -215,13 +209,12 @@ Criteria:
    [orchestrate](skills/poteto-mode/playbooks/orchestrate.md) routes resolve
    empirical questions, plan phases and coordinate the complete outcome.
 2. Each slice has observable acceptance criteria and explicit file ownership.
-   Larger useful slices are preferred over many narrow PRs, with master working.
-3. Work is trunk-based on master without integration branches. Independent
-   file-owned slices can run in parallel. True dependencies sequence.
-4. pstack's Opening a PR, Babysit and Shipping playbooks govern delivery.
-   [Ship-loop](skills/ship-loop/SKILL.md) supplies Shipping's verify step with
-   rigor tiers, an independent judge and one fix round. Each role has a deadline,
-   and a stalled agent is stopped and replaced.
+   Prefer complete useful slices over narrow PRs for their own sake, with trunk working.
+3. Work from the repository's designated trunk without unnecessary integration
+   branches. Independent file-owned slices can run in parallel within the brief's
+   rigor tier; sequence true dependencies.
+4. [Ship-loop](skills/ship-loop/SKILL.md) carries each slice through author-owned
+   running-product proof and merge, then fast CI and one critical release assessment.
 5. [Foundation article 3](skills/foundation/checklist.md#article-3) still requires
    a living `SPEC.md`. It does not require a particular skill to produce it.
 
@@ -314,24 +307,23 @@ Criteria:
 Proof: `skills/principle-prove-it-works/SKILL.md`, `skills/poteto-mode/SKILL.md`
 and the changed consumer's verification evidence.
 
-## US-061 Run work in the environment's isolation
+## US-061 Reuse one prepared worker per slice
 
-When an agent runs builds, suites, browser QA, untrusted code or long jobs, I
-want an isolated disposable environment named by its harness or workstation,
-so execution does not depend on a particular public provider integration.
+When an agent runs builds, suites, browser QA or long jobs, I want one prepared
+Boat worker for its whole slice, so setup is reused without burdening the operator.
 
 Criteria:
-1. The core states the generic placement rule. The harness or workstation names
-   the isolated disposable environment.
-2. Callers use your environment's isolation skill for setup, access and
-   lifecycle rather than requiring a provider-specific skill from this plugin.
-3. Private provider credentials, capacity, pricing and cleanup procedures stay
-   with the environment's owner, not the public method.
-4. The pstack names adapter maps Cursor cloud agents to that environment without
-   requiring Cursor or a particular provider in another harness.
+1. Save a clean toolchain with `boat snapshot <id> <name>` and create the slice's
+   worker with `boat new --from <name>`. Credentials are not saved into snapshots.
+2. Run the slice's commands on that worker, stop it when idle and resume it for
+   further work. Collect evidence and delete the worker at slice end.
+3. Fresh-per-command isolation is reserved for untrusted code, with privilege
+   and egress controls. A worker alone does not sandbox hostile execution.
+4. Live allowance and native credentials remain private state, not copied
+   quotas or secrets in guidance. A platform-specific exception remains explicit.
 
-Proof: `rules/core.md`, `skills/misty/harnesses/pstack-names.md` and the
-environment's own isolation procedure and execution evidence.
+Proof: `rules/core.md`, [boat-workers](skills/boat-workers/SKILL.md) and native
+snapshot/start/stop/resume/deletion receipts.
 
 ## US-062 Recompile from the vision
 
@@ -357,3 +349,21 @@ Criteria:
 
 Proof: `skills/recompile/SKILL.md`, Misty's routing and the reviewed project's
 tracker decision with its real-record acceptance evidence.
+
+## US-063 Supervise open-ended agents
+
+When agents work to a complete outcome, I want a periodic watchdog, so drift,
+stalls and wasted spend are corrected without arbitrary run deadlines.
+
+Criteria:
+1. A supervisor compares each active agent's observed work with its self-contained
+   brief and acceptance condition. Elapsed wall-clock time is not a stop condition.
+2. OMP supervision uses native process/history observations, real completion
+   probes, messages to steer and exact-agent termination/replacement when needed.
+3. Boat supervision uses events, conversations, steering and interruption.
+   A separately briefed Boat agent can own the loop through `boat prompt`.
+4. Replacement carries the full outcome, current evidence and remaining scope;
+   only the owned failed run is interrupted. The loop ends after acceptance and cleanup.
+
+Proof: [watchdog](skills/watchdog/SKILL.md), native supervisory observations and
+recovery evidence, not an agent's status summary alone.

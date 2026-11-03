@@ -8,6 +8,6 @@ In Mistystack, read [the pstack names adapter](../../misty/harnesses/pstack-name
 2. Anti-shortcut clauses, stated and held: no harness modifications, no baseline tampering, no component restructuring to make a diff pass. If the baseline looks wrong, stop and ask, don't edit it.
 3. Migrate one component at a time. Parallelize across worktrees, one owner per component (the **separate-before-serializing-shared-state** principle skill). Shared primitives migrate first as a blocking phase.
 4. Verify each component against its baseline via image diff on the matching surface via the control skill. A nonzero diff is a fail. Investigate the pixel delta. `/loop` per component until the diff is zero.
-5. Run **Opening a PR** per component or per safe batch.
+5. Deliver each proven component or safe batch through the installed [ship-loop](../../ship-loop/SKILL.md) skill.
 
 **Reply:** components migrated, the diff result for each, the baseline harness location, what's left.

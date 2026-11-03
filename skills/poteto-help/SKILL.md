@@ -80,7 +80,7 @@ The default answer is `/poteto-mode`, which runs most of the others when its ste
 | Have different models review a diff and try to break it | [`/interrogate`](../interrogate/SKILL.md) |
 | Fix a bug test-first when a cheap local test exists | [`/tdd`](../tdd/SKILL.md) |
 | Apply TypeScript rules to `.ts` or `.tsx` work | [`/typescript-best-practices`](../typescript-best-practices/SKILL.md) |
-| Strip comments before review, using a reviewer that didn't write them | [`/no-comments`](../no-comments/SKILL.md) |
+| Audit a requested comment-only scope | [`/no-comments`](../no-comments/SKILL.md) |
 | Clean AI tells out of prose | [`/unslop`](../unslop/SKILL.md) |
 | Write docs, an RFC, a README, a PR description, or a commit message to a standard | [`/technical-writing`](../technical-writing/SKILL.md) |
 | Hear the last reply again in plain words | [`/bro`](../bro/SKILL.md) |
@@ -120,14 +120,14 @@ Not in pstack:
 
 Playbooks are step lists inside `/poteto-mode`, not skills, so they have no slash command. Inside `/poteto-mode`, describing the task picks one, and these phrases name one directly:
 
-- "babysit this pr" or "check on pr 123" runs Babysit. It drives the PR to merge-ready and stops there. It doesn't merge unless the user asks to merge, land, or ship.
-- "land the stack" runs Shipping.
+- "check on pr 123" inspects and reports its current state. It does not start an approval loop.
+- Delivery requests use the installed [ship-loop](../ship-loop/SKILL.md) skill for author-run proof, merge and the post-merge release gate.
 - "take over this branch" runs Session pickup.
 - "pause safely" runs Pause safely.
-- "full autopilot on this queue" runs Autopilot-full. "autopilot, don't merge" runs Autopilot-stack.
+- An independent queue uses one author per slice under ship-loop. Carry forward an explicit no-merge hold without inventing an approval gate for other work.
 - "run the eval playbook" runs Eval.
 
-Without `/poteto-mode`, a phrase such as "babysit this pr" can start Cursor's own skill for the same job instead. The Playbooks section of [`poteto-mode`](../poteto-mode/SKILL.md) lists every playbook and when it applies. [Guide page 6](../../docs/guide/06-verify-and-ship.md) covers opening, babysitting, and landing a PR.
+The Playbooks section of [`poteto-mode`](../poteto-mode/SKILL.md) lists the retained task methods. The installed [ship-loop](../ship-loop/SKILL.md) skill is the single delivery authority; [the delivery guide](../../docs/guide/05-verify-and-ship.md) explains the delivery path.
 
 pstack has no planning skill. Cursor's Plan Mode works alongside it. For work that spans phases or stacked PRs, asking `/poteto-mode` for a plan runs the [Multi-phase plan playbook](../poteto-mode/playbooks/multi-phase-plan.md), which writes the plan and doesn't implement it. For a design question, the Prototype playbook or `/architect` settles it in code first.
 

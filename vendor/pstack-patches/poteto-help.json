@@ -1,6 +1,6 @@
 {
   "source": "skills/poteto-help",
-  "reason": "Cursor's marketplace, Custom Mode and setup-state instructions would direct native Mistystack users to the wrong installation.",
+  "reason": "Preserve native installation portability; owner directive 2026-11-03 (ADR0023) removes inherited PR approval/CI workflows and time-cap recipes in favor of native ship-loop and watchdog.",
   "edits": [
     {
       "file": "SKILL.md",
@@ -26,6 +26,81 @@
       "file": "SKILL.md",
       "before": "- Option+Enter on Mac or Alt+Enter on Windows, or Use as Mode from the skill entry, makes it a Custom Mode. It stays in context every turn until the user exits the mode, and it stays out of casual turns.\n- Cursor's docs list Custom Modes in the Agents Window and the CLI. Elsewhere, start each new task with `/poteto-mode`.",
       "after": "- Custom Mode keyboard shortcuts are Cursor-only. In OMP, Claude Code, Codex and pi, invoke the installed skill explicitly at the start of each new task through the native skill mechanism in the pstack names adapter."
+    },
+    {
+      "file": "SKILL.md",
+      "before": "| Strip comments before review, using a reviewer that didn't write them | [`/no-comments`](../no-comments/SKILL.md) |\n",
+      "after": "| Audit a requested comment-only scope | [`/no-comments`](../no-comments/SKILL.md) |\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "- \"babysit this pr\" or \"check on pr 123\" runs Babysit. It drives the PR to merge-ready and stops there. It doesn't merge unless the user asks to merge, land, or ship.\n",
+      "after": "- \"check on pr 123\" inspects and reports its current state. It does not start an approval loop.\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "- \"land the stack\" runs Shipping.\n",
+      "after": "- Delivery requests use the installed [ship-loop](../ship-loop/SKILL.md) skill for author-run proof, merge and the post-merge release gate.\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "- \"full autopilot on this queue\" runs Autopilot-full. \"autopilot, don't merge\" runs Autopilot-stack.\n",
+      "after": "- An independent queue uses one author per slice under ship-loop. Carry forward an explicit no-merge hold without inventing an approval gate for other work.\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "Without `/poteto-mode`, a phrase such as \"babysit this pr\" can start Cursor's own skill for the same job instead. The Playbooks section of [`poteto-mode`](../poteto-mode/SKILL.md) lists every playbook and when it applies. [Guide page 6](../../docs/guide/06-verify-and-ship.md) covers opening, babysitting, and landing a PR.\n",
+      "after": "The Playbooks section of [`poteto-mode`](../poteto-mode/SKILL.md) lists the retained task methods. The installed [ship-loop](../ship-loop/SKILL.md) skill is the single delivery authority; [the delivery guide](../../docs/guide/05-verify-and-ship.md) explains the delivery path.\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "## Review and ship\n",
+      "after": "## Inspect and deliver\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "- `/poteto-mode we need <feature>. /architect it first, and answer open questions with prototypes. let me review before proceeding.`\n",
+      "after": "- `/poteto-mode we need <feature>. settle the design from prototype evidence, then implement the smallest shape that meets the goal.`\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "- `/poteto-mode open the pr. small ordered commits, evidence in the description.`\n",
+      "after": "- `/ship-loop deliver <confirmed scope>. prove the changed journey on the running app and retain the evidence.`\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "- `/poteto-mode babysit this pr. get it green.` For status only: `/poteto-mode check on pr <number>. anything outstanding?`\n",
+      "after": "- `/poteto-mode check on pr <number>. report its observed state and any concrete failure, without starting an approval loop.`\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "- `/poteto-mode land the stack.`\n",
+      "after": "- `/ship-loop finish this queue through merge, the release gate and the live journey check.`\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "- `/poteto-mode im going to bed. <goal> in a fresh worktree off <base>. done means <checks>. keep a decision log. don't ask me before committing. /loop until done. if you're truly stuck after a few hours, stop and write up why.`\n",
+      "after": "- `/poteto-mode im going to bed. <goal> in a fresh worktree off <base>. done means <checks>. keep a decision trail and use the watchdog until done. if a prerequisite is unreachable, preserve evidence, name it exactly and finish the unblocked work.`\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "- `/poteto-mode full autopilot on this queue. each item is independent.`\n",
+      "after": "- `/ship-loop deliver this queue. each slice is independent and keeps one author through real-app proof, merge and release.`\n"
+    },
+    {
+      "file": "references/recipes.md",
+      "before": "- `/poteto-mode autopilot these changes, but don't merge. i'll land them.`\n",
+      "after": "- `/poteto-mode build and prove these changes, but stop before merge. this is an explicit hold; i will land them.`\n"
+    },
+    {
+      "file": "references/prompting.md",
+      "before": "- The real constraints. \"repro first\", \"don't change any code yet\", \"zero behavior change\", and \"let me review before proceeding\" each change what the agent does.\n",
+      "after": "- The real constraints. \"repro first\", \"don't change any code yet\" and \"zero behavior change\" each change what the agent does. State an owner hold only when it is actually required.\n"
+    },
+    {
+      "file": "references/prompting.md",
+      "before": "- Give an exit: \"if you're truly stuck after a few hours, stop and write up why\".\n",
+      "after": "- Keep work open-ended under the installed [watchdog](../../watchdog/SKILL.md). Name an unreachable prerequisite exactly, preserve recovery evidence and finish every unblocked part instead of stopping at an elapsed-time limit.\n"
     }
   ]
 }

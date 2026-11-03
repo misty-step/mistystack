@@ -1,0 +1,26 @@
+{
+  "source": "skills/figure-it-out",
+  "reason": "Owner directive 2026-11-03 (ADR0023) removes a delegated-work judge and time-based checkpoints as delivery gates while preserving evidence-driven experimentation and independent blind instruction evaluation.",
+  "edits": [
+    {
+      "file": "SKILL.md",
+      "before": "- The rigor level, biased high. One-way doors and high blast radius get more. Reversible low-stakes steps get less. Rigor is gates and artifacts, not \"try harder\".\n",
+      "after": "- The implementation and proof depth the risk needs. Rigor changes that depth, not the delivery gates owned by [ship-loop](../ship-loop/SKILL.md).\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "Present the framing and tradeoffs before committing to a long run. Reversible work proceeds (the **never-block-on-the-human** principle skill), but a multi-hour run earns one checkpoint.\n",
+      "after": "State the framing and tradeoffs, then proceed with authorized reversible work under the **never-block-on-the-human** principle skill. Use the installed [watchdog](../watchdog/SKILL.md) for open-ended supervision rather than a time-based approval checkpoint.\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "- Pair delegated work with a judge. If a worker games the gate, reset and harden the contract. If the gate itself is wrong, fix the gate in its own change rather than routing around it.\n",
+      "after": "- The author proves the unit on the real running path and uses the installed [ship-loop](../ship-loop/SKILL.md) skill for delivery. Independent blind judges belong to instruction evaluation, not merge approval.\n"
+    },
+    {
+      "file": "SKILL.md",
+      "before": "Check the whole against the Phase A predicate on the real product, not just the harness. Encode any recurring correction as a gate, a lint rule, a check, or a script (the **encode-lessons-in-structure** principle skill).\n",
+      "after": "Check the whole against the Phase A predicate on the real running product, not just the harness. Deliver changed artifacts through the installed [ship-loop](../ship-loop/SKILL.md) skill. Encode a recurring correction structurally when the evidence warrants it under **encode-lessons-in-structure**.\n"
+    }
+  ]
+}

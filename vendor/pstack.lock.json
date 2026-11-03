@@ -130,21 +130,6 @@
       "vendored": true
     },
     {
-      "source": "skills/poteto-mode/playbooks/autopilot-full.md",
-      "destination": "skills/poteto-mode/playbooks/autopilot-full.md",
-      "vendored": true
-    },
-    {
-      "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
-      "destination": "skills/poteto-mode/playbooks/autopilot-stack.md",
-      "vendored": true
-    },
-    {
-      "source": "skills/poteto-mode/playbooks/babysit.md",
-      "destination": "skills/poteto-mode/playbooks/babysit.md",
-      "vendored": true
-    },
-    {
       "source": "skills/poteto-mode/playbooks/bug-fix.md",
       "destination": "skills/poteto-mode/playbooks/bug-fix.md",
       "vendored": true
@@ -172,11 +157,6 @@
     {
       "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
       "destination": "skills/poteto-mode/playbooks/multi-phase-plan.md",
-      "vendored": true
-    },
-    {
-      "source": "skills/poteto-mode/playbooks/opening-a-pr.md",
-      "destination": "skills/poteto-mode/playbooks/opening-a-pr.md",
       "vendored": true
     },
     {
@@ -212,11 +192,6 @@
     {
       "source": "skills/poteto-mode/playbooks/session-pickup.md",
       "destination": "skills/poteto-mode/playbooks/session-pickup.md",
-      "vendored": true
-    },
-    {
-      "source": "skills/poteto-mode/playbooks/shipping.md",
-      "destination": "skills/poteto-mode/playbooks/shipping.md",
       "vendored": true
     },
     {
@@ -420,7 +395,28 @@
       "vendored": true
     }
   ],
-  "exclude": [],
+  "exclude": [
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-full.md",
+      "reason": "Owner-native ship-loop replaces inherited delivery procedures (owner directive 2026-11-03; ADR0023)."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autopilot-stack.md",
+      "reason": "Owner-native ship-loop replaces inherited delivery procedures (owner directive 2026-11-03; ADR0023)."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/babysit.md",
+      "reason": "Owner-native ship-loop replaces inherited delivery procedures (owner directive 2026-11-03; ADR0023)."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/opening-a-pr.md",
+      "reason": "Owner-native ship-loop replaces inherited delivery procedures (owner directive 2026-11-03; ADR0023)."
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/shipping.md",
+      "reason": "Owner-native ship-loop replaces inherited delivery procedures (owner directive 2026-11-03; ADR0023)."
+    }
+  ],
   "files": {
     "skills/architect/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/architect/references/design-red-flags.md": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce",
@@ -432,7 +428,7 @@
     "skills/automate-me/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/automate-me/SKILL.md": "e8045601fe249dac38aba0d98ff1ef38e0f597385b2162088e51dc7ba3a273ec",
     "skills/benchmark-checklist/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/benchmark-checklist/SKILL.md": "ba109e96c8f6c1c391baccf19e5d11e14370df7b3f2605e1572cd565a6c0fca0",
+    "skills/benchmark-checklist/SKILL.md": "058ab093f02c07ec9a6d762dda4dc7acd85d6549af8bc55d707ccc0e42e56666",
     "skills/blast-radius/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/blast-radius/SKILL.md": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436",
     "skills/bro/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -447,7 +443,7 @@
     "skills/create-verification-skill/references/feature-map-example/search.md": "6e87b9e7f2791a7776ba1bb83f371cd285c306c67f19d245cc4dd6ca3015c823",
     "skills/create-verification-skill/SKILL.md": "140cb61772a1737da5174be0ff055689bcae4394c45515fd20bc3442457c841b",
     "skills/figure-it-out/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/figure-it-out/SKILL.md": "1c0057d0fccc31ba03ea35f112c28454a59744943bdd6dc6c5b580f3ac1221ed",
+    "skills/figure-it-out/SKILL.md": "3cf44438c93e21edacf6ea4bd7021390e05295cc18d0db25b737eb556236f9e7",
     "skills/how/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/how/references/explainer-prompt.md": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff",
     "skills/how/references/explorer-prompt.md": "6300128385ee940fd42ecb84b0e623435440a2dc283eae54ee4a52ba56947ba1",
@@ -459,7 +455,7 @@
     "skills/ketchup-video/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/ketchup-video/SKILL.md": "9fa5a6edc6fcad5ed9aac44be87d7ab28ad3e81f8a1699868c06662dd3de03ae",
     "skills/ketchup/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/ketchup/SKILL.md": "351b552b80aa9ccd70065b645a0bb88875c5c963115b01ff4d6c9be358c4ff09",
+    "skills/ketchup/SKILL.md": "f7241c1fd60a69ab2312ea0e5fae5f16c713c1ee58488061e5eda7cb746c2e79",
     "skills/maintain-formal-verification-skill/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/maintain-formal-verification-skill/SKILL.md": "9c30524cf071facb58559b8eae982d263473dfb7bfcc5c0a64ac010dabf728bc",
     "skills/maintain-verification-skill/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -469,53 +465,31 @@
     "skills/no-comments/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/no-comments/SKILL.md": "f860c91b4a75669c1e4d8270c2dadd4743d74968724d3ad54bf88648f6170ee6",
     "skills/poteto-help/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/poteto-help/references/prompting.md": "b6e0f0863f5e6a07d0d3c148a2a07c3db326a8ab56ea0fb5b13348c4a03a0236",
-    "skills/poteto-help/references/recipes.md": "68c3361fde7c02ac1d899bcdd9fc3af1425ab9efa98e854f17d274a8602ca582",
-    "skills/poteto-help/SKILL.md": "9c7dfa3a40d384780cb6897ce5a3c1635ed666c2c13f0e51994e05db77ed334e",
+    "skills/poteto-help/references/prompting.md": "a4fb310e13a59a4a57a79857536a1f1226b033e814f0c7cfa099f266cedc7184",
+    "skills/poteto-help/references/recipes.md": "4a7a2d72d0d2135d24d2cec8ffa4be29b9bad2f12dc2d7278155734804e97e05",
+    "skills/poteto-help/SKILL.md": "0917c79dba5f08cce20520c5711dd91e847e71ff72950d147c8db5902c012026",
     "skills/poteto-mode/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/poteto-mode/playbooks/authoring-a-skill.md": "f6a13a445c360b48d6cd72780ac01955f45b82826476efe0e67c7559329407aa",
-    "skills/poteto-mode/playbooks/autonomous-run.md": "376b3c551f59f1f83c9b0f12822105476903252bd70320cca9695cff0e7be910",
-    "skills/poteto-mode/playbooks/autopilot-full.md": "f86e6d694f3d4ee68e40326e3fba64f8f005835013b67e26a281f323b5c707ef",
-    "skills/poteto-mode/playbooks/autopilot-stack.md": "34de4bb101dd56524d8067c73bba5988ead6f93d3ab8f96ac13a6adcb43696cb",
-    "skills/poteto-mode/playbooks/babysit.md": "17c4a41171aaa3bb315fd452b0cb067e41bcaaea7ad7e91ad569a47682159089",
-    "skills/poteto-mode/playbooks/bug-fix.md": "1495366637476f3ec3163752ad327b87fe29c5e24ba51e005aad0f13d71fb228",
+    "skills/poteto-mode/playbooks/authoring-a-skill.md": "811f31c86f586b4b01101841f14614800e99d1cdfba8f4b0b7bd60c0bdcb8a66",
+    "skills/poteto-mode/playbooks/autonomous-run.md": "09b7db7ef9bd44db7c78c51c0dd4ed4abf30bbd7a3f70d2c32ac034d28330f4b",
+    "skills/poteto-mode/playbooks/bug-fix.md": "c67feaf4be3f1e1192d196779e35a6a37b48a985b2337ae181559054d9695f93",
     "skills/poteto-mode/playbooks/eval.md": "65184041012cf470be8f27e4ea79ce2a5236081c567b82c721b55147e8ea62eb",
-    "skills/poteto-mode/playbooks/feature.md": "028eaa0664131d8b709805063b903bd87585f4c3d4b5bbe9d9f3cdcdc9acd7a5",
-    "skills/poteto-mode/playbooks/hillclimb.md": "f2329a7d1a15a3967a0e5d023e75298002099aa238643681bd347dc11c4a935e",
-    "skills/poteto-mode/playbooks/investigation.md": "bc04c3fb4df85355e88175710f11fecd1d77800581bd559f9319fe28c3e9f49a",
-    "skills/poteto-mode/playbooks/multi-phase-plan.md": "78659071acdb847735772f69243e3008a3b61aa6cea2a0ee7a6e9f2f7eeab1e2",
-    "skills/poteto-mode/playbooks/opening-a-pr.md": "ef3d41892e48ffb832264b21743bd5003c5c2df8056d3dfd41591022bae06db6",
-    "skills/poteto-mode/playbooks/orchestrate.md": "bf8dfecdc7f178503abcef4f9f8326a794517bfc9a622b40374502043d41adf1",
+    "skills/poteto-mode/playbooks/feature.md": "620e3d4538adaac6769215216c542482798b685e7553e3848092db2ca320e520",
+    "skills/poteto-mode/playbooks/hillclimb.md": "121f92acaa09d01f8c337f41ba74f35801b19e7ad4ffe89a70080e0f4162f22d",
+    "skills/poteto-mode/playbooks/investigation.md": "0cf65a654d30142c7ec4bc118bb65ab517fcbb179aa43f42dc69d0e76f7b89fd",
+    "skills/poteto-mode/playbooks/multi-phase-plan.md": "c5bf96be9cdbd50840a05ec09a6bdda0088559a48cb9bb0e06b481bd947e41b2",
+    "skills/poteto-mode/playbooks/orchestrate.md": "d663c519864ec0a131f0a447adf571563b8c7eef3737018af7e8ca3429eb2ca7",
     "skills/poteto-mode/playbooks/pause-safely.md": "77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d",
-    "skills/poteto-mode/playbooks/perf-issue.md": "e422a442a23d8dbd276bd7bf652b1a4a38b876fe5b3782e9acbb5cf9d8e9d5e4",
+    "skills/poteto-mode/playbooks/perf-issue.md": "d3a3b7b83227bfba4bc0284b0ebabf7680f881f189f4dee0573ea6144af60294",
     "skills/poteto-mode/playbooks/prototype.md": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962",
-    "skills/poteto-mode/playbooks/refactoring.md": "9e64a3b2e2afb757e7567c8353c67bf40f862d02c7af48be95d5e27542d1d3f4",
+    "skills/poteto-mode/playbooks/refactoring.md": "bc7929e5f0177cb64253bd6535c47db030694603c0458da2020961c590a24b7e",
     "skills/poteto-mode/playbooks/runtime-forensics.md": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5",
     "skills/poteto-mode/playbooks/session-pickup.md": "af3982e1a77e61e87a873f5f0721f1a6525e9d6b5f8c7fb65a2660d9455bbe2c",
-    "skills/poteto-mode/playbooks/shipping.md": "966e404d3b686c8c5eff596b06d8664a5f3928631fa197235ea67e3f3a9788c7",
     "skills/poteto-mode/playbooks/trace-forensics.md": "0b184b30aef64a0210d7c43566d862012f676afdd681b52fc6b419541b5a641e",
-    "skills/poteto-mode/playbooks/visual-parity.md": "bfc0bcbc82e5583307f81ca75539b0483287102ed52d2e12d79a1d6a63f90986",
+    "skills/poteto-mode/playbooks/visual-parity.md": "669d258424d7d4ce33651e76d68b3f66cac26a96c41fb8fe9401cf72bcd42a77",
     "skills/poteto-mode/playbooks/worktree-cleanup.md": "be04ae0afe19d4a4da5bcc4e94455f68dbebd1cda6eb0f456ca0d358ecf76c00",
-    "skills/poteto-mode/references/bugbot-triage.md": "219b6025406fe60d0ce85c6495307fa280d5efea0209a08513e2935052cf18ce",
-    "skills/poteto-mode/scripts/bootstrap.ts": "ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361",
-    "skills/poteto-mode/scripts/bun.lock": "667d9cf7222e9aae3fa42a4be383e657784216e9df115da02227fbc5ac7bbe46",
-    "skills/poteto-mode/scripts/check-plan.mjs": "e3d4e9ca638c6fb4a2b52c434c17c7af30da4fdd44605ccfe9906f82fe37b555",
-    "skills/poteto-mode/scripts/check-plan.test.ts": "848d321f2b76299d1b2d7bb46c929dbaebef08ca4ba8669dbe09d1d5c86f96e2",
-    "skills/poteto-mode/scripts/package.json": "c9db6bb9362c6e319e395b358b113ebc72ab06b6c5e3a095093f6ebfdafe1c57",
-    "skills/poteto-mode/scripts/watch-pr/cli.test.ts": "a35592b4c6da96caf8d47987e9cd503fab6c7774ab87d11a43f24b4b5df2a9d1",
-    "skills/poteto-mode/scripts/watch-pr/cli.ts": "89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680",
-    "skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts": "cf0c5ee61b4a73444c1b775cfb6c81a40d312e055dd21a1f5eae6276e54de13f",
-    "skills/poteto-mode/scripts/watch-pr/github.test.ts": "9d9f644388f3516364d47f5eb96c1f977dd6f560bd6005b660d90d3b367cf4b9",
-    "skills/poteto-mode/scripts/watch-pr/github.ts": "7ba193190d488c8ce0982c85234ebea026e9a595703e99a3c3df0fcd640ddd18",
-    "skills/poteto-mode/scripts/watch-pr/policy.test.ts": "7ee38c20ed605f4a255f1f78e5a4be56b3563fcd8d3d65cfeea58d44c3f58d53",
-    "skills/poteto-mode/scripts/watch-pr/policy.ts": "2d4823aeea788acab258ec60eb52e7b9e3a23a6649850af128d6ada5c33d7778",
-    "skills/poteto-mode/scripts/watch-pr/render.ts": "2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604",
-    "skills/poteto-mode/scripts/watch-pr/tsconfig.json": "1ecccc72320b086c63ce3f73c959896fd747363e63553b3b1136296ea4069e45",
-    "skills/poteto-mode/scripts/watch-pr/types.compile.ts": "621af4c9a664fbf699a9737efccdc248abb416df8819c9dc5f824beae2b9b1d6",
-    "skills/poteto-mode/scripts/watch-pr/types.ts": "daa66c56220bae084c18cc6d3b0a2c66c0e72206d298e40973b44ee085ce16d2",
-    "skills/poteto-mode/scripts/watch-pr/watch-pr": "d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4",
+    "skills/poteto-mode/references/bugbot-triage.md": "2a366b10f575481d462ab160961f46b6199c9e290f0efe23d5bdade651d13b98",
     "skills/poteto-mode/scripts/worktree-audit.sh": "d60cb0ffc0d448c3fa5e2433f28611e022adb876be240839ec81fefad2161977",
-    "skills/poteto-mode/SKILL.md": "8dc294b24c25a8f2ba3726dde141a555026d99e75b7ce1125822fb430a12e997",
+    "skills/poteto-mode/SKILL.md": "f4797a9d2ce2d88314d5cf472b3d43e02fe90238a1d98e7e9f37e5e697e7c410",
     "skills/principle-attack-the-premise/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-attack-the-premise/SKILL.md": "6a932884daad4aa189e9b5d1665226bbc75621d4d2a398fd4003bebd382f4599",
     "skills/principle-boundary-discipline/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -535,7 +509,7 @@
     "skills/principle-foundational-thinking/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-foundational-thinking/SKILL.md": "864b827e8199d946ce58beca0f89c4ed4099ed6e426fb698a3aaa45de2a9eea2",
     "skills/principle-guard-the-context-window/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/principle-guard-the-context-window/SKILL.md": "af0b9dd70b43628ce4a59a4d332e9d9ad055084e460f430e7a757495c627e81a",
+    "skills/principle-guard-the-context-window/SKILL.md": "42b46050bb2ba17c43d65a05304d3bd9ce363a086bb58aa1ebee8d42413c35cd",
     "skills/principle-laziness-protocol/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-laziness-protocol/SKILL.md": "1be6e7a435f26a75a76eb848b9c3d611b9977d0f5822361753244da25ca3ca45",
     "skills/principle-make-operations-idempotent/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -557,7 +531,7 @@
     "skills/principle-separate-before-serializing-shared-state/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-separate-before-serializing-shared-state/SKILL.md": "05294b40448e927c5da1c7b6f5c6b9fed3744637e3833d2d948b9154a9dd00bb",
     "skills/principle-sequence-verifiable-units/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/principle-sequence-verifiable-units/SKILL.md": "2ccbbacc56ace5afdfb8670cef19d7bd009fb2a0033b9a741cbdf2b6baf72187",
+    "skills/principle-sequence-verifiable-units/SKILL.md": "0978ac494bcf31a425df8fe498632e631cc7cb00346a96b28dd4ec586b6681b4",
     "skills/principle-subtract-before-you-add/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-subtract-before-you-add/SKILL.md": "8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f",
     "skills/principle-test-behavior-not-implementation/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -988,7 +962,7 @@
     "skills/statechart/scripts/worker.ts": "1f18ed5ef806982e05e8a40fc217e88257700b28b63cb4acbd647872f85f782b",
     "skills/statechart/SKILL.md": "010b7b4532406739b1c3a426d1a45f02bb618a42561fc96b3976e064a7f8384d",
     "skills/swarm/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/swarm/SKILL.md": "8c0b6320d744177755e02e752b4b7a928b2b94baa088736e2265b4754508a470",
+    "skills/swarm/SKILL.md": "c5c987c6c26cb46196065827bcd683fff019fad10536e996b8da2cf74106a997",
     "skills/tdd/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/tdd/SKILL.md": "eeb868e2dfebee528d730a67d7b17498fac4bb85dec2e38bc5c5176aca4d5d2f",
     "skills/teach/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -1019,10 +993,34 @@
   },
   "patches": [
     {
+      "source": "skills/poteto-mode/playbooks/authoring-a-skill.md",
+      "file": "vendor/pstack-patches/authoring-a-skill.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "5edba911d0651715c890e38ca007c145f958227944620395d28a3986449ea1f5"
+    },
+    {
       "source": "skills/automate-me",
       "file": "vendor/pstack-patches/automate-me.json",
       "reason": "The mining pass requires Cursor's system-provided transcript directory; other harnesses expose scoped native history instead.",
       "sha256": "227cbadfa5f4a858b078613e6970b34334eec86d18473393907e2c7b9fa13a1c"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/autonomous-run.md",
+      "file": "vendor/pstack-patches/autonomous-run.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) keeps autonomous work open-ended under the watchdog and routes completed changes through the single native delivery authority.",
+      "sha256": "e409061e17e3abf7b77bb8faff2ee04b427ac25350cb2b95b69ee4525b0d87b8"
+    },
+    {
+      "source": "skills/benchmark-checklist",
+      "file": "vendor/pstack-patches/benchmark-checklist.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "7cd08ed7dec6334789c11bcf04c28dc7fcc71fddbee2c729462304b265b58178"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/bug-fix.md",
+      "file": "vendor/pstack-patches/bug-fix.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "defad87705877354d3aabb232edc7b9d10f1ff95ba056054c21e85a6f4c82afe"
     },
     {
       "source": "skills/poteto-mode/playbooks/eval.md",
@@ -1031,10 +1029,58 @@
       "sha256": "e56963b0bf6ed9d4b8265b65e7689bb12ac496d165f93b5ba2258c6f24aae250"
     },
     {
+      "source": "skills/poteto-mode/playbooks/feature.md",
+      "file": "vendor/pstack-patches/feature.json",
+      "reason": "Phaedrus's 2026-11-03 delivery directive: each useful slice builds and verifies its own running consumer path before merge; fast CI and one critical-correctness/security review belong only to the pre-deploy release gate. Open-ended owners receive watchdog supervision, not review separation or wall-clock caps.",
+      "sha256": "feb392d2ffe50d71ce2ea566bd706b644d40a608ccea5f0b2b7eb1bb5bd6e108"
+    },
+    {
+      "source": "skills/figure-it-out",
+      "file": "vendor/pstack-patches/figure-it-out.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) removes a delegated-work judge and time-based checkpoints as delivery gates while preserving evidence-driven experimentation and independent blind instruction evaluation.",
+      "sha256": "71dc05eed75d63d40f14a0de9fff6de0a4cc291d093ea1e87d174608d94fe88d"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/hillclimb.md",
+      "file": "vendor/pstack-patches/hillclimb.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "1080fd4d8e6637d946038062e7879bad891b3c5ca7421f31d495e199433c3769"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/investigation.md",
+      "file": "vendor/pstack-patches/investigation.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "c1cdfc6d6c485b4dce02b91e677b28ff47c6877bcd726c5a72d430d0af7cb2fc"
+    },
+    {
+      "source": "skills/ketchup",
+      "file": "vendor/pstack-patches/ketchup.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) leaves already-authorized merge and release work with the agent; a read-only catch-up must not invent a user merge or approval gate.",
+      "sha256": "dc7b777474fd63d39749d77ec02f78797a190e1746381edb40d662765b29b73e"
+    },
+    {
       "source": "skills/make-bot-ui",
       "file": "vendor/pstack-patches/make-bot-ui.json",
       "reason": "Cursor's update_state routine, secret-request card and webhook wake envelope are unavailable in OMP, Claude Code, Codex and pi; use an authorized native webhook receiver and credential injection.",
       "sha256": "55cbff980a332070d9ad49cc86d89d0eefa85a154f9cd8a9330be5bc9395c475"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/multi-phase-plan.md",
+      "file": "vendor/pstack-patches/multi-phase-plan.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) removes fixed verifier swarms, forced rebases, exact-head CI and user premerge UI approval from inherited planning; native ship-loop owns delivery.",
+      "sha256": "1b7a65473a296514879e4c6007c264bc81da37073e84ee8fda7876d550736605"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/orchestrate.md",
+      "file": "vendor/pstack-patches/orchestrate.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) removes inherited per-PR independent verifier gates, head-bound verdict rounds and fixed worker/retry caps; native ship-loop and watchdog own delivery and supervision.",
+      "sha256": "610a944d4b23070edf9f1e677b50a8a19d2ef639320ec61818daf79f3eabb184"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/perf-issue.md",
+      "file": "vendor/pstack-patches/perf-issue.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "2f69d68d80fc22f6f4442af3f330ca65cdf78586f64e63b89430aca10c54e0ea"
     },
     {
       "source": "agents/poteto-agent.md",
@@ -1045,20 +1091,38 @@
     {
       "source": "skills/poteto-help",
       "file": "vendor/pstack-patches/poteto-help.json",
-      "reason": "Cursor's marketplace, Custom Mode and setup-state instructions would direct native Mistystack users to the wrong installation.",
-      "sha256": "9dbdea817c4eb36cd25a1bb7b46a052895bf54d4f6f1f7b03b13a54dd054db5b"
+      "reason": "Preserve native installation portability; owner directive 2026-11-03 (ADR0023) removes inherited PR approval/CI workflows and time-cap recipes in favor of native ship-loop and watchdog.",
+      "sha256": "7ddc7ff8a361fb857d1658cc5d579346288ae40b14370e131d0d2d99ab7099b6"
     },
     {
       "source": "skills/poteto-mode",
       "file": "vendor/pstack-patches/poteto-mode.json",
-      "reason": "The worktree auditor hardcodes Cursor history and treats its absence as inactivity; accept scoped exported history and hold unknown activity for review.",
-      "sha256": "94c6a4c4e83e82cbdeab0a2febcbec2c012dedd271c2f3227e0f5634b4a9021d"
+      "reason": "Preserve native history portability; owner directive 2026-11-03 (ADR0023) replaces inherited PR review and CI merge gates with native ship-loop delivery and removes their obsolete procedures and tools.",
+      "sha256": "79a3dbfe4462738593592805dc72819e1445c5c1b1a84846adcfa32819880775"
+    },
+    {
+      "source": "skills/principle-guard-the-context-window",
+      "file": "vendor/pstack-patches/principle-guard-the-context-window.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) keeps agents open-ended under supervision; context management must not impose turn or runtime caps.",
+      "sha256": "99b4f3b15e2e97889314243f1e8056766f24829939421d23135fd68d70882410"
+    },
+    {
+      "source": "skills/principle-sequence-verifiable-units",
+      "file": "vendor/pstack-patches/principle-sequence-verifiable-units.json",
+      "reason": "Phaedrus's 2026-11-03 delivery directive makes each slice useful alone and proved on its own running consumer path before merge. Independent slices can proceed in parallel; CI and one critical-correctness/security review gate deployment, not merge.",
+      "sha256": "b82085ee596407c09514e3cd3c2c5c5c5ffd178022ccb8790df8cd913d55bc15"
     },
     {
       "source": "skills/recall",
       "file": "vendor/pstack-patches/recall.json",
       "reason": "Cursor's workspace-slug transcript layout is not a portable history source; use the destination harness's scoped history.",
       "sha256": "21949110d98563eae52834d98ac64232b84b55362933a5f8054fbc39f4e86b9d"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/refactoring.md",
+      "file": "vendor/pstack-patches/refactoring.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "79fca29471feefcc44a477413fef8135701489256a8add79a920409b12f57e86"
     },
     {
       "source": "skills/reflect",
@@ -1083,6 +1147,18 @@
       "file": "vendor/pstack-patches/show-me-your-work.json",
       "reason": "The audit requires a Cursor transcript path; the same audit must use the destination harness's actual scoped session evidence.",
       "sha256": "4bb93a04ed5086ed7b1b79109365a97cff57bd2d53d2141addcdffd69ace18ff"
+    },
+    {
+      "source": "skills/swarm",
+      "file": "vendor/pstack-patches/swarm.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) keeps required agents open-ended under the watchdog; fixed respawn allowances must not abandon actionable coverage or become delivery gates.",
+      "sha256": "87da09571cfeef8c2a2af3ccaf241fee31b98f9e0c68e6430aaca28144198644"
+    },
+    {
+      "source": "skills/poteto-mode/playbooks/visual-parity.md",
+      "file": "vendor/pstack-patches/visual-parity.json",
+      "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+      "sha256": "eed5e9579d6d8b896042dec833543f33433ecc74daa8836d293edf16aefa578b"
     }
   ],
   "references": [

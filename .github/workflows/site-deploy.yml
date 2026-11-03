@@ -1,75 +1,60 @@
 name: Site deploy
-
-# Every push to master deploys https://stack.mistystep.io (ADR 0018). The site renders the
-# whole repository, so any master change can change it.
-#
-# Queue: one group with cancel-in-progress. A newer run cancels an older in-progress or pending
-# one, and every run builds master as it is when the run starts (not the triggering commit), so
-# the surviving run always deploys the newest master. A stale rerun or a dispatch from another
-# branch also builds current master. Proof of this sequence on a disposable repository:
-# https://github.com/moomooskycow/deploy-queue-proof-20261030/actions
-
 on:
-  push:
-    branches: [master]
-  workflow_dispatch:
-
+  workflow_call:
+    inputs:
+      revision:
+        description: Candidate that passed release CI and critical assessment
+        required: true
+        type: string
 permissions:
   contents: read
-
 concurrency:
   group: stack-site-production
-  cancel-in-progress: true
-
+  cancel-in-progress: false
 jobs:
   deploy:
     runs-on: [self-hosted, hetzner-ci, mistystack-ci]
-    timeout-minutes: 20
     defaults:
       run:
         working-directory: site
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: master
-          fetch-depth: 0
+          ref: ${{ inputs.revision }}
           persist-credentials: false
-      - name: Record the revision being built
-        id: rev
-        run: |
-          sha="$(git rev-parse HEAD)"
-          echo "sha=$sha" >> "$GITHUB_OUTPUT"
-          echo "Building master at $sha (triggered by $GITHUB_SHA)" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
           cache-dependency-path: site/package-lock.json
-      - name: Install the pinned site dependencies
+      - uses: actions/cache@v4
+        id: dependencies
+        with:
+          path: site/node_modules
+          key: mistystack-site-linux-node22-${{ hashFiles('site/package-lock.json') }}
+      - name: Install pinned deployment tools on cache miss
+        if: steps.dependencies.outputs.cache-hit != 'true'
         run: npm ci
-      - name: Build the static site and search index
-        env:
-          SITE_COMMIT: ${{ steps.rev.outputs.sha }}
-        run: npm run build
-      - name: Check the built artifact
-        env:
-          SITE_COMMIT: ${{ steps.rev.outputs.sha }}
-        run: npm run check
-      - name: Deploy mistystack-site
+      - name: Download the artifact already checked by release CI
+        uses: actions/download-artifact@v4
+        with:
+          name: mistystack-site-${{ inputs.revision }}
+          path: site/dist/
+      - name: Deploy the checked bytes
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler deploy
-      - name: Smoke stack.mistystep.io and read back the built revision
+        run: ./node_modules/.bin/wrangler deploy
+      - name: Prove live identity and reading journey
         env:
-          BUILT: ${{ steps.rev.outputs.sha }}
+          BUILT: ${{ inputs.revision }}
         run: |
           for i in $(seq 1 12); do
             if curl -fsSL "https://stack.mistystep.io/?v=$BUILT" | grep -q "$BUILT"; then
-              for path in /guide/ /library/ /evals/ /search/; do
+              for path in /guide/verify-and-ship/ /library/skills/ship-loop/ /library/skills/watchdog/ /search/; do
                 curl -fsS -o /dev/null "https://stack.mistystep.io$path"
               done
-              echo "stack.mistystep.io serves $BUILT" >> "$GITHUB_STEP_SUMMARY"
+              echo "stack.mistystep.io serves $BUILT; delivery/watchdog reading journey passed" >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi
             sleep 10

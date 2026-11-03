@@ -4,6 +4,6 @@ Use [Misty's playbook routing](../../skills/misty/SKILL.md#playbooks) for the ki
 
 Follow [Misty's rigor-gated delegation](../../skills/misty/SKILL.md) when briefing workers. [Setup](../../skills/setup-mistystack/SKILL.md) assigns native rigor roles. The [names adapter](../../skills/misty/harnesses/pstack-names.md) maps pstack responsibilities and second opinions without a second model roster in this guide.
 
-Use your environment's isolation skill for execution under [the core's placement rule](../../rules/core.md). The harness or workstation names the isolated disposable environment and owns its provider-specific procedure.
+Use [boat-workers](../../skills/boat-workers/SKILL.md) for one saved-toolchain-snapshot worker per slice. Reuse it, stop it when idle, resume it as needed and delete it after collecting the result. [Watchdog](../../skills/watchdog/SKILL.md) supervises open-ended agents by observed progress and recovery, not elapsed time.
 
 Next: [Verify and ship](05-verify-and-ship.md).

@@ -2,7 +2,7 @@
 
 In Mistystack, read [the pstack names adapter](../../misty/harnesses/pstack-names.md) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.
 
-Use this reference when the Babysit playbook (`../playbooks/babysit.md`) handles Bugbot or review-automation comments. The goal is not to ignore Bugbot by default. The goal is to stop treating every comment as a required code change.
+Use this reference when assessing Bugbot or review-automation comments. Treat a comment as a claim to verify, not a required code change. The installed [ship-loop](../../ship-loop/SKILL.md) skill owns delivery and the single release assessment.
 
 ## Decision rubric
 
@@ -85,9 +85,9 @@ Do not auto-skip these categories, even if a previous PR dismissed something sim
 
 Historical data showed humans sometimes dismiss security/data-flow comments. Treat those as owner judgment calls, not team-wide skip rules.
 
-## Candidate learnings from recent babysits
+## Candidate learnings from review comments
 
-Append new candidate learnings here during or after babysitting when they look team-useful but not yet mature. Prefer promoting recurring candidates into the section above once several PRs confirm the pattern.
+Append new candidate learnings here when triaging review comments that look team-useful but are not yet mature. Prefer promoting recurring candidates into the section above once several changes confirm the pattern.
 
 ### Manual reimplementations of native browser behavior
 

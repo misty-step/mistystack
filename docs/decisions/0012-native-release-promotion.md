@@ -2,6 +2,7 @@
 
 - Status: accepted
 - Date: 2026-10-15
+- Delivery placement superseded by [0023](0023-live-verification-and-release-gate.md), 2026-11-03.
 
 ## Context
 
@@ -13,10 +14,10 @@ would not fix the missing merge.
 ## Decision
 
 Keep one root Landmark release unit and follow the
-[release convention](../release-convention.md). Native GitHub auto-merge waits
-for required checks on generated release PRs. Squash-only merges use PR_TITLE
-and BLANK; branch protection requires current-base verification and the
-Conventional Commit title check, with no bypass or second release review.
+[release convention](../release-convention.md). Merge generated notes without
+CI or review. Fast CI and one critical-correctness/security assessment gate the
+landed release candidate before publication/deployment. Squash-only merges use
+PR_TITLE and BLANK; no status check or review is a merge requirement.
 
 The immutable baseline is v0.2.0 at
 371658088d55357f5394e910828d918fe66accdc. Keep Landmark's existing pre-stable

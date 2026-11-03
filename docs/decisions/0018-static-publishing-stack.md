@@ -1,6 +1,8 @@
 # 0018: Static publishing, not a full-stack service
 
 Status: accepted, 2026-10-28; deployment commissioned, 2026-10-29.
+Delivery placement and scheduling are superseded by
+[0023](0023-live-verification-and-release-gate.md), 2026-11-03.
 
 ## Context
 
@@ -54,19 +56,16 @@ The method stays harness-neutral and has one content home. Website dependencies
 and build output stay inside `site/`, outside native plugin/package discovery.
 The tradeoff is a JavaScript build toolchain and a separately maintained content
 transform; unresolved source links, fragments or required metadata must fail the
-build rather than silently omit material. The site renders original decision
-bodies and identifies known supersession instead of rewriting historical claims.
+build rather than silently omit material. Decisions disclose supersession;
+retired executable delivery instructions are removed and Git retains their history.
 
-**Deployment commissioned.** Phaedrus commissioned deployment of
-`stack.mistystep.io` on 2026-10-29 and its automation on 2026-10-30. Production
-serves `master`: on every push to `master`,
-[`site-deploy.yml`](../../.github/workflows/site-deploy.yml) builds and checks
-`site/` at the master tip current when the run starts, publishes `site/dist/` to
-the Worker and custom domain named in `site/wrangler.jsonc` with a token scoped
-to Workers scripts and the `mistystep.io` zone's routes, and reads that revision
-back from the live page. A newer run cancels an older one, so the survivor always
-deploys the newest master. Its `workers.dev` preview URLs send
-`X-Robots-Tag: noindex`.
+**Deployment commissioned.** Phaedrus commissioned `stack.mistystep.io`
+deployment on 2026-10-29 and automation on 2026-10-30. Under
+[0023](0023-live-verification-and-release-gate.md), production is promoted by the
+dispatched release workflow, after fast CI and one critical assessment, using
+the already checked `site/dist/` artifact. The target remains the Worker and
+custom domain in `site/wrangler.jsonc`; serving identity is read back live.
+PRs and pushes do not start CI/deployment. Preview URLs retain `noindex`.
 
 Telemetry is open in
 [#622](https://github.com/misty-step/mistystack/issues/622), and the

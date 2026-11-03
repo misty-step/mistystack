@@ -1,0 +1,11 @@
+{
+  "source": "skills/poteto-mode/playbooks/investigation.md",
+  "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
+  "edits": [
+    {
+      "file": "",
+      "before": "No PR, no babysit, no `architect` unless the investigation precedes a code change. If it does, hand back to the user and re-route to Bug fix or Feature.\n",
+      "after": "An investigation produces a cited answer, not a delivery run. If a code change is also authorized, continue under Bug fix or Feature and use the installed [ship-loop](../../ship-loop/SKILL.md) skill for delivery.\n"
+    }
+  ]
+}
