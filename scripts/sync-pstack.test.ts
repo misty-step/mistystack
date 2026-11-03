@@ -10,7 +10,7 @@ afterEach(() => {
 	for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
 
-async function fixture() {
+async function fixture(playbookHeading = "#") {
 	const scratch = process.env.TMPDIR ?? join(homedir(), ".cache/tmp");
 	mkdirSync(scratch, { recursive: true });
 	const root = mkdtempSync(join(scratch, "pstack-test-"));
@@ -27,7 +27,7 @@ async function fixture() {
 	put("upstream/pstack/skills/principle-proof/notes.md", "# Notes\n\nUse the `Task` tool.\n");
 	put("upstream/pstack/skills/workflow/SKILL.md", "---\nname: workflow\ndescription: Work.\n---\n\n# Workflow\n\nUse generalPurpose.\n");
 	put("upstream/pstack/skills/poteto-mode/SKILL.md", "# Upstream router\n");
-	put("upstream/pstack/skills/poteto-mode/playbooks/bug-fix.md", "# Bug fix\n\nUse `subagent_type` and `run_in_background`.\n");
+	put("upstream/pstack/skills/poteto-mode/playbooks/bug-fix.md", `${playbookHeading} Bug fix\n\nUse \`subagent_type\` and \`run_in_background\`.\n`);
 	put("upstream/pstack/agents/poteto-agent.md", "# Agent\n");
 	const git = (...args: string[]) => {
 		const result = Bun.spawnSync(["git", "-C", source, ...args], { stdout: "pipe", stderr: "pipe" });
@@ -88,7 +88,7 @@ test("sync preserves upstream bytes, executable support and explicit-only Codex 
 	expect(checkPstack(root)).toEqual([]);
 });
 
-test("only Markdown using Cursor names receives one harness pointer after its H1", async () => {
+test("only Markdown using Cursor names receives one harness pointer after its first heading", async () => {
 	const { root, source, lock, save } = await fixture();
 	expect(readFileSync(join(root, "skills/principle-proof/notes.md"), "utf8")).toBe("# Notes\n\nIn Mistystack, read [the pstack names adapter](../misty/harnesses/pstack-names.md) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.\n\nUse the `Task` tool.\n");
 	expect(readFileSync(join(root, "skills/misty/playbooks/bug-fix.md"), "utf8")).toContain("# Bug fix\n\nIn Mistystack, read [the pstack names adapter](../harnesses/pstack-names.md)");
@@ -97,6 +97,12 @@ test("only Markdown using Cursor names receives one harness pointer after its H1
 	await updatePstack(root, lock.commit, source);
 	expect(readFileSync(join(root, "skills/workflow/SKILL.md"), "utf8").match(/In Mistystack/g)).toHaveLength(1);
 	expect(existsSync(join(root, "skills/workflow/agents/openai.yaml"))).toBe(false);
+	expect(checkPstack(root)).toEqual([]);
+});
+
+test("sync preserves a pstack H3 playbook and inserts only the harness pointer", async () => {
+	const { root } = await fixture("###");
+	expect(readFileSync(join(root, "skills/misty/playbooks/bug-fix.md"), "utf8")).toBe("### Bug fix\n\nIn Mistystack, read [the pstack names adapter](../harnesses/pstack-names.md) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.\n\nUse `subagent_type` and `run_in_background`.\n");
 	expect(checkPstack(root)).toEqual([]);
 });
 

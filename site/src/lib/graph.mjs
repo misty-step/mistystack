@@ -302,14 +302,16 @@ export async function createGraph(entries) {
   const documents = [];
   for (const entry of entries) {
     const id = entry.id.replaceAll('\\', '/');
+    const kind = kindFor(id);
     const raw = readFileSync(path.join(repoRoot, id), 'utf8');
     const parsed = parseSource(id, raw);
     const ast = markdown.parse(parsed.body);
-    const h1 = ast.children.find((node) => node.type === 'heading' && node.depth === 1);
+    const h1 = ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
     if (!h1) throw new Error(`${id}: a document needs an H1 title`);
+    h1.depth = 1; // Normalize the rendered title, not the vendored source bytes.
     const doc = {
       id, raw, ...parsed, ast, hast: await toHtml.run(ast), title: text(h1),
-      kind: kindFor(id), url: routeFor(id, parsed.data), headings: [],
+      kind, url: routeFor(id, parsed.data), headings: [],
       source: { path: id, commit: release.commit, blobUrl: blobUrl(id), lineRange: [1, raw.split('\n').length - (raw.endsWith('\n') ? 1 : 0)] },
       order: Number(/^docs\/guide\/(\d+)/.exec(id)?.[1] ?? 0),
       parentId: id.startsWith('skills/') && !id.endsWith('/SKILL.md') ? `skills/${id.split('/')[1]}/SKILL.md` : null,

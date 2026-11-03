@@ -10,11 +10,12 @@ before work starts.
 
 [Agent design](skills/agent-design/SKILL.md) owns skill-writing,
 [verification](skills/verification/SKILL.md) owns real-path proof and
-[release-watch](skills/release-watch/SKILL.md) owns live-break recovery. The
-[principle index](skills/misty/SKILL.md#principles) routes to pstack's vendored
-foundation and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns
-the pin and vendored set; [ADR 0021](docs/decisions/0021-pstack-is-the-foundation.md)
-keeps extensions and overrides outside upstream bytes.
+[release-watch](skills/release-watch/SKILL.md) owns live-break recovery.
+The [principle index](skills/misty/SKILL.md#principles) and
+[playbook routing](skills/misty/SKILL.md#routing) reach pstack's vendored foundation
+and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns the pin and
+vendored set; [ADR 0021](docs/decisions/0021-pstack-is-the-foundation.md) keeps
+extensions and overrides outside upstream bytes.
 
 Fleet machinery lives in the private `misty-step/workstation` repository.
 

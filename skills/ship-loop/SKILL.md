@@ -20,6 +20,8 @@ including documents and measurements, take the ordinary round.
 
 Carry confirmed intent forward. Unsettled product intent goes to the `grill` skill;
 a builder needs the briefing contract in the `misty` skill and [roles.md](roles.md).
+Select the task procedure through [Misty's playbook routing](../misty/SKILL.md#routing).
+The vendored playbooks' Opening a PR and shipping steps enter this loop.
 Split the whole outcome into independently useful PRs, each keeping main working.
 Give each unit a bounded diff and a concrete risk check; infrastructure alone
 earns a slice only when it provides a usable consumer contract. Apply
