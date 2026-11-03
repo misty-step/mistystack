@@ -20,12 +20,11 @@ function fail(message) {
   throw new Error(`Home page: ${message}`);
 }
 
-function word(list, n, what) {
-  if (!Number.isInteger(n) || !list[n]) fail(`no word for ${what} ${n}`);
-  return list[n];
+function cardinal(n, what) {
+  if (!Number.isSafeInteger(n) || n < 0) fail(`invalid count for ${what}: ${n}`);
+  return CARDINALS[n] ?? String(n);
 }
 
-const cardinal = (n, what) => word(CARDINALS, n, what);
 const Cardinal = (n, what) => cardinal(n, what).replace(/^./, (c) => c.toUpperCase());
 const series = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`);
 const plain = (node) => node.value ?? (node.children ?? []).map(plain).join('');

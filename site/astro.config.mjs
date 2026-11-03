@@ -40,7 +40,6 @@ export default defineConfig({
     '/library/principles/prove-it-on-the-real-path/': '/library/skills/verification/',
     '/library/principles/vertical-slices/': '/library/principles/sequence-verifiable-units/',
     '/library/principles/skill-diet/': '/library/skills/agent-design/',
-    '/library/playbooks/authoring-a-skill/': '/library/skills/agent-design/',
     '/library/playbooks/incident/': '/library/skills/release-watch/recovery/',
     '/library/playbooks/refactor/': '/library/playbooks/refactoring/',
   },
