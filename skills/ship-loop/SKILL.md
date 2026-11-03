@@ -40,6 +40,10 @@ With two open blocker PRs, wait for one to land.
 Done when each unit has an Oracle, a base and the [rigor role](roles.md#rigor)
 assigned by the `setup-mistystack` skill.
 
+For the unit's safety fact, use pstack's [blast-radius](../blast-radius/SKILL.md).
+Its real-code proof belongs in this round's existing QA/review and judge evidence,
+not a second review panel; Misty's delegation and shipping overrides still apply.
+
 ## 2. Run the round
 
 Use this skill's installed directory as `<skill-dir>`. Run

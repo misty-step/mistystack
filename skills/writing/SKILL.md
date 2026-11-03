@@ -10,12 +10,21 @@ metadata:
 
 # Writing
 
-1. Lead with what changes for the consumer, then the maintainer. Use the field's exact terms and `DOMAIN.md` names. State the conclusion, evidence and required decision; cut chronology that changes none of them.
-2. Write the specification directly: actor, action, condition and observable result. State the target behavior positively. Pair a necessary hard guardrail with what to do instead. Code comments state only a non-obvious why. Let the text carry its register rather than adding persona or tone instructions.
-3. For agent-to-operator prose, apply Simplified Technical English: one instruction per sentence, one meaning per term, active verbs, conditions before steps and complete sentences. Keep articles and verbs; terse is not telegraphic. Read [prose.md](prose.md) for the editing pass and document-mode guidance.
+Use pstack's [unslop](../unslop/SKILL.md) to edit prose,
+[technical-writing](../technical-writing/SKILL.md) for documents, and
+[bro](../bro/SKILL.md) to restate the last message plainly.
+
+Misty adds these rules:
+
+1. Lead with the consumer's change, then the maintainer's. Use the field's exact terms and `DOMAIN.md` names. State the conclusion, evidence and required decision; cut chronology that changes none of them.
+2. Write specifications as actor, action, condition and observable result. State the target positively and pair a hard guardrail with what to do instead. Comments explain only a non-obvious why. Let the text carry its register rather than adding persona instructions.
+3. Apply Simplified Technical English to agent-to-operator prose: one instruction per sentence, one meaning per term, active verbs, conditions before steps and complete sentences. Keep articles and verbs. Read [prose.md](prose.md) for Misty's editing qualifications.
 4. Follow the core's claim rule and the `misty` skill's report-link and delivery-state distinctions.
-5. For a commit or PR, read [publications.md](publications.md). Use a Conventional Commit title. A PR states why, what changed, `Story:`, `Rigor:`, concrete risk and observed verification; link long evidence instead of pasting logs.
+5. For commits and PRs, use a Conventional Commit title and [publications.md](publications.md). A PR states why, what changed, `Story:`, `Rigor:`, concrete risk and observed verification; link long evidence.
 
-When asked to restate plainly, repeat the last message without jargon, as one person to another.
+Pstack's punctuation bans do not apply in Misty prose, including its em-dash and
+mid-sentence-colon bans. Use punctuation for clarity.
 
-Done when the reader can identify what changed for them, what the evidence supports, and any decision or blocker without decoding jargon or opening a transcript. Preserve uncertainty and meaning through the edit. Use punctuation for clarity; punctuation bans are not part of this skill.
+Done when the reader can identify the change, supported evidence and any decision
+or blocker without decoding jargon or opening a transcript. Preserve meaning
+and uncertainty through the edit.

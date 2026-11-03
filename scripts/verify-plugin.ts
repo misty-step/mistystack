@@ -285,7 +285,8 @@ export function lintPlugin(root: string, strict = false) {
 			}
 			if (/^[/\\]/.test(decoded)) continue;
 			const target = resolve(dirname(join(root, file)), decoded);
-			if (!existsSync(target) || !statSync(target).isFile()) {
+			const targetStat = existsSync(target) ? statSync(target) : undefined;
+			if (!targetStat?.isFile() && !targetStat?.isDirectory()) {
 				const source = vendoredSources.get(file);
 				const upstreamTarget = source && posix.normalize(posix.join(posix.dirname(source), decoded));
 				if (upstreamTarget && upstreamOnly.some(source => upstreamTarget === source || upstreamTarget.startsWith(`${source}/`))) continue;

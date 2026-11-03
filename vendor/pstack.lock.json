@@ -2,53 +2,48 @@
   "repo": "cursor/plugins",
   "commit": "c742dd61706fbacc1b95f1a20b7b988cf096ce6c",
   "tree": "4719e1c4b4c43bac85d4206a8b41dd2899769c1c",
-  "generated-at": "2026-11-03T00:28:24.030Z",
+  "generated-at": "2026-11-03T01:50:02.044Z",
   "inventory-sha256": "731ff23c64fa23b309a9ac197b01e6f5ec7d77e7f7db9f066aa1d7e321ee0966",
   "include": [
     {
       "source": "skills/benchmark-checklist",
       "destination": "skills/benchmark-checklist",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/blast-radius",
       "destination": "skills/blast-radius",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/bro",
       "destination": "skills/bro",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/correct",
       "destination": "skills/correct",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/create-verification-skill",
       "destination": "skills/create-verification-skill",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/how",
       "destination": "skills/how",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/in-your-own-words",
       "destination": "skills/in-your-own-words",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/maintain-verification-skill",
       "destination": "skills/maintain-verification-skill",
-      "vendored": false
-    },
-    {
-      "source": "skills/no-comments",
-      "destination": "skills/no-comments",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/bug-fix.md",
@@ -218,28 +213,28 @@
     {
       "source": "skills/sharpen",
       "destination": "skills/sharpen",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/tdd",
       "destination": "skills/tdd",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/technical-writing",
       "destination": "skills/technical-writing",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/unslop",
       "destination": "skills/unslop",
-      "vendored": false
+      "vendored": true
     }
   ],
   "exclude": [
     {
       "source": "agents/comment-sicko.md",
-      "reason": "The no-comments skill covers this review discipline."
+      "reason": "Its comment-deletion rubric conflicts with Misty's non-obvious-why comment rule; writing's rule governs."
     },
     {
       "source": "agents/poteto-agent.md",
@@ -284,6 +279,10 @@
     {
       "source": "skills/make-bot-ui",
       "reason": "Cursor-coupled or personal-mode/transcript scaffolding; Daybook and Linear own context."
+    },
+    {
+      "source": "skills/no-comments",
+      "reason": "Its review step requires the excluded comment-sicko agent, whose rubric conflicts with Misty's non-obvious-why comment rule; writing's rule governs."
     },
     {
       "source": "skills/poteto-help",
@@ -387,6 +386,27 @@
     }
   ],
   "files": {
+    "skills/benchmark-checklist/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/benchmark-checklist/SKILL.md": "ba109e96c8f6c1c391baccf19e5d11e14370df7b3f2605e1572cd565a6c0fca0",
+    "skills/blast-radius/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/blast-radius/SKILL.md": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436",
+    "skills/bro/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/bro/SKILL.md": "aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb",
+    "skills/correct/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/correct/SKILL.md": "e347045d00c967a0b831ef883cc6ac79d21329aa10b5968637df95de7febf0ba",
+    "skills/create-verification-skill/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/create-verification-skill/references/feature-map-example/create-note.md": "644a44c74f35d38c2feb7cd05a0121fdebbb623e8dc376c185b565a581d1ccf7",
+    "skills/create-verification-skill/references/feature-map-example/README.md": "cb7bd782cf89968a4ba3d58a5151db837430db92d19a6f52a906973b77b516ba",
+    "skills/create-verification-skill/references/feature-map-example/search.md": "6e87b9e7f2791a7776ba1bb83f371cd285c306c67f19d245cc4dd6ca3015c823",
+    "skills/create-verification-skill/SKILL.md": "140cb61772a1737da5174be0ff055689bcae4394c45515fd20bc3442457c841b",
+    "skills/how/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/how/references/explainer-prompt.md": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff",
+    "skills/how/references/explorer-prompt.md": "6300128385ee940fd42ecb84b0e623435440a2dc283eae54ee4a52ba56947ba1",
+    "skills/how/SKILL.md": "717b103c02b672762068f604799eec34418280f39b034491995ccb04c19dbc74",
+    "skills/in-your-own-words/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/in-your-own-words/SKILL.md": "fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad",
+    "skills/maintain-verification-skill/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/maintain-verification-skill/SKILL.md": "9cf8813bfa8c2add3af5803ba1eeeb7b0cf208f26b6160ec727e1c69547f9d69",
     "skills/misty/playbooks/bug-fix.md": "f0c10f532b0ac4ffc5901b334118145b864deb2258157e8eabb826337196e9ea",
     "skills/misty/playbooks/eval.md": "6a095b6ced7426fea2cd8096c83cbf10e73d36c3fcf489f91fd2bbf5fc396e9c",
     "skills/misty/playbooks/feature.md": "d0a8bde6c524914f9071efa057496f36a4d0ebf355fd4b5e42801d11ecc0ecd7",
@@ -441,6 +461,14 @@
     "skills/principle-test-behavior-not-implementation/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-test-behavior-not-implementation/SKILL.md": "f7223698623b6a26fea49c751e466b38e6691b1f32ce841d3983e7ffbe2b74a6",
     "skills/principle-type-system-discipline/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/principle-type-system-discipline/SKILL.md": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106"
+    "skills/principle-type-system-discipline/SKILL.md": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106",
+    "skills/sharpen/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/sharpen/SKILL.md": "563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2",
+    "skills/tdd/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/tdd/SKILL.md": "eeb868e2dfebee528d730a67d7b17498fac4bb85dec2e38bc5c5176aca4d5d2f",
+    "skills/technical-writing/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/technical-writing/SKILL.md": "6e443616f51e93a5c47ef35324080c1acd55d204e5a2cabc4feb1378b47dc4c3",
+    "skills/unslop/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "skills/unslop/SKILL.md": "ccab208e315ce05e2fab8eeee2f7879f1289b5c6844840b2d307adf31c79144f"
   }
 }
