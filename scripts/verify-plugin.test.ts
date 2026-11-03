@@ -23,6 +23,7 @@ function fixture() {
 	put("rules/core.md", "---\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
 	const json = (path: string, value: unknown) => put(path, `${JSON.stringify(value)}\n`);
 	const hooks = (variable: string) => ({ SessionStart: [{ hooks: [{ type: "command", command: `cat "$${variable}/rules/core.md"` }] }] });
+	const lock = (value: object) => json("vendor/pstack.lock.json", { repo: "cursor/plugins", commit: "a".repeat(40), tree: "b".repeat(40), "inventory-sha256": "c".repeat(64), exclude: [], ...value });
 	const marketplace = { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }] };
 	json(".claude-plugin/plugin.json", { name: "mistystack", agents: ["./adapters/claude/agents/fixture.md"], hooks: hooks("CLAUDE_PLUGIN_ROOT") });
 	json(".claude-plugin/marketplace.json", marketplace);
@@ -38,7 +39,7 @@ function fixture() {
 	put("adapters/claude/agents/fixture.md", "---\nname: fixture\ndescription: Fixture worker.\n---\nComplete the assigned task.\n");
 	put("agents/fixture.md", "---\nname: fixture\ndescription: Fixture worker.\n---\nComplete the assigned task.\n");
 	put("adapters/pi/core.ts", 'import { readFileSync } from "node:fs";\nexport default function core(pi) {\nconst core = readFileSync(new URL("../../rules/core.md", import.meta.url), "utf8");\npi.on("before_agent_start", event => ({ systemPrompt: `${event.systemPrompt}\\n${core}` }));\n}\n');
-	return { root, put, skill, json };
+	return { root, put, skill, json, lock };
 }
 
 test.each([
@@ -259,11 +260,11 @@ test("reports every missing metadata field and a mismatched directory name", () 
 });
 
 test("lock-listed vendored skills keep upstream metadata but still require names, descriptions and explicit-only principles", () => {
-	const { root, put, json } = fixture();
+	const { root, put, lock } = fixture();
 	const file = "skills/principle-upstream/SKILL.md";
 	const source = "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n";
 	put(file, source);
-	json("vendor/pstack.lock.json", {
+	lock({
 		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true }],
 		files: { [file]: "a".repeat(64) },
 	});
@@ -275,7 +276,7 @@ test("lock-listed vendored skills keep upstream metadata but still require names
 		`${file}: disable-model-invocation must be true`,
 	]);
 	put(file, source);
-	json("vendor/pstack.lock.json", {
+	lock({
 		include: [{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: false }],
 		files: {},
 	});
@@ -283,12 +284,12 @@ test("lock-listed vendored skills keep upstream metadata but still require names
 });
 
 test("only locked vendored files may refer to classified, unvendored upstream targets", () => {
-	const { root, put, json, skill } = fixture();
+	const { root, put, lock, skill } = fixture();
 	const file = "skills/principle-upstream/SKILL.md";
 	const notes = "skills/principle-upstream/reference.md";
 	put(file, "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n");
 	put(notes, "[Excluded](../upstream-excluded/SKILL.md) and [pending](../upstream-pending/SKILL.md). Read the `upstream-excluded` skill.\n");
-	json("vendor/pstack.lock.json", {
+	lock({
 		include: [
 			{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true },
 			{ source: "skills/upstream-pending", destination: "skills/upstream-pending", vendored: false },
@@ -307,13 +308,13 @@ test("only locked vendored files may refer to classified, unvendored upstream ta
 });
 
 test("vendored playbook routing resolves local siblings and only classified upstream-only targets", () => {
-	const { root, put, json, skill } = fixture();
+	const { root, put, lock, skill } = fixture();
 	const file = "skills/misty/playbooks/bug-fix.md";
 	const refactoring = "skills/misty/playbooks/refactoring.md";
 	put("skills/misty/SKILL.md", skill("misty", "[Bug fix](playbooks/bug-fix.md) and [Refactoring](playbooks/refactoring.md)."));
 	put(file, "### Bug fix\n\nRead [refactoring](refactoring.md), [shipping](shipping.md) and [how](../../how/SKILL.md). Read the `how` skill.\n");
 	put(refactoring, "### Refactoring\n\nPin the behavior.\n");
-	json("vendor/pstack.lock.json", {
+	lock({
 		include: [
 			{ source: "skills/poteto-mode/playbooks/bug-fix.md", destination: file, vendored: true },
 			{ source: "skills/poteto-mode/playbooks/refactoring.md", destination: refactoring, vendored: true },

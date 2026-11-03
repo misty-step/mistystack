@@ -5,7 +5,7 @@ disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "Silent failure; Foundations article 8 and mistystack docs/principles/009 evidence."
-  source: "misty-step/mistystack#533; misty-step/mistystack@5828267b657e2c9814728066a5f185b4a0f57fd5/skills/principle-nothing-fails-silently; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#fail-loudly"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 

@@ -3,7 +3,8 @@ import { createHash } from "node:crypto";
 import { chmodSync, copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, renameSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { checkPstack, type PstackLock, updatePstack } from "./sync-pstack";
+import { checkPstack, updatePstack } from "./sync-pstack";
+import type { PstackLock } from "./pstack-lock.mjs";
 
 const roots: string[] = [];
 afterEach(() => {
@@ -28,6 +29,7 @@ async function fixture(playbookHeading = "#") {
 	put("upstream/pstack/skills/workflow/SKILL.md", "---\nname: workflow\ndescription: Work.\n---\n\n# Workflow\n\nUse generalPurpose.\n");
 	put("upstream/pstack/skills/poteto-mode/SKILL.md", "# Upstream router\n");
 	put("upstream/pstack/skills/poteto-mode/playbooks/bug-fix.md", `${playbookHeading} Bug fix\n\nUse \`subagent_type\` and \`run_in_background\`.\n`);
+	put("skills/misty/harnesses/pstack-names.md", "# Names\n\n| pstack | Native |\n| --- | --- |\n| `Task`, `subagent_type`, `run_in_background`, `generalPurpose` | Native tools. |\n");
 	put("upstream/pstack/agents/poteto-agent.md", "# Agent\n");
 	const git = (...args: string[]) => {
 		const result = Bun.spawnSync(["git", "-C", source, ...args], { stdout: "pipe", stderr: "pipe" });
@@ -47,7 +49,7 @@ async function fixture(playbookHeading = "#") {
 	];
 	const names = [...include, ...exclude].map(entry => entry.source).sort();
 	const lock: PstackLock = {
-		repo: "cursor/plugins", commit: "a".repeat(40), tree: git("write-tree"), "generated-at": "2026-11-02T00:00:00.000Z",
+		repo: "cursor/plugins", commit: "a".repeat(40), tree: git("write-tree"),
 		"inventory-sha256": createHash("sha256").update(`${names.join("\n")}\n`).digest("hex"),
 		include, exclude, files: {},
 	};
@@ -75,6 +77,7 @@ function runSync(root: string, args: string[]) {
 	mkdirSync(join(root, "scripts"), { recursive: true });
 	const script = join(root, "scripts/sync-pstack.ts");
 	copyFileSync(join(import.meta.dir, "sync-pstack.ts"), script);
+	copyFileSync(join(import.meta.dir, "pstack-lock.mjs"), join(root, "scripts/pstack-lock.mjs"));
 	return Bun.spawnSync([process.execPath, script, ...args], { cwd: root, stdout: "pipe", stderr: "pipe" });
 }
 
@@ -139,6 +142,7 @@ test("CLI check needs no git, network or upstream checkout and fails nonzero on 
 	const { root, put } = await fixture();
 	mkdirSync(join(root, "scripts"));
 	copyFileSync(join(import.meta.dir, "sync-pstack.ts"), join(root, "scripts/sync-pstack.ts"));
+	copyFileSync(join(import.meta.dir, "pstack-lock.mjs"), join(root, "scripts/pstack-lock.mjs"));
 	rmSync(join(root, "upstream"), { recursive: true });
 	const run = () => Bun.spawnSync([process.execPath, join(root, "scripts/sync-pstack.ts"), "--check"], { cwd: root, env: { ...process.env, PATH: "" }, stdout: "pipe", stderr: "pipe" });
 	expect(run().exitCode).toBe(0);
@@ -220,4 +224,53 @@ test.each([
 		expect(snapshot(outside)).toEqual(outsideBefore);
 		expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(lockBefore);
 	}
+});
+
+test("two CLI updates at the pin leave the lock and vendored tree byte-identical", async () => {
+	const { root, source, lock } = await fixture();
+	const before = { lock: readFileSync(join(root, "vendor/pstack.lock.json")), skills: snapshot(join(root, "skills")) };
+	for (let run = 0; run < 2; run++) {
+		const result = runSync(root, ["--update", lock.commit, "--from", source]);
+		expect(result.exitCode).toBe(0);
+		expect(readFileSync(join(root, "vendor/pstack.lock.json"))).toEqual(before.lock);
+		expect(snapshot(join(root, "skills"))).toEqual(before.skills);
+	}
+});
+
+test("CLI update accepts a real source beneath a symlinked parent without weakening source guards", async () => {
+	const { root, lock } = await fixture();
+	const alias = join(root, "upstream-alias");
+	symlinkSync(join(root, "upstream"), alias);
+	const before = snapshot(join(root, "skills"));
+	const result = runSync(root, ["--update", lock.commit, "--from", join(alias, "pstack")]);
+	expect(result.exitCode).toBe(0);
+	expect(snapshot(join(root, "skills"))).toEqual(before);
+	expect(checkPstack(root)).toEqual([]);
+});
+
+test.each(["arena", "the **arena** skill", "the `arena` skill", "`/arena`"])("offline check requires a route for an excluded named invocation: %s", async invocation => {
+	const { root, source, lock, put, save, repin } = await fixture();
+	put("upstream/pstack/skills/arena/SKILL.md", "# Arena\n");
+	put("upstream/pstack/skills/principle-proof/notes.md", `# Notes\n\nUse ${invocation}.\n`);
+	lock.exclude.push({ source: "skills/arena", reason: "Use the defined instruction trial." });
+	lock["inventory-sha256"] = createHash("sha256").update(`${[...lock.include, ...lock.exclude].map(entry => entry.source).sort().join("\n")}\n`).digest("hex");
+	save();
+	repin();
+	await updatePstack(root, lock.commit, source);
+	expect(checkPstack(root).join("\n")).toContain("missing pstack adapter row for arena");
+	put("skills/misty/harnesses/pstack-names.md", "# Names\n\n| pstack | Native |\n| --- | --- |\n| `Task`, `subagent_type`, `run_in_background`, `arena` | Native sessions. |\n");
+	expect(checkPstack(root)).toEqual([]);
+});
+
+test("offline check rejects a missing harness key or cited router-section route", async () => {
+	const { root, source, lock, put, repin } = await fixture();
+	put("skills/misty/harnesses/pstack-names.md", "# No mappings\n");
+	expect(checkPstack(root).join("\n")).toContain("missing pstack adapter row for Task");
+	put("upstream/pstack/skills/principle-proof/notes.md", "# Notes\n\nRead poteto-mode's Subagents, Non-negotiables and Autonomy.\n");
+	repin();
+	await updatePstack(root, lock.commit, source);
+	const errors = checkPstack(root).join("\n");
+	for (const key of ["poteto-mode", "Subagents", "Non-negotiables", "Autonomy"]) expect(errors).toContain(`missing pstack adapter row for ${key}`);
+	put("skills/misty/harnesses/pstack-names.md", "# Names\n\n| pstack | Native |\n| --- | --- |\n| `subagent_type`, `run_in_background`, `poteto-mode`, `Subagents`, `Non-negotiables`, `Autonomy` | Misty sections. |\n");
+	expect(checkPstack(root)).toEqual([]);
 });

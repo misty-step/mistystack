@@ -3,6 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
+import { readPstackLock } from '../../scripts/pstack-lock.mjs';
 
 // Check the artifact, not Astro's source graph: a valid source link can still be
 // broken by rendering, heading generation, routing, or the search post-build.
@@ -322,7 +323,7 @@ async function main() {
       } catch (error) { fail(`${label}: cannot read canonical source: ${error.message}`); }
     }
   }
-  const pstack = JSON.parse(await readFile(path.join(root, 'vendor/pstack.lock.json'), 'utf8'));
+  const { lock: pstack } = readPstackLock(root);
   for (const entry of pstack.include.filter((entry) => entry.vendored && pstack.files[`${entry.destination}/SKILL.md`])) {
     const id = `${entry.destination}/SKILL.md`;
     const doc = byId.get(id);

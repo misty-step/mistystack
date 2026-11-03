@@ -1,5 +1,9 @@
 # Carries and stack landing
 
+## Merge preflight
+
+Before merging, require the current PR head's independent SHIP and passing affected checks; a carry is valid only under the unchanged-patch rule below. Confirm fast affected checks at that judged SHA. Authored changes, including documents and measurements, take the ordinary round; generator-only machine release PRs need passing checks alone and omit Story.
+
 ## Carry a verdict
 
 A rebase or base merge carries judgment only when the stable patch-id is unchanged:
@@ -41,4 +45,4 @@ and independent judgment under the existing fix-round cap.
    judgment only for an unchanged patch; otherwise re-verify under the round cap.
    Repeat from the resulting judged head with a lease pinned to that same head.
    The next PR still cuts ancestry at the first head recorded for the PR below.
-4. Run fast affected checks at the new head before its squash merge.
+4. Apply [merge preflight](#merge-preflight) at the resulting head before its squash merge.

@@ -4,7 +4,7 @@ description: "When verifying a mistystack change, plugin installation, fresh-ses
 metadata:
   owner: phaedrus
   prevents: "Installer and file-byte checks reported as loaded method proof; method-plugin cutover #533."
-  source: "misty-step/mistystack #533, docs/decisions/0015-omp-method-plugin.md; scripts/verify-plugin.ts owns the native proof."
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 

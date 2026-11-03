@@ -44,7 +44,7 @@ Use EARS conditions that match the behavior: WHEN for events, WHILE for states, 
 
 Use the project's [owned tracker](../foundation/checklist.md#article-2) and existing vocabulary. Read the source ticket, comments and linked decisions before changing it. For each slice, record the delivered behavior, stable story IDs, acceptance criteria, direct blockers and the full briefing contract from the `misty` skill. Link raw material at its source. Prefer the highest existing consumer boundary for its Oracle.
 
-An infrastructure-only step earns a separate ticket only when it is independently useful and verifiable. A mechanical wide refactor that cannot land in useful vertical slices stays one atomic migration when feasible. If compatibility requires stages, make the stages explicit and end with every caller migrated and the old form deleted; temporary coexistence is a migration constraint, not a permanent second API.
+[Ship-loop](../ship-loop/SKILL.md#1-settle-the-unit) owns useful slice boundaries. A mechanical refactor that cannot land as useful units stays one atomic migration when feasible; compatibility stages end with every caller migrated and the old form deleted.
 
 For backlog work, compare the complete in-scope board with accepted direction and current product evidence. Take the highest-value mismatch first. Give each item a disposition: keep, update, merge into an existing owner, retire with a reason, delivered with proof, or unresolved with an exact question. Record priority as an explicit owner decision rather than inferring it from creation order or changing blocker meanings.
 
