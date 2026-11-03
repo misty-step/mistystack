@@ -11,8 +11,7 @@ metadata:
 # Writing
 
 Use pstack's [unslop](../unslop/SKILL.md) to edit prose,
-[technical-writing](../technical-writing/SKILL.md) for documents,
-[no-comments](../no-comments/SKILL.md) for comment review, and
+[technical-writing](../technical-writing/SKILL.md) for documents, and
 [bro](../bro/SKILL.md) to restate the last message plainly.
 
 Misty adds these rules:
