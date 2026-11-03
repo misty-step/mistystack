@@ -81,6 +81,10 @@ function build(graph) {
   const misty = need(graph, MISTY);
   const trial = need(graph, TRIAL);
   const lines = coreLines(core);
+  const headline = home.hero({ coreLines: '', commandHarnesses: '' }).headline;
+  const opening = headline.replace(/\.$/, '');
+  const at = lines.findIndex((line) => line.replace(/^-\s+/, '').startsWith(opening));
+  if (at < 0) fail(`no line of ${CORE} starts with "${opening}"`);
 
   const installCopy = home.install({ inProgress: '' });
   const tabs = harnesses(graph, installCopy);
