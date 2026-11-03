@@ -306,7 +306,11 @@ export async function createGraph(entries) {
     const raw = readFileSync(path.join(repoRoot, id), 'utf8');
     const parsed = parseSource(id, raw);
     const ast = markdown.parse(parsed.body);
-    const h1 = ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
+    let h1 = ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
+    if (!h1 && vendoredSkills.has(id) && typeof parsed.data.name === 'string') {
+      h1 = { type: 'heading', depth: 1, children: [literal(parsed.data.name)] };
+      ast.children.unshift(h1);
+    }
     if (!h1) throw new Error(`${id}: a document needs an H1 title`);
     h1.depth = 1; // Normalize the rendered title, not the vendored source bytes.
     const doc = {

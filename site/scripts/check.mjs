@@ -331,6 +331,12 @@ async function main() {
     expect(html?.includes('Vendored pstack.'), `${id}: upstream provenance must be disclosed`);
     expect(html?.includes(`https://github.com/misty-step/mistystack/blob/${expectedCommit}/vendor/pstack.lock.json`), `${id}: provenance must link to the checked lock`);
     expect(html && !/<dt[^>]*>(Owner|Prevents|Review date)<\/dt>/.test(html), `${id}: do not invent Misty metadata for upstream`);
+    const raw = await readFile(path.join(root, id), 'utf8');
+    if (!/^#{1,6}\s/m.test(raw)) {
+      const name = entry.destination.split('/').at(-1);
+      expect(doc?.title === name, `${id}: a headingless vendored skill must use its installed name as the page title`);
+      expect(doc?.headings.some((heading) => heading.depth === 1 && heading.label === name), `${id}: the generated title must be shareable`);
+    }
   }
   for (const entry of pstack.include.filter((entry) => entry.vendored && entry.destination.startsWith('skills/misty/playbooks/'))) {
     const doc = byId.get(entry.destination);
