@@ -207,6 +207,20 @@ test("accepts relative inline and reference links, supporting files and named sk
 	expect(lintPlugin(root, true)).toEqual({ skillCount: 3, errors: [], warnings: [] });
 });
 
+test("relative directory links stay reachable and missing targets still fail", () => {
+	const { root, put, skill } = fixture();
+	const examples = "skills/misty/references/examples";
+	put("skills/misty/SKILL.md", skill("misty", "[Examples](references/examples/) and [same directory](references/examples)."));
+	put(`${examples}/README.md`, "# Examples\n");
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	rmSync(join(root, examples), { recursive: true });
+	expect(lintPlugin(root, true).errors).toEqual([`skills/misty/SKILL.md: missing reference ${examples}`]);
+	put(`${examples}/fixture.json`, "{}\n");
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put("skills/misty/SKILL.md", skill("misty", "[Missing file](references/examples/missing.md)."));
+	expect(lintPlugin(root, true).errors).toEqual([`skills/misty/SKILL.md: missing reference ${examples}/missing.md`]);
+});
+
 test("does not treat illustrative Markdown, external links or same-file anchors as missing files", () => {
 	const { root, put, skill } = fixture();
 	put("skills/misty/SKILL.md", skill("misty", [
