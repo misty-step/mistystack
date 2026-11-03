@@ -428,7 +428,7 @@
     "skills/automate-me/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/automate-me/SKILL.md": "e8045601fe249dac38aba0d98ff1ef38e0f597385b2162088e51dc7ba3a273ec",
     "skills/benchmark-checklist/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/benchmark-checklist/SKILL.md": "f96a4ad0f97aec6575af2b374929a0d5afd6a4c41b7205c8690e3ec63c28dedf",
+    "skills/benchmark-checklist/SKILL.md": "058ab093f02c07ec9a6d762dda4dc7acd85d6549af8bc55d707ccc0e42e56666",
     "skills/blast-radius/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/blast-radius/SKILL.md": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436",
     "skills/bro/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -1014,7 +1014,7 @@
       "source": "skills/benchmark-checklist",
       "file": "vendor/pstack-patches/benchmark-checklist.json",
       "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
-      "sha256": "15e8d34cb92931bfe998cf8ad167b2e4161669de86212274f492084e5cd8d2de"
+      "sha256": "7cd08ed7dec6334789c11bcf04c28dc7fcc71fddbee2c729462304b265b58178"
     },
     {
       "source": "skills/poteto-mode/playbooks/bug-fix.md",

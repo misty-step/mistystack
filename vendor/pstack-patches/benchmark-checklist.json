@@ -5,7 +5,7 @@
     {
       "file": "SKILL.md",
       "before": "- Keep a PR body to one primary number, per the **Opening a PR** playbook. Put the runs, range, and limiter evidence in a linked artifact or notes file.\n",
-      "after": "- Keep a PR body to one primary number; the installed [writing](../writing/SKILL.md) skill owns the publication format. Put the runs, range and limiter evidence in a linked artifact or notes file.\n"
+      "after": "- Keep a PR body to one primary number; the installed [technical-writing](../technical-writing/SKILL.md) skill owns clear publication prose. Put the runs, range and limiter evidence in a linked artifact or notes file.\n"
     }
   ]
 }
