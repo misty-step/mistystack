@@ -83,3 +83,23 @@ candidate, with accessible evidence, and the live path passed after release.
 An isolated installation is `artifact verified` until its affected fresh-session
 behavior is observed. Lint-only results never substitute for installation or
 fresh-session proof.
+
+## Release-order property
+
+The US-015 schedule check in `scripts/protected-release-check.test.ts` exhausts
+the successful scheduling orders of the four jobs read from
+`.github/workflows/landmark-release.yml`: prepare, verify, publish and deploy.
+Publication must follow successful verification; deployment must follow both
+verification and publication. The same contract checks that the deploy downloads
+the site artifact uploaded by CI and does not rebuild it.
+
+The check is part of the proof command above. Its built-in broken variant removes
+publication's verification dependency and must produce `prepare → publish`.
+Coverage maps to the release workflow and its reusable `ci.yml` / `site-deploy.yml`
+at their last source change, `ac66123ce3961cd68b74a6686879334d26a294c4`.
+When those files change, confirm that this four-job model still describes them
+before advancing that coverage revision.
+
+This is bounded workflow-graph proof, not a proof of GitHub, Landmark, Wrangler,
+the review's substance, or live recovery. It assumes GitHub enforces `needs` and
+models successful jobs; real release and journey receipts remain required.

@@ -100,6 +100,33 @@ test("US-015 release-only checks precede publication and deploy the same checked
 	expect(deploy.jobs.deploy.steps.some((step: { run?: string }) => step.run?.includes("npm run build"))).toBe(false);
 });
 
+test("US-015 all successful release schedules preserve verification before publication and deployment", () => {
+	type Job = { needs?: string | string[] };
+	const release = YAML.parse(readFileSync(join(import.meta.dir, "../.github/workflows/landmark-release.yml"), "utf8"));
+	const required: Record<string, string[]> = { verify: ["prepare"], publish: ["verify"], deploy: ["verify", "publish"] };
+	const counterexample = (jobs: Record<string, Job>): string[] | undefined => {
+		const pending: string[][] = [[]];
+		const visited = new Set<string>();
+		for (const completed of pending) {
+			const key = [...completed].sort().join(",");
+			if (visited.has(key)) continue;
+			visited.add(key);
+			for (const [name, job] of Object.entries(jobs)) {
+				const dependencies = job.needs === undefined ? [] : typeof job.needs === "string" ? [job.needs] : job.needs;
+				if (completed.includes(name) || !dependencies.every(dependency => completed.includes(dependency))) continue;
+				const next = [...completed, name];
+				if ((required[name] ?? []).some(predecessor => !completed.includes(predecessor))) return next;
+				pending.push(next);
+			}
+		}
+		return undefined;
+	};
+	expect(Object.keys(release.jobs).sort()).toEqual(["deploy", "prepare", "publish", "verify"]);
+	expect(counterexample(release.jobs)).toBeUndefined();
+	const broken = { ...release.jobs, publish: { ...release.jobs.publish, needs: ["prepare"] } };
+	expect(counterexample(broken)).toEqual(["prepare", "publish"]);
+});
+
 const check = (repoRoot: string, upstream: string, base?: string, upstreamTimeoutMs?: number, bin = landmark!) =>
 	checkProtectedRelease({ landmark: bin, repoRoot, repository: "owner/repo", upstream, base, upstreamTimeoutMs });
 
