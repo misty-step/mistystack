@@ -145,17 +145,20 @@ When work reaches review, I want risk-scaled independent proof and a bounded fix
 round, so a new thread cannot restart review or turn an unrelated finding into scope.
 
 Criteria:
-1. `ship-loop` records rigor, its concrete reason and diff size on the PR; light
-   work uses combined QA/review and an independent judge, while riskier work
-   separates QA, review and judge.
+1. `ship-loop` records rigor, its concrete reason and diff size on the PR.
+   Light is the default with combined QA/review and an independent judge.
+   Runtime code, security boundaries or data justify separate QA, review and judge.
 2. Light posts combined QA/review and independent judgment as plain PR comments
    without a ledger. Standard and critical retain the native PR ledger across
    head changes and new sessions. Only a judge's FIX naming eligible blockers
    authorizes the one permitted fix round, in every tier.
-3. The blocking reporter rechecks the named fixes. The next verdict is SHIP with
-   tickets or REVERT / SPLIT; new unrelated findings become tickets.
-4. Proof names the checked revision, real path, exact commands and observed
-   result. Generated output lives outside the checkout and is reviewer-accessible.
+3. Reviewers report blockers only. The blocking reporter rechecks named fixes.
+   The next verdict is SHIP or REVERT / SPLIT. Worthwhile non-blocking findings
+   go to one running cleanup issue, not new review gates.
+4. CI owns the suite. The verifier reruns only the main-risk check at the final
+   head, with native proof once before release. Proof names the checked revision,
+   real path, exact commands and observed result. Generated output lives outside
+   the checkout and is reviewer-accessible.
 5. The judge treats a missing real-path proof as missing evidence, not a passing
    unit test. A recorded `no deploy` skips release watching for internal changes.
 6. Pstack's Opening a PR, Babysit and Shipping own delivery. Ship-loop supplies
@@ -211,12 +214,14 @@ Criteria:
    [figure-it-out](skills/figure-it-out/SKILL.md) and
    [orchestrate](skills/poteto-mode/playbooks/orchestrate.md) routes resolve
    empirical questions, plan phases and coordinate the complete outcome.
-2. Each slice has observable acceptance criteria and is useful with main still working.
-3. Independent slices can run in parallel within the brief's rigor tier.
-   True dependencies sequence or stack.
+2. Each slice has observable acceptance criteria and explicit file ownership.
+   Larger useful slices are preferred over many narrow PRs, with master working.
+3. Work is trunk-based on master without integration branches. Independent
+   file-owned slices can run in parallel. True dependencies sequence.
 4. pstack's Opening a PR, Babysit and Shipping playbooks govern delivery.
    [Ship-loop](skills/ship-loop/SKILL.md) supplies Shipping's verify step with
-   rigor tiers, an independent judge and one fix round.
+   rigor tiers, an independent judge and one fix round. Each role has a deadline,
+   and a stalled agent is stopped and replaced.
 5. [Foundation article 3](skills/foundation/checklist.md#article-3) still requires
    a living `SPEC.md`. It does not require a particular skill to produce it.
 

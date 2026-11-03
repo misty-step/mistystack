@@ -17,16 +17,16 @@ same round.
 
 ## Rigor
 
-Classify the changed path, not the initiative. Record
-`Rigor: <tier>, <changed-path risk>, <diff size>` on the PR.
-Size prompts a light-tier check. A concrete risk can raise it.
+Default to light. Use standard only for runtime code, security boundaries or
+data. Raise those paths to critical when the concrete risk warrants it.
+Record `Rigor: <tier>, <changed-path risk>, <diff size>` on the PR.
 The [verify procedure](SKILL.md#1-choose-rigor) owns the machine-release exception.
 
 | Tier | Changed path | Rigor role and review shape |
 | --- | --- | --- |
-| light | Documents, briefs, config JSON, constants, bounded cosmetics and verification tooling without a production runtime path | `rigor-light`: builder, one independent combined QA/review, then independent judge |
-| standard | Runtime behavior or operational rules beyond a bounded light change | `rigor-standard`: builder, separate independent QA and review, then independent judge |
-| critical | Authentication, authorization, money, persisted-data integrity, migrations, security controls, deploy behavior, shared-infrastructure runtime or irreversible operations | `rigor-critical`: builder, separate independent QA and review, then independent judge; name the changed-path risk |
+| light | Default, including documents, briefs, config JSON, constants, cosmetics and verification tooling without a production runtime path | `rigor-light`: builder, one independent combined QA/review, then independent judge |
+| standard | Runtime code, security boundaries or data beyond light scope | `rigor-standard`: builder, separate independent QA and review, then independent judge |
+| critical | High-risk runtime, security or data changes, such as authentication, money, persisted-data integrity, migrations, deploy behavior or irreversible operations | `rigor-critical`: builder, separate independent QA and review, then independent judge; name the changed-path risk |
 
 Dispatch through your harness's subagent mechanism, selecting the `rigor-<tier>` role.
 The `setup-mistystack` skill assigns models and reasoning budgets through native

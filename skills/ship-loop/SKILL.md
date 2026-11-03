@@ -15,6 +15,20 @@ Pstack's [Opening a PR](../poteto-mode/playbooks/opening-a-pr.md),
 [Shipping](../poteto-mode/playbooks/shipping.md) own delivery. This skill supplies
 Shipping's verify step, not another PR-opening, babysit or landing procedure.
 
+## Delivery defaults
+
+- Work from master and target master, not an integration branch. Prefer larger
+  useful slices with explicit file ownership over many narrow PRs.
+- CI owns the suite. Verify once at the final head. The verifier reruns only
+  the check tied to the main risk and retains existing proof. Run native proof
+  once before release, not after every commit or review.
+- Use `sync-pstack --check` for verbatim vendored bytes. Humans and agents review
+  the Misty delta, not unchanged upstream text.
+- Give each role a deadline in its brief. Replace a stalled agent after stopping
+  its thread. [Roles](roles.md#rigor) owns risk selection and
+  [judge.md](judge.md#2-rule) owns the blockers-only review policy.
+
+
 ## 1. Choose rigor
 
 Start with the PR from Opening a PR, its base, head, builder thread and proof.
@@ -46,10 +60,10 @@ Use this skill's installed directory as `<skill-dir>` and read
   `status --pr <url> --json` resumes the existing phase and round.
 
 Each role follows [roles.md](roles.md). QA uses the
-[verification skill](../verification/SKILL.md) for the changed consumer path.
-One QA owner covers each SHA. An additional independent QA pass needs a concrete
-critical uncertainty. The [judge](judge.md) is independent of implementation,
-QA and review. Only its FIX naming eligible introduced blockers authorizes a fix.
+[verification skill](../verification/SKILL.md) for the changed consumer path,
+within the verify-once rule above. One QA owner covers each SHA.
+The [judge](judge.md) is independent of implementation, QA and review.
+Only its FIX naming eligible introduced blockers authorizes a fix.
 Missing required proof cannot pass.
 
 ## 3. Use at most one fix round
@@ -58,13 +72,13 @@ For FIX, dispatch `fix-builder` for only the judge's named blockers.
 The builder owns code blockers. The conductor owns missing proof.
 Then dispatch a fresh `recheck` thread in the blocking reporter's role for those
 blockers and fix-introduced regressions. Retain unchanged evidence.
-The final judge chooses SHIP with useful follow-ups, REVERT or SPLIT.
-Unrelated findings and pre-existing defects cannot start another fix round.
+The final judge chooses SHIP, REVERT or SPLIT.
+Non-blocking findings follow the [cleanup policy](judge.md#2-rule), not another fix round.
 
 Light uses `prompt --rigor light --role fix-builder|recheck|final-judge` and plain
 comments throughout. Standard and critical record the fix head, recheck and
 final verdict through the helper. A new session, retry, rebase or changed SHA
-never resets the cap. Stop a superseded thread before dispatching its replacement.
+never resets the cap.
 
 ## 4. Return the verify result
 
@@ -72,6 +86,7 @@ Use the [names adapter](../misty/harnesses/pstack-names.md#routes) to translate
 the judgment for [Shipping](../poteto-mode/playbooks/shipping.md).
 Return the checked SHA, judgment and evidence. Shipping owns verdict validity
 and landing of the contiguous verified run.
+Apply [Misty's auto-merge delta](../misty/SKILL.md#misty-deltas) after SHIP.
 
 For standard and critical, a head change updates the ledger through
 `record --kind head` as documented by `--help`, without resetting the round.

@@ -19,7 +19,9 @@ not evidence that the method loaded.
    exercised harness versions, affected stories and exact commands. Checks read
    the working tree. Keep output outside the checkout and state whether that
    source matches the recorded commit.
-2. **Gate.** From the repository root, run:
+2. **Gate.** CI owns the suite under ship-loop's
+   [delivery defaults](../../../skills/ship-loop/SKILL.md#delivery-defaults).
+   If the assignment requests the gate, run it once at the final head:
    ```sh
    ./scripts/check
    ```

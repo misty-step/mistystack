@@ -11,6 +11,8 @@ and judge threads in the helper's ledger. Only the judge can authorize the one
 fix round, followed by a named-blocker recheck and final judgment.
 The [verdict mapping](../../skills/misty/harnesses/pstack-names.md#routes) translates
 that judgment for Shipping. Shipping owns verdict validity and landing.
+Apply ship-loop's [delivery defaults](../../skills/ship-loop/SKILL.md#delivery-defaults)
+for trunk-based slices, one verification pass and time-boxed roles.
 
 Use [test-audit](../../skills/test-audit/SKILL.md) for test coverage and [security review](../../skills/security-audit/SKILL.md) for focused boundary and finding questions. For instruction or prompt changes, [agent-design's instruction eval](../../skills/agent-design/SKILL.md#instruction-eval) extends the [vendored eval playbook](../../skills/poteto-mode/playbooks/eval.md).
 
