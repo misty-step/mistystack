@@ -5,6 +5,12 @@ Cursor. [Misty](../SKILL.md) owns routing; [setup](../../setup-mistystack/SKILL.
 owns model assignments and [ship-loop](../../ship-loop/SKILL.md) owns delivery.
 Use only delegation named by the loaded procedure, with Misty's brief and Oracle.
 
+For a vendored relative link to an excluded or pending target, use its source
+path and the commit in [the lock](../../../vendor/pstack.lock.json) to read
+`https://github.com/cursor/plugins/blob/<commit>/pstack/<source-path>`.
+Do not install the excluded skill or replace Misty's override. The site resolves
+these links to that pinned upstream path without changing the installed bytes.
+
 | pstack / Cursor name | OMP | Claude Code | Codex | pi |
 | --- | --- | --- | --- | --- |
 | `Task`, `subagent_type`, `generalPurpose`, `poteto-agent` | `task`, `agent: "rigor-<tier>"` | Native subagent, `mistystack:rigor-<tier>` | Native subagent, separately installed `rigor-<tier>` | Work inline; independent roles need separately briefed sessions |

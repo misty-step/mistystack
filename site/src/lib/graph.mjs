@@ -16,6 +16,10 @@ const pstack = JSON.parse(readFileSync(path.join(repoRoot, 'vendor/pstack.lock.j
 const vendoredSkills = new Map(pstack.include
   .filter((entry) => entry.vendored && pstack.files[`${entry.destination}/SKILL.md`])
   .map((entry) => [`${entry.destination}/SKILL.md`, `${pstack.repo}@${pstack.commit}/pstack/${entry.source}`]));
+const vendoredSources = new Map(pstack.include.filter((entry) => entry.vendored).flatMap((entry) =>
+  Object.keys(pstack.files).filter((file) => file === entry.destination || file.startsWith(`${entry.destination}/`))
+    .map((file) => [file, entry.source + file.slice(entry.destination.length)])));
+const upstreamOnly = [...pstack.exclude, ...pstack.include.filter((entry) => !entry.vendored)].map((entry) => entry.source);
 const markdown = unified().use(remarkParse).use(remarkGfm);
 const toHtml = unified().use(remarkRehype, { allowDangerousHtml: true }).use(rehypeRaw);
 const stringify = unified().use(rehypeStringify);
@@ -195,6 +199,14 @@ function resolveTarget(doc, href, node, graph, image = false) {
       if (fragment && !archive.fragments.includes(decodeURIComponent(fragment))) sourceFailure(doc, node, `unknown archived fragment: ${href}`);
       node.children.push(literal(` (archived source ${archive.commit.slice(0, 7)})`));
       return `${repositoryUrl}/blob/${archive.commit}/${encodePath(target)}${query}${fragment ? `#${fragment}` : ''}`;
+    }
+    if (!existsSync(absolute) && vendoredSources.has(doc.id) && !href.startsWith('/')) {
+      const source = vendoredSources.get(doc.id);
+      const upstream = path.posix.normalize(path.posix.join(path.posix.dirname(source), decodeURIComponent(queryAt < 0 ? beforeHash : beforeHash.slice(0, queryAt))));
+      if (upstreamOnly.some((source) => upstream === source || upstream.startsWith(`${source}/`))) {
+        const kind = upstreamOnly.includes(upstream) && !upstream.endsWith('.md') ? 'tree' : 'blob';
+        return `https://github.com/${pstack.repo}/${kind}/${pstack.commit}/pstack/${encodePath(upstream)}${query}${fragment ? `#${fragment}` : ''}`;
+      }
     }
     if (!existsSync(absolute)) sourceFailure(doc, node, `missing internal target: ${href} (${target})`);
     if (!realpathSync(absolute).startsWith(`${realpathSync(repoRoot)}${path.sep}`) && realpathSync(absolute) !== realpathSync(repoRoot)) sourceFailure(doc, node, `link escapes repository: ${href}`);

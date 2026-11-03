@@ -37,6 +37,10 @@ are selected for the playbook and workflow slices but not installed yet.
 active inclusions and rewrites the lock. Its offline `--check` runs in the
 canonical gate and rejects edits, missing files, unlisted files and inventory drift.
 
+Relative links from vendored files to excluded or pending targets resolve to the
+same pinned upstream source through lint, the site and the harness note; they do
+not cause that target to be installed or allow a second text transform.
+
 ## Consequences
 
 - Upstream sync has a visible cost: select a new commit, classify any new or

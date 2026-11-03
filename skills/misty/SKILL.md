@@ -49,7 +49,7 @@ Read the matching playbook or skill before acting. Combine rows when the task cr
 
 Read a leaf when its trigger applies; the index is not its full procedure.
 
-The [pstack lock](../../vendor/pstack.lock.json) owns the vendored foundation and its exclusions. Cursor names map through [the harness adapter](harnesses/pstack-names.md); Misty's delivery, native model configuration and bounded delegation take precedence.
+The [pstack lock](../../vendor/pstack.lock.json) owns the vendored foundation and its exclusions. [The harness adapter](harnesses/pstack-names.md) maps Cursor names and resolves links to unvendored upstream targets; Misty's delivery, native model configuration and bounded delegation take precedence.
 
 - [principle-laziness-protocol](../principle-laziness-protocol/SKILL.md): Refactoring, sizing a diff, or tempted to add abstractions, layers, or signal threading. Bias to deletion and the smallest change that solves the problem.
 - [principle-foundational-thinking](../principle-foundational-thinking/SKILL.md): Before writing logic: core types and data structures, scaffold-vs-feature sequencing, what concurrent actors share.
