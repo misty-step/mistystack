@@ -1,3 +1,14 @@
+# [0.3.19](https://github.com/misty-step/mistystack/compare/v0.3.18...v0.3.19) (2026-11-03)
+<!-- landmark:protected-release previous=v0.3.18 source=0df97ccff7ba90e5185f84a6cba202f2783011a73b6bbb2b8fc583a42d25a30b -->
+
+### Features
+
+* **method:** adopt pstack as the foundation (#667) ([f74a5e1](https://github.com/misty-step/mistystack/commit/f74a5e1e541cfbbd7d6413b870b791fb858362e3))
+* verify live changes and supervise open-ended delivery ([e9c822c](https://github.com/misty-step/mistystack/commit/e9c822c1b9ea386223308510297498c80497dd25))
+
+### Bug Fixes
+
+* **misty:** restore owner intent and completion guardrails (#666) ([a28daa2](https://github.com/misty-step/mistystack/commit/a28daa287ed41ca6b31903294a559203d5da5756))
 # [0.3.18](https://github.com/misty-step/mistystack/compare/v0.3.17...v0.3.18) (2026-11-02)
 <!-- landmark:protected-release previous=v0.3.17 source=38c12779a0440f86d3f090714a743b42cd64111b5c2393983df0d0e27d082cce -->
 
