@@ -19,13 +19,17 @@ not evidence that the method loaded.
    exercised harness versions, affected stories and exact commands. Checks read
    the working tree. Keep output outside the checkout and state whether that
    source matches the recorded commit.
-2. **Gate.** From the repository root, run:
+2. **Gate.** CI owns the suite under ship-loop's
+   [delivery defaults](../../../skills/ship-loop/SKILL.md#delivery-defaults).
+   If the assignment requests the gate, run it once at the final head:
    ```sh
    ./scripts/check
    ```
    Require exit 0 for plugin structure, skill behavior, protected-release and
-   trufflehog-gate tests. Confirm ship-loop's behavioral tests ran, including its
-   native PR-ledger and bounded-fix-round contracts. CI runs
+   trufflehog-gate tests. Confirm ship-loop's behavioral tests ran, including
+   light's plain-comment path without a ledger, standard's native PR ledger
+   and the bounded-fix-round contract.
+   CI runs
    `./scripts/check plugin --strict --lint-only` for strict references and the same
    maintained tests; its explicit install skip is structural evidence only. When
    `LANDMARK_BIN` is available, retain the real release-replay result separately
@@ -61,8 +65,9 @@ not evidence that the method loaded.
    [setup-mistystack](../../../skills/setup-mistystack/SKILL.md) in an isolated
    destination; separate native assignment persistence, fresh-session discovery
    and authorized inference. For routing or playbook changes, inspect an
-   affected real task's brief and Oracle result. For ship-loop changes, drive its
-   native ledger and retain the affected behavioral output. The gate does not
+   affected real task's brief and Oracle result. For ship-loop changes, drive
+   the affected plain-comment or native-ledger path and retain its behavioral output.
+   The gate does not
    prove provider access, model quality or a completed shipping journey.
 5. **Publish.** Put the checked source and runtime identities, command, exit
    status, observed postcondition and reviewer-open output on the PR.

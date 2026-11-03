@@ -1,29 +1,32 @@
 # Role briefs
 
-The `misty` skill owns the briefing contract. The builder receives the completed
-brief below. Every later role receives only the helper's phase-checked brief:
+The `misty` skill owns the builder's briefing contract. Pstack's
+[Opening a PR](../poteto-mode/playbooks/opening-a-pr.md) owns the builder's PR
+handoff. For this verify step, generate each later role's brief from the
+installed `<skill-dir>`:
 
 ```sh
 bun <skill-dir>/scripts/ship-loop.ts prompt --pr <PR URL> --role <role>
 ```
 
-`<skill-dir>` is the installed directory of the `ship-loop` skill. The helper fills
-revision, ticket, rigor, findings and eligibility from the PR ledger. Judge and
-final-judge briefs point at this skill's [judge.md](judge.md) for the ruling and
-proof contract. Record the native thread ID and report link actually returned;
-a retry keeps the same round.
+For light, add `--rigor light`. The helper reads the PR head, body and plain
+comments without writing a ledger. For standard and critical, it reads the
+ledger and checks the phase. Judge briefs point at [judge.md](judge.md).
+Use the native thread IDs and report links actually returned. A retry keeps the
+same round.
 
 ## Rigor
 
-Classify the changed path, not the initiative. Record tier, concrete reason and
-diff size in the PR. Size prompts a light-tier check; a concrete risk can raise
-it. Generator-only machine release PRs keep the checks-only exception.
+Default to light. Use standard only for runtime code, security boundaries or
+data. Raise those paths to critical when the concrete risk warrants it.
+Record `Rigor: <tier>, <changed-path risk>, <diff size>` on the PR.
+The [verify procedure](SKILL.md#1-choose-rigor) owns the machine-release exception.
 
 | Tier | Changed path | Rigor role and review shape |
 | --- | --- | --- |
-| light | Documents, briefs, config JSON, constants, bounded cosmetics and verification tooling without a production runtime path | `rigor-light`: builder, one independent combined QA/review, then independent judge |
-| standard | Runtime behavior or operational rules beyond a bounded light change | `rigor-standard`: builder, separate independent QA and review, then independent judge |
-| critical | Authentication, authorization, money, persisted-data integrity, migrations, security controls, deploy behavior, shared-infrastructure runtime or irreversible operations | `rigor-critical`: builder, separate independent QA and review, then independent judge; name the changed-path risk |
+| light | Default, including documents, briefs, config JSON, constants, cosmetics and verification tooling without a production runtime path | `rigor-light`: builder, one independent combined QA/review, then independent judge |
+| standard | Runtime code, security boundaries or data beyond light scope | `rigor-standard`: builder, separate independent QA and review, then independent judge |
+| critical | High-risk runtime, security or data changes, such as authentication, money, persisted-data integrity, migrations, deploy behavior or irreversible operations | `rigor-critical`: builder, separate independent QA and review, then independent judge; name the changed-path risk |
 
 Dispatch through your harness's subagent mechanism, selecting the `rigor-<tier>` role.
 The `setup-mistystack` skill assigns models and reasoning budgets through native
@@ -32,43 +35,24 @@ builder, QA/review, judge, fix-builder, recheck or final-judge. A recheck uses t
 original reporter's scope in a fresh thread. Judge independence is from both
 implementation and QA/review, even when all use the same rigor role.
 
-## Builder
+## Evidence
 
-```text
-Outcome and why: <consumer change, ticket URL, parent spec URL>.
-Terms: <DOMAIN.md terms involved>.
-Raw material: <failing run, logs, data or source links; not a summary>.
-Oracle: <check outside the worker, exact command and expected result>.
-Scope: <owned paths, acceptance criteria, branch and base SHA, PR target>.
-Keep: <load-bearing behavior or lines to preserve; 'none' when empty>.
-Effort: <bounded depth and the uncertainty that deserves it>.
-
-Read the `misty` skill for the briefing contract, the ticket/spec and repo AGENTS.md.
-Apply misty's briefing contract and rigor-gated delegation; make acceptance true within Scope without overriding Keep.
-
-Run the Oracle and affected checks, then use the `verification` skill for the changed
-consumer path. Its generator owns a missing .agents/skills/verify-<app>/ skill,
-or stack on the PR adding it. Link proof from the PR.
-
-Push and open against <base branch>; use a Conventional Commit title and
-the `technical-writing` and `unslop` skills for the body. Include the ticket's closing reference
-(`Closes #<n>` for a GitHub issue; Linear uses misty's forge adapter), Story: <IDs|none>,
-Rigor: <tier>, its reason, diff size, and observed verification results.
-The conductor owns merge; preserve other writers' commits.
-
-Return PR URL, head SHA, check results, proof links, native thread ID and blockers.
-Follow pstack's Writing the reply rules.
-```
+Every role posts its report or judgment on the PR with the checked SHA, native
+thread ID and evidence links. Plain light-rigor comments also name the role and
+link the preceding report or judgment. The conductor and judge check the comment
+history for role independence and an earlier fix round before proceeding.
+Standard and critical return the helper's payload to the conductor.
 
 ## After the builder
 
-| Work | Helper role | Recorded event |
+| Work | Helper role | Standard or critical event |
 | --- | --- | --- |
-| QA/review | `qa-review` or `qa` and `review` | `report` |
+| QA/review | `qa-review` for light, `qa` and `review` otherwise | `report` |
 | Initial judgment | `judge` | `verdict` |
 | Authorized fix | `fix-builder` | `head` with reason `fix` |
 | Named-blocker verification | `recheck` | `recheck` |
 | Final judgment | `final-judge` | `verdict` |
 
-Use `record --kind <event> --file <payload.json>`. The helper owns eligibility,
-one-fix-round enforcement and retained evidence; do not duplicate its state.
+Light posts plain comments without `init` or `record`. Standard and critical use
+`record --kind <event> --file <payload.json>`. The helper enforces eligibility,
+independence and the single fix round for that ledger.

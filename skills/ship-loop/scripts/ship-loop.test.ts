@@ -20,10 +20,10 @@ function scratch(): string {
 
 type Harness = { dir: string; store: string; repo?: string };
 
-function harness(comments: Comment[] = [], repo?: string, baseRef = "master"): Harness {
+function harness(comments: Comment[] = [], repo?: string, baseRef = "master", rigor = "standard"): Harness {
   const dir = scratch();
   const store = join(dir, "store.json");
-  writeFileSync(store, JSON.stringify({ comments, next: comments.length + 100, base_ref: baseRef }));
+  writeFileSync(store, JSON.stringify({ comments, next: comments.length + 100, base_ref: baseRef, head_sha: H1, pr_body: `Story: US-023\nRigor: ${rigor}, bounded change, 12 lines` }));
   return { dir, store, repo };
 }
 
@@ -291,11 +291,93 @@ test("a fresh independent recheck links its reporter and exposes fix regressions
   expect((await status(h)).doc.phase).toBe("revert-split");
 });
 
-test("a light rigor PR takes one combined review and a standard PR refuses it", async () => {
-  const light = harness();
-  await cli(light, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "light", "--rigor-reason", "docs", "--base", BASE, "--sha", H1, "--builder-thread", "b"]);
-  expect((await cli(light, ["prompt", "--pr", PR, "--role", "qa-review"])).code).toBe(0);
-  expect((await cli(light, ["prompt", "--pr", PR, "--role", "qa"])).code).toBe(1);
+test("a light PR completes combined QA/review and judgment as plain comments without a ledger", async () => {
+  const h = harness([{ id: 1, author: "conductor", body: `Builder at ${H1}. Thread builder-light.` }], undefined, "master", "light");
+  for (const [role, body] of [
+    ["qa-review", `QA/review PASS at ${H1}. Thread qa-light. Evidence https://example.test/proof.`],
+    ["judge", `Verdict at ${H1}. SHIP. Thread judge-light. QA/review https://example.test/report.`],
+  ]) {
+    const before = readFileSync(h.store, "utf8");
+    const brief = await cli(h, ["prompt", "--pr", PR, "--rigor", "light", "--role", role]);
+    expect(brief.code, brief.err).toBe(0);
+    expect(brief.out).toContain(H1);
+    expect(brief.out).toContain("builder-light");
+    if (role === "judge") expect(brief.out).toContain("qa-light");
+    expect(readFileSync(h.store, "utf8")).toBe(before);
+    const command = brief.out.match(/`gh (pr comment \S+ --body-file) <report.txt>`/);
+    if (!command) throw new Error("plain-comment brief has no usable native comment command");
+    const file = join(h.dir, `${role}.txt`);
+    writeFileSync(file, body);
+    const posted = Bun.spawn(["bun", FAKE_GH, ...command[1].split(" "), file], {
+      env: { ...process.env, SHIP_LOOP_FAKE_STORE: h.store }, stdout: "pipe", stderr: "pipe",
+    });
+    expect(await posted.exited).toBe(0);
+  }
+  expect(comments(h).map((c) => c.body)).toEqual([
+    `Builder at ${H1}. Thread builder-light.`,
+    `QA/review PASS at ${H1}. Thread qa-light. Evidence https://example.test/proof.`,
+    `Verdict at ${H1}. SHIP. Thread judge-light. QA/review https://example.test/report.`,
+  ]);
+  expect((await status(h)).doc).toMatchObject({ ledger: "absent", last_seq: 0, phase: null });
+});
+
+test("plain light prompts cannot replace a standard ledger or create a light ledger", async () => {
+  const standard = harness();
+  expect((await cli(standard, ["prompt", "--pr", PR, "--rigor", "light", "--role", "qa-review"])).code).toBe(1);
+  expect((await cli(standard, ["prompt", "--pr", PR, "--role", "qa"])).code).toBe(1);
+  expect((await initPr(standard)).code).toBe(0);
+  expect((await cli(standard, ["prompt", "--pr", PR, "--rigor", "light", "--role", "judge"])).code).toBe(1);
+  expect((await cli(standard, ["prompt", "--pr", PR, "--role", "qa-review"])).code).toBe(1);
+
+  const light = harness([], undefined, "master", "light");
+  expect((await cli(light, ["prompt", "--pr", PR, "--rigor", "light", "--role", "qa"])).code).toBe(1);
+  expect((await cli(light, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "light", "--rigor-reason", "docs", "--base", BASE, "--sha", H1, "--builder-thread", "b"])).code).toBe(1);
+  expect(comments(light)).toEqual([]);
+});
+
+test("a standard PR requires separate reports and preserves its ledger through SHIP", async () => {
+  const h = harness();
+  expect((await initPr(h)).code).toBe(0);
+  expect((await reportQa(h, [], "PASS")).code).toBe(0);
+  expect((await cli(h, ["record", "--pr", PR, "--kind", "verdict"], {
+    thread_id: "judge-1", sha: H1, verdict: "SHIP", blockers: [], report_url: "https://example.test/verdict",
+  })).code).toBe(1);
+  expect((await reportReview(h)).code).toBe(0);
+  expect((await cli(h, ["record", "--pr", PR, "--kind", "verdict"], {
+    thread_id: "judge-1", sha: H1, verdict: "SHIP", blockers: [], report_url: "https://example.test/verdict",
+  })).code).toBe(0);
+  expect((await status(h)).doc).toMatchObject({
+    ledger: "present", phase: "shipped", source_head: H1, review_thread_ids: ["qa-1", "review-1"],
+  });
+});
+
+test("light fix and final-judge briefs retain plain evidence across a changed head without a fresh allowance", async () => {
+  const h = harness([
+    { id: 1, author: "conductor", body: `Builder ${H1}, thread builder-light.` },
+    { id: 2, author: "conductor", body: `qa-review ISSUES ${H1}, thread qa-light. F1 breaks the consumer.` },
+    { id: 3, author: "conductor", body: `judge FIX ${H1}, thread judge-light. Blocker qa-review:F1.` },
+  ], undefined, "master", "light");
+  const fix = await cli(h, ["prompt", "--pr", PR, "--rigor", "light", "--role", "fix-builder"]);
+  expect(fix.code).toBe(0);
+  expect(fix.out).toContain("qa-review:F1");
+  const store = JSON.parse(readFileSync(h.store, "utf8"));
+  store.head_sha = H2;
+  store.comments.push({ id: 4, author: "conductor", body: `Fixed ${H2}, thread fix-light. Named blocker qa-review:F1.` });
+  writeFileSync(h.store, JSON.stringify(store));
+  const recheck = await cli(h, ["prompt", "--pr", PR, "--rigor", "light", "--role", "recheck"]);
+  expect(recheck.code).toBe(0);
+  expect(recheck.out).toContain(`at head ${H2}`);
+  expect(recheck.out).toContain("qa-light");
+  store.comments.push({ id: 5, author: "conductor", body: `recheck ${H2}, thread recheck-light. qa-review:F1 fixed. No regressions.` });
+  writeFileSync(h.store, JSON.stringify(store));
+  const before = readFileSync(h.store, "utf8");
+  const final = await cli(h, ["prompt", "--pr", PR, "--rigor", "light", "--role", "final-judge"]);
+  expect(final.code).toBe(0);
+  expect(final.out).toContain("The single fix round is spent");
+  expect(final.out).toContain("recheck-light");
+  expect(final.out).toContain("judge-light");
+  expect(readFileSync(h.store, "utf8")).toBe(before);
+  expect((await status(h)).doc.ledger).toBe("absent");
 });
 
 test("replay keeps the lowest-id write for a sequence number and rejects a gap", () => {
@@ -486,15 +568,15 @@ test("a pinned-base PR carries its SHIP across a merge of newer main, and refres
   expect(stablePatchId(repo, pinned, judged)).not.toBe(stablePatchId(repo, pinned, merged));
 
   const shipped = harness([], repo);
-  expect((await cli(shipped, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "light", "--rigor-reason", "docs", "--base", pinned, "--sha", judged, "--builder-thread", "builder-1"])).code).toBe(0);
-  expect((await cli(shipped, ["record", "--pr", PR, "--kind", "report"], { role: "qa-review", sha: judged, thread_id: "qa-1", report_url: "u", outcome: "PASS", findings: [] })).code).toBe(0);
+  expect((await cli(shipped, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "standard", "--rigor-reason", "runtime", "--base", pinned, "--sha", judged, "--builder-thread", "builder-1"])).code).toBe(0);
+  for (const role of ["qa", "review"]) expect((await cli(shipped, ["record", "--pr", PR, "--kind", "report"], { role, sha: judged, thread_id: `${role}-1`, report_url: "u", outcome: "PASS", findings: [] })).code).toBe(0);
   expect((await cli(shipped, ["record", "--pr", PR, "--kind", "verdict"], { thread_id: "judge-1", sha: judged, verdict: "SHIP", blockers: [], tickets: [], report_url: "v" })).code).toBe(0);
   expect((await cli(shipped, ["record", "--pr", PR, "--kind", "head"], { reason: "carry", from: judged, from_base: pinned, sha: merged, to_base: "master" })).code).toBe(0);
   expect((await status(shipped)).doc).toMatchObject({ phase: "shipped", source_head: merged, base: main, carried_shas: [judged] });
 
   // Before any report, the same new head is a refresh: init and the fix budget stay, head and base move.
   const h = harness([], repo);
-  expect((await cli(h, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "light", "--rigor-reason", "docs", "--base", pinned, "--sha", judged, "--builder-thread", "builder-1"])).code).toBe(0);
+  expect((await cli(h, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "standard", "--rigor-reason", "runtime", "--base", pinned, "--sha", judged, "--builder-thread", "builder-1"])).code).toBe(0);
   const missing = await cli(h, ["record", "--pr", PR, "--kind", "head"], { reason: "refresh", from: judged, sha: "f".repeat(40), base: "master" });
   expect(missing.code).toBe(1);
   expect(missing.err).toContain(`${"f".repeat(40)} is not a commit in this checkout`);
@@ -502,8 +584,8 @@ test("a pinned-base PR carries its SHIP across a merge of newer main, and refres
   expect(refreshed.code).toBe(0);
   expect(lastEvent(h)).toMatchObject({ reason: "refresh", from: judged, sha: merged, base: main });
   expect((await status(h)).doc).toMatchObject({ phase: "verify", source_head: merged, base: main, fix_round: 0, carried_shas: [], builder_thread_ids: ["builder-1"], last_seq: 2 });
-  expect((await cli(h, ["record", "--pr", PR, "--kind", "report"], { role: "qa-review", sha: judged, thread_id: "qa-1", report_url: "u", outcome: "PASS", findings: [] })).code).toBe(1);
-  expect((await cli(h, ["record", "--pr", PR, "--kind", "report"], { role: "qa-review", sha: merged, thread_id: "qa-1", report_url: "u", outcome: "PASS", findings: [] })).code).toBe(0);
+  expect((await cli(h, ["record", "--pr", PR, "--kind", "report"], { role: "qa", sha: judged, thread_id: "qa-1", report_url: "u", outcome: "PASS", findings: [] })).code).toBe(1);
+  expect((await cli(h, ["record", "--pr", PR, "--kind", "report"], { role: "qa", sha: merged, thread_id: "qa-1", report_url: "u", outcome: "PASS", findings: [] })).code).toBe(0);
 
   git(repo, "switch", "-q", "--detach", merged);
   const later = commitFile(repo, "feature.txt", "feature\nlater\n");
@@ -513,15 +595,18 @@ test("a pinned-base PR carries its SHIP across a merge of newer main, and refres
 }, 15_000);
 
 async function shipFixture(h: Harness, base: string, judged: string, fixed?: string) {
-  expect((await cli(h, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "light", "--rigor-reason", "carry regression", "--base", base, "--sha", judged, "--builder-thread", "builder-1"])).code).toBe(0);
+  expect((await cli(h, ["init", "--pr", PR, "--ticket", TICKET, "--rigor", "standard", "--rigor-reason", "carry regression", "--base", base, "--sha", judged, "--builder-thread", "builder-1"])).code).toBe(0);
   expect((await cli(h, ["record", "--pr", PR, "--kind", "report"], {
-    role: "qa-review", sha: judged, thread_id: "qa-1", report_url: "u", outcome: fixed ? "ISSUES" : "PASS", findings: fixed ? [finding("F1")] : [],
+    role: "qa", sha: judged, thread_id: "qa-1", report_url: "u", outcome: fixed ? "ISSUES" : "PASS", findings: fixed ? [finding("F1")] : [],
+  })).code).toBe(0);
+  expect((await cli(h, ["record", "--pr", PR, "--kind", "report"], {
+    role: "review", sha: judged, thread_id: "review-1", report_url: "u", outcome: "PASS", findings: [],
   })).code).toBe(0);
   if (fixed) {
-    expect((await cli(h, ["record", "--pr", PR, "--kind", "verdict"], { thread_id: "judge-1", sha: judged, verdict: "FIX", blockers: ["qa-review:F1"], report_url: "v" })).code).toBe(0);
+    expect((await cli(h, ["record", "--pr", PR, "--kind", "verdict"], { thread_id: "judge-1", sha: judged, verdict: "FIX", blockers: ["qa:F1"], report_url: "v" })).code).toBe(0);
     expect((await cli(h, ["record", "--pr", PR, "--kind", "head"], { reason: "fix", sha: fixed, thread_id: "builder-2" })).code).toBe(0);
     expect((await cli(h, ["record", "--pr", PR, "--kind", "recheck"], {
-      thread_id: "recheck-1", reporter_thread_id: "qa-1", sha: fixed, report_url: "r", regressions: [], results: [{ blocker: "qa-review:F1", status: "fixed", evidence: "owner check added" }],
+      thread_id: "recheck-1", reporter_thread_id: "qa-1", sha: fixed, report_url: "r", regressions: [], results: [{ blocker: "qa:F1", status: "fixed", evidence: "owner check added" }],
     })).code).toBe(0);
   }
   expect((await cli(h, ["record", "--pr", PR, "--kind", "verdict"], { thread_id: fixed ? "judge-2" : "judge-1", sha: fixed ?? judged, verdict: "SHIP", blockers: [], tickets: [], report_url: "v" })).code).toBe(0);

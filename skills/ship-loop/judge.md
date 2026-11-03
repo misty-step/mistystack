@@ -14,13 +14,16 @@ blockers and defects the fix introduced; retain unchanged proof.
 
 ## 2. Rule
 
+Reviewers report blockers only. Put worthwhile non-blocking findings in the
+repository's one running cleanup issue, not individual tickets or this PR's gates.
+Link that issue when a ruling needs it. Preference-only findings can be skipped.
+
 Each finding gets one ruling and one reason:
 
 - **blocker:** demonstrated harm introduced by this unit, a broken acceptance
   criterion, or missing required proof. Includes security, data loss, broken build,
   deploy or rollback. Pre-existing defects cannot block this PR.
-- **file:** worthwhile actionable work, while this unit is a net improvement now.
-  Reuse an issue for the same cause; every such ruling gets a ticket link.
+- **file:** worthwhile non-blocking work for the running cleanup issue.
 - **skip:** disproved, already covered, speculative, preference-only or not worth
   doing. A reviewer's suggestion alone does not earn a ticket.
 
@@ -29,8 +32,8 @@ Rule only on QA/review evidence for the atomic unit, not the initiative's remain
 ## 3. Decide and record
 
 Post `Verdict at <head SHA>` with linked QA/review, one outcome and its reason,
-exact blockers with owner and observable fix, useful follow-ups, consequential
-skips and intent calls under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply). Omit empty sections.
+exact blockers with owner and observable fix, the cleanup issue when relevant,
+and consequential skips under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply). Omit empty sections.
 
 - **SHIP:** independent completed QA/review cover this SHA; all blockers resolved.
   The `verification` skill defines the required real-path proof, including sign-in
@@ -40,10 +43,13 @@ skips and intent calls under [pstack's reply rules](../poteto-mode/SKILL.md#writ
 - **REVERT / SPLIT:** drop/revert the unit or make independently shippable units.
 
 Only FIX authorizes the single fix round. The blocking reporter's role rechecks
-named fixes and fix-introduced regressions in a fresh thread. Unrelated findings
-become follow-ups. Final judgment allows SHIP, REVERT or SPLIT; changed SHAs,
-rebases and retries never reset the cap.
+named fixes and fix-introduced regressions in a fresh thread.
+Final judgment allows SHIP, REVERT or SPLIT. Changed SHAs, rebases and retries
+never reset the cap.
 
-Return native thread ID, SHA, outcome, blockers, ticket links and PR report URL to
-the conductor for the helper's `record --kind verdict`. Its schema and state
-machine enforce eligibility and independence. [Merge preflight](merging.md#merge-preflight) owns the merge gate; no additional human review follows.
+Return the native thread ID, SHA, outcome, blockers, ticket links and PR report URL.
+Light posts a plain PR comment without a ledger. Check the linked reports' thread
+IDs and earlier judgments before ruling. For standard and critical, the conductor
+uses `record --kind verdict`. Its state machine enforces eligibility and independence.
+Return the result to [Shipping](../poteto-mode/playbooks/shipping.md) through the
+[verdict mapping](../misty/harnesses/pstack-names.md#routes).

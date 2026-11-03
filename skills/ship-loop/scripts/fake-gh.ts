@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 const store = process.env.SHIP_LOOP_FAKE_STORE;
 if (!store) throw new Error("SHIP_LOOP_FAKE_STORE is required");
 const args = process.argv.slice(2);
-const state = JSON.parse(readFileSync(store, "utf8")) as { comments: { id: number; body: string; author: string | null }[]; next: number; base_ref?: string };
+const state = JSON.parse(readFileSync(store, "utf8")) as { comments: { id: number; body: string; author: string | null }[]; next: number; base_ref?: string; head_sha?: string; pr_body?: string };
 const fail = process.env.SHIP_LOOP_FAKE_FAIL;
 
 if (fail === "read" && !args.includes("POST")) {
@@ -14,9 +14,11 @@ if (fail === "read" && !args.includes("POST")) {
   process.exit(1);
 }
 if (args.some((a) => /\/pulls\/\d+$/.test(a))) {
-  process.stdout.write(JSON.stringify({ author: "conductor", baseRef: state.base_ref ?? "master" }) + "\n");
-} else if (args.includes("-X") && args.includes("POST")) {
-  const body = JSON.parse(readFileSync(0, "utf8")).body as string;
+  process.stdout.write(JSON.stringify({ author: "conductor", baseRef: state.base_ref ?? "master", head: state.head_sha, body: state.pr_body }) + "\n");
+} else if ((args.includes("-X") && args.includes("POST")) || (args[0] === "pr" && args[1] === "comment")) {
+  const body = args[0] === "pr"
+    ? readFileSync(args[args.indexOf("--body-file") + 1], "utf8")
+    : JSON.parse(readFileSync(0, "utf8")).body as string;
   const id = state.next++;
   state.comments.push({ id, body, author: "conductor" });
   writeFileSync(store, JSON.stringify(state));
