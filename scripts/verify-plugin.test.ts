@@ -174,6 +174,7 @@ function expectStrictWarnings(root: string, warnings: string[]) {
 function runPlugin(root: string, args: string[], path = "") {
 	mkdirSync(join(root, "scripts"), { recursive: true });
 	copyFileSync(join(import.meta.dir, "verify-plugin.ts"), join(root, "scripts/verify-plugin.ts"));
+	copyFileSync(join(import.meta.dir, "pstack-lock.mjs"), join(root, "scripts/pstack-lock.mjs"));
 	const result = Bun.spawnSync([process.execPath, join(root, "scripts/verify-plugin.ts"), ...args], {
 		cwd: root,
 		env: { ...process.env, HOME: root, PATH: path },
