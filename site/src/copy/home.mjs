@@ -15,7 +15,7 @@ export const home = {
   navCta: { label: 'Install', href: '#install' },
   hero: (facts) => ({
     headline: 'Before work, name the check.',
-    sub: `mistystack is Misty Step's open method for coding agents. Its core is ${facts.coreLines} lines long and loads in every session; the ${facts.headlineLine} line starts with this headline.`,
+    sub: `mistystack is Misty Step's open method for coding agents. Its core is ${facts.coreLines} lines long and loads in every session. Misty routes the work to a playbook and an outside check.`,
     primary: { label: 'Install for your harness', href: '#install' },
     secondary: { label: `Read all ${facts.coreLines} lines`, href: '#core' },
     proof: `Install commands for ${facts.commandHarnesses}.`,

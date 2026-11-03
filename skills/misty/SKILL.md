@@ -66,7 +66,14 @@ Apply Non-negotiables' delegation and model boundaries through the names adapter
 
 ### Briefing contract
 
-A brief carries **Outcome and why** with source links; **Terms** from DOMAIN.md; **Raw material** such as the failing run or source, not a summary; **Oracle** with its exact command or user path; **Scope and Keep**; and **Effort**. [agent-design](../agent-design/SKILL.md) owns prompt and context craft. Pass this contract, not the parent transcript.
+[agent-design](../agent-design/SKILL.md) owns prompt and context craft. Pass this contract, not the parent transcript:
+
+- **Outcome and why:** the consumer's change with source links.
+- **Terms:** the DOMAIN.md terms involved.
+- **Raw material:** the failing run, logs, data or source, not a summary.
+- **Oracle:** its exact command or real user path.
+- **Scope and Keep:** the owned change and behavior to preserve.
+- **Effort:** how much judgment the unit needs.
 
 ## Writing the reply
 
