@@ -1,0 +1,12 @@
+[extend]
+useDefault = true
+
+# The pinned pstack Sentry reference's SHA-256 is not a Sentry access token.
+# Keep every other rule, path and digest subject to the default scanner.
+[[allowlists]]
+description = "Pinned pstack reference digest in the generated lock"
+targetRules = ["sentry-access-token"]
+condition = "AND"
+paths = ['''^vendor/pstack\.lock\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"skills/why/references/sources/sentry\.md": "2d4f83048eac1df530b399e2aed75dd7c9c18577b7665420aaeb96d0ceb0b702",?$''']

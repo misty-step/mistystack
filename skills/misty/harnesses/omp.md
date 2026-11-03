@@ -41,7 +41,7 @@ intact.
 
 OMP's `read` tool accepts `skill://misty` and `skill://<name>` for installed skills.
 A relative Markdown link is relative to the file containing it, not the session's
-working directory. Follow Misty's [bug-fix routing link](../playbooks/bug-fix.md)
+working directory. Follow Misty's [bug-fix routing link](../../poteto-mode/playbooks/bug-fix.md)
 to that installed file; a checkout copy is not proof of installed content.
 
 Principle leaves, recompile and setup-mistystack retain

@@ -1,0 +1,11 @@
+{
+  "source": "skills/poteto-mode/playbooks/eval.md",
+  "reason": "Cursor's system-named transcript directory is unavailable outside Cursor; inspect the actual candidate native-session evidence.",
+  "edits": [
+    {
+      "file": "",
+      "before": "Read each candidate's local transcript under the active workspace's `agent-transcripts/` directory (the system prompt names this path). Do not glob across `~/.cursor/projects/*/`. That crosses workspace boundaries and reads private chats from unrelated projects.",
+      "after": "Read each candidate's native session transcript or authorized export identified in its brief, using the pstack names adapter. Retain actual file-read events and source identity. Do not assume a Cursor directory or read unrelated workspaces. Missing transcript evidence leaves chain-following unproven."
+    }
+  ]
+}

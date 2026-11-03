@@ -18,12 +18,16 @@ Criteria:
 3. A failed test, invalid plugin or failed available-harness proof exits nonzero.
    Missing CLIs and lint-only installation skips are named, never reported passed.
 4. Verification preserves the live profile, credentials and foreign state.
-5. The gate checks the pinned pstack inventory and vendored file hashes offline,
-   rejecting hand edits, missing files and unlisted files.
+5. The gate checks the wholesale pinned pstack inventory and vendored file hashes
+   offline, including both agents as references, every skill and playbook,
+   formal-verification scripts, and recorded portability patches. It rejects
+   hand edits, missing or unlisted files and patch drift.
 6. pstack sync rejects source symlinks and symlinked destination components
    before writing. The offline gate rejects symlinked vendored paths and parents.
 7. Repeating a pstack update at the same pin leaves the lock and vendored tree unchanged; a real source beneath a symlinked parent remains usable.
 8. The offline gate rejects a detected skill, harness-name or poteto-mode section route without an installed target or explicit names-adapter row.
+9. poteto-mode and poteto-help install as explicit-only skills alongside Misty;
+   the names adapter resolves native mechanisms without changing Misty's nine overrides.
 
 Proof: `scripts/verify`, `scripts/verify-plugin.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -185,7 +189,7 @@ Criteria:
    just their word count or installed file bytes.
 
 Proof: `rules/core.md`, `skills/misty/`, `skills/agent-design/`,
-`skills/misty/playbooks/eval.md`, plugin lint and fresh-session proof.
+`skills/poteto-mode/playbooks/eval.md`, plugin lint and fresh-session proof.
 
 ## US-053 Lead full-value initiatives through atomic delivery
 
@@ -247,7 +251,7 @@ Criteria:
 4. Referenced skills and playbooks resolve to their maintained homes; hidden
    principle leaves remain explicitly reachable.
 
-Proof: `skills/misty/SKILL.md`, `skills/misty/playbooks/`, plugin reference checks.
+Proof: `skills/misty/SKILL.md`, `skills/poteto-mode/playbooks/`, plugin reference checks.
 
 ## US-060 Require an Oracle before dispatch
 

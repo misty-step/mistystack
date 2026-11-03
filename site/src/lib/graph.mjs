@@ -12,7 +12,7 @@ import { parseDocument } from 'yaml';
 import { blobUrl, encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 import { historicalSources } from './historical-sources.mjs';
 
-import { readPstackLock } from '../../../scripts/pstack-lock.mjs';
+import { isPstackTemplateTarget, readPstackLock } from '../../../scripts/pstack-lock.mjs';
 
 const { lock: pstack, vendoredSkills, vendoredSources, upstreamOnly } = readPstackLock(repoRoot);
 const markdown = unified().use(remarkParse).use(remarkGfm);
@@ -41,7 +41,7 @@ function routeFor(id, data) {
     return `/evals/${data.id}/`;
   }
   if (id.startsWith('skills/misty/harnesses/')) return `/install/${path.basename(id, '.md')}/`;
-  if (id.startsWith('skills/misty/playbooks/')) return `/library/playbooks/${path.basename(id, '.md')}/`;
+  if (id.startsWith('skills/poteto-mode/playbooks/')) return `/library/playbooks/${path.basename(id, '.md')}/`;
   const skill = /^skills\/([^/]+)\/(.+)\.md$/.exec(id);
   if (skill) {
     if (skill[1].startsWith('principle-') && skill[2] === 'SKILL') return `/library/principles/${skill[1].slice(10)}/`;
@@ -56,7 +56,7 @@ function kindFor(id) {
   if (/^skills\/principle-[^/]+\/SKILL\.md$/.test(id)) return 'Principles';
   if (/^skills\/[^/]+\/SKILL\.md$/.test(id)) return 'Skills';
   if (id.startsWith('skills/misty/harnesses/')) return 'Install';
-  if (id.startsWith('skills/misty/playbooks/')) return 'Playbooks';
+  if (id.startsWith('skills/poteto-mode/playbooks/')) return 'Playbooks';
   if (id === 'skills/foundation/checklist.md') return 'Foundation';
   if (id.startsWith('skills/')) return 'Supporting documents';
   if (id.startsWith('docs/evals/')) return 'Evals';
@@ -195,7 +195,7 @@ function resolveTarget(doc, href, node, graph, image = false) {
       node.children.push(literal(` (archived source ${archive.commit.slice(0, 7)})`));
       return `${repositoryUrl}/blob/${archive.commit}/${encodePath(target)}${query}${fragment ? `#${fragment}` : ''}`;
     }
-    if (!existsSync(absolute) && vendoredSources.has(doc.id) && !href.startsWith('/')) {
+    if (vendoredSources.has(doc.id) && !href.startsWith('/')) {
       const source = vendoredSources.get(doc.id);
       const upstream = path.posix.normalize(path.posix.join(path.posix.dirname(source), decodeURIComponent(queryAt < 0 ? beforeHash : beforeHash.slice(0, queryAt))));
       if (upstreamOnly.some((source) => upstream === source || upstream.startsWith(`${source}/`))) {
@@ -237,6 +237,13 @@ function decorateHtml(doc, graph) {
   visit(doc.hast, 'element', (node, index, parent) => {
     const properties = node.properties ?? {};
     if (node.tagName === 'a' && typeof properties.href === 'string') {
+      if (vendoredSources.has(doc.id) && isPstackTemplateTarget(doc.id, properties.href)) {
+        node.tagName = 'code';
+        node.children = [literal(`[${text(node)}](${properties.href})`)];
+        delete properties.href;
+        addClass(node, 'sp-code-inline');
+        return;
+      }
       if (properties.href.startsWith('omp://')) {
         node.children.push(literal(' (Open in OMP)'));
         properties.title = 'Open in OMP';

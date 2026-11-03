@@ -1,0 +1,31 @@
+{
+  "source": "skills/poteto-help",
+  "reason": "Cursor's marketplace, Custom Mode and setup-state instructions would direct native Mistystack users to the wrong installation.",
+  "edits": [
+    {
+      "file": "SKILL.md",
+      "before": "- No `~/.cursor/rules/pstack-models.mdc` means `/setup-pstack` hasn't run for this user, so every role uses its default model.",
+      "after": "- Inspect the destination harness's native role configuration through **setup-mistystack**; absence of a Cursor rule says nothing about native setup."
+    },
+    {
+      "file": "SKILL.md",
+      "before": "1. Install with `/add-plugin pstack` in chat, or from Customize in the sidebar.",
+      "after": "1. Install Mistystack through the destination harness's native lifecycle in the pstack names adapter; the full pstack foundation is bundled."
+    },
+    {
+      "file": "SKILL.md",
+      "before": "2. Run [`/setup-pstack`](../setup-pstack/SKILL.md). It asks for a reasoning budget, maps a model to each role, and writes a rule. The rule applies to new chats. Then it offers once each to generate a verification skill and a formal verification skill for the project, unless the project already has one.",
+      "after": "2. Run [`/setup-pstack`](../setup-pstack/SKILL.md). It uses **setup-mistystack** for native model and reasoning configuration, then offers verification and formal-verification skills when the project has none."
+    },
+    {
+      "file": "SKILL.md",
+      "before": "pstack is built for Cursor, and it also installs in Claude Code with `/plugin marketplace add cursor/plugins`, then `/plugin install pstack@cursor-plugins`. There, each command takes a `pstack:` prefix, such as `/pstack:poteto-mode`. The [Claude Code adapter](../../docs/harness/claude-code.md) maps the Cursor names, and a step that needs a Cursor-only feature, such as Bugbot or Automations, is skipped with a one-line note.\n\nOther tools can read the skills, because they use the Agent Skills format. But most workflow skills, including `/poteto-mode`, `/how`, `/why`, and `/teach`, spawn Cursor subagents with per-role models, and Custom Modes and `/loop` are Cursor features, so those parts may not work there.",
+      "after": "Mistystack installs this foundation in OMP, Claude Code, Codex and pi. Use the pstack names adapter for native invocation, subagents, models, history and event handling. A missing integration never skips required proof or independent judgment."
+    },
+    {
+      "file": "SKILL.md",
+      "before": "- Option+Enter on Mac or Alt+Enter on Windows, or Use as Mode from the skill entry, makes it a Custom Mode. It stays in context every turn until the user exits the mode, and it stays out of casual turns.\n- Cursor's docs list Custom Modes in the Agents Window and the CLI. Elsewhere, start each new task with `/poteto-mode`.",
+      "after": "- Custom Mode keyboard shortcuts are Cursor-only. In OMP, Claude Code, Codex and pi, invoke the installed skill explicitly at the start of each new task through the native skill mechanism in the pstack names adapter."
+    }
+  ]
+}

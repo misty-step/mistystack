@@ -44,7 +44,7 @@ replace foreign trust settings. Codex stores a content hash with each trust, so
 check `hooks/list` trust status again after a refresh.
 
 Use Codex's native skill mechanism with `mistystack:misty` or
-`mistystack:<skill-name>`. Follow Misty's [bug-fix link](../playbooks/bug-fix.md)
+`mistystack:<skill-name>`. Follow Misty's [bug-fix link](../../poteto-mode/playbooks/bug-fix.md)
 relative to its installed file, not the working directory or a checkout copy.
 Codex does not enforce `disable-model-invocation`; principle leaves, recompile
 and setup-mistystack also carry `agents/openai.yaml` with

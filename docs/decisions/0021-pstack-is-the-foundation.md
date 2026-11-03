@@ -1,6 +1,6 @@
 # 0021: pstack is the foundation
 
-Status: accepted, 2026-11-02.
+Status: accepted, 2026-11-02; wholesale adoption directed 2026-11-03.
 
 ## Context
 
@@ -20,36 +20,59 @@ keeps pstack as the base and adds a personal `<name>-mode` router alongside
 `poteto-mode`. Rewriting portable primitives into Misty-specific copies obscures
 that foundation and makes upstream changes harder to recognize.
 
+On 2026-11-03, Phaedrus directed wholesale adoption: everything is the baseline,
+with limited modifications only where a primitive's mechanism cannot run outside
+Cursor. This replaces the curated include/exclude rationale and the zero-patch
+target. The owner waived the S5 empirical gate for this adoption
+([MIS-745](https://linear.app/misty-step/issue/MIS-745)); no comparative quality
+claim follows from that waiver.
+
 ## Decision
 
-Vendor pstack's selected primitives verbatim. Misty's `misty` router chooses
-among them, Misty extensions add only the missing method, and router or layer
-overrides resolve differences. Do not patch vendored procedures. The only text
-transform is upstream's one-line harness pointer after the first Markdown heading, linking files that use Cursor names to [the harness-name map](../../skills/misty/harnesses/pstack-names.md).
-Generated Codex sidecars keep upstream's explicit-only skills explicit-only.
+Vendor every pinned skill, poteto-mode playbook, principle and agent, including
+statechart and formal-verification scripts. `poteto-mode` and `poteto-help`
+install as explicit-only skills alongside Misty. Agent definitions install as
+reference files consumed by native briefs, without a new installer.
+
+Try [the harness-name map](../../skills/misty/harnesses/pstack-names.md) first.
+A mapping row is not a modification. Retain upstream text except its one-line
+harness pointer and the smallest portability patch needed when the core
+mechanism cannot run in OMP, Claude Code, Codex or pi. Each patched primitive has
+one exact-replacement JSON file under `vendor/pstack-patches/`, with its source,
+reason and edits. Sync applies those replacements after copying and adding the
+pointer; it fails before writing if a replacement has no unique match.
+Generated Codex sidecars preserve explicit-only invocation.
+
+Misty's nine overrides, core, ship-loop and routing policy are unchanged.
+Availability of the complete baseline does not authorize an override change.
 
 [The lock](../../vendor/pstack.lock.json) is the one home for the source pin,
-include/destination list, every excluded skill, playbook and agent with its
-reason, and the vendored file hashes. All selected playbook and workflow entries are now installed (`vendored: true`); no inclusions are pending.
+complete source/destination inventory, patch reasons and patch hashes, and the
+hashes of final patched bytes. There are no excluded primitives.
 [The sync command](../../scripts/sync-pstack.ts) verifies the source tree, copies
-active inclusions and rewrites the lock. Its offline `--check` runs in the
-canonical gate and rejects edits, missing files, unlisted files and inventory drift.
+the foundation, applies recorded patches and regenerates the lock. Its offline
+`--check` rejects edits, missing or unlisted files, changed patches, inventory
+drift and uncovered native-name routes. Never hand-edit the generated lock.
 
-Relative links from vendored files to excluded or pending targets resolve to the
-same pinned upstream source through lint, the site and the harness note; they do
-not cause that target to be installed or allow a second text transform.
+Playbooks have one home under `skills/poteto-mode/playbooks/`; Misty's routes and
+the public site's existing playbook URLs point there. Upstream documentation
+outside the installed primitives resolves against the pinned source inventory.
 
 ## Consequences
 
-- Upstream sync has a visible cost: select a new commit, classify any new or
-  removed names in the lock, run `bun scripts/sync-pstack.ts --update <commit>`
-  (optionally `--from <checkout-or-pstack-directory>`), review changed bytes, and
-  prove the affected native consumers. Do not repair drift by hand-editing a
-  vendored file or its recorded hash.
-- Misty-only requirements belong in the router, extensions or harness notes.
-  The lock, not this decision or a second inventory, owns inclusion decisions.
-  [Attribution](../../ATTRIBUTION.md) retains the upstream MIT notice.
-- Revisit if upstream's licence or extension model changes, the portable base
-  can no longer be used through reachable overrides, or measured sync cost
-  exceeds the benefit of sharing the foundation. Any exception needs a new
-  recorded decision rather than an accumulating patch set.
+- Upstream sync has a visible cost: select a commit and run
+  `bun scripts/sync-pstack.ts --update <commit> --all`
+  (optionally `--from <checkout-or-pstack-directory>`), review changed bytes,
+  then prove the native consumers. Two updates at the same pin converge.
+  A patch that no longer matches blocks sync instead of silently disappearing.
+- The foundation includes large script bundles. Record the plugin byte delta
+  and observed install-time impact in the PR's native proof, not a size-based
+  exclusion.
+- Misty-only policy stays in the router, extensions and harness notes.
+  [Attribution](../../ATTRIBUTION.md) retains the MIT notice and identifies the
+  portability modifications. The lock, not a duplicate inventory here, owns
+  every included item and patch reason.
+- Revisit if upstream's licence or extension model changes, a primitive cannot
+  be adapted without changing its purpose, or measured sync cost exceeds the
+  benefit. An irreducible exception needs evidence and the owner's decision;
+  neither a silent exclusion nor a broader rewrite is authorized.

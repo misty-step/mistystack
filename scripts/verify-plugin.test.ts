@@ -289,6 +289,47 @@ test("lock-listed vendored skills keep upstream metadata but still require names
 	expect(lintPlugin(root).errors).toContain(`${file}: metadata.source must be non-empty`);
 });
 
+test.each(["poteto-mode", "poteto-help"])("wholesale %s remains explicit-only without acquiring Misty metadata", name => {
+	const { root, put, lock } = fixture();
+	const file = `skills/${name}/SKILL.md`;
+	const source = `---\nname: ${name}\ndescription: Upstream entry.\ndisable-model-invocation: true\n---\n# Upstream\n`;
+	put(file, source);
+	lock({ include: [{ source: `skills/${name}`, destination: `skills/${name}`, vendored: true }], files: { [file]: "a".repeat(64) } });
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, source.replace("disable-model-invocation: true", "disable-model-invocation: false"));
+	expect(lintPlugin(root, true).errors).toEqual([`${file}: disable-model-invocation must be true`]);
+});
+
+test("the maintained gate does not execute upstream script-bundle suites", () => {
+	const { root, put, lock } = fixture();
+	const file = "skills/upstream/SKILL.md";
+	const suite = "skills/upstream/bundle.test.ts";
+	put(file, "---\nname: upstream\ndescription: Upstream entry.\n---\n# Upstream\n");
+	put(suite, 'throw new Error("Upstream suite must run through its own toolchain");\n');
+	put("consumer.test.ts", 'import { test, expect } from "bun:test"; test("maintained consumer", () => expect(true).toBe(true));\n');
+	lock({ include: [{ source: "skills/upstream", destination: "skills/upstream", vendored: true }], files: { [file]: "a".repeat(64), [suite]: "b".repeat(64) } });
+	const result = runPlugin(root, ["--strict", "--lint-only"]);
+	expect(result.code).toBe(0);
+	expect(result.err).toContain("maintained consumer");
+	expect(result.err).not.toContain("Upstream suite must run");
+});
+
+test("vendored prompt examples are literals, while actual file links and Misty references remain strict", () => {
+	const { root, put, lock, skill } = fixture();
+	const file = "skills/upstream/SKILL.md";
+	const prompt = "skills/upstream/references/synthesizer-prompt.md";
+	put(file, "---\nname: upstream\ndescription: Upstream entry.\n---\n# Upstream\n");
+	put(prompt, "# Prompt template\n\nSource: [Citation](citation-url).\n");
+	put("skills/misty/harnesses/pstack-names.md", "# Names\n\n| pstack | Native |\n| --- | --- |\n| `deslop` | Native diff review. |\n");
+	lock({ include: [{ source: "skills/upstream", destination: "skills/upstream", vendored: true }], files: { [file]: "a".repeat(64), [prompt]: "b".repeat(64) } });
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(prompt, "# Prompt template\n\n[Broken](missing.md). Read the `deslop` skill.\n");
+	expect(lintPlugin(root, true).errors).toEqual([`${prompt}: missing reference skills/upstream/references/missing.md`]);
+	put(prompt, "# Prompt template\n");
+	put("skills/misty/SKILL.md", skill("misty", "Read the `deslop` skill."));
+	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: unknown skill deslop (missing skills/deslop/SKILL.md)"]);
+});
+
 test("only locked vendored files may refer to classified, unvendored upstream targets", () => {
 	const { root, put, lock, skill } = fixture();
 	const file = "skills/principle-upstream/SKILL.md";
