@@ -22,6 +22,8 @@ Criteria:
    rejecting hand edits, missing files and unlisted files.
 6. pstack sync rejects source symlinks and symlinked destination components
    before writing. The offline gate rejects symlinked vendored paths and parents.
+7. Repeating a pstack update at the same pin leaves the lock and vendored tree unchanged; a real source beneath a symlinked parent remains usable.
+8. The offline gate rejects a detected skill, harness-name or poteto-mode section route without an installed target or explicit names-adapter row.
 
 Proof: `scripts/verify`, `scripts/verify-plugin.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -172,8 +174,7 @@ context serves the task rather than repeating facts.
 Criteria:
 1. The core routes nontrivial work to `misty`; principles and procedures have
    one home and load through its index or the relevant skill.
-2. Skills follow DOMAIN.md's provenance contract: Misty frontmatter or the
-   vendored pstack lock, each covering its owned files.
+2. Skills follow DOMAIN.md's provenance contract: short Misty source identities point to full directory provenance in ATTRIBUTION.md; the lock owns vendored provenance.
 3. [Agent design](skills/agent-design/SKILL.md) owns skill-writing and instruction,
    tool and context changes. Its [instruction-eval rule](skills/agent-design/SKILL.md#instruction-eval)
    extends the vendored eval playbook with comparison against both prior instructions

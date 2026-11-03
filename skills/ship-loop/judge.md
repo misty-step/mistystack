@@ -24,11 +24,7 @@ Each finding gets one ruling and one reason:
 - **skip:** disproved, already covered, speculative, preference-only or not worth
   doing. A reviewer's suggestion alone does not earn a ticket.
 
-Judge the atomic unit, not the initiative's remaining work. Assess the safety fact and its proof from [blast-radius](../blast-radius/SKILL.md); unproved remains unproved. Heuristics may ship
-labelled approximate. For unsettled intent, choose the reversible option closest
-to the stated outcome and record an `intent call`; block an irreversible choice.
-Confirm the `Rigor:` reason and diff size; raise the tier only for a concrete
-changed-path risk. Record `no deploy` when no deployed artifact changes.
+Rule only on QA/review evidence for the atomic unit, not the initiative's remaining work. Use blast-radius's one-safety-fact idea to identify which supplied proof makes it safe; do not run proof, commission an arena or create another review panel. Missing proof remains unproved. Heuristics may ship labelled approximate. For unsettled intent, record a reversible `intent call` closest to the outcome; block an irreversible choice. Confirm the `Rigor:` reason and diff size; raise it only for a concrete changed-path risk. Record `no deploy` when no deployed artifact changes.
 
 ## 3. Decide and record
 
@@ -50,5 +46,4 @@ rebases and retries never reset the cap.
 
 Return native thread ID, SHA, outcome, blockers, ticket links and PR report URL to
 the conductor for the helper's `record --kind verdict`. Its schema and state
-machine enforce eligibility and independence. SHIP plus passing affected checks
-is the merge gate; no additional human review follows.
+machine enforce eligibility and independence. [Merge preflight](merging.md#merge-preflight) owns the merge gate; no additional human review follows.

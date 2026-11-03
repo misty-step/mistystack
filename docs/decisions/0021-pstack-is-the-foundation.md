@@ -25,14 +25,12 @@ that foundation and makes upstream changes harder to recognize.
 Vendor pstack's selected primitives verbatim. Misty's `misty` router chooses
 among them, Misty extensions add only the missing method, and router or layer
 overrides resolve differences. Do not patch vendored procedures. The only text
-transform is upstream's one-line harness pointer after an H1, linking files that
-use Cursor names to [the harness-name map](../../skills/misty/harnesses/pstack-names.md).
+transform is upstream's one-line harness pointer after the first Markdown heading, linking files that use Cursor names to [the harness-name map](../../skills/misty/harnesses/pstack-names.md).
 Generated Codex sidecars keep upstream's explicit-only skills explicit-only.
 
 [The lock](../../vendor/pstack.lock.json) is the one home for the source pin,
 include/destination list, every excluded skill, playbook and agent with its
-reason, and the vendored file hashes. Included entries marked `vendored: false`
-are selected for the playbook and workflow slices but not installed yet.
+reason, and the vendored file hashes. All selected playbook and workflow entries are now installed (`vendored: true`); no inclusions are pending.
 [The sync command](../../scripts/sync-pstack.ts) verifies the source tree, copies
 active inclusions and rewrites the lock. Its offline `--check` runs in the
 canonical gate and rejects edits, missing files, unlisted files and inventory drift.

@@ -4,7 +4,7 @@ description: "When investigating a question, gathering docs or API facts, or ver
 metadata:
   owner: phaedrus
   prevents: "Code depending on recalled rather than verified interfaces; inferred 90-day use on 2026-10-28: research 8 plus agents/research 7 session-family read-path hits."
-  source: "Local Misty ~/.omp/agent/skills/research; mattpocock/skills@59db609eb1e18aaf59b63284d0e52255aff0c63c/skills/engineering/research; installed agents/research resolves to the same Pocock research skill; Daybook projects/mistystack.md decision 16; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/why"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 

@@ -4,7 +4,7 @@ description: "Review a security boundary or finding; use pinned upstream only fo
 metadata:
   owner: phaedrus
   prevents: "Unsupported vulnerability claims and unsafe target execution; mistystack PR #520."
-  source: "cloudflare/security-audit-skill@c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/SKILL.md; misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/skills/security-audit"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 

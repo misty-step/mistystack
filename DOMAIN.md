@@ -17,8 +17,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   principles, playbook and task skills.
 - **Principle leaf:** one on-demand `principle-<slug>` skill reached through the
   mode's index, not a duplicate of a core rule or task skill's procedure.
-- **Playbook:** a numbered task-type procedure under `skills/misty/playbooks/`
-  whose steps have checkable completion criteria.
+- **Playbook:** a task-type procedure under `skills/misty/playbooks/`; Misty's router and the named outside check determine completion.
 - **Skill:** a directory with a `SKILL.md` entry point and optional supporting
   material. References use relative Markdown links or the skill's name; native
   loading mechanics belong to the adapter.
@@ -61,8 +60,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 1. **Small, always-on core.** `rules/core.md` is at most 20 lines, including
    frontmatter. Native adapters load the core; procedures load on demand.
 2. **Skill provenance.** Misty-authored skills follow the frontmatter convention
-   below. `metadata.source` covers their whole directory, including supporting
-   files. Vendored skills retain upstream frontmatter; `vendor/pstack.lock.json`
+   below. Its short `metadata.source` points to [ATTRIBUTION.md](ATTRIBUTION.md#skill-provenance), which owns full directory-level provenance, including supporting files. Vendored skills retain upstream frontmatter; `vendor/pstack.lock.json`
    owns their provenance, inclusion/exclusion decisions and file hashes. Preserve
    required licence notices for both. Never hand-edit vendored text.
 3. **Harness-neutral method.** One content tree owns the method. Harness-specific
@@ -94,7 +92,7 @@ description: "When to use it; trigger first."
 metadata:
   owner: phaedrus
   prevents: "The observed failure this skill prevents."
-  source: "Ruling or upstream repo@commit/path; covers the directory."
+  source: "Short source identity; full directory provenance in ATTRIBUTION.md."
   sunset: "2026-11-27"
 ---
 ```

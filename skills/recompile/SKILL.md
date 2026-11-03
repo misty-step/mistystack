@@ -5,7 +5,7 @@ disable-model-invocation: true
 metadata:
   owner: phaedrus
   prevents: "Inherited architecture surviving capability changes, or monthly rewrites breaking accepted contracts; Phaedrus's 2026-10-30 ruling on mistystack#631."
-  source: "Phaedrus, 2026-10-30: make the monthly rebuild review a Mistystack practice; https://github.com/misty-step/mistystack/issues/631; Jacob Sansbury, https://x.com/jsnnsa/status/2115671437575168084; Spawn 6 engine pinning and migration, https://www.spawn.co/about/release-6-0-0 (references, not copied procedure)."
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 

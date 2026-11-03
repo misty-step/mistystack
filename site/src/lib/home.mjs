@@ -15,7 +15,6 @@ const PARTS = ['core', 'misty', 'playbooks', 'skills', 'principles', 'oracle'];
 
 const CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
   'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
-const ORDINALS = ['zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 
 function fail(message) {
   throw new Error(`Home page: ${message}`);
@@ -82,7 +81,7 @@ function build(graph) {
   const misty = need(graph, MISTY);
   const trial = need(graph, TRIAL);
   const lines = coreLines(core);
-  const headline = home.hero({ coreLines: '', headlineLine: '', commandHarnesses: '' }).headline;
+  const headline = home.hero({ coreLines: '', commandHarnesses: '' }).headline;
   const opening = headline.replace(/\.$/, '');
   const at = lines.findIndex((line) => line.replace(/^-\s+/, '').startsWith(opening));
   if (at < 0) fail(`no line of ${CORE} starts with "${opening}"`);
@@ -93,7 +92,6 @@ function build(graph) {
   const facts = {
     coreLines: cardinal(lines.length, 'core lines'),
     CoreLines: Cardinal(lines.length, 'core lines'),
-    headlineLine: word(ORDINALS, at + 1, 'core line'),
     commandHarnesses: series(withCommands.map((tab) => tab.name)),
   };
 
@@ -123,7 +121,7 @@ function build(graph) {
   const briefCopy = home.brief({ fields: cardinal(fields.length, 'brief fields') });
   const written = Object.keys(briefCopy.fields);
   if (fields.join('|') !== written.join('|')) fail(`${MISTY} lists the brief fields ${fields.join(', ')}; the copy writes ${written.join(', ')}`);
-  if (!misty.body.includes('A brief with no Oracle')) fail(`${MISTY} no longer returns a brief without an Oracle`);
+  if (!misty.body.includes('a brief without an Oracle returns to shaping')) fail(`${MISTY} no longer returns a brief without an Oracle`);
 
   const round = trial.data;
   const evidenceCopy = home.evidence({ Tasks: Cardinal(round.taskCount, 'tasks'), tasks: cardinal(round.taskCount, 'tasks'), limits: cardinal(round.limits.length, 'limits') });

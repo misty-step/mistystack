@@ -3,6 +3,7 @@ import { YAML } from "bun";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
+import { readPstackLock } from "./pstack-lock.mjs";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -205,27 +206,17 @@ function inside(root: string, target: string) {
 export function lintPlugin(root: string, strict = false) {
 	const errors: string[] = [];
 	const warnings: string[] = [];
-	const vendored = new Set<string>();
-	const vendoredSources = new Map<string, string>();
-	const upstreamOnly: string[] = [];
-	const lockPath = join(root, "vendor/pstack.lock.json");
-	if (existsSync(lockPath)) {
+	let vendored = new Set<string>();
+	let vendoredSources = new Map<string, string>();
+	let upstreamOnly: string[] = [];
+	if (existsSync(join(root, "vendor/pstack.lock.json"))) {
 		try {
-			const lock = jsonObject(lockPath);
-			if (!Array.isArray(lock.include) || !isRecord(lock.files)) throw new Error("include and files are required");
-			for (const entry of lock.include) {
-				if (!isRecord(entry) || !nonempty(entry.source) || !nonempty(entry.destination)) continue;
-				if (entry.vendored !== true) { upstreamOnly.push(entry.source); continue; }
-				for (const file of Object.keys(lock.files)) {
-					if (file === entry.destination || file.startsWith(`${entry.destination}/`)) vendoredSources.set(file, entry.source + file.slice(entry.destination.length));
-				}
-				if (vendoredSources.has(`${entry.destination}/SKILL.md`)) vendored.add(`${entry.destination}/SKILL.md`);
-			}
-			if (Array.isArray(lock.exclude)) for (const entry of lock.exclude) {
-				if (isRecord(entry) && nonempty(entry.source)) upstreamOnly.push(entry.source);
-			}
+			const parsed = readPstackLock(root);
+			vendored = new Set(parsed.vendoredSkills.keys());
+			vendoredSources = parsed.vendoredSources;
+			upstreamOnly = parsed.upstreamOnly;
 		} catch (error) {
-			errors.push(`vendor/pstack.lock.json: ${error instanceof Error ? error.message : String(error)}`);
+			errors.push(error instanceof Error ? error.message : String(error));
 		}
 	}
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();

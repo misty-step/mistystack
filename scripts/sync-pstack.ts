@@ -1,85 +1,59 @@
 #!/usr/bin/env bun
 import { YAML } from "bun";
 import { createHash } from "node:crypto";
-import { chmodSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join, posix, relative, resolve, sep } from "node:path";
+import { dirname, join, posix, resolve } from "node:path";
+import { isPlaybook, isSkill, noSymlinkStat, PSTACK_LOCK as LOCK, readPstackLock, type PstackLock } from "./pstack-lock.mjs";
 
-type Inclusion = { source: string; destination: string; vendored: boolean };
-export type PstackLock = {
-	repo: string;
-	commit: string;
-	tree: string;
-	"generated-at": string;
-	"inventory-sha256": string;
-	include: Inclusion[];
-	exclude: { source: string; reason: string }[];
-	files: Record<string, string>;
-};
-
-const LOCK = "vendor/pstack.lock.json";
 const ADAPTER = "skills/misty/harnesses/pstack-names.md";
 const SIDECAR = "policy:\n  allow_implicit_invocation: false\n";
 // Keep the Cursor-name detectors aligned with cursor/plugins/scripts/generate-pstack-harness-trees.mjs.
-const CURSOR_NAMES = [
-	/`Task`|\bTask (tool|subagent|call)/, /AskQuestion/, /\btodo ?list\b/i,
-	/generalPurpose/, /poteto-agent/, /comment-sicko/, /readonly: (true|false)|readonly\/Ask/,
-	/environment: "(cloud|local)"/, /cloud_base_branch/, /run_in_background/, /`resume`/,
-	/file_attachments/, /\bclaude-[a-z]+-\d/, /\bgrok-\d/, /\bgpt-\d/, /inherit-parent/,
-	/pstack-models\.mdc/, /\.cursor\/skills/, /\.cursor\/plugins|\.cursor-plugin/,
-	/\.cursor\/rules|always-applied rule/, /agent-transcripts|\.cursor\/projects/,
-	/Bugbot|Cursor [Aa]utomation|cursor\.(sh|com)\/automations|[Cc]loud [Aa]gent|built-in PR tool/,
-	/\bsubagent_type\b|\bcursor-team-kit\b|\bOrigin\b|\/loop\b/,
+const CURSOR_NAMES: [string, RegExp][] = [
+	["Task", /`Task`|\bTask (tool|subagent|call)/], ["AskQuestion", /AskQuestion/], ["todolist", /\btodo ?list\b/i],
+	["generalPurpose", /generalPurpose/], ["poteto-agent", /poteto-agent/], ["comment-sicko", /comment-sicko/],
+	["readonly/Ask", /readonly: (true|false)|readonly\/Ask/], ['environment: "cloud"', /environment: "(cloud|local)"/],
+	["cloud_base_branch", /cloud_base_branch/], ["run_in_background", /run_in_background/], ["resume", /`resume`/],
+	["file_attachments", /file_attachments/], ["claude-*", /\bclaude-[a-z]+-\d/], ["grok-*", /\bgrok-\d/], ["gpt-*", /\bgpt-\d/],
+	["inherit-parent", /inherit-parent/], ["pstack-models.mdc", /pstack-models\.mdc/], [".cursor/skills/", /\.cursor\/skills/],
+	[".cursor/plugins/", /\.cursor\/plugins|\.cursor-plugin/], [".cursor/rules/", /\.cursor\/rules|always-applied rule/],
+	["agent-transcripts", /agent-transcripts|\.cursor\/projects/], ["Bugbot", /Bugbot/],
+	["Automations", /Cursor [Aa]utomation|cursor\.(sh|com)\/automations/], ["cloud agents", /[Cc]loud [Aa]gent/],
+	["built-in PR tool", /built-in PR tool/], ["subagent_type", /\bsubagent_type\b/], ["cursor-team-kit", /\bcursor-team-kit\b/],
+	["Origin", /\bOrigin\b/], ["/loop", /\/loop\b/],
 ];
 const sha256 = (bytes: string | Buffer) => createHash("sha256").update(bytes).digest("hex");
 const inventoryHash = (names: string[]) => sha256(`${[...names].sort().join("\n")}\n`);
-const portable = (path: string) => /^[a-zA-Z0-9_.\/-]+$/.test(path) && !path.split("/").some(part => part === "" || part === "." || part === "..");
-const isSkill = (source: string) => /^skills\/[^/]+$/.test(source);
-const isPlaybook = (source: string) => /^skills\/poteto-mode\/playbooks\/[^/]+\.md$/.test(source);
-const owns = (entry: Inclusion, file: string) => isSkill(entry.source) ? file.startsWith(`${entry.destination}/`) : file === entry.destination;
 
-function noSymlinkStat(root: string, target: string) {
-	let path = resolve(root);
-	let stat;
-	for (const component of ["", ...relative(path, resolve(target)).split(sep).filter(Boolean)]) {
-		if (component) path = join(path, component);
-		stat = lstatSync(path, { throwIfNoEntry: false });
-		if (!stat) return;
-		if (stat.isSymbolicLink()) throw new Error(`symlink is not allowed: ${path}`);
+function checkRoutes(root: string, lock: PstackLock): string[] {
+	const adapter = existsSync(join(root, ADAPTER)) ? readFileSync(join(root, ADAPTER), "utf8") : "";
+	const keys = new Set(adapter.split("\n").filter(line => line.startsWith("|")).flatMap(line =>
+		[...line.split("|")[1].matchAll(/`([^`]+)`/g)].map(match => match[1])));
+	const aliases = new Map<string, string>();
+	for (const { source } of [...lock.include, ...lock.exclude]) {
+		if (!isSkill(source) && !isPlaybook(source)) continue;
+		const name = posix.basename(source, ".md");
+		aliases.set(name, name);
+		if (name.startsWith("principle-")) aliases.set(name.slice("principle-".length), name);
 	}
-	return stat;
-}
-
-function load(root: string): PstackLock {
-	noSymlinkStat(root, join(root, LOCK));
-	const lock: PstackLock = JSON.parse(readFileSync(join(root, LOCK), "utf8"));
-	if (lock.repo !== "cursor/plugins" || !/^[a-f0-9]{40}$/.test(lock.commit) || !/^[a-f0-9]{40}$/.test(lock.tree)
-		|| !Array.isArray(lock.include) || !Array.isArray(lock.exclude) || !lock.files || typeof lock.files !== "object" || Array.isArray(lock.files)) {
-		throw new Error(`${LOCK}: invalid pstack lock`);
-	}
-	const seen = new Set<string>();
-	for (const entry of [...lock.include, ...lock.exclude]) {
-		if (typeof entry.source !== "string" || !(isSkill(entry.source) || isPlaybook(entry.source) || /^agents\/[^/]+\.md$/.test(entry.source)) || !portable(entry.source)) {
-			throw new Error(`${LOCK}: invalid upstream name ${JSON.stringify(entry.source)}`);
+	const installed = new Set(lock.include.filter(entry => entry.vendored && existsSync(join(root, entry.destination))).map(entry => posix.basename(entry.source, ".md")));
+	const errors = new Set<string>();
+	for (const file of Object.keys(lock.files).filter(file => file.endsWith(".md") && existsSync(join(root, file)))) {
+		const text = readFileSync(join(root, file), "utf8");
+		const needed = new Set(CURSOR_NAMES.filter(([, pattern]) => pattern.test(text)).map(([key]) => key));
+		for (const token of text.match(/[a-z][a-z0-9-]*/g) ?? []) {
+			const name = aliases.get(token);
+			if (name && !installed.has(name) && !existsSync(join(root, "skills", name, "SKILL.md"))) needed.add(keys.has(name) ? name : token);
 		}
-		if (seen.has(entry.source)) throw new Error(`${LOCK}: duplicate upstream name ${entry.source}`);
-		seen.add(entry.source);
-	}
-	for (const entry of lock.include) {
-		if (!(isSkill(entry.source) || isPlaybook(entry.source)) || typeof entry.destination !== "string" || !portable(entry.destination) || !entry.destination.startsWith("skills/") || typeof entry.vendored !== "boolean") {
-			throw new Error(`${LOCK}: invalid inclusion ${entry.source}`);
+		for (const match of text.matchAll(/(?:the\s+)?(?:\*\*|`)([a-z][a-z0-9-]+)(?:\*\*|`)\s+(?:principle\s+)?skill\b|`\/([a-z][a-z0-9-]+)`/g)) {
+			const token = match[1] ?? match[2];
+			const name = aliases.get(token) ?? token;
+			if (!installed.has(name) && !existsSync(join(root, "skills", name, "SKILL.md"))) needed.add(keys.has(`/${token}`) ? `/${token}` : keys.has(name) ? name : token);
 		}
-		if (lock.include.some(other => other !== entry && (other.destination === entry.destination || other.destination.startsWith(`${entry.destination}/`) || entry.destination.startsWith(`${other.destination}/`)))) {
-			throw new Error(`${LOCK}: overlapping destination ${entry.destination}`);
-		}
+		for (const section of ["Subagents", "Non-negotiables", "Autonomy", "Opening a PR"]) if (text.includes(section)) needed.add(section);
+		for (const key of needed) if (!keys.has(key)) errors.add(`${file}: missing pstack adapter row for ${key} in ${ADAPTER}`);
 	}
-	for (const entry of lock.exclude) if (typeof entry.reason !== "string" || !entry.reason.trim()) throw new Error(`${LOCK}: missing exclusion reason for ${entry.source}`);
-	for (const [file, hash] of Object.entries(lock.files)) {
-		if (!portable(file) || !lock.include.some(entry => entry.vendored && owns(entry, file)) || !/^[a-f0-9]{64}$/.test(hash)) {
-			throw new Error(`${LOCK}: invalid vendored file ${file}`);
-		}
-	}
-	return lock;
+	return [...errors];
 }
 
 function walk(root: string): string[] {
@@ -96,7 +70,7 @@ function walk(root: string): string[] {
 
 export function checkPstack(root: string): string[] {
 	try {
-		const lock = load(root);
+		const { lock } = readPstackLock(root);
 		for (const entry of lock.include.filter(entry => entry.vendored)) noSymlinkStat(root, join(root, entry.destination));
 		for (const file of Object.keys(lock.files)) noSymlinkStat(root, join(root, file));
 		const errors: string[] = [];
@@ -116,7 +90,7 @@ export function checkPstack(root: string): string[] {
 				for (const file of walk(path)) if (!lock.files[`${entry.destination}/${file}`]) errors.push(`${entry.destination}/${file}: unlisted vendored file`);
 			}
 		}
-		return errors;
+		return [...errors, ...checkRoutes(root, lock)];
 	} catch (error) {
 		return [error instanceof Error ? error.message : String(error)];
 	}
@@ -155,7 +129,7 @@ function wrap(bytes: Buffer, destination: string, skillNames: string[]) {
 		const route = new RegExp(`the \\*\\*${name}\\*\\* skill|\u0060/${name}\u0060`);
 		return text.split("\n").some(line => route.test(line) && !line.includes(`(../${name}/`));
 	});
-	if (!CURSOR_NAMES.some(pattern => pattern.test(text)) && !routed) return bytes;
+	if (!CURSOR_NAMES.some(([, pattern]) => pattern.test(text)) && !routed) return bytes;
 	if (!/^#{1,6} /m.test(text)) throw new Error(`${destination}: uses Cursor names but has no Markdown heading for the harness pointer`);
 	const href = posix.relative(posix.dirname(destination), ADAPTER);
 	const line = `In Mistystack, read [the pstack names adapter](${href}) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.`;
@@ -170,12 +144,12 @@ function command(args: string[]) {
 
 export async function updatePstack(root: string, commit: string, from?: string) {
 	if (!/^[a-f0-9]{7,40}$/.test(commit)) throw new Error("--update requires a commit SHA");
-	const lock = load(root);
+	const { lock } = readPstackLock(root);
 	const temporary = process.env.TMPDIR ?? join(homedir(), ".cache/tmp");
 	mkdirSync(temporary, { recursive: true });
 	const scratch = mkdtempSync(join(temporary, "pstack-sync-"));
 	try {
-		let source = from ? resolve(from) : undefined;
+		let source = from ? join(realpathSync(dirname(resolve(from))), posix.basename(resolve(from))) : undefined;
 		let tree = lock.tree;
 		if (!from || commit !== lock.commit) {
 			commit = command(["gh", "api", `repos/${lock.repo}/commits/${commit}`, "--jq", ".sha"]);
@@ -189,7 +163,7 @@ export async function updatePstack(root: string, commit: string, from?: string) 
 			command(["git", "-C", checkout, "fetch", "--depth=1", "origin", commit]);
 			const archive = join(scratch, "source.tar");
 			command(["git", "-C", checkout, "archive", "--format=tar", "-o", archive, commit, "pstack"]);
-			source = join(scratch, "source");
+			source = join(realpathSync(scratch), "source");
 			mkdirSync(source);
 			command(["tar", "-xf", archive, "-C", source]);
 		}
@@ -230,7 +204,7 @@ export async function updatePstack(root: string, commit: string, from?: string) 
 			chmodSync(join(root, file), mode);
 			files[file] = sha256(bytes);
 		}
-		writeFileSync(join(root, LOCK), `${JSON.stringify({ ...lock, commit, tree, "generated-at": new Date().toISOString(), "inventory-sha256": inventoryHash(names), files }, null, 2)}\n`);
+		writeFileSync(join(root, LOCK), `${JSON.stringify({ ...lock, commit, tree, "inventory-sha256": inventoryHash(names), files }, null, 2)}\n`);
 		return files;
 	} finally {
 		rmSync(scratch, { recursive: true, force: true });

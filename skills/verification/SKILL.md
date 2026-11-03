@@ -4,7 +4,7 @@ description: "Prove changed behavior on its real consumer path, create a missing
 metadata:
   owner: phaedrus
   prevents: "'Fix still fails / regression' (36 corrections); evidence-packet loaded in 12 audited sessions; changed-path scope repaired in mistystack PR #455."
-  source: "misty-step/mistystack#533; misty-step/mistystack@0ccc1a308cdeefa29e991d3b7c1dbab016cfea03/agent-config/{skills/story-qa,guidance/engineering.md}; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/{create-verification-skill,maintain-verification-skill,principle-prove-it-works}; installed Misty ~/.omp/agent/skills/evidence-packet (SKILL.md sha256:08fb52a436fbc663c59648b9b07b87a9c3d3f782c5fd7f55a5568be886f78923); misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md#prove"
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
 ---
 
@@ -39,11 +39,7 @@ report the exact limit instead of substituting an easier check.
 
 ## 2. Drive and inspect
 
-Use `.agents/skills/verify-<app>/`. For missing proof, follow pstack's
-[create-verification-skill](../create-verification-skill/SKILL.md) in this change
-or stack on the PR adding it. Keep one canonical source, exposed through the
-active harness's native mechanism; repository instructions remain in `AGENTS.md`.
-A documents-only change does not inherit missing product infrastructure.
+For missing proof, follow [create-verification-skill](../create-verification-skill/SKILL.md); the [names adapter](../misty/harnesses/pstack-names.md#routes) overrides both generators' Cursor paths. Keep one canonical source exposed through the active harness; repository instructions stay in `AGENTS.md`. A documents-only change does not inherit missing product infrastructure.
 
 Add an Accounts section to the generated skill under the [QA sign-in contract](#qa-sign-in-contract);
 mark unauthenticated surfaces n/a. Its Evidence section follows [evidence.md](evidence.md).
