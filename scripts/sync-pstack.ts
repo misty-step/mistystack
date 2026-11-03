@@ -156,10 +156,10 @@ function wrap(bytes: Buffer, destination: string, skillNames: string[]) {
 		return text.split("\n").some(line => route.test(line) && !line.includes(`(../${name}/`));
 	});
 	if (!CURSOR_NAMES.some(pattern => pattern.test(text)) && !routed) return bytes;
-	if (!/^# /m.test(text)) throw new Error(`${destination}: uses Cursor names but has no H1 for the harness pointer`);
+	if (!/^#{1,6} /m.test(text)) throw new Error(`${destination}: uses Cursor names but has no Markdown heading for the harness pointer`);
 	const href = posix.relative(posix.dirname(destination), ADAPTER);
 	const line = `In Mistystack, read [the pstack names adapter](${href}) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.`;
-	return Buffer.from(text.replace(/^(# .*)\n+/m, `$1\n\n${line}\n\n`));
+	return Buffer.from(text.replace(/^(#{1,6} .*)\n+/m, `$1\n\n${line}\n\n`));
 }
 
 function command(args: string[]) {

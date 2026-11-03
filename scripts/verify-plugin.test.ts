@@ -292,6 +292,30 @@ test("only locked vendored files may refer to classified, unvendored upstream ta
 	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: missing reference skills/upstream-excluded/SKILL.md"]);
 });
 
+test("vendored playbook routing resolves local siblings and only classified upstream-only targets", () => {
+	const { root, put, json, skill } = fixture();
+	const file = "skills/misty/playbooks/bug-fix.md";
+	const refactoring = "skills/misty/playbooks/refactoring.md";
+	put("skills/misty/SKILL.md", skill("misty", "[Bug fix](playbooks/bug-fix.md) and [Refactoring](playbooks/refactoring.md)."));
+	put(file, "### Bug fix\n\nRead [refactoring](refactoring.md), [shipping](shipping.md) and [how](../../how/SKILL.md). Read the `how` skill.\n");
+	put(refactoring, "### Refactoring\n\nPin the behavior.\n");
+	json("vendor/pstack.lock.json", {
+		include: [
+			{ source: "skills/poteto-mode/playbooks/bug-fix.md", destination: file, vendored: true },
+			{ source: "skills/poteto-mode/playbooks/refactoring.md", destination: refactoring, vendored: true },
+			{ source: "skills/how", destination: "skills/how", vendored: false },
+		],
+		exclude: [{ source: "skills/poteto-mode/playbooks/shipping.md", reason: "Ship-loop owns delivery." }],
+		files: { [file]: "a".repeat(64), [refactoring]: "b".repeat(64) },
+	});
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, "[Missing](missing.md)\n");
+	expect(lintPlugin(root, true).errors).toEqual([`${file}: missing reference skills/misty/playbooks/missing.md`]);
+	put(file, "### Bug fix\n");
+	put("skills/misty/SKILL.md", skill("misty", "[Retired](playbooks/refactor.md)"));
+	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: missing reference skills/misty/playbooks/refactor.md"]);
+});
+
 test.each(["2026-11-27", "2026-11-27 # YAML 1.1 timestamp", "2026-11-27T00:00:00Z", "!!timestamp 2026-11-27"])(
 	"rejects a plain YAML date that YAML 1.1 readers cannot serialize (%s)",
 	value => {

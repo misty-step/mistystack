@@ -2,7 +2,7 @@
   "repo": "cursor/plugins",
   "commit": "c742dd61706fbacc1b95f1a20b7b988cf096ce6c",
   "tree": "4719e1c4b4c43bac85d4206a8b41dd2899769c1c",
-  "generated-at": "2026-11-02T23:55:54.643Z",
+  "generated-at": "2026-11-03T00:28:24.030Z",
   "inventory-sha256": "731ff23c64fa23b309a9ac197b01e6f5ec7d77e7f7db9f066aa1d7e321ee0966",
   "include": [
     {
@@ -53,57 +53,57 @@
     {
       "source": "skills/poteto-mode/playbooks/bug-fix.md",
       "destination": "skills/misty/playbooks/bug-fix.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/eval.md",
       "destination": "skills/misty/playbooks/eval.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/feature.md",
       "destination": "skills/misty/playbooks/feature.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/hillclimb.md",
       "destination": "skills/misty/playbooks/hillclimb.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/investigation.md",
       "destination": "skills/misty/playbooks/investigation.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/perf-issue.md",
       "destination": "skills/misty/playbooks/perf-issue.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/prototype.md",
       "destination": "skills/misty/playbooks/prototype.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/refactoring.md",
       "destination": "skills/misty/playbooks/refactoring.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/runtime-forensics.md",
       "destination": "skills/misty/playbooks/runtime-forensics.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/trace-forensics.md",
       "destination": "skills/misty/playbooks/trace-forensics.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/poteto-mode/playbooks/visual-parity.md",
       "destination": "skills/misty/playbooks/visual-parity.md",
-      "vendored": false
+      "vendored": true
     },
     {
       "source": "skills/principle-attack-the-premise",
@@ -387,6 +387,17 @@
     }
   ],
   "files": {
+    "skills/misty/playbooks/bug-fix.md": "f0c10f532b0ac4ffc5901b334118145b864deb2258157e8eabb826337196e9ea",
+    "skills/misty/playbooks/eval.md": "6a095b6ced7426fea2cd8096c83cbf10e73d36c3fcf489f91fd2bbf5fc396e9c",
+    "skills/misty/playbooks/feature.md": "d0a8bde6c524914f9071efa057496f36a4d0ebf355fd4b5e42801d11ecc0ecd7",
+    "skills/misty/playbooks/hillclimb.md": "2a017493753272e9fcd68d7d1d63acda72a606ddb2e942999de1c0f31932ab99",
+    "skills/misty/playbooks/investigation.md": "d54e8ae1f981700db473d65650299a826f56e7c42cd585f1793c99af09bfd772",
+    "skills/misty/playbooks/perf-issue.md": "fb39e0300f34ad6321e6e4cecf0f537c2373759687144d115b1794319ababfb1",
+    "skills/misty/playbooks/prototype.md": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962",
+    "skills/misty/playbooks/refactoring.md": "cbede119165753121b5be0561e9c31d2b2c746ecd6845b8ed1199c43fd9164bb",
+    "skills/misty/playbooks/runtime-forensics.md": "3463372b578c28f27c236f2627f09b5c5b1e85e86db7399fb984f3892fb450f5",
+    "skills/misty/playbooks/trace-forensics.md": "aaa6cee7e29f1ad71612d93830c0872963af7f274d734e537efbe0d0ad7abae7",
+    "skills/misty/playbooks/visual-parity.md": "c2c07ec738e76a2ee7f83a0a63955ebe52069c302b952df04de8e44c65ce501c",
     "skills/principle-attack-the-premise/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/principle-attack-the-premise/SKILL.md": "6a932884daad4aa189e9b5d1665226bbc75621d4d2a398fd4003bebd382f4599",
     "skills/principle-boundary-discipline/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",

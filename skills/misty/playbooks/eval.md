@@ -1,10 +1,27 @@
-# Eval
+### Eval
 
-1. **Precommit the trial.** Trial the kernel as a whole on about six replayed real tasks from the top correction classes: fix still fails/regression (36), overengineering/scope (16), data fidelity/duplicates (15) and finish the work (11). Include a task only with real-failure or real-use evidence, a recoverable base, the verbatim user prompt and an outside Oracle. Trial a leaf separately only when it replaces a skill actually used on the selected tasks. Fix the exact Oracles, repeats and promotion rule. Compare three arms: old/current instructions, candidate instructions and no instructions; reserve the existing rubric below for the judge. **Complete when:** the task records, applicable trial scope, three arms and pass rule are fixed before runs begin.
-2. **Isolate and blind.** Apply misty's delegation boundary. Give every run a fresh harness session with identical source base, inputs, tools, model and limits; vary only the instruction arm. Use neutral project-shaped paths and labels. Candidate-visible prompts and paths reveal neither trial, arm, rubric nor other candidates. **Complete when:** the arm map is outside candidate and judge context and the verbatim user request runs unchanged in all arms.
-3. **Run.** Dispatch independent subagents through your harness's mechanism using misty's briefing contract; keep hidden trial metadata out of their briefs. Preserve complete tool transcripts, diffs, token usage and Oracle output outside the checkout. **Complete when:** every scheduled run has artifacts and a terminal result; missing or refused checks are unproven, not passes.
-4. **Judge blind.** An independent judge sees sanitized labels, tasks, artifacts and the same rubric, never arm or model identities. Score Oracle pass, net LOC, special cases, taste and tokens. Taste covers domain fit, interface depth and reader load; fewer lines do not excuse broken behavior. Never score response length. **Complete when:** each score names observable evidence and every arm is graded on one scale.
-5. **Grade the chain.** Inspect the actual harness transcripts for files read, decisions made and checks exercised. Grade adherence from tool events and artifact shape, not the worker's self-report. **Complete when:** claimed instruction effects are traceable to the run, and unrelated private sessions were not read.
-6. **Decide.** Reveal the arm map only after grading. Keep the candidate only when it beats both old/current and none under the precommitted rule; otherwise retain the supported baseline or delete ineffective guidance. **Complete when:** the report links the rubric, per-arm measurements, blinded verdict, uncertainty and promotion decision under the core's claim rule.
+In Mistystack, read [the pstack names adapter](../harnesses/pstack-names.md) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.
 
-Source: misty-step/mistystack#533 Q8 and Q10; cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/poteto-mode/playbooks/eval.md.
+**You own the experiment design. Plan, blind, run, synthesize.**
+
+**Non-negotiables for blinding:**
+
+- No `eval`, `test`, `judge`, `experiment`, `rubric`, `score`, `compare`, `benchmark`, `candidate`, or `arena` in any directory, file, or prompt the candidate sees.
+- The candidate prompt looks like an organic user request. State the goal, not the meta.
+- No chain-eliciting cues. Don't ask the candidate to list which skills, principles, or files they applied. Ask for design notes generally and grade chain-following from code shape, not self-report.
+- Sanitize directory and slug names. Use project-shaped names a user might pick.
+- Don't tell the candidate other candidates exist.
+- The judge can know it's judging but sees outputs by sanitized label only, never by model name.
+- Comparing two variants: one judge scores both sets in a single pass on one scale, blind to which set each came from.
+
+**Steps:**
+
+1. **Frame.** State what variant is under test and what behavior counts as success. Write the rubric (3-6 concrete criteria) for the judge only. Hold it back from candidates.
+2. **Set up sanitized environments.** Per-candidate working dir with the variant in place. Plant any context an organic task would have: a project skeleton, the skills the candidate would naturally read.
+3. **Author one organic prompt.** What a user would type. No leakage of what's being measured.
+4. **Spawn N parallel candidates** on different models per the **arena** skill's Phase B. Each works in its own sanitized dir. Same prompt to each. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section.
+5. **Spawn one blinded judge** on a different model family per the **arena** skill's Phase C. Judge sees outputs by sanitized label and the rubric, never a model name.
+6. **Verify the chain from transcripts, not self-report.** Read each candidate's local transcript under the active workspace's `agent-transcripts/` directory (the system prompt names this path). Do not glob across `~/.cursor/projects/*/`. That crosses workspace boundaries and reads private chats from unrelated projects. Look at which files each candidate actually opened. Grade chain-following from the files it really read plus the shape of the code, never from the candidate's own claims.
+7. **Read every candidate output yourself** end to end. Compare to the judge's verdict. Disagreement means a model is biased or the rubric is ambiguous. Synthesize.
+
+**Reply:** variant under test, rubric, per-candidate notes, judge's verdict, your synthesis, and a recommendation for whether to promote the variant.

@@ -1,9 +1,17 @@
-# Bug fix
+### Bug fix
 
-1. **Reproduce.** Preserve the failing run and drive the reported consumer path. Use the `verification` skill for the surface and the `research` skill for unfamiliar behavior. Treat the user's observed failure as evidence, not a claim to reconfirm. **Complete when:** the exact trigger, actual result, expected result and outside check are recorded; any unreachable part is named.
-2. **Isolate.** Split competing causes with runtime evidence; instrument where state is unclear. Check history only to settle a regression question. Read the `principle-fix-root-causes` skill. **Complete when:** one mechanism explains the failure and an observation distinguishes it from the rejected causes.
-3. **Repair the class.** Choose the highest layer that can make the failure impossible. Scope subagents through misty's briefing contract when independent work merits them. Keep only changes supported by the mechanism. **Complete when:** the cause is removed, affected callers are migrated and speculative changes are absent.
-4. **Prove.** Apply the `test-audit` skill; preserve a regression check that fails for the defect and passes for the repair. Exercise success, rejection and recovery through the original consumer boundary. **Complete when:** the original path passes on the changed artifact and the affected checks have recorded results.
-5. **Deliver.** Use the `ship-loop` skill and the `writing` skill. **Complete when:** the reviewable unit links the failing and passing evidence, root cause, fix and any remaining unproven behavior under the core's claim rule.
+In Mistystack, read [the pstack names adapter](../harnesses/pstack-names.md) once per session before you follow this skill. It maps the Cursor names in pstack skills to your harness.
 
-Source: cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/skills/poteto-mode/playbooks/bug-fix.md; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md (Build, Prove).
+**You own this task. Plan, review, verify.** Delegate investigation and the fix to subagents, stay in the lead. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section.
+
+Be scientific. Every shipped line traces to runtime evidence. Belt-and-suspenders that "might help" is a hypothesis, not a fix. It does not ship. When evidence refutes a hypothesis, revert what it motivated. The smallest change the evidence justifies ships, nothing more.
+
+1. Reproduce it yourself on the matching surface via the control skill (Non-negotiables), even when a debug or instrumentation protocol says to ask the user to reproduce. Ask the user only with a stated, specific reason the control surface cannot reach the target, and only after driving it as far as it goes. If it won't reproduce directly, synthesize the trigger, tighten conditions, or instrument until it fires.
+2. Binary-search the cause. Form the candidate hypotheses, then rule them out until one survives. Seed them with `how` over the affected subsystem and the **why** skill for regression history. Each pass, take the split that cuts the most remaining problem space, get runtime evidence, eliminate. When program state is unclear, add instrumentation or logging and read it as the code runs. Don't guess. Drive a long or stubborn hunt with Cursor's `/loop` command. Confirm the surviving *mechanism* with runtime evidence before the step-3 architect/interrogate fan-out.
+3. Plan the fix. If it crosses a function boundary, `architect` first. Delegate implementation to a subagent using your configured bug-fix model (default `grok-4.7-xhigh-fast`) with a specific scope.
+4. Verify on the same surface. The original repro now passes. "Inconclusive" or wrong-surface is not a pass. Flag it. Unit tests show branch behavior, not bug absence.
+5. Stage the commits so the failing repro lands before the fix in git history. See the **tdd** skill for the failing-test-first cadence when the bug has a cheap local test path. Skip it when the test would be expensive, integration-heavy, or unclear.
+   This is the canonical **sequence-verifiable-units** principle skill, the failing test first and the fix on top.
+6. Run **Opening a PR**.
+
+**Reply:** what was broken, root cause, fix, how you verified. Paste failing-then-passing repro output verbatim.

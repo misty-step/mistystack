@@ -40,5 +40,6 @@ export default defineConfig({
     '/library/principles/skill-diet/': '/library/skills/agent-design/',
     '/library/playbooks/authoring-a-skill/': '/library/skills/agent-design/',
     '/library/playbooks/incident/': '/library/skills/release-watch/recovery/',
+    '/library/playbooks/refactor/': '/library/playbooks/refactoring/',
   },
 });

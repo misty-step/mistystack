@@ -24,10 +24,16 @@ Read the matching playbook or skill before acting. Combine rows when the task cr
 | --- | --- |
 | Reported defect | [Bug fix](playbooks/bug-fix.md) |
 | New or changed behavior | [Feature](playbooks/feature.md) |
-| Behavior-preserving reshape | [Refactor](playbooks/refactor.md) |
+| Behavior-preserving reshape | [Refactoring](playbooks/refactoring.md) |
 | Read-only explanation or recommendation | [Investigation](playbooks/investigation.md) |
+| Performance defect | [Perf issue](playbooks/perf-issue.md) |
+| Sustained improvement against a metric | [Hillclimb](playbooks/hillclimb.md) |
+| Diagnose a live process | [Runtime forensics](playbooks/runtime-forensics.md) |
+| Diagnose an existing trace or capture | [Trace forensics](playbooks/trace-forensics.md) |
+| Throwaway experiment to choose a design | [Prototype](playbooks/prototype.md) |
+| Pixel-exact equivalence to a visual baseline | [Visual parity](playbooks/visual-parity.md) |
 | Live user-facing break | [release-watch](../release-watch/SKILL.md) |
-| Instruction or prompt comparison | [Eval](playbooks/eval.md) |
+| Evaluation or experiment | [Eval](playbooks/eval.md); for instruction comparisons, [Misty's instruction-eval rule](../agent-design/SKILL.md#instruction-eval) |
 | Write or change a skill | [agent-design](../agent-design/SKILL.md) |
 | Unsettled outcome, scope or product intent | [grill](../grill/SKILL.md) |
 | Carry a confirmed unit through review and shipping | [ship-loop](../ship-loop/SKILL.md) |

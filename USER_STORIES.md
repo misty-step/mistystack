@@ -175,8 +175,9 @@ Criteria:
 2. Skills follow DOMAIN.md's provenance contract: Misty frontmatter or the
    vendored pstack lock, each covering its owned files.
 3. [Agent design](skills/agent-design/SKILL.md) owns skill-writing and instruction,
-   tool and context changes, including comparison against both the prior
-   instruction and no instructions through the eval playbook.
+   tool and context changes. Its [instruction-eval rule](skills/agent-design/SKILL.md#instruction-eval)
+   extends the vendored eval playbook with comparison against both prior instructions
+   and no instructions.
 4. A cutover migrates current callers and removes obsolete method copies.
    Workstation facts remain with the workstation plugin.
 5. Changed instructions are checked through the affected actual consumer, not
