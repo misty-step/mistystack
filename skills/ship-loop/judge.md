@@ -24,7 +24,7 @@ Each finding gets one ruling and one reason:
 - **skip:** disproved, already covered, speculative, preference-only or not worth
   doing. A reviewer's suggestion alone does not earn a ticket.
 
-Judge the atomic unit, not the initiative's remaining work. A safety claim names the one fact that makes the change safe and its evidence. Heuristics may ship
+Judge the atomic unit, not the initiative's remaining work. Assess the safety fact and its proof from [blast-radius](../blast-radius/SKILL.md); unproved remains unproved. Heuristics may ship
 labelled approximate. For unsettled intent, choose the reversible option closest
 to the stated outcome and record an `intent call`; block an irreversible choice.
 Confirm the `Rigor:` reason and diff size; raise the tier only for a concrete

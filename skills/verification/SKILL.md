@@ -39,9 +39,16 @@ report the exact limit instead of substituting an easier check.
 
 ## 2. Drive and inspect
 
-Use `.agents/skills/verify-<app>/`. If needed proof has no skill, [generate it](generate.md)
-in this change or stack on the PR adding it. A documents-only change does not
-inherit missing product infrastructure.
+Use `.agents/skills/verify-<app>/`. For missing proof, follow pstack's
+[create-verification-skill](../create-verification-skill/SKILL.md) in this change
+or stack on the PR adding it. Keep one canonical source, exposed through the
+active harness's native mechanism; repository instructions remain in `AGENTS.md`.
+A documents-only change does not inherit missing product infrastructure.
+
+Add an Accounts section to the generated skill under the [QA sign-in contract](#qa-sign-in-contract);
+mark unauthenticated surfaces n/a. Its Evidence section follows [evidence.md](evidence.md).
+The vendored generator owns launch, doctor, drive, feature-map seeding, cleanup
+and the end-to-end proof of its generated recipe.
 
 Apply misty's delegation boundary. Use authorized disposable data and clean only
 what the run created. Capture action and result, inspect each artifact, and publish proof
@@ -62,7 +69,12 @@ the blocked criterion.
 
 ## Commissioned upkeep
 
-For a verification-skill/feature-map audit, use [maintenance.md](maintenance.md).
+For a verification-skill/feature-map audit, follow pstack's
+[maintain-verification-skill](../maintain-verification-skill/SKILL.md). Resolve the
+target from the request and repository; ask only if they cannot disambiguate it.
+Apply Misty's bounded delegation: combine small related source slices instead
+of one agent per sentence. A feature not reached stays unverified, with the
+exact prerequisite and attempted route, never passed.
 For check placement, deletion or schedule repair, use [check-cadence.md](check-cadence.md).
 For recurring product QA, agents use distinct user personas to walk pre-release
 and live SPEC stories and file bugs/friction in the owned backlog. Such walks

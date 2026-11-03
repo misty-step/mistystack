@@ -18,6 +18,8 @@
 /library/skills/security-audit/references/workflow/ /library/skills/security-audit/ 301
 /install/grok-bot/ /install/ 301
 /library/skills/verification/accounts/ /library/skills/verification/#qa-sign-in-contract 301
+/library/skills/verification/generate/ /library/skills/create-verification-skill/ 301
+/library/skills/verification/maintenance/ /library/skills/maintain-verification-skill/ 301
 /library/principles/one-home-per-fact/ /library/core/ 301
 /library/principles/finish-the-work/ /library/core/ 301
 /library/principles/prove-it-on-the-real-path/ /library/skills/verification/ 301

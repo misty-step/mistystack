@@ -33,6 +33,8 @@ export default defineConfig({
     '/library/skills/security-audit/references/workflow/': '/library/skills/security-audit/',
     '/install/grok-bot/': '/install/',
     '/library/skills/verification/accounts/': '/library/skills/verification/#qa-sign-in-contract',
+    '/library/skills/verification/generate/': '/library/skills/create-verification-skill/',
+    '/library/skills/verification/maintenance/': '/library/skills/maintain-verification-skill/',
     '/library/principles/one-home-per-fact/': '/library/core/',
     '/library/principles/finish-the-work/': '/library/core/',
     '/library/principles/prove-it-on-the-real-path/': '/library/skills/verification/',

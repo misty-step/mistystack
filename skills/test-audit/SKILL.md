@@ -10,14 +10,15 @@ metadata:
 
 # Test audit
 
-Name the consumer failure before adding or deleting a test. Inspect existing
-proof at its owner boundary: one primary proof per contract; another layer needs
-a distinct consequential failure. Use history only for concrete uncertainty.
+Use pstack's [test-behavior-not-implementation](../principle-test-behavior-not-implementation/SKILL.md)
+to judge tests and choose assertions. Misty's audit scope is one primary proof
+per consumer contract; another layer needs a distinct consequential failure.
+Name that failure before adding or deleting proof, and use history only for
+concrete uncertainty.
 
-Keep independent access, data, migration, package and protocol contracts.
-Negative cases reach the guard; behavior through the real path beats assertion
-shape; a test that survives a behavior-preserving refactor tests behavior. Remove implementation/wording pins, copied inventories, mock echoes,
-tautologies and duplicate layers, not the contract they accidentally protected.
+Preserve independent access, data, migration, package and protocol contracts.
+Negative cases must reach the guard. Remove copied inventories, mock echoes and
+duplicate layers, not the contract they accidentally protected.
 
 Run affected checks and the actual consumer path through the `verification` skill.
 Report deleted proof, retained contracts and residual risk in the existing PR,
