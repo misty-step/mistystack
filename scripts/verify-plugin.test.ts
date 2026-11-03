@@ -273,7 +273,7 @@ test("only locked vendored files may refer to classified, unvendored upstream ta
 	const file = "skills/principle-upstream/SKILL.md";
 	const notes = "skills/principle-upstream/reference.md";
 	put(file, "---\nname: principle-upstream\ndescription: Check the artifact.\ndisable-model-invocation: true\n---\n# Upstream\n");
-	put(notes, "[Excluded](../upstream-excluded/SKILL.md) and [pending](../upstream-pending/SKILL.md).\n");
+	put(notes, "[Excluded](../upstream-excluded/SKILL.md) and [pending](../upstream-pending/SKILL.md). Read the `upstream-excluded` skill.\n");
 	json("vendor/pstack.lock.json", {
 		include: [
 			{ source: "skills/principle-upstream", destination: "skills/principle-upstream", vendored: true },
@@ -285,6 +285,8 @@ test("only locked vendored files may refer to classified, unvendored upstream ta
 	expect(lintPlugin(root, true).errors).toEqual([]);
 	put(notes, "[Typo](../upstream-missing/SKILL.md)\n");
 	expect(lintPlugin(root, true).errors).toContain(`${notes}: missing reference skills/upstream-missing/SKILL.md`);
+	put(notes, "Read the `upstream-missing` skill.\n");
+	expect(lintPlugin(root, true).errors).toContain(`${notes}: unknown skill upstream-missing (missing skills/upstream-missing/SKILL.md)`);
 	put(notes, "[Excluded](../upstream-excluded/SKILL.md)\n");
 	put("skills/misty/SKILL.md", skill("misty", "[Excluded](../upstream-excluded/SKILL.md)"));
 	expect(lintPlugin(root, true).errors).toEqual(["skills/misty/SKILL.md: missing reference skills/upstream-excluded/SKILL.md"]);

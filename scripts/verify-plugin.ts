@@ -293,7 +293,9 @@ export function lintPlugin(root: string, strict = false) {
 			}
 		}
 		for (const [, name] of text.matchAll(/\bthe\s+`([a-z0-9-]+)`\s+skill\b/gi)) {
-			if (!names.has(name)) references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
+			if (!names.has(name) && !(vendoredSources.has(file) && upstreamOnly.includes(`skills/${name}`))) {
+				references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
+			}
 		}
 	}
 	(strict ? errors : warnings).push(...[...references].sort((a, b) => a.localeCompare(b)));
