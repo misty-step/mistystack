@@ -332,7 +332,7 @@ export async function createGraph(entries) {
     };
     if (doc.kind === 'Core') doc.lineCounts = { total: doc.source.lineRange[1], body: parsed.body.split('\n').length - (parsed.body.endsWith('\n') ? 1 : 0) };
     if (doc.kind === 'Foundation') {
-      doc.articles = ast.children.filter((node) => node.type === 'list').flatMap((list) => list.children.map((item, index) => ({
+      doc.articles = ast.children.filter((node) => node.type === 'list' && node.ordered).flatMap((list) => list.children.map((item, index) => ({
         number: list.start + index,
         label: text(item.children[0]?.children?.find((node) => node.type === 'strong') ?? item).replace(/\.$/, ''),
         id: `article-${list.start + index}`,
