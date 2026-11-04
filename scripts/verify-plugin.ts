@@ -430,9 +430,16 @@ export function verifyInstall(root: string, omp: string, model: string) {
 			}
 			const content = checked([omp, "read", `skill://${name}`], project, env);
 			if (!content.includes(body)) throw new Error(`skill://${name} is not readable`);
+			console.log(`Explicit-only readback: ${name} hidden and body matches candidate`);
 			hiddenSkills++;
 		}
 		console.log(`Explicit-only skills: ${hiddenSkills} hidden from the model list and readable through skill://`);
+		const checklist = checked([omp, "read", "skill://foundation/checklist.md"], project, env);
+		const expectedChecklist = readFileSync(join(root, "skills/foundation/checklist.md"), "utf8").trim();
+		if (!checklist.includes(expectedChecklist) || !/^## Conformance$/m.test(checklist)) {
+			throw new Error("installed checklist conformance is missing or differs from the candidate");
+		}
+		console.log("Installed checklist: checklist.md#conformance readable and matches candidate");
 		console.log(`Discovery: misty and foundation listed; ${agents.length} native task agents listed; working-tree skill readable; always-apply core injected`);
 		console.log(core);
 	});

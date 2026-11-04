@@ -569,6 +569,7 @@ test.each([
 	const { root, put, skill } = fixture();
 	const sourceDescription = "For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.";
 	put("skills/foundation/SKILL.md", skill("foundation").replace("When changing the consumer path.", sourceDescription));
+	put("skills/foundation/checklist.md", "# Constitution\n\n## Conformance\n\nReal product proof.\n");
 	for (const name of ["recompile", "setup-mistystack"]) put(`skills/${name}/SKILL.md`, skill(name));
 	const skills = [
 		`- misty: ${sourceDescription}`,
@@ -586,7 +587,7 @@ test.each([
 case "$1" in
   config) printf '%s\\n' "$PI_CODING_AGENT_DIR" ;;
   launch) printf '%s\\n' '${frame}' ;;
-  read) printf '%s\\n' "$2" >> ${JSON.stringify(trace)}; printf 'Run the owned check.\\n' ;;
+  read) printf '%s\\n' "$2" >> ${JSON.stringify(trace)}; if [ "$2" = "skill://foundation/checklist.md" ]; then cat ${JSON.stringify(join(root, "skills/foundation/checklist.md"))}; else printf 'Run the owned check.\\n'; fi ;;
   *) printf 'Installed fixture\\n' ;;
 esac
 `);
@@ -600,12 +601,13 @@ esac
 	}
 });
 
-test.each(["readable", "unreadable", "listed"])("checks every principle's hidden discovery and explicit read (%s)", state => {
+test.each(["readable", "unreadable", "listed", "stale-checklist", "missing-conformance"])("checks installed explicit-only leaves and conformance (%s)", state => {
 	const { root, put, skill } = fixture();
 	put("skills/principle-alpha/SKILL.md", skill("principle-alpha", "Alpha's independent procedure."));
 	put("skills/principle-omega/SKILL.md", skill("principle-omega", "Omega's independent procedure."));
 	const foundationDescription = "For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.";
 	put("skills/foundation/SKILL.md", skill("foundation").replace("When changing the consumer path.", foundationDescription));
+	put("skills/foundation/checklist.md", `# Constitution\n\n## ${state === "missing-conformance" ? "Other" : "Conformance"}\n\nReal product proof.\n`);
 	const trace = join(root, "omp-commands");
 	const omp = join(root, "omp");
 	const prompt = `# Core\n\n- Load misty.\n<skills>\n- misty: Fixture router.\n- foundation: ${foundationDescription}\n${state === "listed" ? "- principle-omega: Leaked leaf.\n" : ""}</skills>`;
@@ -614,6 +616,7 @@ test.each(["readable", "unreadable", "listed"])("checks every principle's hidden
 		data: { systemPrompt: [prompt], dumpTools: [{ name: "task", description: "fixture" }] },
 	});
 	const omega = state === "unreadable" ? "printf '%s\\n' 'Unavailable procedure'" : `cat ${JSON.stringify(join(root, "skills/principle-omega/SKILL.md"))}`;
+	const checklist = state === "stale-checklist" ? "printf '%s\\n' '## Conformance'" : `cat ${JSON.stringify(join(root, "skills/foundation/checklist.md"))}`;
 	put("omp", `#!/bin/sh
 printf '%s\\n' "$*" >> ${JSON.stringify(trace)}
 case "$1 $2" in
@@ -623,6 +626,7 @@ case "$1 $2" in
   "read skill://misty") cat ${JSON.stringify(join(root, "skills/misty/SKILL.md"))} ;;
   "read skill://principle-alpha") cat ${JSON.stringify(join(root, "skills/principle-alpha/SKILL.md"))} ;;
   "read skill://principle-omega") ${omega} ;;
+  "read skill://foundation/checklist.md") ${checklist} ;;
   *) exit 1 ;;
 esac
 `);
@@ -630,10 +634,12 @@ esac
 	const verify = () => verifyInstall(root, omp, "fixture/model");
 	if (state === "listed") expect(verify).toThrow("explicit-only skill leaked into the model's skill list");
 	else if (state === "unreadable") expect(verify).toThrow("skill://principle-omega is not readable");
+	else if (state === "stale-checklist" || state === "missing-conformance") expect(verify).toThrow("installed checklist conformance is missing or differs from the candidate");
 	else {
 		expect(verify).not.toThrow();
 		const commands = readFileSync(trace, "utf8");
 		for (const name of ["principle-alpha", "principle-omega"]) expect(commands).toContain(`read skill://${name}\n`);
+		expect(commands).toContain("read skill://foundation/checklist.md\n");
 	}
 });
 

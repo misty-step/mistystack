@@ -254,6 +254,7 @@ Criteria:
 4. The core carries only Misty deltas. pstack's first-message trigger and
    [prove-it-works](skills/principle-prove-it-works/SKILL.md) govern task
    framing and proof without a duplicate core outside-check rule or ask-first rule.
+5. Designing a program or adding a responsibility reaches the explicit-only [compose-small-programs](skills/principle-compose-small-programs/SKILL.md) leaf through Misty's principle inventory.
 
 Proof: `scripts/verify-plugin.ts`, `scripts/verify-plugin.test.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -369,3 +370,12 @@ Criteria:
 
 Proof: [watchdog](skills/watchdog/SKILL.md), native supervisory observations and
 recovery evidence, not an agent's status summary alone.
+
+## US-064 Audit project conformance
+
+When I audit a project, I want one finished-deliverable contract and linked implementation guidance, so evidence covers the whole product without duplicate procedures.
+
+Criteria:
+1. [Foundation](skills/foundation/SKILL.md) audits all twelve articles against [Conformance](skills/foundation/checklist.md#conformance), with installed primitives linked from each applicable article and article 1 retaining auditable state.
+
+Proof: `skills/foundation/`, plugin lint, site link checks and isolated installed checklist readback.

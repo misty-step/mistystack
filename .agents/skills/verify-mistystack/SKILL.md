@@ -39,7 +39,7 @@ not evidence that the method loaded.
    installed core and list Misty plus Foundation's current trigger, the
    installed skill body to match the candidate, and every explicit-only skill
    (including recompile and setup-mistystack) to remain readable but hidden from
-   the automatic list.
+   the automatic list, and read the installed `checklist.md#conformance` with content matching the candidate.
    Other adapters' no-model inventory checks prove installation and registration,
    not that a model received the core. Follow the matching
    [harness note](../../../skills/misty/SKILL.md) for fresh-session proof: use an

@@ -16,7 +16,7 @@ Read your harness note: [OMP](harnesses/omp.md), [Claude Code](harnesses/claude.
 
 ## Misty deltas
 
-- **Shipping.** [Ship-loop](../ship-loop/SKILL.md) owns delivery: build, author verifies the real running app, merge without CI or review, then fast CI and one critical-correctness/security review at the pre-deploy release gate. Deploy the checked artifact and prove a live journey. Pstack's non-delivery methods remain the baseline.
+- **Shipping.** [Ship-loop](../ship-loop/SKILL.md) owns delivery under [Conformance](../foundation/checklist.md#conformance); pstack's non-delivery methods remain the baseline.
 - **Delegation.** Light rigor works inline. Standard may use [architect](../architect/SKILL.md), [interrogate](../interrogate/SKILL.md) and [how](../how/SKILL.md). Critical may also use [arena](../arena/SKILL.md) and [swarm](../swarm/SKILL.md). The brief names the rigor tier that permits its fan-out. Instruction trials retain [agent-design's defined arms and blind judge](../agent-design/SKILL.md#instruction-eval).
 - **Placement and supervision.** [Boat workers](../boat-workers/SKILL.md) owns one snapshot-backed worker per slice, idle stop/resume and final deletion. [Watchdog](../watchdog/SKILL.md) supervises open-ended agent runs through native observations and steering, not agent time caps.
 - **Planning.** Unsettled or conflicting product intent belongs to the owner. [figure-it-out](../figure-it-out/SKILL.md) plans execution of a settled outcome; it does not decide product intent.
@@ -27,6 +27,7 @@ Read [pstack's principle index](../poteto-mode/SKILL.md#principles) and each tri
 
 - [deeper-not-bigger](../principle-deeper-not-bigger/SKILL.md): Scoping or briefing. Grug lens and stronger methods at fixed scope.
 - [deep-modules](../principle-deep-modules/SKILL.md): Designing a module. Small interfaces over hidden complexity.
+- [compose-small-programs](../principle-compose-small-programs/SKILL.md): Designing a new program, command, service or feature that adds a responsibility to an existing program.
 - [nothing-fails-silently](../principle-nothing-fails-silently/SKILL.md): Error paths, fallbacks or telemetry. One explicit terminal outcome.
 
 ## Autonomy
