@@ -86,5 +86,4 @@ Report the consumer outcome, merged PRs, release, exercised checks and remaining
 blockers under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
 Distinguish `merged`, `released`, `artifact verified` and `live behavior proven`.
 
-**Complete when:** live identity and the critical journey pass, or the exact
-unreachable prerequisite is reported without claiming the unproved boundary.
+**Complete when:** the deliverable meets [Conformance](../foundation/checklist.md#conformance); an unreachable prerequisite remains explicitly unproved.

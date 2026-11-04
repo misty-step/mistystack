@@ -17,6 +17,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   principles, playbook and task skills.
 - **Principle leaf:** one on-demand `principle-<slug>` skill reached through the
   mode's index, not a duplicate of a core rule or task skill's procedure.
+- **Conformance:** the finished-deliverable contract in the [Foundation checklist](skills/foundation/checklist.md#conformance), separate from its audit procedure.
 - **Playbook:** a task-type procedure under `skills/poteto-mode/playbooks/`, selected through Misty's router.
 - **Skill:** a directory with a `SKILL.md` entry point and optional supporting
   material. References use relative Markdown links or the skill's name; native
