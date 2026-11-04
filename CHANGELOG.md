@@ -1,3 +1,9 @@
+# [0.3.21](https://github.com/misty-step/mistystack/compare/v0.3.20...v0.3.21) (2026-11-04)
+<!-- landmark:protected-release previous=v0.3.20 source=bf16c4805cb9b8208868a473312d0b5cf40c812062eaa0b395a5f9ab0f5c35b6 -->
+
+### Features
+
+* **method:** compose small programs and define conformance ([0bcc4a1](https://github.com/misty-step/mistystack/commit/0bcc4a131c526e9204b8903d230487a4ffa9c777))
 # [0.3.20](https://github.com/misty-step/mistystack/compare/v0.3.19...v0.3.20) (2026-11-03)
 <!-- landmark:protected-release previous=v0.3.19 source=472eae2728cd1fbe73579b52815ae4de42b999d860a7efd6f26f03e2de2ff91b -->
 
