@@ -15,6 +15,7 @@ if (!cases.length) throw new Error('No cases selected.');
 const names = new Set(index.skills.map(skill => skill.name));
 for (const item of cases) for (const expected of item.expected) if (!names.has(expected)) throw new Error(`${item.id}: expected skill ${expected} is not indexed.`);
 const versions = values.versions.split(',');
+if (versions.some(version => !['skill-fit-1', QUESTION_VERSION].includes(version))) throw new Error('Unknown question version.');
 const evidence = { startedAt: new Date().toISOString(), revision: index.revision, datasetHash: createHash('sha256').update(rawCases).digest('hex'), skillCount: index.skills.length, split: values.split, maxRequestBytes: MAX_REQUEST_BYTES, concurrency: CONCURRENCY, rows: [] };
 await mkdir(path.dirname(path.resolve(values.out)), { recursive: true });
 for (const item of cases) {

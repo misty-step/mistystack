@@ -391,4 +391,4 @@ export async function createGraph(entries) {
 }
 
 export const catalogKinds = ['Skills', 'Principles', 'Playbooks', 'Mode', 'Core'];
-export const publicRoutes = (graph) => ['/', '/library/', '/evals/', '/search/', '/find/', ...graph.documents.map((doc) => doc.url)];
+export const publicRoutes = (graph) => ['/', '/library/', '/evals/', '/search/', ...graph.documents.map((doc) => doc.url)];
