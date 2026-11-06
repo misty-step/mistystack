@@ -1,0 +1,52 @@
+---
+import { statusIcon } from '@misty-step/brand/spine';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { MAX_QUERY_LENGTH } from '../../lib/skill-search.mjs';
+import '../../styles/find.css';
+const intro = 'Describe a task. Jev ranks every skill mistystack ships or recommends by how well it fits.';
+---
+<SiteLayout title="Find a skill" section="Find" description={intro} noindex>
+  <div class="page">
+    <section class="s s-index">
+      <div class="s-head">
+        <h1 class="s-title">Find a skill</h1>
+        <p class="s-intro">{intro}</p>
+        <form class="field-row find-form" action="/find/" method="get" role="search" novalidate data-find-form>
+          <div class="sp-field"><label class="sp-label" for="find-q">Task</label><textarea class="sp-input" id="find-q" name="q" rows="3" autocomplete="off" enterkeyhint="search" data-max-length={MAX_QUERY_LENGTH} placeholder="Try “review a pull request for security issues”"></textarea><p class="sp-field-note" id="find-q-error" hidden></p></div>
+          <button class="sp-button" type="submit">Find skills</button>
+        </form>
+        <noscript><p class="s-status find-noscript">The skill finder needs JavaScript. <a class="sp-link" href="/library/">Browse the library</a> instead.</p></noscript>
+        <div class="find-summary">
+          <p class="s-status"><span role="status" aria-live="polite" data-find-status></span><span class="find-elapsed" aria-hidden="true" data-find-elapsed></span></p>
+          <p class="s-status" data-find-note hidden>Closeness is Jev’s judgment of relevance, not of correctness.</p>
+          <p class="s-status find-run" data-find-run hidden></p>
+        </div>
+      </div>
+      <div class="find-results">
+        <ol class="entries" aria-label="Ranked skills" data-find-results></ol>
+        <button class="sp-button sp-quiet find-more" type="button" data-find-more hidden>Show more skills</button>
+        <span class="sp-sr" role="status" data-find-announce></span>
+        <template data-find-template="result">
+          <li class="entry find-result">
+            <div class="find-result-head">
+              <h2 class="entry-title" data-slot="name"></h2>
+              <p class="find-closeness"><span class="sp-sr">Closeness </span><svg class="find-bar" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true" data-slot="bar"><rect class="find-bar-track" width="100" height="8"></rect><rect class="find-bar-fill" width="0" height="8" data-slot="fill"></rect></svg><span class="find-percent" data-slot="percent"></span></p>
+            </div>
+            <p class="entry-body" data-slot="description"></p>
+            <p class="entry-meta" data-slot="source"><span class="badge"><span data-slot="pack"></span><code class="find-pin" data-slot="pin"></code></span></p>
+            <div class="find-commands" data-slot="commands"></div>
+          </li>
+        </template>
+        <template data-find-template="command">
+          <div class="find-command"><code data-slot="text"></code><button class="find-copy" type="button" data-find-copy><span data-slot="label">Copy</span><span class="sp-sr" data-slot="what"></span></button></div>
+        </template>
+        <template data-find-template="placeholder">
+          <li class="entry find-placeholder" aria-hidden="true"><span class="sp-skeleton find-skeleton-title"></span><span class="sp-skeleton"></span><span class="sp-skeleton find-skeleton-short"></span></li>
+        </template>
+        <template data-find-template="warn"><Fragment set:html={statusIcon('warn')} /></template>
+        <template data-find-template="err"><Fragment set:html={statusIcon('err')} /></template>
+      </div>
+    </section>
+  </div>
+  <script>import '../../scripts/find.mjs';</script>
+</SiteLayout>

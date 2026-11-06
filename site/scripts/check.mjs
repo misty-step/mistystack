@@ -272,6 +272,10 @@ async function main() {
     for (const link of links) checkLink(link.value, `/${file}`, link.label);
   }
   required('index.html');
+  required('find/index.html');
+  const worker = required('.worker/index.js')?.toString('utf8') ?? '';
+  expect(worker.includes('/api/find') && worker.includes('api/alpha/decisions'), '.worker/index.js: missing bundled finder or Jev endpoint');
+  expect(files.get('.assetsignore')?.toString('utf8').split('\n').includes('.worker/'), '.assetsignore: Worker code and index must not be public assets');
   const notFound = required('404.html')?.toString('utf8');
   if (notFound) {
     expect(/404|not found/i.test(notFound), '404.html: must explain the missing page');

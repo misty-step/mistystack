@@ -401,3 +401,16 @@ Criteria:
 3. `reflect` delivers approved skill edits through the maintained source and ship-loop instead of editing local copies without a pull request.
 
 Proof: plugin lint, `bun scripts/sync-pstack.ts --check`, and a fresh isolated OMP session following the installed Look back route.
+
+## US-067 Find a skill by the work
+
+When I describe what I need to do, I want a ranked list of preferred-set skills with closeness and invocation details, so I can choose useful guidance without knowing its name.
+
+Criteria:
+1. Any natural-language query is judged against every skill's bounded core text, including pinned upstream catalog plugins. No phase label or keyword match is required.
+2. Results show relevance, source pack and pin, description, invocation or installation command, and a link to the maintained skill or its pinned upstream source.
+3. Light and dark appearances, keyboard interaction, loading, rejection and degraded states remain usable. Provider failures never become fabricated relevance scores.
+4. The same Worker protects its credential and enforces per-client admission. The API discloses the served model, cost when known, and incomplete scoring.
+5. A labeled set covers shaping, design, delivery, incident, retro and orientation. Its rerunnable evaluation reports top-1 and top-3 hit rates, latency, cost, and served model.
+
+Proof: [ADR 0025](docs/decisions/0025-skill-finder-worker.md), the site checks, labeled evaluation and real Worker browser journey.

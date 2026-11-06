@@ -169,6 +169,36 @@ test("Codex marketplace policy and local source are required, not just its plugi
 	expect(errors).toContain(".agents/plugins/marketplace.json: plugin policy must use installation AVAILABLE and authentication ON_USE");
 });
 
+test.each([
+	{ source: "github", repo: "owner/skills", sha: "a".repeat(40) },
+	{ source: "git-subdir", url: "https://github.com/owner/skills.git", path: "plugins/design", sha: "b".repeat(40) },
+])("accepts a pinned OMP catalog source without requiring local files", source => {
+	const { root, json } = fixture();
+	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toEqual([]);
+});
+
+test.each([
+	{ source: "github", repo: "owner/skills", ref: "main" },
+	{ source: "github", repo: "owner/skills", sha: "abc123" },
+	{ source: "github", repo: "owner/skills", sha: "z".repeat(40) },
+])("rejects branch-only and incomplete OMP catalog pins", source => {
+	const { root, json } = fixture();
+	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toContain(".omp-plugin/marketplace.json: catalog-skill: catalog source requires a full 40-hex sha");
+});
+
+test.each([
+	[{ source: "github", repo: "not-a-repository", sha: "a".repeat(40) }, "github source requires owner/repo"],
+	[{ source: "git-subdir", url: "file:///outside", path: "plugin", sha: "a".repeat(40) }, "git-subdir source requires an HTTPS repository URL"],
+	[{ source: "git-subdir", url: "https://github.com/owner/skills.git", path: "../outside", sha: "a".repeat(40) }, "git-subdir source requires an in-repository path"],
+	[{ source: "npm", package: "uninstalled", sha: "a".repeat(40) }, "catalog source must use github or git-subdir"],
+])("rejects malformed OMP catalog sources", (source, message) => {
+	const { root, json } = fixture();
+	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toContain(`.omp-plugin/marketplace.json: catalog-skill: ${message}`);
+});
+
 function expectStrictWarnings(root: string, warnings: string[]) {
 	const report = lintPlugin(root);
 	expect(report.errors).toEqual([]);
@@ -318,18 +348,20 @@ test("Pocock-locked skills keep upstream metadata only while their bytes and fil
 	expect(lintPlugin(root).errors).toContain(`${file}: metadata.owner must be non-empty`);
 });
 
-test("the maintained gate does not execute upstream script-bundle suites", () => {
+test("the method gate leaves upstream and isolated site suites to their own toolchains", () => {
 	const { root, put, lock } = fixture();
 	const file = "skills/upstream/SKILL.md";
 	const suite = "skills/upstream/bundle.test.ts";
 	put(file, "---\nname: upstream\ndescription: Upstream entry.\n---\n# Upstream\n");
 	put(suite, 'throw new Error("Upstream suite must run through its own toolchain");\n');
+	put("site/scripts/isolated.test.mjs", 'throw new Error("Site suite must run through its own toolchain");\n');
 	put("consumer.test.ts", 'import { test, expect } from "bun:test"; test("maintained consumer", () => expect(true).toBe(true));\n');
 	lock({ include: [{ source: "skills/upstream", destination: "skills/upstream", vendored: true }], files: { [file]: "a".repeat(64), [suite]: "b".repeat(64) } });
 	const result = runPlugin(root, ["--strict", "--lint-only"]);
 	expect(result.code).toBe(0);
 	expect(result.err).toContain("maintained consumer");
 	expect(result.err).not.toContain("Upstream suite must run");
+	expect(result.err).not.toContain("Site suite must run");
 });
 
 test("vendored prompt examples are literals, while actual file links and Misty references remain strict", () => {

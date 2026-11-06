@@ -129,6 +129,29 @@ function lintManifests(root: string, errors: string[]) {
 			}
 			required(plugin, `${file}: plugin`, ["name"]);
 			if (plugin.name === "mistystack") found = true;
+			if (file === ".omp-plugin/marketplace.json" && plugin.name !== "mistystack") {
+				const source = plugin.source;
+				const label = `${file}: ${String(plugin.name)}`;
+				if (!isRecord(source) || !["github", "git-subdir"].includes(String(source.source))) {
+					errors.push(`${label}: catalog source must use github or git-subdir`);
+					continue;
+				}
+				if (typeof source.sha !== "string" || !/^[a-f0-9]{40}$/i.test(source.sha)) {
+					errors.push(`${label}: catalog source requires a full 40-hex sha`);
+				}
+				if (source.source === "github" && (typeof source.repo !== "string" || !/^[\w.-]+\/[\w.-]+$/.test(source.repo))) {
+					errors.push(`${label}: github source requires owner/repo`);
+				}
+				if (source.source === "git-subdir") {
+					if (typeof source.url !== "string" || !/^https:\/\/[^/?#\s]+\/[^?#\s]+$/.test(source.url)) {
+						errors.push(`${label}: git-subdir source requires an HTTPS repository URL`);
+					}
+					if (typeof source.path !== "string" || !source.path || source.path.startsWith("/") || source.path.includes("\\") || source.path.split("/").some(part => !part || part === "." || part === "..")) {
+						errors.push(`${label}: git-subdir source requires an in-repository path`);
+					}
+				}
+				continue;
+			}
 			const source = codex && isRecord(plugin.source) ? plugin.source.path : plugin.source;
 			if (codex && (!isRecord(plugin.source) || plugin.source.source !== "local")) {
 				errors.push(`${file}: plugin source must be local`);
@@ -725,7 +748,7 @@ if (import.meta.main) {
 		if (report.errors.length > 0) process.exit(1);
 		const vendoredTests = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).vendoredSources : new Map<string, string>();
 		const maintainedTests = [...new Bun.Glob("**/*.{test,spec}.{js,jsx,ts,tsx,mjs,cjs}").scanSync({ cwd: root })]
-			.filter(file => !file.split("/").includes("node_modules") && !vendoredTests.has(file)).sort();
+			.filter(file => !file.startsWith("site/") && !file.split("/").includes("node_modules") && !vendoredTests.has(file)).sort();
 		const tests = Bun.spawnSync([process.execPath, "test", "--max-concurrency=1", ...maintainedTests.map(file => `./${file}`)], {
 			cwd: root, stdout: "inherit", stderr: "inherit",
 		});
