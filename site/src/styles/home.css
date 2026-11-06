@@ -47,7 +47,7 @@
 
 /* Install: one tab per harness, its commands and where they come from. */
 .install { display: grid; grid-template-columns: minmax(0, 1fr); min-inline-size: 0; }
-.install-panel { display: grid; gap: var(--space-md); }
+.install-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
 .install-command { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-sm); }
 .install-command > pre { flex: 1 1 18rem; min-inline-size: 0; }
 .install-command > .copy { flex: none; }
