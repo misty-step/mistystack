@@ -379,3 +379,14 @@ Criteria:
 1. [Foundation](skills/foundation/SKILL.md) audits all twelve articles against [Conformance](skills/foundation/checklist.md#conformance), with installed primitives linked from each applicable article and article 1 retaining auditable state.
 
 Proof: `skills/foundation/`, plugin lint, site link checks and isolated installed checklist readback.
+
+## US-065 Shape unsettled intent in every session
+
+When product intent is unsettled, I want every OMP session to offer the same grilling and shaping method, so decisions reach their homes without a per-repository setup.
+
+Criteria:
+1. Installing mistystack makes `grilling` model-discoverable and `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets`, `domain-modeling` and `to-questionnaire` available, with no skill-name collision against mistystack or pstack skills.
+2. [Misty](skills/misty/SKILL.md#shaping) routes unsettled intent to `grilling`, where agents find facts and the owner decides, and supplies the tracker, workflow-state, `DOMAIN.md` and `docs/decisions/` facts the skills expect.
+3. The vendored skills match `vendor/pocock.lock.json` byte for byte; plugin lint rejects edited, missing or unrecorded files.
+
+Proof: [ADR 0024](docs/decisions/0024-pocock-shaping-skills.md), plugin lint, and a fresh isolated OMP session's skill list and installed routing.

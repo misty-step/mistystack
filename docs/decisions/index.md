@@ -5,6 +5,9 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0024](0024-pocock-shaping-skills.md): unsettled intent routes to vendored
+  Matt Pocock shaping skills (`grilling`, `to-spec`, `to-tickets` and others)
+  under a hash-checked lock. Supersedes 0022 row 7's unrouted owner provision.
 - [0023](0023-live-verification-and-release-gate.md): author-owned running-product
   proof, merge without CI/review, fast CI and one critical assessment at release;
   one snapshot-backed Boat worker per slice and open-ended watchdog supervision.

@@ -10,7 +10,7 @@ const inherited = !document.skill && skill;
     {!inherited && <><dt data-pagefind-ignore>When to use</dt><dd><p>{skill.description}</p></dd></>}
     {skill.vendored ? <>
       <dt data-pagefind-ignore>Source</dt><dd><p><a class="sp-link" href={skill.provenanceUrl}>{skill.source}</a></p></dd>
-      <dt data-pagefind-ignore>Provenance</dt><dd><p>Vendored pstack. The lock owns the upstream pin and file hashes; upstream does not supply Misty's owner, prevented-failure or review-date fields.</p></dd>
+      <dt data-pagefind-ignore>Provenance</dt><dd><p>Vendored {skill.pack}. The lock owns the upstream pin and file hashes; upstream does not supply Misty's owner, prevented-failure or review-date fields.</p></dd>
     </> : <>
       {!inherited && <><dt data-pagefind-ignore>Prevents</dt><dd><p>{skill.prevents}</p></dd></>}
       <dt data-pagefind-ignore>Owner</dt><dd><p>{skill.owner}</p></dd>
