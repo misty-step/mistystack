@@ -1,13 +1,14 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import HeadlineText from '../components/HeadlineText.astro';
 ---
 <SiteLayout title="Page not found" section="About" path="/404.html" noindex>
-  <div class="page">
-    <section class="s s-cta">
-      <h1 class="s-title">Page not found</h1>
-      <p class="s-intro">This address does not identify a page in this revision.</p>
-      <div class="actions"><a class="btn btn-primary" href="/search/">Search the method</a><a class="btn btn-quiet" href="/library/">Browse the library</a></div>
-      <p class="s-intro"><a class="sp-link" href="/">Go to the home page</a> or <a class="sp-link" href="/guide/">follow the guide</a>.</p>
+  <div class="frame page">
+    <section class="page-head">
+      <h1 class="page-title"><HeadlineText text="Page not found" stop /></h1>
+      <p class="lede">This address does not identify a page in this revision.</p>
+      <div class="actions"><a class="sp-button" href="/search/">Search the method</a><a class="sp-secondary" href="/library/">Browse the library</a></div>
+      <p class="lede"><a class="sp-link" href="/">Go to the home page</a> or <a class="sp-link" href="/guide/">follow the guide</a>.</p>
     </section>
   </div>
 </SiteLayout>

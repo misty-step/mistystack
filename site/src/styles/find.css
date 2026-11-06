@@ -1,64 +1,39 @@
 /*
   The skill finder (/find/). The question, its status and the run's provenance
-  sit in the section head; the ranked skills fill the reading column. Like
+  sit in the tool panel; the ranked skills are the spine's ranked results. Like
   site.css, every value is a brand token, a ratio of one, or a structural length.
 */
 
 /* The question is sent by script; without it the noscript note offers the library. */
 html:not([data-js]) .find-form { display: none; }
-.field-row > .sp-field:has(textarea) { flex-basis: 100%; }
-.find-form textarea { resize: vertical; }
-.find-noscript { margin-block-start: 20px; }
 
-.find-summary { display: grid; gap: 6px; margin-block-start: 20px; }
+.find-summary { display: grid; gap: var(--space-xs); }
 .find-summary [data-tone] { color: var(--ink); }
-.find-elapsed { font-variant-numeric: tabular-nums; }
+.find-summary .find-elapsed { font: var(--type-mono); letter-spacing: var(--mono-tracking); font-variant-numeric: tabular-nums; }
 .find-elapsed:not(:empty) { margin-inline-start: 0.4em; }
-.find-run code { font-family: var(--font-mono); font-size: 0.92em; overflow-wrap: anywhere; }
+.find-summary .find-run { font: var(--type-mono); letter-spacing: var(--mono-tracking); overflow-wrap: anywhere; }
 
-/* One ranked skill: name and closeness, what it does, where it comes from, how to run it. */
-.find-result-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 16px; }
-.find-closeness {
-  display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--display-weight);
-  line-height: 1; letter-spacing: var(--display-tracking); font-variant-numeric: tabular-nums; color: var(--ink);
+/* One ranked skill, stacked in the results column: name, closeness, what it does, then its source and commands. */
+.find-results .sp-ranked-result { grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "closeness" "description" "source"; }
+.find-results .sp-ranked-name a {
+  color: var(--ink); text-decoration-line: underline; text-decoration-color: var(--border);
+  text-decoration-thickness: 1px; text-underline-offset: 0.2em;
 }
-.find-percent { min-inline-size: 2.6em; text-align: end; }
-.find-bar { inline-size: 5rem; block-size: 8px; }
-.find-bar-track { fill: var(--line); }
-.find-bar-fill { fill: var(--ink-3); }
-.find-result .badge { gap: 0.5em; }
-.find-pin { font-family: var(--font-mono); font-size: 0.92em; color: var(--ink-2); }
-
-.find-commands { display: grid; gap: 8px; }
-.find-command { display: flex; align-items: flex-start; gap: 8px; }
-.find-command > code {
-  flex: 1 1 auto; min-inline-size: 0; min-block-size: 44px; padding: 11px 14px;
-  border-radius: var(--radius); background: var(--bg-3);
-  font-family: var(--font-mono); font-size: var(--step--1); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere;
-}
-.find-copy {
-  flex: none; min-block-size: 44px; padding: 0 18px;
-  border: var(--rule) solid var(--line-2); border-radius: var(--radius); background: transparent; color: var(--ink);
-  font-family: var(--font-ui); font-size: var(--step--1); font-weight: 600; line-height: 1.2;
-}
-.find-more { margin-block-start: 24px; }
+.find-results .sp-ranked-source { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); padding-block-start: var(--space-sm); }
+.find-results .find-source { flex: none; gap: var(--space-sm); }
+.find-commands { display: grid; flex: 1 1 16rem; gap: var(--space-sm); min-inline-size: 0; }
+.find-results .find-command > code { white-space: pre-wrap; overflow-wrap: anywhere; padding-block: var(--space-sm); }
 
 /* Waiting: the spine's still wash in the shape of a result. */
-.find-placeholder > .sp-skeleton { block-size: 1em; }
-.find-placeholder > .find-skeleton-title { block-size: 1.75em; inline-size: 45%; }
-.find-placeholder > .find-skeleton-short { inline-size: 60%; }
-
-@media (max-width: 700px) {
-  .find-bar { inline-size: 3.5rem; }
+.find-placeholder {
+  display: grid; gap: var(--space-sm); padding: var(--card-padding);
+  border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface);
 }
+.find-placeholder > .sp-skeleton { block-size: 1em; }
+.find-placeholder > .find-skeleton-title { block-size: 1.5em; inline-size: 40%; }
+.find-placeholder > .find-skeleton-bar { block-size: var(--space-sm); }
+.find-placeholder > .find-skeleton-short { inline-size: 70%; }
 
 @media (hover: hover) and (pointer: fine) {
-  .find-copy:hover { background: var(--bg-2); }
-}
-
-@media (forced-colors: active) {
-  .find-bar { forced-color-adjust: none; }
-  .find-bar-track { fill: Canvas; stroke: CanvasText; }
-  .find-bar-fill { fill: CanvasText; }
+  .find-results .sp-ranked-name a:hover { text-decoration-color: currentColor; }
 }
