@@ -14,6 +14,7 @@ const CATALOG_SHA = 'c'.repeat(40);
 const SUBDIR_SHA = 'd'.repeat(40);
 const PSTACK_COMMIT = 'e'.repeat(40);
 const POCOCK_COMMIT = '1'.repeat(40);
+const WARP_COMMIT = '2'.repeat(40);
 const roots = [];
 after(() => {
   for (const root of roots) rmSync(root, { recursive: true, force: true });
@@ -84,6 +85,12 @@ function fixture() {
     repo: 'mattpocock/skills', commit: POCOCK_COMMIT,
     skills: { 'skills/gamma': 'skills/productivity/gamma' }, files: { 'skills/gamma/SKILL.md': sha256(gamma) },
   }));
+  const risk = skill('merge-risk', 'Vendored Warp body.');
+  put('skills/merge-risk/SKILL.md', risk);
+  put('vendor/warp.lock.json', JSON.stringify({
+    repo: 'warpdotdev/common-skills', commit: WARP_COMMIT,
+    skills: { 'skills/merge-risk': '.agents/skills/merge-risk' }, files: { 'skills/merge-risk/SKILL.md': sha256(risk) },
+  }));
   catalog(catalogA, catalogB);
   const build = (fetch) => buildSkillIndex({ root, revision: REVISION, cacheDir: path.join(base, 'cache'), fetch });
   return { base, put, catalog, build };
@@ -96,7 +103,7 @@ test('indexes repository and pinned catalog skills with provenance and invocatio
   const entry = (id) => index.skills.find((candidate) => candidate.id === id);
   assert.equal(index.revision, REVISION);
   assert.deepEqual(index.skills.map((candidate) => candidate.id), [
-    'catalog-a:alpha', 'catalog-b:delta', 'catalog-b:epsilon', 'mistystack:alpha', 'pocock:gamma', 'pstack:beta',
+    'Warp:merge-risk', 'catalog-a:alpha', 'catalog-b:delta', 'catalog-b:epsilon', 'mistystack:alpha', 'pocock:gamma', 'pstack:beta',
   ]);
   assert.deepEqual(entry('catalog-a:alpha'), {
     id: 'catalog-a:alpha', name: 'alpha', pack: 'catalog-a', pin: CATALOG_SHA, description: 'alpha description.',
@@ -108,6 +115,7 @@ test('indexes repository and pinned catalog skills with provenance and invocatio
   assert.deepEqual(entry('catalog-b:epsilon').source, { pack: 'catalog-b', pin: SUBDIR_SHA, repository: 'https://github.com/acme/mono', path: 'plugins/b/extra/epsilon/SKILL.md' });
   assert.deepEqual(entry('pstack:beta').source, { pack: 'pstack', pin: PSTACK_COMMIT, repository: 'https://github.com/cursor/plugins', path: 'pstack/skills/beta/SKILL.md' });
   assert.deepEqual(entry('pocock:gamma').source, { pack: 'pocock', pin: POCOCK_COMMIT, repository: 'https://github.com/mattpocock/skills', path: 'skills/productivity/gamma/SKILL.md' });
+  assert.deepEqual(entry('Warp:merge-risk').source, { pack: 'Warp', pin: WARP_COMMIT, repository: 'https://github.com/warpdotdev/common-skills', path: '.agents/skills/merge-risk/SKILL.md' });
   assert.deepEqual(entry('mistystack:alpha').invoke, { skill: '/skill:alpha', install: null });
   assert.equal(entry('mistystack:alpha').url, `https://github.com/misty-step/mistystack/blob/${REVISION}/skills/alpha/SKILL.md`);
   assert.deepEqual(remote.requests.filter((url) => /REFERENCE\.md|nested|unrelated/.test(url)), []);

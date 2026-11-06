@@ -26,7 +26,7 @@ root is a `SKILL.md`.
 ## Decision
 
 Vendor the seven skills unchanged from `mattpocock/skills`. `vendor/pocock.lock.json`
-owns the pin, source paths and file hashes; `bun scripts/sync-pocock.ts <checkout>`
+owns the pin, source paths and file hashes; `bun scripts/sync-skills.ts vendor/pocock.lock.json <checkout>`
 regenerates them, and plugin lint rejects edited, missing or unrecorded files.
 [Misty's Shaping section](../../skills/misty/SKILL.md#shaping) routes unsettled
 intent to `grilling` and supplies the facts Pocock's per-repo setup would write:
@@ -43,3 +43,26 @@ catalog pin bump. The rest of Pocock's pack is not installed.
 Revisit if OMP adds plugin-qualified skill selection
 ([MIS-873](https://linear.app/misty-step/issue/MIS-873)) or subset installation
 from a plugin; then the official plugin can replace the vendored copy.
+
+## Extension: multiple unchanged upstreams
+
+On 2026-11-06, [MIS-940](https://linear.app/misty-step/issue/MIS-940) adds Warp's
+`merge-risk` and `resolve-merge-conflicts` from `warpdotdev/common-skills`, pinned
+in `vendor/warp.lock.json`. A single registry, `scripts/skill-locks.mjs`, owns
+each pack's identity, repository and allowed source layout. One sync command,
+`bun scripts/sync-skills.ts <lock> <checkout>`, replaces the pack-specific
+implementation. Lint, installed-byte proof and the site's graph and skill index
+consume that same registry and validated provenance.
+
+Pocock sources remain `skills/<group>/<name>`; Warp sources are
+`.agents/skills/<name>`. Destinations remain `skills/<name>`. The sync validates
+every mapping and source before replacing any destination, preserves supporting
+files and executable modes, and records unchanged bytes. The pstack generator
+remains separate because its recorded patches and removals are a different contract.
+
+Misty routes the two new intents. Ship-loop retains the overall and per-category
+merge-risk verdicts in the PR's Merge Danger section and the single release-gate
+assessment; forge conflicts use resolve-merge-conflicts. The names adapter maps
+its upstream script prefix to the installed directory without modifying Warp's
+bytes. Neither skill adds a PR review or CI gate.
+

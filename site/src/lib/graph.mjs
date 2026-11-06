@@ -13,15 +13,11 @@ import { blobUrl, encodePath, release, repoRoot, repositoryUrl } from './release
 import { historicalSources } from './historical-sources.mjs';
 
 import { isPstackTemplateTarget, readPstackLock } from '../../../scripts/pstack-lock.mjs';
-import { POCOCK_LOCK, POCOCK_REPO, readPocockLock } from '../../../scripts/pocock-lock.mjs';
+import { readSkillLocks } from '../../../scripts/skill-locks.mjs';
 
 const { lock: pstack, vendoredSkills, vendoredSources, upstreamOnly } = readPstackLock(repoRoot);
-const pocock = readPocockLock(repoRoot);
-if (pocock.errors.length > 0) throw new Error(pocock.errors.join('\n'));
-const pocockSources = new Map(Object.keys(pocock.lock?.files ?? {}).map((file) => {
-  const [destination, upstream] = Object.entries(pocock.lock.skills).find(([skill]) => file.startsWith(`${skill}/`));
-  return [file, `${POCOCK_REPO}: ${upstream}${file.slice(destination.length)}`];
-}));
+const upstreams = readSkillLocks(repoRoot);
+if (upstreams.errors.length > 0) throw new Error(upstreams.errors.join('\n'));
 const markdown = unified().use(remarkParse).use(remarkGfm);
 const toHtml = unified().use(remarkRehype, { allowDangerousHtml: true }).use(rehypeRaw);
 const stringify = unified().use(rehypeStringify);
@@ -94,7 +90,8 @@ function validateMetadata(doc) {
       if (typeof data[key] !== 'string' || !data[key].trim()) throw new Error(`${doc.id}: ${key} must be a nonempty string`);
     }
     if (data.name !== doc.id.split('/')[1]) throw new Error(`${doc.id}: name must match its installed directory`);
-    const upstream = vendoredSkills.get(doc.id) ?? pocockSources.get(doc.id);
+    const locked = upstreams.files.get(doc.id);
+    const upstream = vendoredSkills.get(doc.id) ?? (locked && `${locked.repo}: ${locked.source}`);
     if (!upstream) {
       for (const key of ['owner', 'prevents', 'source', 'sunset']) {
         if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
@@ -111,8 +108,8 @@ function validateMetadata(doc) {
       name: data.name, description: data.description,
       ...(upstream ? {
         vendored: true, source: upstream,
-        pack: pocockSources.has(doc.id) ? "Matt Pocock's skills" : 'pstack',
-        provenanceUrl: blobUrl(pocockSources.has(doc.id) ? POCOCK_LOCK : 'vendor/pstack.lock.json'),
+        pack: locked?.label ?? 'pstack',
+        provenanceUrl: blobUrl(locked?.lock ?? 'vendor/pstack.lock.json'),
       } : data.metadata),
       disableModelInvocation: data['disable-model-invocation'] === true,
     };
@@ -319,12 +316,12 @@ export async function createGraph(entries) {
     const raw = readFileSync(path.join(repoRoot, id), 'utf8');
     const parsed = parseSource(id, raw);
     const ast = markdown.parse(parsed.body);
-    if (pocockSources.has(id)) {
-      // Pocock templates use <placeholder> headings; show them as text, and title the page by skill name.
+    if (upstreams.files.has(id)) {
+      // Upstream templates use <placeholder> headings; render them as text.
       visit(ast, 'heading', (node) => { node.children = node.children.map((child) => child.type === 'html' ? literal(child.value) : child); });
     }
-    let h1 = pocockSources.has(id) && id.endsWith('/SKILL.md') ? undefined : ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
-    if (!h1 && (vendoredSources.has(id) || pocockSources.has(id))) {
+    let h1 = upstreams.files.has(id) && id.endsWith('/SKILL.md') ? undefined : ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
+    if (!h1 && (vendoredSources.has(id) || upstreams.files.has(id))) {
       const title = typeof parsed.data.name === 'string' ? parsed.data.name : path.basename(id, '.md').replaceAll('-', ' ');
       h1 = { type: 'heading', depth: 1, children: [literal(title)] };
       ast.children.unshift(h1);
