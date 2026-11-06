@@ -1,3 +1,14 @@
+# [0.3.23](https://github.com/misty-step/mistystack/compare/v0.3.22...v0.3.23) (2026-11-06)
+<!-- landmark:protected-release previous=v0.3.22 source=e2da65dcfa87a224fe8bc5b5df9ab757f299b934a65db14b2a59be5504205ec0 -->
+
+### Features
+
+* **skills:** route orient, look-back, supervise and explain intents ([9d5f39a](https://github.com/misty-step/mistystack/commit/9d5f39a38446f7bb5600d47c05831cbd674d7c53))
+* **site:** find preferred skills with Jev-ranked relevance ([5f19b0c](https://github.com/misty-step/mistystack/commit/5f19b0c2ad313b32a7a9c1df3246471edfa64682))
+
+### Bug Fixes
+
+* **site:** let the first finder release deploy before its secret exists ([6b9e5b6](https://github.com/misty-step/mistystack/commit/6b9e5b6832d8d07ce5f4e50c822aca4ca1eacee8))
 # [0.3.22](https://github.com/misty-step/mistystack/compare/v0.3.21...v0.3.22) (2026-11-06)
 <!-- landmark:protected-release previous=v0.3.21 source=bdf8b5584cec2b2285d8d0a609ddfd8ed82190d07ed56f3f157459e56340f557 -->
 
