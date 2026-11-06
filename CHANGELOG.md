@@ -1,3 +1,10 @@
+# [0.3.24](https://github.com/misty-step/mistystack/compare/v0.3.23...v0.3.24) (2026-11-06)
+<!-- landmark:protected-release previous=v0.3.23 source=8cc438bfc925af1cf636952174aaf6d872f3d380a8ee823ad60b64030856af59 -->
+
+### Features
+
+* vendor Warp merge-risk and conflict skills ([a84f585](https://github.com/misty-step/mistystack/commit/a84f5851d32f12a66b59d4348f199579d941f35b))
+* **site:** adopt the locked Misty Step identity ([d336151](https://github.com/misty-step/mistystack/commit/d336151fa3629a5a1678f6c79a8ee81cebf3b701))
 # [0.3.23](https://github.com/misty-step/mistystack/compare/v0.3.22...v0.3.23) (2026-11-06)
 <!-- landmark:protected-release previous=v0.3.22 source=e2da65dcfa87a224fe8bc5b5df9ab757f299b934a65db14b2a59be5504205ec0 -->
 
