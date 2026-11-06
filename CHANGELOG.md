@@ -1,3 +1,13 @@
+# [0.3.22](https://github.com/misty-step/mistystack/compare/v0.3.21...v0.3.22) (2026-11-06)
+<!-- landmark:protected-release previous=v0.3.21 source=bdf8b5584cec2b2285d8d0a609ddfd8ed82190d07ed56f3f157459e56340f557 -->
+
+### Features
+
+* **skills:** route shaping through vendored Pocock grilling skills ([36119c4](https://github.com/misty-step/mistystack/commit/36119c46016d1b21da0f6c44e3142920588934a9))
+
+### Bug Fixes
+
+* **scripts:** refuse Pocock lock paths outside skills/ before syncing ([ae5d5c6](https://github.com/misty-step/mistystack/commit/ae5d5c6ae9abb4dd314a10107898e8fbd1942a06))
 # [0.3.21](https://github.com/misty-step/mistystack/compare/v0.3.20...v0.3.21) (2026-11-04)
 <!-- landmark:protected-release previous=v0.3.20 source=bf16c4805cb9b8208868a473312d0b5cf40c812062eaa0b395a5f9ab0f5c35b6 -->
 
