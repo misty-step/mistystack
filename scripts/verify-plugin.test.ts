@@ -348,18 +348,20 @@ test("Pocock-locked skills keep upstream metadata only while their bytes and fil
 	expect(lintPlugin(root).errors).toContain(`${file}: metadata.owner must be non-empty`);
 });
 
-test("the maintained gate does not execute upstream script-bundle suites", () => {
+test("the method gate leaves upstream and isolated site suites to their own toolchains", () => {
 	const { root, put, lock } = fixture();
 	const file = "skills/upstream/SKILL.md";
 	const suite = "skills/upstream/bundle.test.ts";
 	put(file, "---\nname: upstream\ndescription: Upstream entry.\n---\n# Upstream\n");
 	put(suite, 'throw new Error("Upstream suite must run through its own toolchain");\n');
+	put("site/scripts/isolated.test.mjs", 'throw new Error("Site suite must run through its own toolchain");\n');
 	put("consumer.test.ts", 'import { test, expect } from "bun:test"; test("maintained consumer", () => expect(true).toBe(true));\n');
 	lock({ include: [{ source: "skills/upstream", destination: "skills/upstream", vendored: true }], files: { [file]: "a".repeat(64), [suite]: "b".repeat(64) } });
 	const result = runPlugin(root, ["--strict", "--lint-only"]);
 	expect(result.code).toBe(0);
 	expect(result.err).toContain("maintained consumer");
 	expect(result.err).not.toContain("Upstream suite must run");
+	expect(result.err).not.toContain("Site suite must run");
 });
 
 test("vendored prompt examples are literals, while actual file links and Misty references remain strict", () => {

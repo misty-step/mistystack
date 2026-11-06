@@ -748,7 +748,7 @@ if (import.meta.main) {
 		if (report.errors.length > 0) process.exit(1);
 		const vendoredTests = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).vendoredSources : new Map<string, string>();
 		const maintainedTests = [...new Bun.Glob("**/*.{test,spec}.{js,jsx,ts,tsx,mjs,cjs}").scanSync({ cwd: root })]
-			.filter(file => !file.split("/").includes("node_modules") && !vendoredTests.has(file)).sort();
+			.filter(file => !file.startsWith("site/") && !file.split("/").includes("node_modules") && !vendoredTests.has(file)).sort();
 		const tests = Bun.spawnSync([process.execPath, "test", "--max-concurrency=1", ...maintainedTests.map(file => `./${file}`)], {
 			cwd: root, stdout: "inherit", stderr: "inherit",
 		});
