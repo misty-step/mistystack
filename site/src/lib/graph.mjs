@@ -13,8 +13,15 @@ import { blobUrl, encodePath, release, repoRoot, repositoryUrl } from './release
 import { historicalSources } from './historical-sources.mjs';
 
 import { isPstackTemplateTarget, readPstackLock } from '../../../scripts/pstack-lock.mjs';
+import { POCOCK_LOCK, POCOCK_REPO, readPocockLock } from '../../../scripts/pocock-lock.mjs';
 
 const { lock: pstack, vendoredSkills, vendoredSources, upstreamOnly } = readPstackLock(repoRoot);
+const pocock = readPocockLock(repoRoot);
+if (pocock.errors.length > 0) throw new Error(pocock.errors.join('\n'));
+const pocockSources = new Map(Object.keys(pocock.lock?.files ?? {}).map((file) => {
+  const [destination, upstream] = Object.entries(pocock.lock.skills).find(([skill]) => file.startsWith(`${skill}/`));
+  return [file, `${POCOCK_REPO}: ${upstream}${file.slice(destination.length)}`];
+}));
 const markdown = unified().use(remarkParse).use(remarkGfm);
 const toHtml = unified().use(remarkRehype, { allowDangerousHtml: true }).use(rehypeRaw);
 const stringify = unified().use(rehypeStringify);
@@ -87,7 +94,7 @@ function validateMetadata(doc) {
       if (typeof data[key] !== 'string' || !data[key].trim()) throw new Error(`${doc.id}: ${key} must be a nonempty string`);
     }
     if (data.name !== doc.id.split('/')[1]) throw new Error(`${doc.id}: name must match its installed directory`);
-    const upstream = vendoredSkills.get(doc.id);
+    const upstream = vendoredSkills.get(doc.id) ?? pocockSources.get(doc.id);
     if (!upstream) {
       for (const key of ['owner', 'prevents', 'source', 'sunset']) {
         if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
@@ -102,7 +109,11 @@ function validateMetadata(doc) {
     }
     doc.skill = {
       name: data.name, description: data.description,
-      ...(upstream ? { vendored: true, source: upstream, provenanceUrl: blobUrl('vendor/pstack.lock.json') } : data.metadata),
+      ...(upstream ? {
+        vendored: true, source: upstream,
+        pack: pocockSources.has(doc.id) ? "Matt Pocock's skills" : 'pstack',
+        provenanceUrl: blobUrl(pocockSources.has(doc.id) ? POCOCK_LOCK : 'vendor/pstack.lock.json'),
+      } : data.metadata),
       disableModelInvocation: data['disable-model-invocation'] === true,
     };
   }
@@ -309,7 +320,7 @@ export async function createGraph(entries) {
     const parsed = parseSource(id, raw);
     const ast = markdown.parse(parsed.body);
     let h1 = ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
-    if (!h1 && vendoredSources.has(id)) {
+    if (!h1 && (vendoredSources.has(id) || pocockSources.has(id))) {
       const title = typeof parsed.data.name === 'string' ? parsed.data.name : path.basename(id, '.md').replaceAll('-', ' ');
       h1 = { type: 'heading', depth: 1, children: [literal(title)] };
       ast.children.unshift(h1);
