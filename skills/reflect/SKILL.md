@@ -44,7 +44,7 @@ Present the synthesizer's full Accepted / Rejected / Backlog output and wait for
 
 File each Backlog item to your team's devex or backlog tracker without waiting. Only the Accepted list waits for approval.
 
-Never edit a skill under `plugins/cache/`. Before approval, show its destination, `.cursor/skills/<skill>/` or `~/.cursor/skills/<skill>/`. After approval, copy the skill folder there and edit the copy. Never open a PR or push.
+Never edit an installed plugin copy. Before approval, show each edit's maintained source: the repository that owns the skill, or a project `.agents/skills/<skill>/`. A vendored skill changes through its owner's lock and recorded patches, not hand edits. After approval, deliver each accepted edit through [ship-loop](../ship-loop/SKILL.md).
 
 Follow each approved row's Routing exactly:
 

@@ -8,7 +8,8 @@
     "skills/to-spec": "skills/engineering/to-spec",
     "skills/to-tickets": "skills/engineering/to-tickets",
     "skills/domain-modeling": "skills/engineering/domain-modeling",
-    "skills/to-questionnaire": "skills/productivity/to-questionnaire"
+    "skills/to-questionnaire": "skills/productivity/to-questionnaire",
+    "skills/retro": "skills/engineering/retro"
   },
   "files": {
     "skills/grilling/SKILL.md": "a146842ed93ca43d833550fa9adf02e58cb63c83fea9d4b4522995b82242d4e2",
@@ -26,6 +27,8 @@
     "skills/domain-modeling/SKILL.md": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3",
     "skills/domain-modeling/agents/openai.yaml": "f6bf2aa996c6e6f53fdd0708e18a0d16a56aed8322cca59fedbe3c0d2c75f06b",
     "skills/to-questionnaire/SKILL.md": "b5eb929842ee0e93d867c5e906d183d350f2f2d149eaeaa86967d94d8eda1d3b",
-    "skills/to-questionnaire/agents/openai.yaml": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2"
+    "skills/to-questionnaire/agents/openai.yaml": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2",
+    "skills/retro/SKILL.md": "33fbc28568e3146f20fd908b12998bc0ab30aa4f4c87288199a40793efa94696",
+    "skills/retro/agents/openai.yaml": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c"
   }
 }
