@@ -3,7 +3,6 @@
   "name": "mistystack-site",
   "main": "./dist/.worker/index.js",
   "compatibility_date": "2026-10-28",
-  "secrets": { "required": ["OPENROUTER_API_KEY"] },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
