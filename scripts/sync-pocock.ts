@@ -22,8 +22,14 @@ if (git("status", "--porcelain") !== "") throw new Error(`${checkout} has uncomm
 const commit = git("rev-parse", "HEAD");
 
 const lock = JSON.parse(readFileSync(join(root, POCOCK_LOCK), "utf8"));
+const skills = Object.entries(lock.skills as Record<string, string>);
+for (const [destination, source] of skills) {
+	if (!/^skills\/[a-z0-9-]+$/.test(destination) || !/^skills\/[a-z0-9-]+\/[a-z0-9-]+$/.test(source)) {
+		throw new Error(`${POCOCK_LOCK}: refusing skill mapping ${destination} <- ${source}; destinations are skills/<name>, sources skills/<group>/<name>`);
+	}
+}
 const files: Record<string, string> = {};
-for (const [destination, source] of Object.entries(lock.skills as Record<string, string>)) {
+for (const [destination, source] of skills) {
 	if (!existsSync(join(checkout, source, "SKILL.md"))) throw new Error(`${source}/SKILL.md is missing at ${commit}`);
 	rmSync(join(root, destination), { recursive: true, force: true });
 	cpSync(join(checkout, source), join(root, destination), { recursive: true });
