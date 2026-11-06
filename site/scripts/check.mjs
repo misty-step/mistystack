@@ -254,7 +254,7 @@ async function main() {
     const base = route(file);
     if (base.startsWith('/decisions/')) {
       const html = files.get(file).toString('utf8');
-      for (const badge of html.matchAll(/<p\b[^>]*class="badge"[^>]*>([\s\S]*?)<\/p>/g)) {
+      for (const badge of html.matchAll(/<p\b[^>]*class="sp-tag doc-status"[^>]*>([\s\S]*?)<\/p>/g)) {
         expect(!decode(badge[1]).includes(']('), `${file}: decision badge must render plain text, not Markdown links`);
       }
     }

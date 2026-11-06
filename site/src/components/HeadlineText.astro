@@ -1,0 +1,8 @@
+---
+// A headline ends with its full stop in Indigo. `stop` adds one to a title that has no closing punctuation.
+const { text, stop = false } = Astro.props;
+const stopped = text.endsWith('.');
+const words = stopped ? text.slice(0, -1) : text;
+const indigo = stopped || (stop && !/[?!…]$/.test(text));
+---
+{words}{indigo && <span class="ms-stop">.</span>}
