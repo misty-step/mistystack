@@ -84,7 +84,7 @@ export async function rankSkills({ query, skills, apiKey, fetcher = fetch, versi
           headers: { Authorization: `Bearer ${apiKey.trim()}`, 'Content-Type': 'application/json', 'HTTP-Referer': 'https://stack.mistystep.io', 'X-Title': 'Mistystack skill finder' },
           body: JSON.stringify(batch),
           signal: AbortSignal.timeout(timeoutMs),
-          redirect: 'error',
+          redirect: 'manual',
         });
         if (!response.ok) {
           await response.body?.cancel();

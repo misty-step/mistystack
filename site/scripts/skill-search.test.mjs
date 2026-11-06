@@ -39,6 +39,7 @@ test('Jev responses rank skills and report served model and summed cost', async 
     const body = JSON.parse(options.body);
     assert.equal(body.model, '~typesafe/jev-latest');
     assert.equal(body.state.skills.s1.core, skills[1].core);
+    assert.equal(options.redirect, 'manual');
     return Response.json({ model: 'typesafe/jev-1.14', answers: { s0: answer(1), s1: answer(4) }, usage: { cost: 0.001 } });
   } });
   assert.equal(ranked.degraded, false);
