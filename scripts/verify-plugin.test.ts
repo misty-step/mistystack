@@ -169,6 +169,36 @@ test("Codex marketplace policy and local source are required, not just its plugi
 	expect(errors).toContain(".agents/plugins/marketplace.json: plugin policy must use installation AVAILABLE and authentication ON_USE");
 });
 
+test.each([
+	{ source: "github", repo: "owner/skills", sha: "a".repeat(40) },
+	{ source: "git-subdir", url: "https://github.com/owner/skills.git", path: "plugins/design", sha: "b".repeat(40) },
+])("accepts a pinned OMP catalog source without requiring local files", source => {
+	const { root, json } = fixture();
+	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toEqual([]);
+});
+
+test.each([
+	{ source: "github", repo: "owner/skills", ref: "main" },
+	{ source: "github", repo: "owner/skills", sha: "abc123" },
+	{ source: "github", repo: "owner/skills", sha: "z".repeat(40) },
+])("rejects branch-only and incomplete OMP catalog pins", source => {
+	const { root, json } = fixture();
+	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toContain(".omp-plugin/marketplace.json: catalog-skill: catalog source requires a full 40-hex sha");
+});
+
+test.each([
+	[{ source: "github", repo: "not-a-repository", sha: "a".repeat(40) }, "github source requires owner/repo"],
+	[{ source: "git-subdir", url: "file:///outside", path: "plugin", sha: "a".repeat(40) }, "git-subdir source requires an HTTPS repository URL"],
+	[{ source: "git-subdir", url: "https://github.com/owner/skills.git", path: "../outside", sha: "a".repeat(40) }, "git-subdir source requires an in-repository path"],
+	[{ source: "npm", package: "uninstalled", sha: "a".repeat(40) }, "catalog source must use github or git-subdir"],
+])("rejects malformed OMP catalog sources", (source, message) => {
+	const { root, json } = fixture();
+	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toContain(`.omp-plugin/marketplace.json: catalog-skill: ${message}`);
+});
+
 function expectStrictWarnings(root: string, warnings: string[]) {
 	const report = lintPlugin(root);
 	expect(report.errors).toEqual([]);

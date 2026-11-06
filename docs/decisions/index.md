@@ -5,6 +5,9 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0025](0025-skill-finder-worker.md): one bounded Jev skill-finder route in the
+  existing Worker, with pinned preferred-set content and explicit degradation.
+  Supersedes 0018's assets-only restriction for skill discovery.
 - [0024](0024-pocock-shaping-skills.md): unsettled intent routes to vendored
   Matt Pocock shaping skills (`grilling`, `to-spec`, `to-tickets` and others)
   under a hash-checked lock. Supersedes 0022 row 7's unrouted owner provision.

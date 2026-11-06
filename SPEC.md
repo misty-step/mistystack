@@ -66,6 +66,15 @@ snapshot-backed Boat worker per slice with idle stop/resume and final deletion.
   failure, supports content-type filtering and shareable queries, and provides
   useful empty/error states and browse recovery. If search needs JavaScript,
   its unavailable state says so without blocking access to the library.
+- A visitor can describe arbitrary work at the skill finder and receive every
+  scored preferred-set skill ranked by closeness. Results disclose the pack and
+  pin, description, invocation or install command, and maintained or pinned
+  upstream link. Catalog skills participate even when not installed locally.
+- Closeness reflects Jev's probability-weighted relevance score, not confidence
+  or a guarantee of correctness. The finder shows the served model and known
+  cost, and distinguishes partial scoring from a complete result. Credential,
+  timeout, provider and rate-limit failures remain explicit without invented
+  scores. Keyword search and reading still work without inference.
 - At phone sizes, navigation, long titles, metadata, tables and code remain
   readable and operable without page-level horizontal scrolling or hover-only
   controls. Keyboard focus, touch targets and heading navigation remain usable.
@@ -111,6 +120,8 @@ Architecture and operational status belong in [decision records](docs/decisions/
 not in the behavior contract above. The public site's publishing-stack
 exception, its commissioned deployment and its open telemetry and production
 proof are recorded in [ADR 0018](docs/decisions/0018-static-publishing-stack.md).
+The bounded skill-finder runtime is recorded in
+[ADR 0025](docs/decisions/0025-skill-finder-worker.md).
 
 [ADR 0023](docs/decisions/0023-live-verification-and-release-gate.md) records the
 current delivery, supervision and worker-lifecycle decision. It supersedes the
