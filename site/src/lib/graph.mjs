@@ -319,7 +319,11 @@ export async function createGraph(entries) {
     const raw = readFileSync(path.join(repoRoot, id), 'utf8');
     const parsed = parseSource(id, raw);
     const ast = markdown.parse(parsed.body);
-    let h1 = ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
+    if (pocockSources.has(id)) {
+      // Pocock templates use <placeholder> headings; show them as text, and title the page by skill name.
+      visit(ast, 'heading', (node) => { node.children = node.children.map((child) => child.type === 'html' ? literal(child.value) : child); });
+    }
+    let h1 = pocockSources.has(id) && id.endsWith('/SKILL.md') ? undefined : ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
     if (!h1 && (vendoredSources.has(id) || pocockSources.has(id))) {
       const title = typeof parsed.data.name === 'string' ? parsed.data.name : path.basename(id, '.md').replaceAll('-', ' ');
       h1 = { type: 'heading', depth: 1, children: [literal(title)] };
