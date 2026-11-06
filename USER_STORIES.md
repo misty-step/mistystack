@@ -390,3 +390,14 @@ Criteria:
 3. The vendored skills match `vendor/pocock.lock.json` byte for byte; plugin lint rejects edited, missing or unrecorded files.
 
 Proof: [ADR 0024](docs/decisions/0024-pocock-shaping-skills.md), plugin lint, and a fresh isolated OMP session's skill list and installed routing.
+
+## US-066 Orient and look back through named intents
+
+When I ask where we are, what went well, which agents are stuck or how something works, I want one named route per intent, so the right procedure runs without remembering skill names.
+
+Criteria:
+1. [Misty](skills/misty/SKILL.md#playbooks) names Orient (`recall`, `ketchup`, workstation's `lage` by scope), Look back (`retro`), Supervise (`watchdog`, workstation's `heartbeat`) and Explain (`how`, `why`, `teach`, `bro`).
+2. Matt Pocock's `retro` is vendored unchanged under `vendor/pocock.lock.json`; [Looking back](skills/misty/SKILL.md#looking-back) maps its writing guide and reviewer assumptions to Misty's, adds harness and spend review, routes each accepted candidate to `correct`, `reflect` or the owning repository as a ship-loop slice, and records re-run proposals on the tracker.
+3. `reflect` delivers approved skill edits through the maintained source and ship-loop instead of editing local copies without a pull request.
+
+Proof: plugin lint, `bun scripts/sync-pstack.ts --check`, and a fresh isolated OMP session following the installed Look back route.

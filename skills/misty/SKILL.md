@@ -45,6 +45,15 @@ The shaping skills are Matt Pocock's, vendored unchanged under [the Pocock lock]
 - **Outputs:** `to-spec` publishes the feature spec to the tracker as product intent. `SPEC.md` changes in the pull request that ships the behavior, never ahead of it. `to-tickets` creates tracker issues with native blocking relations; each ticket is one [ship-loop](../ship-loop/SKILL.md) slice.
 - **Recording a grilling session:** after the owner confirms shared understanding, write owner decisions and intent to the tracker, architecture or stack decisions to an ADR, and terms to `DOMAIN.md`.
 
+## Looking back
+
+[retro](../retro/SKILL.md) is Matt Pocock's, vendored unchanged under the same lock. It reviews a session, by default the current one, for environment changes that would improve the next run. These facts replace its assumptions:
+
+- **Reviewer and coding standards:** no per-PR reviewer runs under [ship-loop](../ship-loop/SKILL.md). A mechanical rule becomes a check through [correct](../correct/SKILL.md); a judgment call goes to the owning skill or `AGENTS.md` through agent-design.
+- **Harness and spend:** also review model and role choices, reasoning budgets, subagent fan-out, worker placement, wall time and spend observed in the session.
+- **Routing each accepted candidate:** a repeated mistake goes to `correct`; a skill's wording or trigger goes to [reflect](../reflect/SKILL.md); repository checks and docs, harness configuration, models, credentials and extensions go to the repository that owns them. Each lands as a ship-loop slice.
+- **Re-run proposals:** when a change claims better quality, cost or time, record it on the tracker as an experiment: the source session, starting commit, the single change and the oracle. Human answers may differ in the re-run; outside systems are recreated, not skipped. Running it depends on persistent traces ([MIS-889](https://linear.app/misty-step/issue/MIS-889)) and replay ([MIS-890](https://linear.app/misty-step/issue/MIS-890)).
+
 ## Exact rules, typed decisions and agents
 
 Use ordinary code for exact facts and gates: identity, dates, counts, duplicate
@@ -114,6 +123,10 @@ Read the matched procedure; combine rows across boundaries. The [names adapter](
 | Experiment / instruction comparison / skill authoring | [Eval](../poteto-mode/playbooks/eval.md) / [Instruction eval](../agent-design/SKILL.md#instruction-eval) / [Authoring a skill](../poteto-mode/playbooks/authoring-a-skill.md) with [agent-design](../agent-design/SKILL.md) |
 | Multi-phase plan / cross-cutting task / standing program | [Multi-phase plan](../poteto-mode/playbooks/multi-phase-plan.md) / [figure-it-out](../figure-it-out/SKILL.md) / [Orchestrate](../poteto-mode/playbooks/orchestrate.md) |
 | Unsettled intent / feature spec / tickets / async stakeholder decisions | [grilling](../grilling/SKILL.md) / [to-spec](../to-spec/SKILL.md) / [to-tickets](../to-tickets/SKILL.md) / [to-questionnaire](../to-questionnaire/SKILL.md), under [Shaping](#shaping) |
+| Orient: where we are and what next, across recent work / this chat only / delegated lanes | [recall](../recall/SKILL.md) / [ketchup](../ketchup/SKILL.md) / workstation's `lage` |
+| Look back: what went well or badly and what to change | [retro](../retro/SKILL.md), under [Looking back](#looking-back) |
+| Supervise running agents: stalls, drift, waste | [watchdog](../watchdog/SKILL.md) and workstation's `heartbeat` |
+| Explain: how it works / why it is this way / teach me / plain words | [how](../how/SKILL.md) / [why](../why/SKILL.md) / [teach](../teach/SKILL.md) / [bro](../bro/SKILL.md) |
 | Open a PR / prove and merge a slice / release | [Ship-loop](../ship-loop/SKILL.md), [verification](../verification/SKILL.md) and [release-watch](../release-watch/SKILL.md) |
 | Autonomous task / independent delivery queue / long-running agents | [Autonomous run](../poteto-mode/playbooks/autonomous-run.md), [Ship-loop](../ship-loop/SKILL.md) and [watchdog](../watchdog/SKILL.md) |
 | Resume / pause / reclaim owned worktrees | [Session pickup](../poteto-mode/playbooks/session-pickup.md) / [Pause safely](../poteto-mode/playbooks/pause-safely.md) / [Worktree cleanup](../poteto-mode/playbooks/worktree-cleanup.md) |

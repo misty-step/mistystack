@@ -224,6 +224,7 @@ export function lintPlugin(root: string, strict = false) {
 	const pocock = readPocockLock(root);
 	errors.push(...pocock.errors);
 	for (const file of pocock.vendoredSkills) vendored.add(file);
+	const pocockFiles = new Set(Object.keys(pocock.lock?.files ?? {}));
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	if (skills.length === 0) errors.push("skills/: no SKILL.md files found");
 	for (const file of skills) {
@@ -291,7 +292,7 @@ export function lintPlugin(root: string, strict = false) {
 			}
 		}
 		for (const [, name] of text.matchAll(/\bthe\s+`([a-z0-9-]+)`\s+skill\b/gi)) {
-			if (!names.has(name) && !(vendoredSources.has(file) && (nativeNames.has(name) || upstreamOnly.includes(`skills/${name}`)))) {
+			if (!names.has(name) && !((vendoredSources.has(file) || pocockFiles.has(file)) && (nativeNames.has(name) || upstreamOnly.includes(`skills/${name}`)))) {
 				references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
 			}
 		}

@@ -71,7 +71,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 2. **Skill provenance.** Misty-authored skills follow the frontmatter convention
    below. Its short `metadata.source` points to [ATTRIBUTION.md](ATTRIBUTION.md#skill-provenance), which owns full directory-level provenance, including supporting files. Vendored skills retain upstream frontmatter; `vendor/pstack.lock.json`
    owns pstack's provenance, destinations, recorded exact patches/removals and file
-   hashes, and `vendor/pocock.lock.json` owns the unchanged Pocock shaping skills'
+   hashes, and `vendor/pocock.lock.json` owns the unchanged Pocock shaping and retro skills'
    pin, sources and file hashes. Preserve required licence notices for both.
    Regenerate vendored text and its lock; never hand-edit them.
 3. **Harness-neutral method.** One content tree owns the method. Harness-specific

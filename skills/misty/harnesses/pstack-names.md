@@ -17,6 +17,7 @@ Read a pstack name as the native route below, not a request to install Cursor. [
 | `exhaust-the-design-space`, `principle-exhaust-the-design-space` | Read the installed [exhaust-the-design-space](../../principle-exhaust-the-design-space/SKILL.md) principle under the current rigor tier. |
 | `create-verification-skill`, `maintain-verification-skill`, `.cursor/skills/verify-*` | Follow the installed skills through [verification](../../verification/SKILL.md), writing and locating `.agents/skills/verify-<app>/` instead of every `.cursor/skills/verify-*` path. |
 | `create-skill`, `correct`, `reflect`, `automate-me` | Native skill authoring through [agent-design](../../agent-design/SKILL.md); read the installed primitive for its craft. Project skills live in `.agents/skills/`, user skills in the destination harness's native skill root, never Cursor paths or an installed cache. |
+| `writing-for-agents` (vendored Pocock skills) | [agent-design](../../agent-design/SKILL.md). |
 | `setup-pstack`, `pstack-models.mdc` | [setup-mistystack](../../setup-mistystack/SKILL.md). |
 | `recall`, `ketchup`, `ketchup-video`, `session-pickup`, `pause-safely`, `agent-transcripts` | Read the installed primitive and the owning work item, PR evidence and scoped native session history below. Daybook owns shared context, not a new transcript store. |
 | `make-bot-ui` | Cursor webhook routines, secret-request cards and routine wake turns have no native equivalent in OMP, Claude Code, Codex or pi. Skip this skill with a one-line note, as upstream does for unavailable integrations. |

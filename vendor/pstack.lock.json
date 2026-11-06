@@ -545,7 +545,7 @@
     "skills/reflect/references/judgment-reviewer.md": "885774e2d2db01d227c6267e591c89af8684d69db1c009b610ad616d2f489a32",
     "skills/reflect/references/synthesizer.md": "91e5cc3fdd928d122ad666bf49764c214559cc11676918ddd664b049dc3ade85",
     "skills/reflect/references/tooling-reviewer.md": "f71a5b4185c8d57d983d9c498298dd444507b36bbe6e2413dd738d9db6445404",
-    "skills/reflect/SKILL.md": "15ab3167a462b5986659fe24266650dfccd31df77a3271c84f0c3679a6adc659",
+    "skills/reflect/SKILL.md": "9093a25d1c6b3d5629156f7ff42d84933044d11e12a47969efd91aced2e34b12",
     "skills/setup-pstack/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/setup-pstack/SKILL.md": "516e3f423d14932aa7c76e08563bc63b9788e460d0cbe500a90a5278eddf534a",
     "skills/sharpen/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
@@ -1128,8 +1128,8 @@
     {
       "source": "skills/reflect",
       "file": "vendor/pstack-patches/reflect.json",
-      "reason": "Cursor's transcript discovery command and JSONL schema cannot identify the active session in other harnesses.",
-      "sha256": "656e2c4ddfb353ab6b8e2a10d65dec24edbe89682d435fdc6983d00a6a9a2c99"
+      "reason": "Cursor's transcript discovery cannot identify the active session in other harnesses; owner directive 2026-11-03 (ADR0023) delivers approved skill edits through the maintained source and ship-loop, not local copies without a PR.",
+      "sha256": "0db6f5b026360bfda075bfe3dcd8b7befbbb47000fa336416e7013241d20baeb"
     },
     {
       "source": "skills/poteto-mode/playbooks/session-pickup.md",
