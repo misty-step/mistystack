@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync,
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
 import { PSTACK_LOCK, isPstackTemplateTarget, readPstackLock, readPstackNames } from "./pstack-lock.mjs";
-import { readPocockLock } from "./pocock-lock.mjs";
+import { readSkillLocks } from "./skill-locks.mjs";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -244,10 +244,9 @@ export function lintPlugin(root: string, strict = false) {
 			errors.push(error instanceof SyntaxError ? `${PSTACK_LOCK}: ${error.message}` : error instanceof Error ? error.message : String(error));
 		}
 	}
-	const pocock = readPocockLock(root);
-	errors.push(...pocock.errors);
-	for (const file of pocock.vendoredSkills) vendored.add(file);
-	const pocockFiles = new Set(Object.keys(pocock.lock?.files ?? {}));
+	const upstreams = readSkillLocks(root);
+	errors.push(...upstreams.errors);
+	for (const file of upstreams.vendoredSkills) vendored.add(file);
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	if (skills.length === 0) errors.push("skills/: no SKILL.md files found");
 	for (const file of skills) {
@@ -315,7 +314,7 @@ export function lintPlugin(root: string, strict = false) {
 			}
 		}
 		for (const [, name] of text.matchAll(/\bthe\s+`([a-z0-9-]+)`\s+skill\b/gi)) {
-			if (!names.has(name) && !((vendoredSources.has(file) || pocockFiles.has(file)) && (nativeNames.has(name) || upstreamOnly.includes(`skills/${name}`)))) {
+			if (!names.has(name) && !((vendoredSources.has(file) || upstreams.files.has(file)) && (nativeNames.has(name) || upstreamOnly.includes(`skills/${name}`)))) {
 				references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
 			}
 		}
@@ -441,6 +440,16 @@ export function verifyInstall(root: string, omp: string, model: string) {
 		if (!installedMisty.includes(document(join(root, "skills/misty/SKILL.md")).body)) {
 			throw new Error("skill://misty did not read the working-tree body");
 		}
+		for (const file of readSkillLocks(root).vendoredSkills) {
+			const { frontmatter, body } = document(join(root, file));
+			const name = basename(dirname(file));
+			if (frontmatter["disable-model-invocation"] !== true && !new RegExp(`^- ${name}:`, "m").test(skillList)) {
+				throw new Error(`${file}: upstream skill is missing from the model's skill list`);
+			}
+			const content = checked([omp, "read", `skill://${name}`], project, env);
+			if (!content.includes(body)) throw new Error(`skill://${name} did not read the working-tree body`);
+			console.log(`Upstream skill readback: ${name} discovered and body matches candidate`);
+		}
 		const foundation = document(join(root, "skills/foundation/SKILL.md"));
 		const foundationEntry = /^- foundation: (.+)$/m.exec(skillList)?.[1];
 		// OMP truncates descriptions; the trigger precedes the first colon.
@@ -487,7 +496,7 @@ function installedRoot(value: unknown, scratch: string, root?: string) {
 function installedContent(root: string, installed: string) {
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	const locked = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).lock : undefined;
-	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file), ...Object.keys(readPocockLock(root).lock?.files ?? {})]);
+	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file), ...readSkillLocks(root).files.keys()]);
 	for (const file of files) {
 		const target = join(installed, file);
 		if (!existsSync(target) || !readFileSync(target).equals(readFileSync(join(root, file)))) {

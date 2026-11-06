@@ -13,6 +13,7 @@ For the pstack foundation, [vendor/pstack.lock.json](vendor/pstack.lock.json) ow
 | [pstack, revision and inventory in the lock](vendor/pstack.lock.json) | Pinned foundation with recorded portability and owner delivery changes under `vendor/pstack-patches/`, routed by `misty`. Explicit exclusions retire the old PR-delivery procedures; their callers use ship-loop. Earlier craft adaptations informed agent-design, setup, verification, design, ship-loop, research, test-audit and retired Misty prose/planning skills. | MIT, Lauren Tan |
 | [mattpocock/skills@59db609eb1e18aaf59b63284d0e52255aff0c63c](https://github.com/mattpocock/skills/tree/59db609eb1e18aaf59b63284d0e52255aff0c63c) | Shaping, research, domain-language and agent-writing methods from `grill-me`, `grilling`, `grill-with-docs`, `to-spec`, `to-tickets`, `domain-modeling`, `writing-for-agents`, `research` and `pr`. | MIT, Matt Pocock |
 | [mattpocock/skills, revision and files in the Pocock lock](vendor/pocock.lock.json) | `grilling`, `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets`, `domain-modeling`, `to-questionnaire` and `retro`, vendored unchanged and routed by `misty` ([ADR 0024](docs/decisions/0024-pocock-shaping-skills.md)). | MIT, Matt Pocock |
+| [warpdotdev/common-skills, revision and files in the Warp lock](vendor/warp.lock.json) | `merge-risk` and `resolve-merge-conflicts`, including its conflict extractor, vendored unchanged; Misty and ship-loop route their use, and the names adapter resolves installed script paths ([ADR 0024 extension](docs/decisions/0024-pocock-shaping-skills.md#extension-multiple-unchanged-upstreams)). | MIT, Denver Technologies, Inc. |
 | [humanlayer/skills@653b6411c1f70c275a18e37673b042ff99f67ceb](https://github.com/humanlayer/skills/tree/653b6411c1f70c275a18e37673b042ff99f67ceb/plugins/show-me/skills/show-me) | Historical smallest-useful-visual guidance in the retired Misty publications procedure. Its notice remains for prior adaptations. | MIT, HumanLayer |
 | [emilkowalski/skills@2d228630ba1446365f614a108cb8252f1feda202](https://github.com/emilkowalski/skills/tree/2d228630ba1446365f614a108cb8252f1feda202) | `emil-design-eng`, animation vocabulary, animation performance, animate and motion-review methods rewritten in `skills/design/`. | MIT, Emil Kowalski |
 | [pbakaus/impeccable@5adaee704634e9031ec8943721c4ffa1a3c22221](https://github.com/pbakaus/impeccable/tree/5adaee704634e9031ec8943721c4ffa1a3c22221) | Critique, polish and audit references rewritten in `skills/design/`; modified by Misty Step for OMP, its review contract and reduced scope. No upstream executable is bundled. | Apache-2.0, Paul Bakaus |
@@ -87,6 +88,32 @@ SOFTWARE.
 MIT License
 
 Copyright (c) 2026 Matt Pocock
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### Warp — Denver Technologies, Inc.
+
+```text
+MIT License
+
+Copyright (c) 2026 Denver Technologies, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

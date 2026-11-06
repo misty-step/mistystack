@@ -28,8 +28,10 @@ slice and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
 
 Implement the smallest complete change. Migrate every caller and delete obsolete
 paths. Record `Story: <IDs|none>` and `Rigor: <tier> — <changed-path risk>` in the
-PR, with its observed proof. A generator-only release PR contains only generator
-output and needs no invented product story.
+PR, with its observed proof. The PR record's **Merge Danger** section carries
+[merge-risk](../merge-risk/SKILL.md)'s output: the overall verdict and every
+per-category verdict with its risk-increasing gaps. A generator-only release PR
+contains only generator output and needs no invented product story.
 
 **Complete when:** the specified behavior exists and its real consumer can run.
 
@@ -47,8 +49,10 @@ path until it works. Record what actually ran and what remains unproved.
 Once that proof passes, squash-merge the PR yourself with a Conventional Commit
 title. Do not request a review, start CI, wait for checks, or add a judge.
 Do not rebase merely because trunk advanced. If the forge reports a conflict,
-merge the target branch into the owned branch, resolve it, and repeat the affected
-real path before merging. Prefer independent branches to stacked-merge choreography.
+merge the target branch into the owned branch, use
+[resolve-merge-conflicts](../resolve-merge-conflicts/SKILL.md) with the
+[installed script path](../misty/harnesses/pstack-names.md#installed-paths), and
+repeat the affected real path before merging. Prefer independent branches to stacked-merge choreography.
 Confirm the PR reads `MERGED` against the intended target; queued is not merged.
 
 **Complete when:** the author has exercised the changed behavior and the PR is merged.
@@ -62,7 +66,9 @@ slow gate instead of normalizing its delay. No CI runs on PRs or pushes.
 
 Commission **one** review of the release candidate, limited to critical correctness
 and security. Give that reviewer the release diff, invariants, real-path and formal
-proof, and concrete risk. It is one release assessment, not a per-PR review cycle.
+proof, and concrete risk. Include a [merge-risk](../merge-risk/SKILL.md) verdict
+for this candidate, with its per-category verdicts, in that same assessment.
+It is one release assessment, not a per-PR review cycle or an additional review.
 Noncritical findings go to the owning tracker. A critical defect stops deployment:
 repair it and prove the affected behavior; do not restart a broad review process.
 

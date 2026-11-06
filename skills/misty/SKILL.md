@@ -128,6 +128,7 @@ Read the matched procedure; combine rows across boundaries. The [names adapter](
 | Supervise running agents: stalls, drift, waste | [watchdog](../watchdog/SKILL.md) and workstation's `heartbeat` |
 | Explain: how it works / why it is this way / teach me / plain words | [how](../how/SKILL.md) / [why](../why/SKILL.md) / [teach](../teach/SKILL.md) / [bro](../bro/SKILL.md) |
 | Open a PR / prove and merge a slice / release | [Ship-loop](../ship-loop/SKILL.md), [verification](../verification/SKILL.md) and [release-watch](../release-watch/SKILL.md) |
+| Assess merge risk / resolve Git conflicts | [merge-risk](../merge-risk/SKILL.md) / [resolve-merge-conflicts](../resolve-merge-conflicts/SKILL.md), with installed script paths from the [names adapter](harnesses/pstack-names.md#installed-paths) |
 | Autonomous task / independent delivery queue / long-running agents | [Autonomous run](../poteto-mode/playbooks/autonomous-run.md), [Ship-loop](../ship-loop/SKILL.md) and [watchdog](../watchdog/SKILL.md) |
 | Resume / pause / reclaim owned worktrees | [Session pickup](../poteto-mode/playbooks/session-pickup.md) / [Pause safely](../poteto-mode/playbooks/pause-safely.md) / [Worktree cleanup](../poteto-mode/playbooks/worktree-cleanup.md) |
 | Consumer proof / tests / prose | [verification](../verification/SKILL.md) / [test-audit](../test-audit/SKILL.md) / [unslop](../unslop/SKILL.md) and [technical-writing](../technical-writing/SKILL.md) |

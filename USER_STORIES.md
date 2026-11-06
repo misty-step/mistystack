@@ -414,3 +414,25 @@ Criteria:
 5. A labeled set covers shaping, design, delivery, incident, retro and orientation. Its rerunnable evaluation reports top-1 and top-3 hit rates, latency, cost, and served model.
 
 Proof: [ADR 0025](docs/decisions/0025-skill-finder-worker.md), the site checks, labeled evaluation and real Worker browser journey.
+
+## US-068 Assess merge risk and resolve conflicts from installed skills
+
+When shipping a change, I want Warp's compact risk and conflict procedures in
+every native installation, so the PR explains merge danger and conflicts use
+focused context without depending on repository-local skill files.
+
+Criteria:
+1. `merge-risk` and `resolve-merge-conflicts`, including the executable conflict
+   extractor, are unchanged at the pin in `vendor/warp.lock.json`; all unchanged
+   upstream packs share one sync command and hash-checking module.
+2. Misty routes both intents. Ship-loop records merge-risk's overall and
+   per-category verdicts in Merge Danger and in the single release assessment,
+   and uses resolve-merge-conflicts on forge conflicts.
+3. The names adapter resolves Warp's script prefix against the installed skill
+   directory. A fresh isolated OMP session lists merge-risk and reads
+   `skill://resolve-merge-conflicts`.
+4. The built skill index identifies both skills as pack Warp, with the locked
+   pin and `warpdotdev/common-skills` repository.
+
+Proof: shared sync containment/layout tests, strict plugin checks, built skill
+index assertions and isolated OMP discovery/read events.

@@ -34,6 +34,8 @@ Agent reference files are installed under `vendor/pstack-agents/`; they supply b
 
 In [poteto-help](../../poteto-help/SKILL.md), `../../README.md` means the [upstream README](https://github.com/cursor/plugins/blob/c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/README.md), not Mistystack's README. Its seven `../../docs/guide/<file>.md` links resolve under [the pinned upstream guide](https://github.com/cursor/plugins/tree/c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack/docs/guide), with the same filename: `01-setup.md`, `02-poteto-mode.md`, `06-verify-and-ship.md`, `07-overnight.md`, `08-principles.md`, `09-make-it-yours.md` and `10-recipes-and-pitfalls.md`. These are lock references, not installed guide files.
 
+Warp's [resolve-merge-conflicts](../../resolve-merge-conflicts/SKILL.md) uses `.agents/skills/resolve-merge-conflicts/scripts/...` as an upstream prefix. Resolve it against the installed skill directory, not the working repository: locate `skill://resolve-merge-conflicts` in OMP (or the loaded skill path in another harness), then run `python3 <installed-resolve-merge-conflicts>/scripts/extract_conflict_context.py` from the conflicted repository.
+
 
 ## Bundled playbook files
 

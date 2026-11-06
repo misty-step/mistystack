@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseDocument } from 'yaml';
-import { readPocockLock } from '../../../scripts/pocock-lock.mjs';
+import { SKILL_UPSTREAMS, readSkillLocks } from '../../../scripts/skill-locks.mjs';
 import { readPstackLock } from '../../../scripts/pstack-lock.mjs';
 import { encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 
@@ -20,7 +20,7 @@ const SHA = /^[0-9a-f]{40}$/;
 const REPOSITORY = /^([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+?)(?:\.git)?$/;
 const PLUGIN_NAME = /^[A-Za-z0-9](?:[A-Za-z0-9.-]{0,62}[A-Za-z0-9])?$/;
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
-const VENDORED_PACKS = ['pstack', 'pocock'];
+const VENDORED_PACKS = ['pstack', ...SKILL_UPSTREAMS.map(({ pack }) => pack)];
 const ROOT_CATALOGS = ['marketplace.json', '.omp-plugin/marketplace.json', '.claude-plugin/marketplace.json'];
 const encoder = new TextEncoder();
 const utf8 = new TextDecoder('utf-8', { fatal: true });
@@ -124,8 +124,8 @@ function catalogPlugins(catalog) {
 
 async function repositorySkills(root, pack, revision) {
   const { lock: pstack, vendoredSkills } = readPstackLock(root);
-  const pocock = readPocockLock(root);
-  if (pocock.errors.length) throw new Error(pocock.errors.join('\n'));
+  const upstreams = readSkillLocks(root);
+  if (upstreams.errors.length) throw new Error(upstreams.errors.join('\n'));
   const pstackPrefix = `${pstack.repo}@${pstack.commit}/`;
   const directories = (await readdir(path.join(root, 'skills')))
     .filter((directory) => !directory.startsWith('.') && existsSync(path.join(root, 'skills', directory, 'SKILL.md')))
@@ -143,8 +143,9 @@ async function repositorySkills(root, pack, revision) {
     if (upstream !== undefined) {
       if (!upstream.startsWith(pstackPrefix)) throw new Error(`${file}: unexpected pstack provenance ${upstream}`);
       source = { pack: 'pstack', pin: pstack.commit, repository: `${GITHUB}/${pstack.repo}`, path: `${upstream.slice(pstackPrefix.length)}/SKILL.md` };
-    } else if (pocock.vendoredSkills.has(file)) {
-      source = { pack: 'pocock', pin: pocock.lock.commit, repository: `${GITHUB}/${pocock.lock.repo}`, path: `${pocock.lock.skills[`skills/${directory}`]}/SKILL.md` };
+    } else if (upstreams.vendoredSkills.has(file)) {
+      const locked = upstreams.files.get(file);
+      source = { pack: locked.pack, pin: locked.commit, repository: `${GITHUB}/${locked.repo}`, path: locked.source };
     }
     return skillEntry(skill, source, blobUrl(repositoryUrl, revision, file), null);
   }));
