@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync,
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
 import { PSTACK_LOCK, isPstackTemplateTarget, readPstackLock, readPstackNames } from "./pstack-lock.mjs";
+import { readPocockLock } from "./pocock-lock.mjs";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -220,6 +221,9 @@ export function lintPlugin(root: string, strict = false) {
 			errors.push(error instanceof SyntaxError ? `${PSTACK_LOCK}: ${error.message}` : error instanceof Error ? error.message : String(error));
 		}
 	}
+	const pocock = readPocockLock(root);
+	errors.push(...pocock.errors);
+	for (const file of pocock.vendoredSkills) vendored.add(file);
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	if (skills.length === 0) errors.push("skills/: no SKILL.md files found");
 	for (const file of skills) {
@@ -459,7 +463,7 @@ function installedRoot(value: unknown, scratch: string, root?: string) {
 function installedContent(root: string, installed: string) {
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	const locked = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).lock : undefined;
-	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file)]);
+	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file), ...Object.keys(readPocockLock(root).lock?.files ?? {})]);
 	for (const file of files) {
 		const target = join(installed, file);
 		if (!existsSync(target) || !readFileSync(target).equals(readFileSync(join(root, file)))) {

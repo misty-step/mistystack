@@ -18,7 +18,8 @@ conclude **no rebuild**; the calendar is not a reason to rewrite.
 1. **Recover intent.** Re-read the project's vision and durable record: artifacts,
    actual user evidence, decisions and obligations, including its SPEC and tracker.
    Preserve provenance, accepted history and existing access/retention boundaries.
-   Resolve unsettled or conflicting product intent with the owner, not code as
+   Resolve unsettled or conflicting product intent with the owner through
+   [grilling](../grilling/SKILL.md), not code as
    the deciding authority. Use [figure-it-out](../figure-it-out/SKILL.md) only to
    plan execution after the outcome is settled. **Done when:** the intended outcome
    and continuity obligations have source links, and missing evidence is explicit.

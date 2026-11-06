@@ -180,6 +180,7 @@ function runPlugin(root: string, args: string[], path = "") {
 	mkdirSync(join(root, "scripts"), { recursive: true });
 	copyFileSync(join(import.meta.dir, "verify-plugin.ts"), join(root, "scripts/verify-plugin.ts"));
 	copyFileSync(join(import.meta.dir, "pstack-lock.mjs"), join(root, "scripts/pstack-lock.mjs"));
+	copyFileSync(join(import.meta.dir, "pocock-lock.mjs"), join(root, "scripts/pocock-lock.mjs"));
 	const result = Bun.spawnSync([process.execPath, join(root, "scripts/verify-plugin.ts"), ...args], {
 		cwd: root,
 		env: { ...process.env, HOME: root, PATH: path },
@@ -298,6 +299,23 @@ test.each(["poteto-mode", "poteto-help"])("wholesale %s remains explicit-only wi
 	expect(lintPlugin(root, true).errors).toEqual([]);
 	put(file, source.replace("disable-model-invocation: true", "disable-model-invocation: false"));
 	expect(lintPlugin(root, true).errors).toEqual([`${file}: disable-model-invocation must be true`]);
+});
+
+test("Pocock-locked skills keep upstream metadata only while their bytes and file set match the lock", () => {
+	const { root, put, json } = fixture();
+	const file = "skills/grilling/SKILL.md";
+	const source = "---\nname: grilling\ndescription: Grill the user about a plan.\n---\nAsk the frontier.\n";
+	put(file, source);
+	json("vendor/pocock.lock.json", { repo: "mattpocock/skills", commit: "a".repeat(40), skills: { "skills/grilling": "skills/productivity/grilling" }, files: { [file]: new Bun.CryptoHasher("sha256").update(source).digest("hex") } });
+	expect(lintPlugin(root, true).errors).toEqual([]);
+	put(file, source.replace("Ask the frontier.", "Ask one question."));
+	expect(lintPlugin(root, true).errors).toEqual([`${file}: differs from mattpocock/skills@${"a".repeat(40)}; vendored bytes are not hand-edited`]);
+	put(file, source);
+	put("skills/grilling/notes.md", "# Local addition\n");
+	expect(lintPlugin(root, true).errors).toEqual(["skills/grilling/notes.md: not recorded in vendor/pocock.lock.json; run bun scripts/sync-pocock.ts"]);
+	rmSync(join(root, "vendor/pocock.lock.json"));
+	rmSync(join(root, "skills/grilling/notes.md"));
+	expect(lintPlugin(root).errors).toContain(`${file}: metadata.owner must be non-empty`);
 });
 
 test("the maintained gate does not execute upstream script-bundle suites", () => {
