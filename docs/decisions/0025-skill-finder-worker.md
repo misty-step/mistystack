@@ -21,6 +21,6 @@ The provider key has a $20 monthly cap. A Cloudflare rate-limit binding admits e
 
 Reading stays available when inference fails. Catalog content introduces a build-time network dependency, recoverable from the immutable source cache. A model alias can change ranking behavior, so evaluation evidence records the served revision and the checked-in labeled cases remain rerunnable.
 
-The build bundles the Worker and its index into `dist/.worker/`, excluded from public assets by `.assetsignore`. The existing release gate checks and promotes that same `dist/` artifact. Production remains exclusive to the dispatched release workflow. Setting a secret on an unpublished Worker version does not release this feature.
+The build bundles the Worker and its index into `dist/.worker/`, excluded from public assets by `.assetsignore`. The existing release gate checks and promotes that same `dist/` artifact. Production remains exclusive to the dispatched release workflow. The dedicated credential stays in pass and is streamed to the deployed Worker through Wrangler after the normal release first introduces the application script. Until then, inference is explicitly unavailable. Later deployments preserve the Worker secret without a second credential copy in GitHub.
 
 Revisit this decision if the catalog exceeds the subrequest bound, if anonymous traffic exhausts the capped credential, or if the labeled evaluation no longer separates direct skills from broad guidance.

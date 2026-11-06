@@ -28,8 +28,11 @@ const causes = new Map([
   ['provider_timeout', 'Jev did not answer in time.'],
   ['provider_unavailable', 'Jev is unavailable.'],
   ['invalid_provider_answer', 'Jev returned answers the skill finder could not read.'],
+  ['invalid_provider_response', 'Jev returned a reply the skill finder could not read.'],
+  ['provider_cost_unavailable', 'Jev did not report the full cost.'],
   ['mixed_served_models', 'Jev served more than one model.'],
   ['rate_limited', 'Too many requests right now. Try again shortly.'],
+  ['rate_limiter_unavailable', 'The skill finder’s rate limit is unavailable.'],
 ]);
 
 const text = (value) => (typeof value === 'string' && value.trim() ? value.trim() : null);
@@ -92,6 +95,7 @@ function reset() {
   run.hidden = true;
   list.removeAttribute('aria-busy');
   list.replaceChildren();
+  announcer.textContent = '';
   setInvalid(field, null);
 }
 
