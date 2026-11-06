@@ -233,7 +233,7 @@ function entry(result) {
   const closeness = finite(result.closeness);
   slot(item, 'percent').textContent = closeness === null ? 'Not scored' : `${Math.round(closeness * 100)}%`;
   if (closeness === null) slot(item, 'bar').remove();
-  else slot(item, 'fill').setAttribute('width', String(Math.min(Math.max(closeness, 0), 1) * 100));
+  else slot(item, 'bar').value = Math.min(Math.max(closeness, 0), 1);
 
   const description = text(result.description);
   if (description) slot(item, 'description').textContent = description;
