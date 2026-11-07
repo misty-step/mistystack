@@ -432,11 +432,11 @@
     "skills/blast-radius/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/blast-radius/SKILL.md": "2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436",
     "skills/bro/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/bro/SKILL.md": "aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb",
+    "skills/bro/SKILL.md": "1ed4aeba2f5d20b62996f27226ef35b95e91280c89c35507a4d9ff595c94808b",
     "skills/correct/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/correct/SKILL.md": "e347045d00c967a0b831ef883cc6ac79d21329aa10b5968637df95de7febf0ba",
     "skills/create-formal-verification-skill/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "skills/create-formal-verification-skill/SKILL.md": "6ece879808bbdd4e70412e43c76390cb9bf1a81196f0447ab76426e4bc662543",
+    "skills/create-formal-verification-skill/SKILL.md": "699bec1164d76047c683fea711df408a7587bf284598aaf3d157a1d46e2bef60",
     "skills/create-verification-skill/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "skills/create-verification-skill/references/feature-map-example/create-note.md": "644a44c74f35d38c2feb7cd05a0121fdebbb623e8dc376c185b565a581d1ccf7",
     "skills/create-verification-skill/references/feature-map-example/README.md": "cb7bd782cf89968a4ba3d58a5151db837430db92d19a6f52a906973b77b516ba",
@@ -1018,10 +1018,22 @@
       "sha256": "7cd08ed7dec6334789c11bcf04c28dc7fcc71fddbee2c729462304b265b58178"
     },
     {
+      "source": "skills/bro",
+      "file": "vendor/pstack-patches/bro.json",
+      "reason": "Owner-approved Overmind reflection, 2026-11-06: plain-language restatements must not turn conditional cost projections or estimates into measured facts.",
+      "sha256": "623ab326578f2435beb03984c5c258e91c831b4596dd3724cde7e8b0bd9b7857"
+    },
+    {
       "source": "skills/poteto-mode/playbooks/bug-fix.md",
       "file": "vendor/pstack-patches/bug-fix.json",
       "reason": "Owner directive 2026-11-03 (ADR0023) makes native ship-loop the single delivery authority; remove the inherited PR-gate caller rather than overriding it.",
       "sha256": "defad87705877354d3aabb232edc7b9d10f1ff95ba056054c21e85a6f4c82afe"
+    },
+    {
+      "source": "skills/create-formal-verification-skill",
+      "file": "vendor/pstack-patches/create-formal-verification-skill.json",
+      "reason": "Owner-approved Overmind reflection, 2026-11-06: a separate model must earn its maintenance beyond existing coverage; an explicit justified no-target outcome is valid.",
+      "sha256": "f5199d8588ea19bb4e0608518a5f487e0442b09a3e768f05861bdd1caf391cea"
     },
     {
       "source": "skills/poteto-mode/playbooks/eval.md",
