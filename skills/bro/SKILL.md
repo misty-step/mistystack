@@ -5,3 +5,5 @@ disable-model-invocation: true
 ---
 
 Restate your last message. Stop using jargon and speak coherently. State it more simply and concisely, like one human talking to another.
+
+Preserve assumptions, uncertainty, and the distinction between measured facts and estimates. Keep conditions such as "if we run this much" on a cost projection.

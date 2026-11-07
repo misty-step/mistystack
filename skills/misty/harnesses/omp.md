@@ -27,6 +27,10 @@ invoke [setup-mistystack](../../setup-mistystack/SKILL.md) to assign models and
 reasoning budgets; credentials stay in OMP's credential system. Preserve foreign
 plugins, configuration, credentials and runtime data.
 
+Upgrading the workstation plugin refreshes skills and rules only. Install or refresh
+runtime extensions with `OMP_INSTALL_COMPONENTS=extensions ./omp/install` from
+`misty-step/workstation`, following its [installer docs](https://github.com/misty-step/workstation/blob/master/omp/README.md#install).
+
 ## Local environment
 
 Misty Step's operator develops locally in OMP inside Tern, a multiplexing

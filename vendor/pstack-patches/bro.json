@@ -1,0 +1,11 @@
+{
+  "source": "skills/bro",
+  "reason": "Owner-approved Overmind reflection, 2026-11-06: plain-language restatements must not turn conditional cost projections or estimates into measured facts.",
+  "edits": [
+    {
+      "file": "SKILL.md",
+      "before": "Restate your last message. Stop using jargon and speak coherently. State it more simply and concisely, like one human talking to another.",
+      "after": "Restate your last message. Stop using jargon and speak coherently. State it more simply and concisely, like one human talking to another.\n\nPreserve assumptions, uncertainty, and the distinction between measured facts and estimates. Keep conditions such as \"if we run this much\" on a cost projection."
+    }
+  ]
+}

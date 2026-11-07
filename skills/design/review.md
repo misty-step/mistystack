@@ -33,6 +33,10 @@ automated scan is evidence about its rules, not visual quality. Within scope,
 fix blocked tasks and misleading states first, then hierarchy/responsiveness,
 then visual inconsistency. Preserve the incumbent identity during polish.
 
+For dense monitoring or status surfaces, give a cold observer the user's real task
+without explaining the interface. Test whether they understand what is happening
+and can complete the task before polishing.
+
 | Check | Evidence to inspect |
 | --- | --- |
 | Hierarchy | Primary information/action appears first at each size; secondary detail is disclosed; remove redundant labels before adding explanatory copy. |
