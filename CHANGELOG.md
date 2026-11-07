@@ -1,3 +1,9 @@
+# [0.3.25](https://github.com/misty-step/mistystack/compare/v0.3.24...v0.3.25) (2026-11-07)
+<!-- landmark:protected-release previous=v0.3.24 source=49035cca0fa15c9e84f4cf6c282cec4dcfc7e52e66f1efec46472f4f50391c24 -->
+
+### Bug Fixes
+
+* **skills:** preserve task comprehension and qualified conclusions (#685) ([49cca01](https://github.com/misty-step/mistystack/commit/49cca01436aed9fd3ebb4d4773d30388904952bd))
 # [0.3.24](https://github.com/misty-step/mistystack/compare/v0.3.23...v0.3.24) (2026-11-06)
 <!-- landmark:protected-release previous=v0.3.23 source=8cc438bfc925af1cf636952174aaf6d872f3d380a8ee823ad60b64030856af59 -->
 
