@@ -85,7 +85,7 @@ Primitives: [experience first](../principle-experience-first/SKILL.md), [visual 
 
 11. **Explicit state.** Consequential workflows have named states and events with one transition table owning allowed transitions. Code, tests and diagrams follow that table. Append-only history exists where audit, replay or recovery needs it. Native transactions and existing capabilities handle simple CRUD without a custom state-machine platform. Costly ordering, concurrency or durability promises have reproducible formal-property proof mapped to real code under [Verification's formal-property contract](../verification/SKILL.md#formal-properties). Evidence names the properties, assumptions, bounds, tool version and confirmed commit, including rejection of a broken variant. Formal proof supplements the real running-product journey.
 
-Primitives: [statechart](../statechart/SKILL.md), [create formal verification skill](../create-formal-verification-skill/SKILL.md), [maintain formal verification skill](../maintain-formal-verification-skill/SKILL.md).
+Primitives: [model the domain](../principle-model-the-domain/SKILL.md) for the signs of an implicit state machine, [statechart](../statechart/SKILL.md), [create formal verification skill](../create-formal-verification-skill/SKILL.md), [maintain formal verification skill](../maintain-formal-verification-skill/SKILL.md).
 
 <a id="article-12"></a>
 <a id="12"></a>
