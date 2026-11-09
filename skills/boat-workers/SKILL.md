@@ -93,10 +93,11 @@ boat --no-update exec <id> --timeout 0 -- <command>
 ```
 
 Retain the actual `bx_...` ID returned by creation and use it explicitly for
-every operation; `current` is shell-local. Inspect the upload set before
-`push`: it copies tracked and unignored files, not just committed source. Record
-the snapshot identity, source revision, worker ID and commands in the existing
-slice thread with its evidence, not a second ledger.
+every operation; `current` is shell-local. `--push` copies tracked and unignored
+files from the current directory. Run it from the narrowest directory the job
+needs, name that directory in the brief, and never push from a notes vault or
+home directory. Record the snapshot identity, source revision, worker ID and
+commands in the existing slice thread with its evidence, not a second ledger.
 
 `--no-auto-stop` keeps the actively supervised slice alive until an explicit
 stop. Do not impose an agent wall-clock cap through a TTL, task deadline or

@@ -58,9 +58,11 @@ data and clean only what the run created. Capture action and result, inspect eac
 artifact, and publish proof by [evidence.md](evidence.md). After a repair, re-drive
 the affected criteria and fix-introduced regressions; reference unchanged proof.
 
-Done when each criterion has an observed result at the named revision, linked
-proof and owned cleanup, or an exact unproved claim and missing prerequisite.
-Follow [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
+Done when the original real path passes, the linked observation identifies the
+checked revision, and that revision and the item's Done status are on the shared
+remote before anyone is told it is done. An exact unproved claim and missing
+prerequisite still leave proof incomplete. Follow
+[pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
 
 ## Formal properties
 
