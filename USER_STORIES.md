@@ -98,8 +98,11 @@ Criteria:
 3. Publication refuses an unlanded candidate or a tag pointing to another commit.
 4. Retries preserve an already published version without duplicate notes or
    moving its tag.
+5. The generated PR also carries the release version in every native manifest,
+   so a harness that detects upgrades by manifest version reports each release.
+   The gate fails when a manifest and the changelog disagree.
 
-Proof: `.github/workflows/landmark-release.yml`,
+Proof: `.github/workflows/landmark-release.yml`, `scripts/stamp-version.test.ts`,
 `scripts/protected-release.test.ts`, `scripts/protected-release-check.test.ts`.
 
 ## US-021 Keep test coverage meaningful

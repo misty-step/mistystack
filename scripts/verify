@@ -45,5 +45,6 @@ fi
 for script in scripts/bootstrap scripts/check scripts/verify .githooks/pre-commit .githooks/pre-push; do
   sh -n "$script"
 done
+bun scripts/stamp-version.ts --check
 bun scripts/verify-plugin.ts "$@"
 printf 'Verification complete: %s\n' "$selection"

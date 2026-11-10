@@ -97,7 +97,10 @@ evidence contract. No check installs into an operator's live profile.
 ## Release
 
 Landmark prepares a generated changelog PR, then publishes only its verified,
-landed commit. Keep [CHANGELOG.md](CHANGELOG.md) generated. The shared
+landed commit. Keep [CHANGELOG.md](CHANGELOG.md) generated. The same PR carries
+the release version in every native manifest, written by
+`scripts/stamp-version.ts`, so a harness that detects upgrades by version sees
+each release; `./scripts/check` fails when a manifest and the changelog disagree. The shared
 [release convention](docs/release-convention.md) stays at its existing path for
 external callers.
 
