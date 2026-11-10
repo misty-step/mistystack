@@ -10,9 +10,9 @@ metadata:
 
 # Research
 
-For code architecture, runtime flow, placement or ownership, use pstack's
-[how](../how/SKILL.md). Misty adds the versioned research contract below for
-implementation-critical questions and dependency decisions.
+For how this repository's own code works, read the code. This is the versioned
+research contract for implementation-critical questions about things outside it,
+and for dependency decisions.
 
 1. **Question.** Name the installed version, disputed behavior and decision the answer changes. Verify unfamiliar APIs before coding against them; memory is not a contract. For historical motivation, read blame, the introducing PR and its issue. Done when source or observation can distinguish the answer from alternatives.
 
@@ -20,4 +20,4 @@ implementation-critical questions and dependency decisions.
 
 3. **Legwork.** Keep small lookups inline. Independent reading follows Misty's briefing and delegation contract and `agent-design`: give a bounded question; request links, excerpts, versions, contradictions and unresolved claims. Continue unblocked work while answers arrive. Done when evidence answers the question, not just a plausible summary.
 
-4. **Resolve and return.** Read primary material behind consequential findings. Reconcile conflicts against installed behavior or a focused probe. Choose an approach with no unresolved critical dependency; otherwise name the missing prerequisite and finish reachable research. Lead with the answer and decision, citing direct links with version limits, rejected alternatives and gaps. Follow [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply): documentation proves what it says, not live behavior. Store durable findings only when requested or needed in their existing maintained home; return temporary legwork in the result. Done when each implementation-critical claim is source-verified or explicitly excluded from the design.
+4. **Resolve and return.** Read primary material behind consequential findings. Reconcile conflicts against installed behavior or a focused probe. Choose an approach with no unresolved critical dependency; otherwise name the missing prerequisite and finish reachable research. Lead with the answer and decision, citing direct links with version limits, rejected alternatives and gaps. Follow [Misty's reporting rules](../misty/SKILL.md#reporting): documentation proves what it says, not live behavior. Store durable findings only when requested or needed in their existing maintained home; return temporary legwork in the result. Done when each implementation-critical claim is source-verified or explicitly excluded from the design.

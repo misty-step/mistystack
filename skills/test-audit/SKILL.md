@@ -10,7 +10,7 @@ metadata:
 
 # Test audit
 
-Use pstack's [test-behavior-not-implementation](../principle-test-behavior-not-implementation/SKILL.md)
+Use the [test behavior principle](../misty/principles.md)
 to judge tests and choose assertions. Inspect existing proof at its owner boundary:
 one primary proof per consumer contract; another layer needs a distinct consequential failure.
 Name that failure before adding or deleting proof, and use history only for

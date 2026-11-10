@@ -37,14 +37,11 @@ Code reads repository `AGENTS.md` natively from 2.1.277 onward; this adapter doe
 not require `CLAUDE.md` or a duplicate standing-instruction file.
 
 Invoke `/mistystack:misty` or `/mistystack:<skill-name>` through Claude's native
-skill mechanism. Follow Misty's [bug-fix link](../../poteto-mode/playbooks/bug-fix.md) relative to
+skill mechanism. Follow Misty's [ship-loop link](../../ship-loop/SKILL.md) relative to
 the installed skill file, not the working directory or a source checkout.
-Principle leaves, recompile and setup-mistystack retain
+Recompile and setup-mistystack retain
 `disable-model-invocation: true`: Claude does not invoke them automatically,
-while a user can invoke them explicitly or read their installed files. Misty's
-relative links reach its extension leaves and pstack's principle index. That
-index names upstream leaves rather than linking each one. Open those through
-`/mistystack:<skill-name>` or their installed `skills/<name>/SKILL.md` files.
+while a user can invoke them explicitly or read their installed files.
 Check discovery and explicit reachability separately.
 
 ## Dispatch and rigor
@@ -61,13 +58,25 @@ the [rigor tier](../../ship-loop/roles.md#rigor), and put the worker's responsib
 in the brief. The author proves the running path and merges. A separately briefed
 reviewer performs the single critical-correctness/security assessment at release.
 
-The native agent frontmatter's `model` field is the model authority: the supplied
-light, standard and critical agents use `haiku`, `sonnet` and `opus`, respectively.
+The native agent frontmatter is the model authority. The supplied agents set
+`model: inherit`, so a worker runs on the session's model, and vary `effort`:
+`low` for light, `medium` for standard and `high` for critical. A tier that sent
+critical work to a weaker model than its parent would invert the tier. Lower
+effort is the cheap way to run a fully specified slice; raise a tier to `xhigh`
+only where you have measured a gain. To put light work on a cheaper model,
+change that agent's `model` field in the target installation.
 These are Claude-native selections, not OMP `modelRoles`. Inspect native agent
 configuration and any overrides in the target installation; do not maintain model
 choices in skill prose or edit plugin-cache copies as durable configuration.
 Retain actual agent/model identity from an authorized dispatch before claiming a
 chosen mapping works.
+
+## Effort and updates
+
+Run interactive sessions at `medium` and long unattended work at `high`. Effort,
+not prompt wording, controls how much the model thinks. During a long turn the
+model may go quiet between tool calls; that is expected for unattended work, and
+the closing report carries what the reader needs.
 
 ## Drive the real UI
 
@@ -87,8 +96,8 @@ artifact readback. Installation and file checks without inference are
 
 In a fresh destination session, retain evidence that the `SessionStart` hook
 supplied the installed core, Misty is discoverable, and an actual skill/read event
-opens installed Misty and follows its relative bug-fix link to the first step.
-Check that a principle leaf is excluded from automatic invocation but explicitly
+opens installed Misty and follows its relative ship-loop link to the first step.
+Check that recompile is excluded from automatic invocation but explicitly
 reachable. Prove native rigor-agent discovery separately; a short authorized
 dispatch must retain its selected agent, actual model identity and result before
 claiming live dispatch. A model's self-report alone is not loading proof.

@@ -45,14 +45,12 @@ proof incomplete; report the exact limit instead of substituting an easier check
 
 ## 2. Drive and inspect
 
-For missing proof, follow [create-verification-skill](../create-verification-skill/SKILL.md); the [names adapter](../misty/harnesses/pstack-names.md#routes) overrides both generators' Cursor paths. Keep one canonical source exposed through the active harness; repository instructions stay in `AGENTS.md`. A documents-only change does not inherit missing product infrastructure.
+When the repository has no verification skill, write one by [recipe.md](recipe.md) and prove it before relying on it. Keep one canonical source exposed through the active harness; repository instructions stay in `AGENTS.md`. A documents-only change does not inherit missing product infrastructure.
 
-Add an Accounts section to the generated skill under the [QA sign-in contract](#qa-sign-in-contract);
+Its Accounts section follows the [QA sign-in contract](#qa-sign-in-contract);
 mark unauthenticated surfaces n/a. Its Evidence section follows [evidence.md](evidence.md).
-The vendored generator owns launch, doctor, drive, feature-map seeding, cleanup
-and the end-to-end proof of its generated recipe.
 
-Apply [Misty's delegation procedure](../misty/SKILL.md). Place execution through
+Delegate only under [Misty's delegation rules](../misty/SKILL.md#delegation). Place execution through
 the [Boat worker procedure](../boat-workers/SKILL.md). Use authorized disposable
 data and clean only what the run created. Capture action and result, inspect each
 artifact, and publish proof by [evidence.md](evidence.md). After a repair, re-drive
@@ -62,13 +60,15 @@ Done when the original real path passes, the linked observation identifies the
 checked revision, and that revision and the item's Done status are on the shared
 remote before anyone is told it is done. An exact unproved claim and missing
 prerequisite still leave proof incomplete. Follow
-[pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
+[Misty's reporting rules](../misty/SKILL.md#reporting).
 
 ## Formal properties
 
-For ordering, concurrency or durability, follow the canonical pstack
-[create-formal-verification-skill](../create-formal-verification-skill/SKILL.md)
-alongside [create-verification-skill](../create-verification-skill/SKILL.md).
+Ordering, concurrency and durability are where tests pass and users still lose
+data, so model them. Write the state machine down first: its states, events and
+the transitions that must never happen. Then check it with a tool that explores
+every interleaving. Keep the specification, its rerun command and its mapping to
+real code in the repository's verification skill.
 Choose the costly user promise that tests can miss, not the easiest target.
 TLA+ is the default for bad event orders; use a code-level verifier or proof
 assistant when the property concerns the implementation for all inputs.
@@ -81,7 +81,7 @@ atomic step to real code. Record tool version, coverage, assumptions, bounds,
 one rerun command and the last confirmed source commit. Show the check rejecting
 a scratch defect in the covered real code, then restore it and recheck. Do not
 weaken a property to pass or claim a bounded model proves the whole system.
-Read TLA+ results with pstack's [statechart](../statechart/SKILL.md) skill and
+Draw the checked model as a statechart when a reader needs to follow it, and
 replay counterexamples against the real app or code. Formal proof supplements,
 never replaces, the running consumer path.
 
@@ -95,11 +95,10 @@ the blocked criterion.
 
 ## Commissioned upkeep
 
-For a verification-skill/feature-map audit, follow pstack's
-[maintain-verification-skill](../maintain-verification-skill/SKILL.md). Resolve the
+For a verification-skill or feature-map audit, follow the upkeep section of
+[recipe.md](recipe.md). Resolve the
 target from the request and repository; ask only if they cannot disambiguate it.
-Apply [Misty's delegation procedure](../misty/SKILL.md); combine small related
-source slices instead of one agent per sentence. A feature not reached stays unverified, with the
+Combine small related source slices; [delegate](../misty/SKILL.md#delegation) only genuinely independent ones. A feature not reached stays unverified, with the
 exact prerequisite and attempted route, never passed.
 For check placement, deletion or schedule repair, use [check-cadence.md](check-cadence.md).
 For recurring product QA, agents use distinct user personas to walk pre-release

@@ -49,5 +49,5 @@ that removes the error class: eliminate the dangerous affordance or correct the
 ownership/type shape before adding warnings. Keep it within the original
 outcome; closing a class does not authorize a framework. Link the fix and real
 regression proof; state residual risk rather than promising an impossible cure.
-Before closing a material incident, exercise alert delivery to the owned response path (or record why not) and repair the cause through the [bug-fix playbook](../poteto-mode/playbooks/bug-fix.md).
+Before closing a material incident, exercise alert delivery to the owned response path (or record why not) and repair the cause through the [defect rule in Misty's loop](../misty/SKILL.md#the-loop).
 Close the incident only after verified recovery and the linked postmortem.

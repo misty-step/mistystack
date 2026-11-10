@@ -13,21 +13,19 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   without a custom installer or a second copy of the method.
 - **Core rule:** `rules/core.md`, the always-applied entry point and guardrails
   for sessions using the method.
-- **Mode:** `misty`, the skill that routes nontrivial work to the relevant
-  principles, playbook and task skills.
-- **Principle leaf:** one on-demand `principle-<slug>` skill reached through the
-  mode's index, not a duplicate of a core rule or task skill's procedure.
+- **Mode:** `misty`, the one self-contained page that holds the work loop,
+  ownership, autonomy, delegation and reporting, and routes to each task skill.
+  It has no base document that it overrides.
+- **Principle:** one entry in `skills/misty/principles.md`, with the moment it
+  applies and its reason. It is not a skill and is not cited as a rule.
 - **Conformance:** the finished-deliverable contract in the [Foundation checklist](skills/foundation/checklist.md#conformance), separate from its audit procedure.
-- **Playbook:** a task-type procedure under `skills/poteto-mode/playbooks/`, selected through Misty's router.
 - **Skill:** a directory with a `SKILL.md` entry point and optional supporting
   material. References use relative Markdown links or the skill's name; native
   loading mechanics belong to the adapter.
-- **Vendored foundation:** the pinned pstack skills, playbooks and agent
-  references in `vendor/pstack.lock.json`. The lock owns source inventory,
-  explicit exclusions, exact patches/removals and generated-file hashes.
-  Recorded owner delivery changes remove obsolete upstream procedures instead
-  of leaving contradictory instructions installed. Unchanged primitives retain
-  upstream bytes apart from the harness pointer and recorded modifications.
+- **Vendored skill:** an upstream skill kept byte-for-byte under a registered
+  lock in `vendor/` (Matt Pocock's shaping skills, Warp's merge skills). The
+  lock owns the pin, source mapping and file hashes. Local facts an upstream
+  skill expects live in the mode's supporting files, not in edits to it.
 - **Recompile review:** the monthly and model-capability-triggered reconsideration
   of a project's implementation from its vision and durable record, owned by
   [recompile](skills/recompile/SKILL.md). Keeping the system is a valid outcome.
@@ -45,8 +43,8 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   responsibility; the native adapter supplies dispatch and runtime selection.
 - **Oracle:** a check outside the worker that can disprove completion, expressed
   as an exact command or real user path. It is evidence for
-  [prove-it-works](skills/principle-prove-it-works/SKILL.md), not a core rule or a
-  separate mandatory pre-dispatch gate.
+  [proof on the real path](skills/misty/principles.md), not a separate mandatory
+  pre-dispatch gate.
 - **Local development environment:** the environment where the agent runs.
   Its harness note owns local constraints. The
   [OMP note](skills/misty/harnesses/omp.md) names the operator's Tern+OMP setup.
@@ -69,20 +67,21 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 1. **Small, always-on core.** `rules/core.md` is at most 20 lines, including
    frontmatter. Native adapters load the core; procedures load on demand.
 2. **Skill provenance.** Misty-authored skills follow the frontmatter convention
-   below. Its short `metadata.source` points to [ATTRIBUTION.md](ATTRIBUTION.md#skill-provenance), which owns full directory-level provenance, including supporting files. Vendored skills retain upstream frontmatter; `vendor/pstack.lock.json`
-   owns pstack's provenance, destinations, recorded exact patches/removals and file
-   hashes. Registered upstream locks (`vendor/pocock.lock.json` and
+   below. Its short `metadata.source` points to [ATTRIBUTION.md](ATTRIBUTION.md#skill-provenance), which owns full directory-level provenance, including supporting files. Vendored skills retain upstream frontmatter. Registered upstream locks (`vendor/pocock.lock.json` and
    `vendor/warp.lock.json`) own unchanged skills' pins, source mappings and file
    hashes through `scripts/skill-locks.mjs`. Preserve every upstream's required
    licence notices.
    Regenerate vendored text and its lock; never hand-edit them.
-3. **Harness-neutral method.** One content tree owns the method. Harness-specific
+3. **One page, no layers.** The mode states the method directly. A change to
+   the method edits that page or a task skill; it does not add an override on
+   top of another document ([ADR 0026](docs/decisions/0026-one-page-method.md)).
+4. **Harness-neutral method.** One content tree owns the method. Harness-specific
    tools, configuration, loading behavior and working environments live in
    disclosed native-adapter references, not shared procedures or the core.
-4. **One home per fact.** Core rules, principles, procedures, model assignments,
+5. **One home per fact.** Core rules, principles, procedures, model assignments,
    consumer stories and historical decisions each have one authority. References
    point there; cutovers migrate callers and remove the old home.
-5. **Owned boundary.** Native-adapter verification uses isolated runtime state.
+6. **Owned boundary.** Native-adapter verification uses isolated runtime state.
    Installation does not replace foreign configuration, credentials or runtime
    state. Fleet machinery stays in private `misty-step/workstation`.
 
@@ -92,7 +91,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 this contract owns their fields. All skill names match directories and all
 descriptions are non-empty. Vendored skills keep upstream's metadata rather
 than acquiring Misty's convention; lint reads their provenance from the lock.
-Principle leaves, poteto-mode and poteto-help remain explicit-only, including vendored leaves.
+Recompile and setup-mistystack remain explicit-only.
 
 For Misty-authored skills, descriptions are trigger-first and
 `metadata.prevents` cites observed failure evidence. The owner and sunset

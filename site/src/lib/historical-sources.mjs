@@ -39,4 +39,7 @@ export const historicalSources = new Map([
     `agent-config/skills/foundation/${file}`,
     { commit: 'afbaf33b3f940108ccaf06c74841c9fbfa812bd0', fragments: [] },
   ]),
+  ...['scripts/sync-pstack.ts', 'skills/misty/harnesses/pstack-names.md', 'vendor/pstack.lock.json'].map((file) => [
+    file, { commit: 'c750ff4d4ec2a61e3e4ecb0eaf1f73e0e088e356', fragments: [] },
+  ]),
 ]);

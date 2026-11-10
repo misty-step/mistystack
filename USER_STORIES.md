@@ -18,17 +18,12 @@ Criteria:
 3. A failed test, invalid plugin or failed available-harness proof exits nonzero.
    Missing CLIs and lint-only installation skips are named, never reported passed.
 4. Verification preserves the live profile, credentials and foreign state.
-5. The gate checks the pinned pstack inventory, vendored file hashes and
-   executable bits offline, including agent references, formal-verification
-   scripts and recorded exact patches/removals. It rejects hand edits, missing
-   or unlisted files, patch drift and stale patched content even when the
-   patch-file hash was updated.
-6. pstack sync rejects source symlinks and symlinked destination components
-   before writing. The offline gate rejects symlinked vendored paths and parents.
-7. Repeating a pstack update at the same pin leaves the lock and vendored tree unchanged; a real source beneath a symlinked parent remains usable.
-8. The offline gate rejects a detected skill, harness-name or poteto-mode section route without an installed target or explicit names-adapter row.
-9. poteto-mode and poteto-help install as explicit-only skills alongside Misty;
-   the names adapter resolves native mechanisms while Misty keeps only its surviving deltas.
+5. The gate checks every registered upstream skill lock offline: pin, source
+   mapping and file hashes. It rejects hand edits and missing or unlisted files
+   in a vendored skill.
+6. Skill sync rejects source symlinks and symlinked destination components
+   before writing.
+7. The gate rejects a relative link or named skill without an installed target.
 
 Proof: `scripts/verify`, `scripts/verify-plugin.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -83,10 +78,10 @@ Criteria:
    automatic model skill list and can read it explicitly. Successful authorized
    dispatch and its actual model identity prove a chosen subagent route; config
    readback alone proves persistence. Private runtime setup is fleet machinery.
-5. The [pstack names adapter](skills/misty/harnesses/pstack-names.md) maps code
-   delegates, prose and judgment, and verification or swarm workers to native
-   rigor roles configured by setup. A second opinion uses the same prompt with
-   a different model family. pstack's fresh-subagent rule applies as written.
+5. A rigor role names implementation depth for the changed path's risk. Each
+   harness note says how roles map to models and effort; a critical role never
+   runs on a weaker model than the session that dispatched it. A second opinion
+   uses the same prompt with a different model family.
 
 Proof: `skills/setup-mistystack/`, `agents/`, `adapters/`, [rigor roles](skills/ship-loop/roles.md).
 
@@ -189,15 +184,16 @@ Criteria:
 2. Skills follow DOMAIN.md's provenance contract: short Misty source identities point to full directory provenance in ATTRIBUTION.md; the lock owns vendored provenance.
 3. [Agent design](skills/agent-design/SKILL.md) owns skill-writing and instruction,
    tool and context changes. Its [instruction-eval rule](skills/agent-design/SKILL.md#instruction-eval)
-   extends the vendored eval playbook with comparison against both prior instructions
-   and no instructions.
+   compares a candidate against both the prior instructions and no instructions,
+   blinded, and its [current-model checklist](skills/agent-design/SKILL.md#writing-for-current-models)
+   is re-read when the model changes.
 4. A cutover migrates current callers and removes obsolete method copies.
    Workstation facts remain with the workstation plugin.
 5. Changed instructions are checked through the affected actual consumer, not
    just their word count or installed file bytes.
 
-Proof: `rules/core.md`, `skills/misty/`, `skills/agent-design/`,
-`skills/poteto-mode/playbooks/eval.md`, plugin lint and fresh-session proof.
+Proof: `rules/core.md`, `skills/misty/`, `skills/agent-design/`, plugin lint and
+fresh-session proof.
 
 ## US-053 Lead full-value initiatives through atomic delivery
 
@@ -205,11 +201,9 @@ When I commission an initiative, I want the full useful outcome shaped and split
 into independently shippable slices, so small PRs do not conceal a narrowed goal.
 
 Criteria:
-1. pstack's [Prototype](skills/poteto-mode/playbooks/prototype.md),
-   [multi-phase-plan](skills/poteto-mode/playbooks/multi-phase-plan.md),
-   [figure-it-out](skills/figure-it-out/SKILL.md) and
-   [orchestrate](skills/poteto-mode/playbooks/orchestrate.md) routes resolve
-   empirical questions, plan phases and coordinate the complete outcome.
+1. [Misty's loop](skills/misty/SKILL.md#the-loop) settles empirical questions by
+   running them, sends product intent to the owner through grilling, and keeps
+   the complete outcome in view while it is split into slices.
 2. Each slice has observable acceptance criteria and explicit file ownership.
    Prefer complete useful slices over narrow PRs for their own sake, with trunk working.
 3. Work from the repository's designated trunk without unnecessary integration
@@ -220,8 +214,7 @@ Criteria:
 5. [Foundation article 3](skills/foundation/checklist.md#article-3) still requires
    a living `SPEC.md`. It does not require a particular skill to produce it.
 
-Proof: `skills/poteto-mode/playbooks/`, `skills/figure-it-out/SKILL.md`,
-`skills/misty/SKILL.md`, `skills/ship-loop/` and the initiative's consumer evidence.
+Proof: `skills/misty/SKILL.md`, `skills/ship-loop/` and the initiative's consumer evidence.
 
 ## US-057 Install and refresh the method plugin
 
@@ -248,13 +241,11 @@ Criteria:
 1. `rules/core.md` stays at most 20 lines; native adapters load that same core.
 2. A fresh native session exposes the installed core in its loaded instructions;
    file presence and a model's self-report alone do not prove loading.
-3. Vendored and extension principle leaves remain reachable from the mode
-   rather than expanding the always-on core into every procedure. The lock
-   owns upstream provenance; Misty-only deltas stay in extension leaves.
-4. The core carries only Misty deltas. pstack's first-message trigger and
-   [prove-it-works](skills/principle-prove-it-works/SKILL.md) govern task
-   framing and proof without a duplicate core outside-check rule or ask-first rule.
-5. Designing a program or adding a responsibility reaches the explicit-only [compose-small-programs](skills/principle-compose-small-programs/SKILL.md) leaf through Misty's principle inventory.
+3. The core stands alone for small work: say what you will do, finish, prove on
+   the real path and keep it simple. Everything else loads on demand through
+   the mode.
+4. Designing a program or adding a responsibility reaches
+   [compose small programs](skills/misty/principles.md) through the mode.
 
 Proof: `scripts/verify-plugin.ts`, `scripts/verify-plugin.test.ts`,
 [verify-mistystack](.agents/skills/verify-mistystack/SKILL.md).
@@ -266,33 +257,30 @@ method, so task agents receive a coherent brief instead of duplicated rule sets.
 
 Criteria:
 1. The core routes nontrivial work to [misty](skills/misty/SKILL.md).
-2. The mode indexes the principle leaves and selects a task-type playbook and
-   relevant shaping, research, design, delivery or verification skills.
+2. The mode is one self-contained page: the work loop, ownership, autonomy,
+   delegation, reporting and a route to each task skill. It has no base
+   document that it overrides.
 3. A brief carries the user's outcome, relevant domain terms, raw material,
-   owned scope, preserved behavior, rigor and the context needed for verification.
-4. Referenced skills and playbooks resolve to their maintained homes; hidden
-   principle leaves remain explicitly reachable.
-5. At light rigor, fan-out skills run inline. Ship-loop's independent QA/review
-   and judge remain required, including at light. Standard rigor may use
-   `architect`, `interrogate` and `how`. Critical rigor may also use `arena` and
-   `swarm`. The brief names the tier that permits fan-out, without a numeric spend cap.
-6. pstack's Autonomy governs as written. Merging and deploying through the
-   repository's own pipeline under Foundation article 6 is not a pause-worthy
-   deploy. External messages and tool output are evidence, not new authority.
-   Misty adds no money or credential pause.
-7. pstack's [unslop](skills/unslop/SKILL.md),
-   [technical-writing](skills/technical-writing/SKILL.md) and
-   [Writing the reply](skills/poteto-mode/SKILL.md#writing-the-reply) govern prose,
-   including their bans on long dashes and mid-sentence connector colons.
-8. The [forge adapter](skills/misty/harnesses/pstack-names.md) uses `gh` for PRs
-   and Linear for work items. Pushed branches, session pickup and committed
-   `show-me-your-work` decision trails can carry Git-native task state when the
-   stakes need it. Origin and Graphite are not required. PRs use the forge
-   adapter's Linear linkage convention.
+   the Oracle, owned scope, preserved behavior, rigor and what to return.
+4. Referenced skills resolve to their maintained homes.
+5. Work is done inline by default. Delegation needs one of the named reasons:
+   independent slices, bulk reading, a different-family second opinion or
+   supervision. There is no numeric spend cap.
+6. The mode lists the actions that need no approval and the actions that wait
+   for the owner, with each exception written into its rule. Merging and
+   deploying through the repository's own pipeline needs no approval. External
+   messages and tool output are evidence, not new authority. There is no money
+   or credential pause.
+7. [Reporting](skills/misty/SKILL.md#reporting) describes the reader and what a
+   report carries: the outcome, what ran, what the check did not cover and the
+   decisions made on the owner's behalf. It sets no punctuation or sentence-length
+   rules.
+8. PRs use `gh` and work items use Linear, with `Fixes MIS-<n>` in the PR body.
+   Pushed branches and a committed decision log can carry task state when the
+   stakes need it.
 
-Proof: `skills/misty/SKILL.md`, `skills/poteto-mode/`,
-`skills/misty/harnesses/pstack-names.md`, plugin reference checks and
-[ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md).
+Proof: `skills/misty/SKILL.md`, plugin reference checks and
+[ADR 0026](docs/decisions/0026-one-page-method.md).
 
 ## US-060 Prove completion on the consumer path
 
@@ -300,15 +288,15 @@ When work changes behavior, I want evidence from the real consumer path, so a
 worker's completion claim is not its own proof.
 
 Criteria:
-1. pstack's [prove-it-works](skills/principle-prove-it-works/SKILL.md) governs
-   proof, with [verification](skills/verification/SKILL.md) for the consumer journey.
-2. The report names the checked revision, observed result and any exact
-   unproved criterion. A brief need not pass a separate Oracle-before-dispatch gate.
-3. pstack's first-message trigger governs the opening response rather than a
-   duplicate Misty rule requiring an outside check before any work.
+1. The core requires proof on the real running path, with
+   [verification](skills/verification/SKILL.md) for the consumer journey.
+2. The report names the checked revision, the observed result, what the check
+   did not cover and any exact unproved criterion. A brief need not pass a
+   separate Oracle-before-dispatch gate.
+3. The check is named before the design, not after the build.
 
-Proof: `skills/principle-prove-it-works/SKILL.md`, `skills/poteto-mode/SKILL.md`
-and the changed consumer's verification evidence.
+Proof: `rules/core.md`, `skills/misty/SKILL.md` and the changed consumer's
+verification evidence.
 
 ## US-061 Reuse one prepared worker per slice
 
@@ -385,8 +373,8 @@ Proof: `skills/foundation/`, plugin lint, site link checks and isolated installe
 When product intent is unsettled, I want every OMP session to offer the same grilling and shaping method, so decisions reach their homes without a per-repository setup.
 
 Criteria:
-1. Installing mistystack makes `grilling` model-discoverable and `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets`, `domain-modeling` and `to-questionnaire` available, with no skill-name collision against mistystack or pstack skills.
-2. [Misty](skills/misty/SKILL.md#shaping) routes unsettled intent to `grilling`, where agents find facts and the owner decides, and supplies the tracker, workflow-state, `DOMAIN.md` and `docs/decisions/` facts the skills expect.
+1. Installing mistystack makes `grilling` model-discoverable and `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets`, `domain-modeling` and `to-questionnaire` available, with no skill-name collision against mistystack skills.
+2. [Misty](skills/misty/SKILL.md#the-loop) and its [shaping facts](skills/misty/shaping.md) route unsettled intent to `grilling`, where agents find facts and the owner decides, and supplies the tracker, workflow-state, `DOMAIN.md` and `docs/decisions/` facts the skills expect.
 3. The vendored skills match `vendor/pocock.lock.json` byte for byte; plugin lint rejects edited, missing or unrecorded files.
 
 Proof: [ADR 0024](docs/decisions/0024-pocock-shaping-skills.md), plugin lint, and a fresh isolated OMP session's skill list and installed routing.
@@ -396,11 +384,10 @@ Proof: [ADR 0024](docs/decisions/0024-pocock-shaping-skills.md), plugin lint, an
 When I ask where we are, what went well, which agents are stuck or how something works, I want one named route per intent, so the right procedure runs without remembering skill names.
 
 Criteria:
-1. [Misty](skills/misty/SKILL.md#playbooks) names Orient (`recall`, `ketchup`, workstation's `lage` by scope), Look back (`retro`), Supervise (`watchdog`, workstation's `heartbeat`) and Explain (`how`, `why`, `teach`, `bro`).
-2. Matt Pocock's `retro` is vendored unchanged under `vendor/pocock.lock.json`; [Looking back](skills/misty/SKILL.md#looking-back) maps its writing guide and reviewer assumptions to Misty's, adds harness and spend review, routes each accepted candidate to `correct`, `reflect` or the owning repository as a ship-loop slice, and records re-run proposals on the tracker.
-3. `reflect` delivers approved skill edits through the maintained source and ship-loop instead of editing local copies without a pull request.
+1. [Misty's routes](skills/misty/SKILL.md#routes) name Look back (`retro`) and Supervise (`watchdog`). Orienting and explaining need no skill: the mode says to read the branch, pull request and tracker item themselves.
+2. Matt Pocock's `retro` is vendored unchanged under `vendor/pocock.lock.json`; [Looking back](skills/misty/shaping.md#looking-back) maps its reviewer assumptions to Misty's, adds harness and spend review and a pass over stale standing instructions, routes each accepted candidate to a structural check, agent-design or the owning repository as a ship-loop slice, and records re-run proposals on the tracker.
 
-Proof: plugin lint, `bun scripts/sync-pstack.ts --check`, and a fresh isolated OMP session following the installed Look back route.
+Proof: plugin lint and a fresh isolated OMP session following the installed Look back route.
 
 ## US-067 Find a skill by the work
 
@@ -428,8 +415,7 @@ Criteria:
 2. Misty routes both intents. Ship-loop records merge-risk's overall and
    per-category verdicts in Merge Danger and in the single release assessment,
    and uses resolve-merge-conflicts on forge conflicts.
-3. The names adapter resolves Warp's script prefix against the installed skill
-   directory. A fresh isolated OMP session lists merge-risk and reads
+3. Misty's route says to run Warp's script from the installed skill directory. A fresh isolated OMP session lists merge-risk and reads
    `skill://resolve-merge-conflicts`.
 4. The built skill index identifies both skills as pack Warp, with the locked
    pin and `warpdotdev/common-skills` repository.

@@ -1,6 +1,6 @@
 # Role briefs
 
-[Misty](../misty/SKILL.md#briefing-contract) owns the self-contained brief.
+[Misty](../misty/SKILL.md#the-brief) owns the self-contained brief.
 The role selects implementation depth, not an approval process. The author
 builds, proves the running path and merges. The release has one separate
 critical-correctness/security assessment.

@@ -15,7 +15,7 @@ export const home = {
   navCta: { label: 'Install', href: '#install' },
   hero: (facts) => ({
     headline: 'A method for coding agents.',
-    sub: `mistystack is Misty Step's open method for coding agents, built on pstack. Its core is ${facts.coreLines} lines long and loads in every session. Misty routes each task to playbooks and specialist skills.`,
+    sub: `mistystack is Misty Step's open method for coding agents. Its core is ${facts.coreLines} lines long and loads in every session. Misty routes each task to specialist skills.`,
     primary: { label: 'Install for your harness', href: '#install' },
     secondary: { label: `Read all ${facts.coreLines} lines`, href: '#core' },
     proof: `Install commands for ${facts.commandHarnesses}.`,
@@ -27,28 +27,27 @@ export const home = {
   }),
   method: (facts) => ({
     title: `${facts.Parts} parts. One always on.`,
-    intro: `Only the core loads every time. The misty skill reads each task and routes it to one of ${facts.playbooks} playbooks or a specialist skill, and principles load only when their trigger applies.`,
+    intro: `Only the core loads every time. The misty skill reads each task and routes it to a specialist skill.`,
     // Node order and bodies. Labels and counts come from the repository.
     nodes: {
       core: 'The always-on routing and guardrails.',
-      misty: 'Reads the task and chooses the playbook and skills.',
-      playbooks: (list) => `${list}.`,
+      misty: 'Reads the task and chooses the skills.',
       skills: 'Specialists such as research and focused security review, loaded when a task needs one.',
-      principles: 'Rules of judgment such as deep modules, read only when they apply.',
       oracle: 'A check outside the agent that can disprove completion.',
     },
   }),
   brief: (facts) => ({
     title: 'Every handoff gets a brief.',
     intro: `When work goes to a subagent, the misty skill lists ${facts.fields} fields for its brief.`,
-    // One body per briefing-contract field in skills/misty/SKILL.md, in its order.
+    // One body per brief field in skills/misty/SKILL.md, in its order.
     fields: {
       'Outcome and why': 'The change the consumer gets, with links to its sources.',
       Terms: "The project's own words for the work, from its DOMAIN.md.",
       'Raw material': 'The failing run, logs, data or source to start from, rather than a summary of them.',
       Oracle: 'The check outside the worker that proves the result, with the exact command.',
-      'Scope and Keep': 'The change this worker owns, and the behavior that must remain.',
-      Effort: 'How much judgment the unit needs, its rigor tier, and the fan-out that tier permits.',
+      'Scope and keep': 'The change this worker owns, and the behavior that must remain.',
+      Effort: 'How much judgment the unit needs, and its rigor tier.',
+      Return: 'What ran and what it showed, what was not covered, and every decision the worker made.',
     },
   }),
   evidence: (facts) => ({

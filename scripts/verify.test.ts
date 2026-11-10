@@ -21,7 +21,7 @@ function run(args: string[], code = 0, syncCode = 0) {
 	mkdirSync(bin);
 	for (const [name, body] of [
 		["git", 'case "$1" in rev-parse) printf "fixture-source\\n" ;; esac'],
-		["bun", 'printf "%s\\n" "$*" >> "$VERIFY_TRACE"\ncase "$1" in scripts/sync-pstack.ts) exit "$VERIFY_SYNC_EXIT" ;; *) exit "$VERIFY_EXIT" ;; esac'],
+		["bun", 'printf "%s\\n" "$*" >> "$VERIFY_TRACE"\nexit "$VERIFY_EXIT"'],
 	]) {
 		const path = join(bin, name);
 		writeFileSync(path, `#!/bin/sh\n${body}\n`);
@@ -52,7 +52,7 @@ test("the default and all gates skip native installs while selecting maintained 
 	for (const selection of [[], ["all"]]) {
 		const result = run(selection);
 		expect(result.code).toBe(0);
-		expect(result.args).toEqual(["scripts/sync-pstack.ts --check", "scripts/verify-plugin.ts --lint-only"]);
+		expect(result.args).toEqual(["scripts/verify-plugin.ts --lint-only"]);
 		expect(result.out).toContain("Verification complete: all");
 	}
 });
@@ -61,7 +61,7 @@ test("native install checks remain explicit and forward the no-inference OMP mod
 	for (const flags of [[], ["--strict"], ["--strict", "--lint-only"], ["--model", "fixture/model"]]) {
 		const result = run(["plugin", ...flags]);
 		expect(result.code).toBe(0);
-		expect(result.args).toEqual(["scripts/sync-pstack.ts --check", ["scripts/verify-plugin.ts", ...flags].join(" ")]);
+		expect(result.args).toEqual([["scripts/verify-plugin.ts", ...flags].join(" ")]);
 	}
 });
 
@@ -92,12 +92,5 @@ test("help succeeds without proof and identifies plugin-only options", () => {
 test("a failed maintained suite is the canonical gate's failure", () => {
 	const result = run([], 17);
 	expect(result.code).toBe(17);
-	expect(result.out).not.toContain("Verification complete: all");
-});
-
-test("vendored drift stops the canonical gate before plugin tests or installs", () => {
-	const result = run([], 0, 19);
-	expect(result.code).toBe(19);
-	expect(result.args).toEqual(["scripts/sync-pstack.ts --check"]);
 	expect(result.out).not.toContain("Verification complete: all");
 });

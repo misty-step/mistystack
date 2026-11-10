@@ -11,11 +11,8 @@ import GithubSlugger from 'github-slugger';
 import { parseDocument } from 'yaml';
 import { blobUrl, encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 import { historicalSources } from './historical-sources.mjs';
-
-import { isPstackTemplateTarget, readPstackLock } from '../../../scripts/pstack-lock.mjs';
 import { readSkillLocks } from '../../../scripts/skill-locks.mjs';
 
-const { lock: pstack, vendoredSkills, vendoredSources, upstreamOnly } = readPstackLock(repoRoot);
 const upstreams = readSkillLocks(repoRoot);
 if (upstreams.errors.length > 0) throw new Error(upstreams.errors.join('\n'));
 const markdown = unified().use(remarkParse).use(remarkGfm);
@@ -44,22 +41,16 @@ function routeFor(id, data) {
     return `/evals/${data.id}/`;
   }
   if (id.startsWith('skills/misty/harnesses/')) return `/install/${path.basename(id, '.md')}/`;
-  if (id.startsWith('skills/poteto-mode/playbooks/')) return `/library/playbooks/${path.basename(id, '.md')}/`;
   const skill = /^skills\/([^/]+)\/(.+)\.md$/.exec(id);
-  if (skill) {
-    if (skill[1].startsWith('principle-') && skill[2] === 'SKILL') return `/library/principles/${skill[1].slice(10)}/`;
-    return `/library/skills/${skill[1]}/${skill[2] === 'SKILL' ? '' : `${skill[2]}/`}`;
-  }
+  if (skill) return `/library/skills/${skill[1]}/${skill[2] === 'SKILL' ? '' : `${skill[2]}/`}`;
   return `/${id.replace(/\.md$/, '')}/`;
 }
 
 function kindFor(id) {
   if (id === 'rules/core.md') return 'Core';
   if (id === 'skills/misty/SKILL.md') return 'Mode';
-  if (/^skills\/principle-[^/]+\/SKILL\.md$/.test(id)) return 'Principles';
   if (/^skills\/[^/]+\/SKILL\.md$/.test(id)) return 'Skills';
   if (id.startsWith('skills/misty/harnesses/')) return 'Install';
-  if (id.startsWith('skills/poteto-mode/playbooks/')) return 'Playbooks';
   if (id === 'skills/foundation/checklist.md') return 'Foundation';
   if (id.startsWith('skills/')) return 'Supporting documents';
   if (id.startsWith('docs/evals/')) return 'Evals';
@@ -91,8 +82,7 @@ function validateMetadata(doc) {
     }
     if (data.name !== doc.id.split('/')[1]) throw new Error(`${doc.id}: name must match its installed directory`);
     const locked = upstreams.files.get(doc.id);
-    const upstream = vendoredSkills.get(doc.id) ?? (locked && `${locked.repo}: ${locked.source}`);
-    if (!upstream) {
+    if (!locked) {
       for (const key of ['owner', 'prevents', 'source', 'sunset']) {
         if (typeof data.metadata?.[key] !== 'string' || !data.metadata[key].trim()) throw new Error(`${doc.id}: metadata.${key} must be a nonempty string`);
       }
@@ -106,11 +96,7 @@ function validateMetadata(doc) {
     }
     doc.skill = {
       name: data.name, description: data.description,
-      ...(upstream ? {
-        vendored: true, source: upstream,
-        pack: locked?.label ?? 'pstack',
-        provenanceUrl: blobUrl(locked?.lock ?? 'vendor/pstack.lock.json'),
-      } : data.metadata),
+      ...(locked ? { vendored: true, source: `${locked.repo}: ${locked.source}`, pack: locked.label, provenanceUrl: blobUrl(locked.lock) } : data.metadata),
       disableModelInvocation: data['disable-model-invocation'] === true,
     };
   }
@@ -203,14 +189,6 @@ function resolveTarget(doc, href, node, graph, image = false) {
       node.children.push(literal(` (archived source ${archive.commit.slice(0, 7)})`));
       return `${repositoryUrl}/blob/${archive.commit}/${encodePath(target)}${query}${fragment ? `#${fragment}` : ''}`;
     }
-    if (vendoredSources.has(doc.id) && !href.startsWith('/')) {
-      const source = vendoredSources.get(doc.id);
-      const upstream = path.posix.normalize(path.posix.join(path.posix.dirname(source), decodeURIComponent(queryAt < 0 ? beforeHash : beforeHash.slice(0, queryAt))));
-      if (upstreamOnly.some((source) => upstream === source || upstream.startsWith(`${source}/`))) {
-        const kind = upstreamOnly.includes(upstream) && !upstream.endsWith('.md') ? 'tree' : 'blob';
-        return `https://github.com/${pstack.repo}/${kind}/${pstack.commit}/pstack/${encodePath(upstream)}${query}${fragment ? `#${fragment}` : ''}`;
-      }
-    }
     if (!existsSync(absolute)) sourceFailure(doc, node, `missing internal target: ${href} (${target})`);
     if (!realpathSync(absolute).startsWith(`${realpathSync(repoRoot)}${path.sep}`) && realpathSync(absolute) !== realpathSync(repoRoot)) sourceFailure(doc, node, `link escapes repository: ${href}`);
     if (statSync(absolute).isDirectory()) {
@@ -245,13 +223,6 @@ function decorateHtml(doc, graph) {
   visit(doc.hast, 'element', (node, index, parent) => {
     const properties = node.properties ?? {};
     if (node.tagName === 'a' && typeof properties.href === 'string') {
-      if (vendoredSources.has(doc.id) && isPstackTemplateTarget(doc.id, properties.href)) {
-        node.tagName = 'code';
-        node.children = [literal(`[${text(node)}](${properties.href})`)];
-        delete properties.href;
-        addClass(node, 'sp-code-inline');
-        return;
-      }
       if (properties.href.startsWith('omp://')) {
         node.children.push(literal(' (Open in OMP)'));
         properties.title = 'Open in OMP';
@@ -320,14 +291,13 @@ export async function createGraph(entries) {
       // Upstream templates use <placeholder> headings; render them as text.
       visit(ast, 'heading', (node) => { node.children = node.children.map((child) => child.type === 'html' ? literal(child.value) : child); });
     }
-    let h1 = upstreams.files.has(id) && id.endsWith('/SKILL.md') ? undefined : ast.children.find((node) => node.type === 'heading' && (node.depth === 1 || kind === 'Playbooks' && vendoredSources.has(id)));
-    if (!h1 && (vendoredSources.has(id) || upstreams.files.has(id))) {
+    let h1 = upstreams.files.has(id) && id.endsWith('/SKILL.md') ? undefined : ast.children.find((node) => node.type === 'heading' && node.depth === 1);
+    if (!h1 && upstreams.files.has(id)) {
       const title = typeof parsed.data.name === 'string' ? parsed.data.name : path.basename(id, '.md').replaceAll('-', ' ');
       h1 = { type: 'heading', depth: 1, children: [literal(title)] };
       ast.children.unshift(h1);
     }
     if (!h1) throw new Error(`${id}: a document needs an H1 title`);
-    h1.depth = 1; // Normalize the rendered title, not the vendored source bytes.
     const doc = {
       id, raw, ...parsed, ast, hast: await toHtml.run(ast), title: text(h1),
       kind, url: routeFor(id, parsed.data), headings: [],
@@ -349,15 +319,6 @@ export async function createGraph(entries) {
         label: text(item.children[0]?.children?.find((node) => node.type === 'strong') ?? item).replace(/\.$/, ''),
         id: `article-${list.start + index}`,
       })));
-    }
-    if (doc.kind === 'Playbooks') {
-      doc.playbook = {
-        steps: ast.children.filter((node) => node.type === 'list' && node.ordered).flatMap((list) => list.children.map((item, index) => ({
-          number: list.start + index, text: text(item),
-          completeWhen: /Complete when:\s*([\s\S]+)/.exec(text(item))?.[1] ?? null,
-        }))),
-        sourceText: text(ast.children.findLast((node) => node.type === 'paragraph' && text(node).startsWith('Source:')) ?? { value: '' }),
-      };
     }
     visit(ast, 'code', (node) => {
       if (!doc.command && /^(?:sh|bash|shell)$/.test(node.lang ?? '')) doc.command = { value: node.value, line: node.position.start.line + parsed.offset };
@@ -387,5 +348,5 @@ export async function createGraph(entries) {
   return graph;
 }
 
-export const catalogKinds = ['Skills', 'Principles', 'Playbooks', 'Mode', 'Core'];
+export const catalogKinds = ['Skills', 'Mode', 'Core'];
 export const publicRoutes = (graph) => ['/', '/library/', '/evals/', '/search/', ...graph.documents.map((doc) => doc.url)];

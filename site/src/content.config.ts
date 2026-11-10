@@ -8,7 +8,6 @@ const repository = defineCollection({
     base: new URL('../../', import.meta.url),
     pattern: [
       'skills/**/*.md',
-      '!skills/statechart/scripts/test/corpus/**',
       'rules/core.md',
       'docs/**/*.md',
       '!docs/decisions/0000-template.md',

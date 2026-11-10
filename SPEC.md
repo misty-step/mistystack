@@ -1,8 +1,8 @@
 # Mistystack specification
 
 Mistystack gives engineers and coding agents one maintained engineering method.
-A small always-on core routes work to pstack's baseline procedures and Misty's
-remaining deltas. [USER_STORIES.md](USER_STORIES.md) owns the method's consumer
+A small always-on core stands alone for small work and routes the rest to one
+self-contained mode page and its task skills. [USER_STORIES.md](USER_STORIES.md) owns the method's consumer
 stories and detailed acceptance criteria. [DOMAIN.md](DOMAIN.md) owns its vocabulary.
 Product intent lives in Linear and changes in GitHub pull requests. Git-native
 task state can support session pickup and decision trails without becoming a
@@ -13,7 +13,7 @@ second backlog.
 Consumers install and refresh one content tree through the destination harness's
 native mechanism, preserve unrelated runtime state, and obtain that harness's
 own installation and fresh-session loading proof. The method exposes its core,
-Misty routing, principle leaves, playbooks, task skills and real-consumer proof
+the Misty mode page, its principles, task skills and real-consumer proof
 as specified in US-057 through US-061 and the other maintained
 [consumer stories](USER_STORIES.md). Runtime and model configuration, isolation
 providers and private fleet machinery do not become a second copy of the method.
@@ -50,8 +50,8 @@ snapshot-backed Boat worker per slice with idle stop/resume and final deletion.
 - Guide, Library and Evals are primary reading destinations. Foundation and
   Decisions are directly discoverable; stories, domain, exemplars, attribution,
   changelog and source links remain reachable.
-- The library exposes every canonical core, mode, principle, playbook and task
-  skill, including leaves hidden from automatic model discovery and supporting
+- The library exposes the canonical core, mode and every task
+  skill, including skills hidden from automatic model discovery and supporting
   Markdown documents. A skill shows its exact installed name and trigger.
   Misty-authored skills also show prevented failure, owner, provenance and
   review/sunset date; vendored skills show upstream provenance from the lock
@@ -126,4 +126,5 @@ The bounded skill-finder runtime is recorded in
 [ADR 0023](docs/decisions/0023-live-verification-and-release-gate.md) records the
 current delivery, supervision and worker-lifecycle decision. It supersedes the
 corresponding provisions of [ADR 0022](docs/decisions/0022-pstack-governs-owner-rulings.md)
-and earlier delivery instructions; pstack remains the baseline elsewhere.
+and earlier delivery instructions. [ADR 0026](docs/decisions/0026-one-page-method.md)
+makes the mode one page and removes the vendored pstack baseline.

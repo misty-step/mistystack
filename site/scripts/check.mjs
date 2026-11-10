@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
-import { readPstackLock } from '../../scripts/pstack-lock.mjs';
+import { readSkillLocks } from '../../scripts/skill-locks.mjs';
 import astroConfig from '../astro.config.mjs';
 
 // Check the artifact, not Astro's source graph: a valid source link can still be
@@ -167,7 +167,6 @@ function checkLink(value, base, label) {
 
 function publicSource(source) {
   if (!nonempty(source) || source.includes('\\') || source.split('/').some((part) => !part || part === '.' || part === '..' || part.startsWith('.'))) return false;
-  if (source.startsWith('skills/statechart/scripts/test/corpus/')) return false;
   if (!/\.(md|json)$/.test(source)) return false;
   return /^(docs|skills)\//.test(source) || source === 'rules/core.md' || /^(README|DOMAIN|USER_STORIES|ATTRIBUTION|CHANGELOG|CONTRIBUTING|FOUNDATIONS|SPEC)\.md$/.test(source);
 }
@@ -231,7 +230,6 @@ async function main() {
   for (const [file, bytes] of files) {
     if (/\.(html|svg)$/.test(file)) pages.set(file, parseHTML(file, bytes.toString('utf8')));
   }
-  for (const file of pages.keys()) expect(!file.startsWith('library/skills/statechart/scripts/test/corpus/'), `${file}: test corpus must not be published as a library page`);
   for (const line of (files.get('_redirects')?.toString('utf8') ?? '').split('\n')) {
     const clean = line.trim();
     if (!clean || clean.startsWith('#')) continue;
@@ -282,9 +280,6 @@ async function main() {
     const recovery = pages.get('404.html')?.links.some(({ value }) => /^\/(search|library)\/(?:[?#]|$)/.test(value));
     expect(recovery, '404.html: must link to search or library recovery');
   }
-  const installHTML = required('install/index.html')?.toString('utf8');
-  const chooser = installHTML?.match(/<nav\b[^>]*aria-label="Choose your harness"[^>]*>[\s\S]*?<\/nav>/)?.[0];
-  expect(chooser && !chooser.includes('/install/pstack-names/'), 'install/index.html: the shared pstack names map is documentation, not an installable harness');
 
   const index = json('content-index.json');
   expect(Array.isArray(index) && index.length > 0, 'content-index.json: expected a nonempty document array');
@@ -336,13 +331,15 @@ async function main() {
       } catch (error) { fail(`${label}: cannot read canonical source: ${error.message}`); }
     }
   }
-  const { lock: pstack, vendoredSkills } = readPstackLock(root);
-  for (const id of vendoredSkills.keys()) {
+  const upstreams = readSkillLocks(root);
+  for (const error of upstreams.errors) fail(error);
+  for (const id of upstreams.vendoredSkills) {
+    const locked = upstreams.files.get(id);
     const doc = byId.get(id);
     expect(doc, `${id}: vendored skill is missing from the published library`);
-    const html = doc && files.get(`${doc.url.slice(1)}index.html`)?.toString('utf8');
-    expect(html?.includes('Vendored pstack.'), `${id}: upstream provenance must be disclosed`);
-    expect(html?.includes(`https://github.com/misty-step/mistystack/blob/${expectedCommit}/vendor/pstack.lock.json`), `${id}: provenance must link to the checked lock`);
+    const html = doc && decode(files.get(`${doc.url.slice(1)}index.html`)?.toString('utf8') ?? '');
+    expect(html?.includes(`Vendored ${locked.label}.`), `${id}: upstream provenance must be disclosed`);
+    expect(html?.includes(`https://github.com/misty-step/mistystack/blob/${expectedCommit}/${locked.lock}`), `${id}: provenance must link to the checked lock`);
     expect(html && !/<dt[^>]*>(Owner|Prevents|Review date)<\/dt>/.test(html), `${id}: do not invent Misty metadata for upstream`);
     const raw = await readFile(path.join(root, id), 'utf8');
     if (!/^#{1,6}\s/m.test(raw)) {
@@ -350,13 +347,6 @@ async function main() {
       expect(doc?.title === name, `${id}: a headingless vendored skill must use its installed name as the page title`);
       expect(doc?.headings.some((heading) => heading.depth === 1 && heading.label === name), `${id}: the generated title must be shareable`);
     }
-  }
-  for (const entry of pstack.include.filter((entry) => entry.vendored && entry.source.startsWith('skills/poteto-mode/playbooks/'))) {
-    const doc = byId.get(entry.destination);
-    expect(doc?.kind === 'Playbooks', `${entry.destination}: vendored playbook is missing from the published library`);
-    const page = doc && pages.get(`${doc.url.slice(1)}index.html`);
-    expect(page?.tags.filter(({ name }) => name === 'h1').length === 1, `${entry.destination}: render one page title without rewriting the source heading`);
-    expect(['skills/misty/SKILL.md', 'skills/poteto-mode/SKILL.md', 'skills/misty/harnesses/pstack-names.md'].some((id) => byId.get(id)?.outboundLinks.includes(entry.destination)), `${entry.destination}: Misty or its names adapter must route to the vendored playbook`);
   }
   for (const doc of documents.filter((value) => value && typeof value === 'object')) {
     if (doc.parentId !== null) expect(byId.has(doc.parentId), `${doc.id}: unknown parentId ${doc.parentId}`);
@@ -436,7 +426,6 @@ function checkPagefind(documents) {
         const file = `pagefind/fragment/${hash}.pf_fragment`;
         const fragment = JSON.parse(unpack(file).toString('utf8'));
         expect(nonempty(fragment.content), `${file}: empty indexed content`);
-        expect(!new URL(fragment.url, origin).pathname.startsWith('/library/skills/statechart/scripts/test/corpus/'), `${file}: test corpus must not enter Pagefind`);
         const resolved = checkLink(fragment.url, '/', file);
         const url = resolved ? route(resolved.file) : fragment.url;
         for (const anchor of fragment.anchors ?? []) checkLink(`${fragment.url}#${encodeURIComponent(anchor.id)}`, '/', `${file} anchor`);

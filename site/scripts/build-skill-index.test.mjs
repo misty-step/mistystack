@@ -12,7 +12,6 @@ const { buildSkillIndex } = await import('../src/lib/skill-index-build.mjs');
 const REVISION = 'b'.repeat(40);
 const CATALOG_SHA = 'c'.repeat(40);
 const SUBDIR_SHA = 'd'.repeat(40);
-const PSTACK_COMMIT = 'e'.repeat(40);
 const POCOCK_COMMIT = '1'.repeat(40);
 const WARP_COMMIT = '2'.repeat(40);
 const roots = [];
@@ -71,16 +70,9 @@ function fixture() {
   const catalog = (...plugins) => put('.omp-plugin/marketplace.json', JSON.stringify({
     name: 'mistystack', owner: { name: 'Fixture' }, plugins: [{ name: 'mistystack', source: './' }, ...plugins],
   }));
-  const beta = skill('beta', 'Vendored pstack body.');
   const gamma = skill('gamma', 'Vendored Pocock body.');
   put('skills/alpha/SKILL.md', skill('alpha', 'Repository body.'));
-  put('skills/beta/SKILL.md', beta);
   put('skills/gamma/SKILL.md', gamma);
-  put('vendor/pstack.lock.json', JSON.stringify({
-    repo: 'cursor/plugins', commit: PSTACK_COMMIT, tree: 'f'.repeat(40),
-    include: [{ source: 'skills/beta', destination: 'skills/beta', vendored: true }],
-    exclude: [], files: { 'skills/beta/SKILL.md': sha256(beta) }, executables: [],
-  }));
   put('vendor/pocock.lock.json', JSON.stringify({
     repo: 'mattpocock/skills', commit: POCOCK_COMMIT,
     skills: { 'skills/gamma': 'skills/productivity/gamma' }, files: { 'skills/gamma/SKILL.md': sha256(gamma) },
@@ -103,7 +95,7 @@ test('indexes repository and pinned catalog skills with provenance and invocatio
   const entry = (id) => index.skills.find((candidate) => candidate.id === id);
   assert.equal(index.revision, REVISION);
   assert.deepEqual(index.skills.map((candidate) => candidate.id), [
-    'Warp:merge-risk', 'catalog-a:alpha', 'catalog-b:delta', 'catalog-b:epsilon', 'mistystack:alpha', 'pocock:gamma', 'pstack:beta',
+    'Warp:merge-risk', 'catalog-a:alpha', 'catalog-b:delta', 'catalog-b:epsilon', 'mistystack:alpha', 'pocock:gamma',
   ]);
   assert.deepEqual(entry('catalog-a:alpha'), {
     id: 'catalog-a:alpha', name: 'alpha', pack: 'catalog-a', pin: CATALOG_SHA, description: 'alpha description.',
@@ -113,7 +105,6 @@ test('indexes repository and pinned catalog skills with provenance and invocatio
     url: `https://github.com/acme/skills/blob/${CATALOG_SHA}/skills/alpha/SKILL.md`,
   });
   assert.deepEqual(entry('catalog-b:epsilon').source, { pack: 'catalog-b', pin: SUBDIR_SHA, repository: 'https://github.com/acme/mono', path: 'plugins/b/extra/epsilon/SKILL.md' });
-  assert.deepEqual(entry('pstack:beta').source, { pack: 'pstack', pin: PSTACK_COMMIT, repository: 'https://github.com/cursor/plugins', path: 'pstack/skills/beta/SKILL.md' });
   assert.deepEqual(entry('pocock:gamma').source, { pack: 'pocock', pin: POCOCK_COMMIT, repository: 'https://github.com/mattpocock/skills', path: 'skills/productivity/gamma/SKILL.md' });
   assert.deepEqual(entry('Warp:merge-risk').source, { pack: 'Warp', pin: WARP_COMMIT, repository: 'https://github.com/warpdotdev/common-skills', path: '.agents/skills/merge-risk/SKILL.md' });
   assert.deepEqual(entry('mistystack:alpha').invoke, { skill: '/skill:alpha', install: null });
