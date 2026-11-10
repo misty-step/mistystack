@@ -18,6 +18,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 - [Robert C. Martin — The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): keep business policy independent of framework and persistence; exchange simple structures across boundaries.
 - [Boris Cherny — Claude Code best practices](https://www.anthropic.com/research/claude-code-best-practices): reusable workflows, independent challenge and real verification feedback. This authored historical essay is no longer maintained; use current documentation for commands.
 - [Peter Steinberger — Shipping at Inference-Speed](https://steipete.me/posts/2025/shipping-at-inference-speed): scriptable CLIs that let agents act and verify, with human architectural judgment; his solo workflow is not a universal concurrency policy.
+- [Brian Armstrong on lead agents and one review queue](https://x.com/brian_armstrong/status/2119112609223827547): every decision that needs the owner arrives in one prioritized queue, with screenshots and a video per product review, and his corrections are distilled so later drafts need fewer. Standing leads already map to [Orchestrate](../skills/poteto-mode/playbooks/orchestrate.md) and [watchdog](../skills/watchdog/SKILL.md), and corrections to [correct](../skills/correct/SKILL.md). The queue is fleet runtime that belongs to workstation. His human review of every change is not adopted; [ship-loop](../skills/ship-loop/SKILL.md) keeps author-run proof.
 
 ## Codebases
 
