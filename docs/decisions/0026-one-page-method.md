@@ -1,6 +1,6 @@
 # 0026: The method is one page; pstack is not vendored
 
-Status: proposed, 2026-11-10. Unproven until the comparison under Consequences runs.
+Status: accepted, 2026-11-10.
 Supersedes [0021](0021-pstack-is-the-foundation.md) and the "pstack governs" rule of
 [0022](0022-pstack-governs-owner-rulings.md). The owner's rulings recorded in 0022,
 [0023](0023-live-verification-and-release-gate.md) and
@@ -40,6 +40,11 @@ No comparison supported the layered tree. The
 [kernel trial](../evals/2026-10-28-kernel-trial.md) predates pstack adoption and
 ran on another model, and 0021 waived the empirical gate.
 
+Phaedrus, later on 2026-11-10, on whether to hold this for a comparison: "I
+don't want us to do too much thumb twiddling on evals. I want to just go with
+whatever the research suggests and whatever your judgment suggests, and err on
+the side of simplicity."
+
 ## Decision
 
 The mode is one self-contained page, [misty](../../skills/misty/SKILL.md), with no
@@ -62,6 +67,18 @@ repoints them and removes instructions the guide identifies as harmful.
 
 Rigor roles on Claude Code inherit the session's model and vary effort.
 
+All four native adapters stay. [MIS-867](https://linear.app/misty-step/issue/MIS-867)
+planned an OMP-only cutover; since then the factory's twelve-trial harness
+comparison ran Prime, Codex, pi and Claude Code, and the factory default is not
+OMP. The adapters are a dozen small files and the harness in use changes faster
+than they do. MIS-867's catalog half is already on `master`; pstack is not added
+to that catalog.
+
+Method changes ship on evidence and judgment. Agent-design's three-arm
+comparison is a tool for a disputed or expensive call, not a gate on every edit.
+This replaces Daybook decision 6's rule that every slimming be a three-arm
+comparison.
+
 ## Consequences
 
 - The load path for a nontrivial task falls from about 53 KB to about 13 KB, and
@@ -72,14 +89,8 @@ Rigor roles on Claude Code inherit the session's model and vary effort.
 - Upstream improvements to pstack no longer arrive by sync. Reading it is now a
   deliberate act, recorded in exemplars.
 - Removed public pages redirect to their nearest maintained page.
-- **Unproven.** Daybook decision 6 requires every slimming to beat both the old
-  instructions and none. That comparison has not run: it needs real task bases
-  and stored traces ([MIS-889](https://linear.app/misty-step/issue/MIS-889),
-  [MIS-890](https://linear.app/misty-step/issue/MIS-890)). Run
-  [agent-design's instruction eval](../../skills/agent-design/SKILL.md#instruction-eval)
-  with this tree, the tree at `c750ff4` and no instructions, on Fable 5.2 at
-  `high` and `medium` and on the factory's default model. Keep this decision
-  only if it wins under the rule fixed before the runs.
-- Revisit if that comparison favors the layered tree, if a removed procedure's
+- No behavioral comparison backs this change, by the owner's ruling above. The
+  evidence is the vendor's measured guidance and a reading of the tree.
+- Revisit if a removed procedure's
   absence shows up as a repeated correction, or if a later model changes what
   needs saying.

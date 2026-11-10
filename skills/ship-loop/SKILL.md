@@ -27,8 +27,11 @@ Use [boat-workers](../boat-workers/SKILL.md) for one snapshot-backed worker per
 slice and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
 
 Implement the smallest complete change. Migrate every caller and delete obsolete
-paths. Record `Story: <IDs|none>` and `Rigor: <tier> — <changed-path risk>` in the
-PR, with its observed proof. The PR record's **Merge Danger** section carries
+paths. Open the PR body with a one-sentence `## Why` in the user's terms. Record
+`Story: <IDs|none>`, `Rigor: <tier> — <changed-path risk>`, the observed proof and
+`Unproved: <claims|none>`, and close the owning issue with `Fixes MIS-<n>`. A change
+that cannot be undone after release (a migration, a deletion, a published
+contract) is standard rigor or higher and carries its rollback or restore proof. The PR record's **Merge Danger** section carries
 [merge-risk](../merge-risk/SKILL.md)'s output: the overall verdict and every
 per-category verdict with its risk-increasing gaps. A generator-only release PR
 contains only generator output and needs no invented product story.

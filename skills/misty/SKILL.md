@@ -114,7 +114,7 @@ The same rules cover pull requests, commit messages, documents and comments in t
 | A security review | [security-audit](../security-audit/SKILL.md) |
 | Opening a pull request, merging, releasing | [ship-loop](../ship-loop/SKILL.md), [merge-risk](../merge-risk/SKILL.md) |
 | Git conflicts | [resolve-merge-conflicts](../resolve-merge-conflicts/SKILL.md), run from its installed skill directory |
-| A deployment or a live break | [release-watch](../release-watch/SKILL.md) |
+| A deployment, a live break or any material incident | [release-watch](../release-watch/SKILL.md) |
 | Builds, suites and browser QA on isolated machines | [boat-workers](../boat-workers/SKILL.md) |
 | Running agents to supervise | [watchdog](../watchdog/SKILL.md) |
 | Looking back on a session | [retro](../retro/SKILL.md), with the [shaping facts](shaping.md#looking-back) |

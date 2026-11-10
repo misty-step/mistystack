@@ -8,7 +8,8 @@ Records explain trade-offs; current method guidance lives in the
 - [0026](0026-one-page-method.md): the method is one self-contained page and
   pstack is no longer vendored. Supersedes 0021 and the "pstack governs"
   rule of 0022; the owner's rulings in 0022 to 0024 stay in force, restated in
-  the mode. Proposed 2026-11-10, unproven until its three-arm comparison runs.
+  the mode. Keeps all four adapters and makes the three-arm comparison a tool,
+  not a gate.
 - [0025](0025-skill-finder-worker.md): one bounded Jev skill-finder route in the
   existing Worker, with pinned preferred-set content and explicit degradation.
   Supersedes 0018's assets-only restriction for skill discovery.
