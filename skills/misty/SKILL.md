@@ -26,7 +26,7 @@ Read your harness note: [OMP](harnesses/omp.md), [Claude Code](harnesses/claude.
 
 Read [pstack's principle index](../poteto-mode/SKILL.md#principles) and each triggered leaf in full. Misty's extension leaves add:
 
-- [deeper-not-bigger](../principle-deeper-not-bigger/SKILL.md): Scoping or briefing. Grug lens and stronger methods at fixed scope.
+- [deeper-not-bigger](../principle-deeper-not-bigger/SKILL.md): Scoping, briefing or cutting a bloated draft before proof. Grug lens, first-principles rewrite and stronger methods at fixed scope.
 - [deep-modules](../principle-deep-modules/SKILL.md): Designing a module. Small interfaces over hidden complexity.
 - [compose-small-programs](../principle-compose-small-programs/SKILL.md): Designing a new program, command, service or feature that adds a responsibility to an existing program.
 - [nothing-fails-silently](../principle-nothing-fails-silently/SKILL.md): Error paths, fallbacks or telemetry. One explicit terminal outcome.
