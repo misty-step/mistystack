@@ -27,7 +27,9 @@ Use [boat-workers](../boat-workers/SKILL.md) for one snapshot-backed worker per
 slice and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
 
 Implement the smallest complete change. Migrate every caller and delete obsolete
-paths. Open the PR body with a one-sentence `## Why` in the user's terms. Record
+paths. Before proving, [cut the draft](../misty/principles.md#cut-the-draft-before-proof):
+if it accumulated wrappers, parallel state or retained legacy code, rewrite it
+from first principles first. Open the PR body with a one-sentence `## Why` in the user's terms. Record
 `Story: <IDs|none>`, `Rigor: <tier> — <changed-path risk>`, the observed proof and
 `Unproved: <claims|none>`, and close the owning issue with `Fixes MIS-<n>`. A change
 that cannot be undone after release (a migration, a deletion, a published

@@ -19,9 +19,10 @@ The method runs on any harness that reads Agent Skills and an always-on instruct
 1. **Understand.** Say what the user wants and the change you expect to make, then start. Read the source, the failing run and the tracker item themselves; a summary of them is not evidence. A question whose answer you could observe by running something is yours to answer by running it. A question about product intent or preference belongs to the owner: take it to [grilling](../grilling/SKILL.md) under the [shaping facts](shaping.md). If the evidence rules out the change that was asked for, show the evidence and stop that part.
 2. **Make it verifiable.** Before you design, ask how this change can be fully verified, and name the check: the exact command or the real user journey, and what it will show when the change is right and when it is wrong. A design you cannot check is the wrong design. [Verification](../verification/SKILL.md) owns the procedure.
 3. **Build.** Make the smallest complete change: migrate every caller and delete what the change makes obsolete. The [principles](principles.md) describe the taste we hold; read the entry whose trigger matches. When a change does not fit the existing design, neither bolt it on nor widen the task silently. Name the reshape at the start, land it first as its own behavior-preserving slice, then build on it. That reshape is part of the work. Stop only the part whose reshape would break behavior the brief says to keep or reach outside the scope you own; report it as a recommendation with its evidence and finish the rest.
-4. **Prove.** Run the check from step 2 on the built, running product. A unit suite, a mock or a subagent's summary does not replace it.
-5. **Ship.** [Ship-loop](../ship-loop/SKILL.md) owns delivery: the author proves and merges, the release has one gate, and [release-watch](../release-watch/SKILL.md) proves it live.
-6. **Report.** See [Reporting](#reporting).
+4. **Cut the draft.** A first draft records how you found the solution, not the solution. Before proving it, [review it for complexity](principles.md#cut-the-draft-before-proof): delete what the change replaces, collapse parallel controls and state, call existing boundaries directly, and rewrite it from scratch if it is bloated.
+5. **Prove.** Run the check from step 2 on the built, running product. A unit suite, a mock or a subagent's summary does not replace it.
+6. **Ship.** [Ship-loop](../ship-loop/SKILL.md) owns delivery: the author proves and merges, the release has one gate, and [release-watch](../release-watch/SKILL.md) proves it live.
+7. **Report.** See [Reporting](#reporting).
 
 Some tasks have a shape worth naming:
 
