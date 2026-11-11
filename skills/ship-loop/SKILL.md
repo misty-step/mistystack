@@ -27,7 +27,9 @@ Use [boat-workers](../boat-workers/SKILL.md) for one snapshot-backed worker per
 slice and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
 
 Implement the smallest complete change. Migrate every caller and delete obsolete
-paths. Record `Story: <IDs|none>` and `Rigor: <tier> — <changed-path risk>` in the
+paths. Before proving, review the diff with [deeper-not-bigger](../principle-deeper-not-bigger/SKILL.md);
+if the first draft accumulated wrappers, parallel state or retained legacy code,
+rewrite it from first principles first. Record `Story: <IDs|none>` and `Rigor: <tier> — <changed-path risk>` in the
 PR, with its observed proof. The PR record's **Merge Danger** section carries
 [merge-risk](../merge-risk/SKILL.md)'s output: the overall verdict and every
 per-category verdict with its risk-increasing gaps. A generator-only release PR
