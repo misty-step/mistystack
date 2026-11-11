@@ -8,9 +8,14 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
 
 - **Content tree:** the canonical method in open Agent Skills format,
   `skills/<name>/SKILL.md`, with supporting files beside each entry point.
+- **Universal install:** the path that works on any harness: the content tree
+  in the harness's Agent Skills directory and the core in its always-on
+  instruction file. [Any harness](skills/misty/harnesses/any.md) owns it. Every
+  harness is supported through it; none is the reference harness.
 - **Native adapter:** thin integration from this repository that exposes the
   content tree through a harness's own loading and configuration mechanisms,
-  without a custom installer or a second copy of the method.
+  without a custom installer or a second copy of the method. It is a
+  convenience over the universal install, kept where it is cheap and proven.
 - **Core rule:** `rules/core.md`, the always-applied entry point and guardrails
   for sessions using the method.
 - **Mode:** `misty`, the one self-contained page that holds the work loop,

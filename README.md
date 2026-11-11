@@ -25,7 +25,13 @@ Fleet machinery lives in the private `misty-step/workstation` repository.
 
 ## Harness support
 
-Install and refresh through the matching native reference:
+Mistystack works on any harness that reads Agent Skills and an always-on
+instruction file. That covers Cursor, Antigravity, Prime Agent, OpenCode, Gemini
+CLI and others through one path:
+
+- [Any harness](skills/misty/harnesses/any.md): `npx skills add misty-step/mistystack -g`, then the core in `AGENTS.md`.
+
+Four harnesses also have a native plugin that does both steps:
 
 - [OMP](skills/misty/harnesses/omp.md): marketplace plugin and role-backed agents.
 - [Claude Code](skills/misty/harnesses/claude.md): marketplace plugin, core hook and native agents.

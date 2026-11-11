@@ -5,7 +5,7 @@
     "name": "Misty Step"
   },
   "metadata": {
-    "description": "Misty Step's method for OMP agents."
+    "description": "Misty Step's method for coding agents, with pinned companion packs."
   },
   "plugins": [
     {

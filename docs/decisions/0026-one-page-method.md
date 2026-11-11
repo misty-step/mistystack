@@ -67,12 +67,17 @@ repoints them and removes instructions the guide identifies as harmful.
 
 Rigor roles on Claude Code inherit the session's model and vary effort.
 
-All four native adapters stay. [MIS-867](https://linear.app/misty-step/issue/MIS-867)
-planned an OMP-only cutover; since then the factory's twelve-trial harness
-comparison ran Prime, Codex, pi and Claude Code, and the factory default is not
-OMP. The adapters are a dozen small files and the harness in use changes faster
-than they do. MIS-867's catalog half is already on `master`; pstack is not added
-to that catalog.
+No harness is the reference harness. We use Claude Code, Codex, OMP, pi, Prime
+Agent, Antigravity, Cursor and others, and the set changes faster than this
+repository does. The contract is the
+[universal install](../../skills/misty/harnesses/any.md): the content tree in the
+harness's Agent Skills directory and the core in its always-on instruction file.
+The native adapters for Claude Code, Codex, OMP and pi stay as conveniences over
+it. Shared skills name no harness's tools; that detail lives in the harness
+notes. [MIS-867](https://linear.app/misty-step/issue/MIS-867)'s OMP-only cutover
+is withdrawn. Its companion-pack catalog is already on `master` in OMP's
+marketplace file, which stays the one list of pins; other harnesses install each
+pack from its repository at that pin. pstack is not added to it.
 
 Method changes ship on evidence and judgment. Agent-design's three-arm
 comparison is a tool for a disputed or expensive call, not a gate on every edit.

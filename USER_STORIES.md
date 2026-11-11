@@ -71,7 +71,8 @@ Criteria:
    `rigor-standard` and `rigor-critical` through the active harness's authority:
    OMP model roles, Claude agent model fields or Codex user-agent TOML.
 2. Native role agents select the tier where subagents exist; the brief supplies
-   responsibility. pi runs rigor inline without inventing subagents or model roles.
+   responsibility. pi and harnesses on the universal install run rigor inline
+   without inventing subagents or model roles.
 3. Setup preserves unrelated config, credentials and runtime state, resolves
    native shadowing and reads assignments back.
 4. A fresh session proves core loading and role discovery, omits setup from the
@@ -373,7 +374,7 @@ Proof: `skills/foundation/`, plugin lint, site link checks and isolated installe
 
 ## US-065 Shape unsettled intent in every session
 
-When product intent is unsettled, I want every OMP session to offer the same grilling and shaping method, so decisions reach their homes without a per-repository setup.
+When product intent is unsettled, I want every session, on any harness, to offer the same grilling and shaping method, so decisions reach their homes without a per-repository setup.
 
 Criteria:
 1. Installing mistystack makes `grilling` model-discoverable and `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets`, `domain-modeling` and `to-questionnaire` available, with no skill-name collision against mistystack skills.

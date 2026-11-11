@@ -82,13 +82,13 @@ function build(graph) {
   const trial = need(graph, TRIAL);
   const lines = coreLines(core);
 
-  const installCopy = home.install({ inProgress: '' });
+  const installCopy = home.install({ native: '' });
   const tabs = harnesses(graph, installCopy);
   const withCommands = tabs.filter((tab) => tab.lines.length);
   const facts = {
     coreLines: cardinal(lines.length, 'core lines'),
     CoreLines: Cardinal(lines.length, 'core lines'),
-    commandHarnesses: series(withCommands.map((tab) => tab.name)),
+    commandHarnesses: series(withCommands.filter((tab) => tab.id !== 'any').map((tab) => tab.name)),
   };
 
   const skills = graph.documents.filter((doc) => doc.kind === 'Skills');
@@ -128,7 +128,7 @@ function build(graph) {
         limits: round.limits,
         href: trial.url,
       },
-      install: { ...home.install({ inProgress: series(withCommands.filter((tab) => tab.id !== 'omp').map((tab) => tab.name)) }), tabs },
+      install: { ...home.install({ native: series(withCommands.filter((tab) => tab.id !== 'any').map((tab) => tab.name)) }), tabs },
       read: home.read({ chapters: cardinal(chapters, 'guide chapters') }),
     },
     footer: home.footer,

@@ -3,8 +3,10 @@
 Maintain one harness-neutral method tree in Agent Skills format
 (`skills/<name>/SKILL.md`) and thin native adapters from this repository.
 Read [DOMAIN.md](DOMAIN.md) for terms and [USER_STORIES.md](USER_STORIES.md)
-for the affected consumer contract. Native adapters serve OMP, Claude Code, Codex
-and pi; private runtime setup belongs to the workstation plugin.
+for the affected consumer contract. The method must work on every harness we use: Claude Code, Codex, OMP, pi,
+Prime Agent, Antigravity, Cursor and others. [The universal install](skills/misty/harnesses/any.md)
+is the contract; the native adapters for Claude Code, Codex, OMP and pi are
+conveniences on top of it. Private runtime setup belongs to the workstation plugin.
 
 ## Route the change
 
@@ -29,6 +31,8 @@ Edit maintained source, not installed plugin copies. Keep one home per fact;
 migrate callers before deleting an old path. Fleet runtime, credentials, hosts
 and launchers belong to private `misty-step/workstation`. Adapters use
 native harness mechanisms, not a custom installer or duplicated method content.
+Nothing in a shared skill may depend on one harness: tool names, URI schemes and
+configuration belong in `skills/misty/harnesses/`.
 The method is one page with no base document beneath it
 ([ADR 0026](docs/decisions/0026-one-page-method.md)); add to a task skill or a
 sibling file before adding to [misty](skills/misty/SKILL.md), and check any new

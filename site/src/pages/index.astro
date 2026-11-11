@@ -48,7 +48,7 @@ const { hero, sections: { core, method, brief, evidence, install, read } } = pag
     </section>
 
     <section class="home-section home-split" id="install">
-      <div class="section-head"><h2><HeadlineText text={install.title} /></h2><p class="section-intro">{install.intro.split(install.issue.label)[0]}<a class="sp-link" href={install.issue.href}>{install.issue.label}</a>{install.intro.split(install.issue.label)[1]}</p></div>
+      <div class="section-head"><h2><HeadlineText text={install.title} /></h2><p class="section-intro">{install.intro}</p></div>
       <div class="install">
         <div class="sp-tabs" role="tablist" aria-label="Choose your harness">{install.tabs.map((tab, index) => (
           <button type="button" role="tab" class="sp-tab" id={`install-tab-${tab.id}`} aria-controls={`install-panel-${tab.id}`} aria-selected={String(index === 0)} tabindex={index === 0 ? 0 : -1}>{tab.name}</button>

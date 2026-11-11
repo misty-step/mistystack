@@ -1,10 +1,9 @@
 # Mistystack guide
 
 Misty Step's harness-neutral method: one content tree in Agent Skills format
-(`skills/<name>/SKILL.md`), exposed through thin native adapters from this
-repository. OMP shipped first; other adapters and their proofs are tracked by
-[#591](https://github.com/misty-step/mistystack/issues/591), not claimed as shipped
-here. Work through [misty](../../skills/misty/SKILL.md); each project keeps its own
+(`skills/<name>/SKILL.md`), installed on any harness that reads Agent Skills and an
+always-on instruction file. Claude Code, Codex, OMP and pi also have a native
+plugin from this repository. Work through [misty](../../skills/misty/SKILL.md); each project keeps its own
 intent, decisions and proof.
 
 1. [Install and setup](01-install-and-setup.md)

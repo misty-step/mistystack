@@ -18,7 +18,7 @@ export const home = {
     sub: `mistystack is Misty Step's open method for coding agents. Its core is ${facts.coreLines} lines long and loads in every session. Misty routes each task to specialist skills.`,
     primary: { label: 'Install for your harness', href: '#install' },
     secondary: { label: `Read all ${facts.coreLines} lines`, href: '#core' },
-    proof: `Install commands for ${facts.commandHarnesses}.`,
+    proof: `One install for any harness; native plugins for ${facts.commandHarnesses}.`,
   }),
   core: (facts) => ({
     title: `${facts.CoreLines} lines. Every session.`,
@@ -57,17 +57,17 @@ export const home = {
     link: 'Read the trial record and limitations',
   }),
   install: (facts) => ({
-    title: 'Shipped for OMP first.',
-    intro: `The ${facts.inProgress} adapters are in progress (#591). Their commands are here too, copied from each harness's reference file in the repository.`,
-    issue: { label: '#591', href: 'https://github.com/misty-step/mistystack/issues/591' },
+    title: 'Works on any harness.',
+    intro: `One command installs the skills on any agent that reads Agent Skills; the core goes in AGENTS.md. ${facts.native} also have a native plugin. Each command is copied from that harness's reference file in the repository.`,
     copy: 'Copy',
     copied: 'Copied',
     copyFailed: 'Select the command to copy',
     // Tab order and one note per harness reference with an installation command.
     harnesses: {
-      omp: 'Start a fresh OMP session.',
+      any: 'Cursor, Antigravity, Prime Agent and others. Then add the core to AGENTS.md.',
       claude: 'Start a fresh session after installing.',
       codex: 'Review and trust the native SessionStart hook. Rigor agents are installed separately.',
+      omp: 'Start a fresh OMP session.',
       pi: 'Rigor runs inline; pi has no native subagent mechanism.',
     },
     source: 'Source:',

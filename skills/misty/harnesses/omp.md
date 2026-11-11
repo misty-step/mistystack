@@ -94,6 +94,21 @@ Use [watchdog](../../watchdog/SKILL.md) to supervise open-ended tasks through
 budgets must not force wrap-up or termination; inspect the destination OMP
 configuration when a run stops without meeting its brief.
 
+## Supervise agents
+
+- Read `proc://` to enumerate jobs and agents, then `proc://<id>` for the owned
+  agent's state and output. Read `history://<id>` for the actual tool actions;
+  an `agent://<id>` summary is a lead, not completion proof.
+- Steer with `write` to `agent://<id>` using the concrete correction. Observe
+  subsequent actions or the real probe to establish whether it took effect.
+- When recovery requires termination, use `write` to `proc://<id>/kill` with no
+  content, targeting the exact owned ID. Confirm termination through native
+  state, then use `task` to respawn with the full self-contained recovery brief.
+  Do not kill unrelated agents or processes.
+- Inspect automatic completion deliveries and artifacts. A `completed` task
+  state means the agent returned; the brief is still owned until its outside
+  check and collection are satisfied.
+
 ## Drive the real UI
 
 Use OMP's browser tool through `eval`. Read its API instructions at

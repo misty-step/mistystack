@@ -6,6 +6,7 @@ metadata:
   prevents: "Installer and file-byte checks reported as loaded method proof; method-plugin cutover #533."
   source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
+  internal: "true"
 ---
 
 # Verify mistystack
