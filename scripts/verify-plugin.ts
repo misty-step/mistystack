@@ -476,8 +476,7 @@ function installedRoot(value: unknown, scratch: string, root?: string) {
 
 function installedContent(root: string, installed: string) {
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
-	const locked = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).lock : undefined;
-	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file), ...readSkillLocks(root).files.keys()]);
+	const files = new Set([...skills, "rules/core.md", ...readSkillLocks(root).files.keys()]);
 	for (const file of files) {
 		const target = join(installed, file);
 		if (!existsSync(target) || !readFileSync(target).equals(readFileSync(join(root, file)))) {
