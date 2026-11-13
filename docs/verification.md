@@ -16,7 +16,7 @@ and plugin structure checks sequentially. Release-only CI runs
 lint, with installation explicitly skipped and no model call.
 Relative links may target files or directories; directory links retain their
 README or source-tree destination rather than becoming false missing-file errors.
-Vendored playbook headings normalize in the rendered tree. A headingless vendored
+A headingless vendored
 skill uses its installed name as the page title; raw source bytes stay unchanged.
 
 The full `plugin` selection installs the candidate in disposable homes through

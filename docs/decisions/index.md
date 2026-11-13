@@ -5,6 +5,11 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0026](0026-one-page-method.md): the method is one self-contained page and
+  pstack is no longer vendored. Supersedes 0021 and the "pstack governs"
+  rule of 0022; the owner's rulings in 0022 to 0024 stay in force, restated in
+  the mode. Keeps all four adapters and makes the three-arm comparison a tool,
+  not a gate.
 - [0025](0025-skill-finder-worker.md): one bounded Jev skill-finder route in the
   existing Worker, with pinned preferred-set content and explicit degradation.
   Supersedes 0018's assets-only restriction for skill discovery.
@@ -18,12 +23,13 @@ Records explain trade-offs; current method guidance lives in the
   shipping and placement provisions and the historical Foundation PR obligations.
 
 - [0022](0022-pstack-governs-owner-rulings.md): pstack governs; Misty keeps only
-  the owner's surviving deltas. Supersedes 0021's method override restrictions
+  the owner's surviving deltas. Its governing rule is superseded by 0026; its
+  rulings remain. Supersedes 0021's method override restrictions
   and 0017's public provider-specific placement rule. Removes the router's
   Git-as-task-state prohibition without superseding 0020.
 
 - [0021](0021-pstack-is-the-foundation.md): pinned wholesale pstack foundation,
-  native mappings and minimal portability patches. [0022](0022-pstack-governs-owner-rulings.md)
+  native mappings and minimal portability patches. Superseded by 0026. [0022](0022-pstack-governs-owner-rulings.md)
   supersedes its method override restrictions, not its vendoring decisions.
 
 - [0020](0020-github-and-linear-replace-entire.md): GitHub hosts code and pull

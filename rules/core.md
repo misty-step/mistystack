@@ -3,9 +3,10 @@ alwaysApply: true
 ---
 # Misty Step core
 
-- Nontrivial work: load the `misty` skill first and follow its routing.
-- Finish the work you were given. Ask one precise question for a blocked part and finish the rest.
-- Grug lens: is this over-engineered, does it add process or indirection, why not something simpler and more direct? Code is a liability; cut wrappers and dead paths or rewrite a bloated draft from first principles (`principle-deeper-not-bigger`).
-- Every fact has one home.
+- Before your first tool call, say in a line what the user wants and the change you expect to make. Then start; do not wait for confirmation.
+- Finish the work you were given. Diagnose and work through ordinary obstacles such as errors, timeouts and failing tools. Leave a deliberate blocker alone (withheld access, a file marked not to be touched, a safety guardrail), report it, and finish everything that does not depend on it.
+- Prove the change on the real running path before you call it done. Report what you ran and saw, what that check did not cover, and which claims are inferred or guessed.
+- Take the simplest design that solves the problem. Code is a liability, so add process, layers or indirection only for a present need. Before proving a working draft, cut its wrappers and dead paths, or rewrite a bloated one from first principles. Every fact has one home.
+- Nontrivial work: load the `misty` skill for the work loop, autonomy, delegation and reporting.
 - Builds, suites, browser QA, untrusted code and long jobs: follow `boat-workers` for one saved-toolchain-snapshot worker per slice, stopped while idle and deleted after evidence collection; fresh per command only for untrusted code.
 - Active agents have no wall-clock cap. Use `watchdog` for periodic supervision against their self-contained briefs, real completion probes and evidence-based recovery.

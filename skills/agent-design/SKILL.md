@@ -10,12 +10,12 @@ metadata:
 
 # Agent design
 
-Use pstack's [correct](../correct/SKILL.md) for recurring agent mistakes and
-[encode-lessons-in-structure](../principle-encode-lessons-in-structure/SKILL.md)
-when a correction can be enforced instead of repeated. Misty keeps the following
-instruction and context contract:
+An instruction is the weakest way to change agent behavior. When a recurring
+mistake can be caught by a lint, type, test or script, [encode the lesson](../misty/principles.md)
+there and write no instruction. For what must stay prose, this is the instruction
+and context contract:
 
-1. **Observe and brief.** Start from corrections, a failing task or usage evidence, not a topic inventory. Reuse a skill whose trigger fits. Misty's briefing contract owns dispatch: give a blank child raw inputs and the outside check, not the parent transcript. Done when the guidance has one behavioral job, an owner and an Oracle that distinguishes it from none, and the child can use the material independently.
+1. **Observe and brief.** Start from corrections, a failing task or usage evidence, not a topic inventory. Reuse a skill whose trigger fits. [Misty's brief](../misty/SKILL.md#the-brief) owns dispatch: give a blank child raw inputs and the outside check, not the parent transcript. Done when the guidance has one behavioral job, an owner and an Oracle that distinguishes it from none, and the child can use the material independently.
 
 2. **Place.** Repository and host standing instructions live in regular `AGENTS.md` files for every supported harness, including fixtures; Claude Code reads them natively. During consolidation, read both instruction files through existing symlinks, reconcile into `AGENTS.md`, then remove obsolete `CLAUDE.md` files or symlinks. Do not introduce new ones. Keep stable local facts and hard guardrails in standing context, task state in the task. Done when each fact has one home and each required document has a trigger-bearing pointer.
 
@@ -25,10 +25,25 @@ instruction and context contract:
 
 5. **Prune.** Use exact terms and precise leading words, not repeated definitions. State targets positively and pair a hard prohibition with the positive action. Cut model-default no-ops, persona, role-play, stale tool facts and copies of structural facts. Keep permissions in tool scope, configuration and credentials; prose is not a security boundary. Prefer native task state to a second ledger. Done when each instruction changes a decision or carries a needed local fact.
 
-6. **Compare and deliver.** Exercise discovery and affected pointers in an isolated installation. Apply [Instruction eval](#instruction-eval); fewer tokens alone are not success. Deliver through ship-loop and retain notices. At sunset, repair drift, consolidate weak triggers or delete ineffective guidance. Done when structural and consumer checks pass and the unit links its comparison and keep/delete decision under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply); untested guidance stays unproven.
+6. **Compare and deliver.** Exercise discovery and affected pointers in an isolated installation. Ship on the evidence you have: the correction that prompted the change, the vendor's guidance for the model in use, and your judgment. Prefer the simpler instruction. Use [Instruction eval](#instruction-eval) when a change is disputed or a wrong call would be expensive, not as a gate on every edit. Deliver through ship-loop and retain notices. At sunset, repair drift, consolidate weak triggers or delete ineffective guidance. Done when structural and consumer checks pass and the unit states its evidence and keep/delete decision under [Misty's reporting rules](../misty/SKILL.md#reporting). Watch the next sessions for the correction recurring.
 
 ## Instruction eval
 
-Use [pstack's eval playbook](../poteto-mode/playbooks/eval.md) for blinding and transcript inspection, replacing its arena phases with native fresh sessions for three arms: current, candidate and no injected instructions. Hold source, inputs, tools, model and limits fixed; vary only instructions. Select six real tasks from the top observed correction classes, with recoverable bases, verbatim requests and outside Oracles; do not invent a missing class. Trial a skill separately only when it replaces a skill actually used by those tasks.
+Run three arms in native fresh sessions: current, candidate and no injected instructions. Blind them: each arm sees an ordinary user request in a project-shaped directory, with no word such as eval, judge, rubric or candidate in any path or prompt, and no hint that other arms exist. Do not ask an arm which instructions it applied; read which files it opened from its transcript and judge the shape of its work. Hold source, inputs, tools, model and limits fixed; vary only instructions. Select six real tasks from the top observed correction classes, with recoverable bases, verbatim requests and outside Oracles; do not invent a missing class. Trial a skill separately only when it replaces a skill actually used by those tasks.
 
-Precommit tasks, repeats, judge-only rubric and promotion rule before runs. Keep arm identities outside candidate context and use neutral paths/labels. Retain complete transcripts, diffs, token usage and Oracle output outside the checkout. One independent blind judge grades sanitized artifacts and actual transcripts without arm/model identities: Oracle pass, net LOC, special cases, taste (domain fit, interface depth, reader load) and tokens, never response length. Missing checks stay unproven. Reveal arms only after grading; retain the candidate only if it beats both current and none under the precommitted rule. Otherwise retain the supported baseline or remove ineffective guidance. Report evidence, uncertainty and decision under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
+Precommit tasks, repeats, judge-only rubric and promotion rule before runs. Keep arm identities outside candidate context and use neutral paths/labels. Retain complete transcripts, diffs, token usage and Oracle output outside the checkout. One independent blind judge grades sanitized artifacts and actual transcripts without arm/model identities: Oracle pass, net LOC, special cases, taste (domain fit, interface depth, reader load) and tokens, never response length. Missing checks stay unproven. Reveal arms only after grading; retain the candidate only if it beats both current and none under the precommitted rule. Otherwise retain the supported baseline or remove ineffective guidance. Report evidence, uncertainty and decision under [Misty's reporting rules](../misty/SKILL.md#reporting).
+
+## Writing for current models
+
+Current frontier models follow instructions closely and literally, so wording that was harmless padding for older models now changes behavior or costs tokens. Check a prompt, skill, `AGENTS.md`, memory file or brief against these before it ships, and again whenever the model changes. Each one is a measured effect in the model vendor's own guidance; [recompile](../recompile/SKILL.md) is the review that re-reads them on a capability jump.
+
+- **Say why.** A rule with its reason and scope gets applied with judgment. A bare absolute gets applied everywhere, including where it does harm.
+- **Put the exception in the rule.** "Do not deploy without the owner's go-ahead" works. "Never deploy", with the exception in another file or a later line, mostly does not.
+- **Name what needs no approval.** A general "act freely" changes nothing. A list of the routine actions that need no approval does.
+- **Say who owns the code.** A repository's `AGENTS.md` states whether it is the agent's to shape or someone else's to change minimally. Silence reads as someone else's, and the agent will add to a structure it should have merged.
+- **Delete delegation mandates.** A line that tells the agent to use subagents will be obeyed on tasks that do not need them. State the cost and the conditions instead, as [Misty's delegation rules](../misty/SKILL.md#delegation) do.
+- **No hard style limits.** Word counts, sentence-length caps and punctuation bans produce choppy prose. Describe the reader and what they need.
+- **Do not ask for reasoning in the reply.** Ask for decisions, evidence and what was not covered. A request to reproduce internal reasoning can be refused outright by the model's safety layer.
+- **Change effort, not adjectives.** "Think carefully" and "answer directly" are no-ops at most effort levels. Set the effort level in harness-native configuration.
+- **Prune what piles up.** Cautions accumulate in notes, memory and messages between agents, some written by agents themselves. Delete the ones whose reason is gone. One stale "never retry" can stop routine recovery.
+- **Do not layer.** One page that says the thing beats a base document plus a list of overrides. The reader has to reconcile them on every task and will sometimes pick the wrong one.

@@ -6,6 +6,7 @@ metadata:
   prevents: "Installer and file-byte checks reported as loaded method proof; method-plugin cutover #533."
   source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
   sunset: "2026-11-27"
+  internal: "true"
 ---
 
 # Verify mistystack
@@ -21,8 +22,8 @@ not evidence that the method loaded.
    source matches the recorded commit.
 2. **Select one proof command.** On the slice's Boat worker, run
    `./scripts/check plugin --strict` when installation/loading is affected,
-   otherwise use `./scripts/check plugin --strict --lint-only`. Both run pinned
-   pstack inventory, strict references and maintained skill, release-protection
+   otherwise use `./scripts/check plugin --strict --lint-only`. Both run upstream skill-lock
+   checks, strict references and maintained skill, release-protection
    and secret-scanner tests. Do not run both selections and duplicate the suites.
    Require exit 0 and retain optional Landmark replay results separately from
    skips. `./scripts/check --help` identifies the maintained flags.
@@ -51,7 +52,7 @@ not evidence that the method loaded.
 4. **Walk the changed contract.** For roles or setup, follow
    [setup-mistystack](../../../skills/setup-mistystack/SKILL.md) in an isolated
    destination; separate native assignment persistence, fresh-session discovery
-   and authorized inference. For changed routing, skills or playbooks, start a
+   and authorized inference. For changed routing or skills, start a
    fresh isolated session, read installed Misty and follow its relative link to
    the affected procedure. Retain actual read-tool events, installed paths and
    the changed instructions, then use that procedure on the authorized real task.
@@ -65,7 +66,7 @@ not evidence that the method loaded.
    structural tests do not establish it.
 5. **Publish proof and merge.** Put the checked source and runtime identities,
    commands, exit statuses, observed postconditions and reader-accessible output
-   on the PR. Follow [pstack's reply rules](../../../skills/poteto-mode/SKILL.md#writing-the-reply);
+   on the PR. Follow [Misty's reporting rules](../../../skills/misty/SKILL.md#reporting);
    list every skipped or unproved criterion. Once the affected real consumer
    path passes, merge without waiting for CI, independent review or a judge.
    Preserve output outside Git. The private workstation repository owns host,

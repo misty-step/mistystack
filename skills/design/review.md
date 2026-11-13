@@ -52,7 +52,7 @@ and can complete the task before polishing.
 ## Review result
 
 For each finding: consumer impact, named state, observed evidence, location and
-smallest repair. Follow [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply); separate code-derived concerns
+smallest repair. Follow [Misty's reporting rules](../misty/SKILL.md#reporting); separate code-derived concerns
 from defects observed on the surface. Keep capture output outside Git. Link the
 checked revision and captures/recordings in the repository's existing evidence channel.
 Required missing coverage prevents a pass.

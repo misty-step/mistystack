@@ -10,7 +10,7 @@ const documents = graph.documents.filter((document) => catalogKinds.includes(doc
   <div class="frame tool">
     <div class="tool-panel">
       <h1 class="page-title"><HeadlineText text="Library" stop /></h1>
-      <p class="lede">The complete method, including principle leaves hidden from automatic model discovery. Supporting documents are linked from each entry.</p>
+      <p class="lede">The complete method. Supporting documents are linked from each entry.</p>
       <form class="sp-card tool-form" action="/library/" method="get" data-catalog-controls hidden>
         <div class="sp-field"><label class="sp-label" for="catalog-q">Find an entry</label><input class="sp-input" id="catalog-q" type="search" name="q" placeholder="Name, trigger or prevented failure" /></div>
         <div class="sp-field"><label class="sp-label" for="catalog-section">Section</label><select class="sp-input" id="catalog-section" name="section"><option value="">All sections ({documents.length})</option>{catalogKinds.map((kind) => <option value={kind}>{kind} ({documents.filter((document) => document.kind === kind).length})</option>)}</select></div>

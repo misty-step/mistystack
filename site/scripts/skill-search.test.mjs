@@ -12,7 +12,7 @@ const env = { OPENROUTER_API_KEY: 'test-key', SKILL_SEARCH_LIMITER: { limit: asy
 test('all indexed skills are judged once within byte and Worker subrequest limits', async () => {
   const index = JSON.parse(await readFile(new URL('../.generated/skill-index.json', import.meta.url), 'utf8'));
   assert.equal(index.coreTextLimitBytes, 8000);
-  assert(index.skills.length > 100);
+  assert(index.skills.length > 0);
   assert.equal(new Set(index.skills.map(skill => skill.id)).size, index.skills.length);
   const batches = batchesFor(index.skills, 'How do I plan a safe data migration?');
   assert(batches.length <= MAX_BATCHES);

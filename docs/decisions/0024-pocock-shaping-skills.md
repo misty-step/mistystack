@@ -28,7 +28,7 @@ root is a `SKILL.md`.
 Vendor the seven skills unchanged from `mattpocock/skills`. `vendor/pocock.lock.json`
 owns the pin, source paths and file hashes; `bun scripts/sync-skills.ts vendor/pocock.lock.json <checkout>`
 regenerates them, and plugin lint rejects edited, missing or unrecorded files.
-[Misty's Shaping section](../../skills/misty/SKILL.md#shaping) routes unsettled
+[Misty's shaping facts](../../skills/misty/shaping.md) routes unsettled
 intent to `grilling` and supplies the facts Pocock's per-repo setup would write:
 the owning tracker from Foundation article 2, its workflow states, `DOMAIN.md`
 and `docs/decisions/`. This supersedes 0022 row 7's "belongs to the owner"

@@ -15,10 +15,10 @@ export const home = {
   navCta: { label: 'Install', href: '#install' },
   hero: (facts) => ({
     headline: 'A method for coding agents.',
-    sub: `mistystack is Misty Step's open method for coding agents, built on pstack. Its core is ${facts.coreLines} lines long and loads in every session. Misty routes each task to playbooks and specialist skills.`,
+    sub: `mistystack is Misty Step's open method for coding agents. Its core is ${facts.coreLines} lines long and loads in every session. Misty routes each task to specialist skills.`,
     primary: { label: 'Install for your harness', href: '#install' },
     secondary: { label: `Read all ${facts.coreLines} lines`, href: '#core' },
-    proof: `Install commands for ${facts.commandHarnesses}.`,
+    proof: `One install for any harness; native plugins for ${facts.commandHarnesses}.`,
   }),
   core: (facts) => ({
     title: `${facts.CoreLines} lines. Every session.`,
@@ -27,28 +27,27 @@ export const home = {
   }),
   method: (facts) => ({
     title: `${facts.Parts} parts. One always on.`,
-    intro: `Only the core loads every time. The misty skill reads each task and routes it to one of ${facts.playbooks} playbooks or a specialist skill, and principles load only when their trigger applies.`,
+    intro: `Only the core loads every time. The misty skill reads each task and routes it to a specialist skill.`,
     // Node order and bodies. Labels and counts come from the repository.
     nodes: {
       core: 'The always-on routing and guardrails.',
-      misty: 'Reads the task and chooses the playbook and skills.',
-      playbooks: (list) => `${list}.`,
+      misty: 'Reads the task and chooses the skills.',
       skills: 'Specialists such as research and focused security review, loaded when a task needs one.',
-      principles: 'Rules of judgment such as deep modules, read only when they apply.',
       oracle: 'A check outside the agent that can disprove completion.',
     },
   }),
   brief: (facts) => ({
     title: 'Every handoff gets a brief.',
     intro: `When work goes to a subagent, the misty skill lists ${facts.fields} fields for its brief.`,
-    // One body per briefing-contract field in skills/misty/SKILL.md, in its order.
+    // One body per brief field in skills/misty/SKILL.md, in its order.
     fields: {
       'Outcome and why': 'The change the consumer gets, with links to its sources.',
       Terms: "The project's own words for the work, from its DOMAIN.md.",
       'Raw material': 'The failing run, logs, data or source to start from, rather than a summary of them.',
       Oracle: 'The check outside the worker that proves the result, with the exact command.',
-      'Scope and Keep': 'The change this worker owns, and the behavior that must remain.',
-      Effort: 'How much judgment the unit needs, its rigor tier, and the fan-out that tier permits.',
+      'Scope and keep': 'The change this worker owns, and the behavior that must remain.',
+      Effort: 'How much judgment the unit needs, and its rigor tier.',
+      Return: 'What ran and what it showed, what was not covered, and every decision the worker made.',
     },
   }),
   evidence: (facts) => ({
@@ -58,17 +57,17 @@ export const home = {
     link: 'Read the trial record and limitations',
   }),
   install: (facts) => ({
-    title: 'Shipped for OMP first.',
-    intro: `The ${facts.inProgress} adapters are in progress (#591). Their commands are here too, copied from each harness's reference file in the repository.`,
-    issue: { label: '#591', href: 'https://github.com/misty-step/mistystack/issues/591' },
+    title: 'Works on any harness.',
+    intro: `One command installs the skills on any agent that reads Agent Skills; the core goes in AGENTS.md. ${facts.native} also have a native plugin. Each command is copied from that harness's reference file in the repository.`,
     copy: 'Copy',
     copied: 'Copied',
     copyFailed: 'Select the command to copy',
     // Tab order and one note per harness reference with an installation command.
     harnesses: {
-      omp: 'Start a fresh OMP session.',
+      any: 'Cursor, Antigravity, Prime Agent and others. Then add the core to AGENTS.md.',
       claude: 'Start a fresh session after installing.',
       codex: 'Review and trust the native SessionStart hook. Rigor agents are installed separately.',
+      omp: 'Start a fresh OMP session.',
       pi: 'Rigor runs inline; pi has no native subagent mechanism.',
     },
     source: 'Source:',

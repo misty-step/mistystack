@@ -38,13 +38,11 @@ plus the shared `rules/core.md`; it does not replace pi's system prompt or copy
 the method into an extension. A package on disk is not proof the extension ran.
 
 Invoke `/skill:misty` or `/skill:<skill-name>`, or read the installed skill. Follow its
-[bug-fix link](../../poteto-mode/playbooks/bug-fix.md) relative to that installed file, not the
+[ship-loop link](../../ship-loop/SKILL.md) relative to that installed file, not the
 working directory or source checkout. pi enforces skill metadata and
-`disable-model-invocation: true`: principle leaves, recompile and setup-mistystack
+`disable-model-invocation: true`: recompile and setup-mistystack
 remain out of automatic model invocation while explicit invocation and installed-file
-reads can reach them. Misty's links reach its extension leaves and pstack's principle
-index, which names upstream leaves rather than linking each one. Open those through
-`/skill:<skill-name>` or their installed `skills/<name>/SKILL.md` files.
+reads can reach them.
 Prove discovery and explicit reachability separately.
 
 ## Rigor inline, without subagents
@@ -82,7 +80,7 @@ output and installed-artifact readback. No-model installation is
 Start a fresh destination session and retain the system-prompt/extension evidence
 that the installed core was appended before the agent ran. Demonstrate Misty
 discovery and actual skill/read events that open installed Misty, follow its
-relative bug-fix link and quote the first step. Check principle-leaf automatic
+relative ship-loop link and quote the first step. Check recompile's automatic
 exclusion and explicit reachability separately. For any claimed model choice,
 retain the actual main-session model identity and authorized task result. Do not
 claim rigor-agent discovery or subagent dispatch in pi; neither is provided.

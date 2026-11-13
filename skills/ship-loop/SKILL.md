@@ -18,19 +18,22 @@ release gate, not a PR or push. Use the owning tracker from
 ## 1. Settle and build the slice
 
 Carry confirmed intent forward. Resolve unsettled product intent with the owner
-through [grilling](../grilling/SKILL.md); [figure-it-out](../figure-it-out/SKILL.md)
-plans execution of a settled outcome. Give the builder
-[Misty's briefing contract](../misty/SKILL.md#briefing-contract), owned paths,
+through [grilling](../grilling/SKILL.md); planning execution of a settled outcome
+is ordinary work under [Misty's loop](../misty/SKILL.md#the-loop). Give the builder
+[Misty's briefing contract](../misty/SKILL.md#the-brief), owned paths,
 a base branch, acceptance criteria and the [risk-appropriate role](roles.md#rigor).
 Keep independently useful slices separate and sequence only genuine dependencies.
 Use [boat-workers](../boat-workers/SKILL.md) for one snapshot-backed worker per
 slice and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
 
 Implement the smallest complete change. Migrate every caller and delete obsolete
-paths. Before proving, review the diff with [deeper-not-bigger](../principle-deeper-not-bigger/SKILL.md);
-if the first draft accumulated wrappers, parallel state or retained legacy code,
-rewrite it from first principles first. Record `Story: <IDs|none>` and `Rigor: <tier> — <changed-path risk>` in the
-PR, with its observed proof. The PR record's **Merge Danger** section carries
+paths. Before proving, [cut the draft](../misty/principles.md#cut-the-draft-before-proof):
+if it accumulated wrappers, parallel state or retained legacy code, rewrite it
+from first principles first. Open the PR body with a one-sentence `## Why` in the user's terms. Record
+`Story: <IDs|none>`, `Rigor: <tier> — <changed-path risk>`, the observed proof and
+`Unproved: <claims|none>`, and close the owning issue with `Fixes MIS-<n>`. A change
+that cannot be undone after release (a migration, a deletion, a published
+contract) is standard rigor or higher and carries its rollback or restore proof. The PR record's **Merge Danger** section carries
 [merge-risk](../merge-risk/SKILL.md)'s output: the overall verdict and every
 per-category verdict with its risk-increasing gaps. A generator-only release PR
 contains only generator output and needs no invented product story.
@@ -41,9 +44,9 @@ contains only generator output and needs no invented product story.
 
 Follow [verification](../verification/SKILL.md). Start the actual app or installed
 artifact and exercise the affected user journey, including its relevant rejection
-and recovery. Use the pstack verification generator when the repository lacks
-that procedure. For ordering, concurrency or durability, use its formal-verification
-generator and retain the properties, assumptions, bounds and proof result.
+and recovery. When the repository lacks that procedure, write it as verification describes.
+For ordering, concurrency or durability, add its formal check and retain the
+properties, assumptions, bounds and proof result.
 Run the narrow affected native checks on the slice's worker; a unit test alone
 is not real-path proof. Fix a failed acceptance criterion and repeat its affected
 path until it works. Record what actually ran and what remains unproved.
@@ -52,8 +55,8 @@ Once that proof passes, squash-merge the PR yourself with a Conventional Commit
 title. Do not request a review, start CI, wait for checks, or add a judge.
 Do not rebase merely because trunk advanced. If the forge reports a conflict,
 merge the target branch into the owned branch, use
-[resolve-merge-conflicts](../resolve-merge-conflicts/SKILL.md) with the
-[installed script path](../misty/harnesses/pstack-names.md#installed-paths), and
+[resolve-merge-conflicts](../resolve-merge-conflicts/SKILL.md), running its script
+from the installed skill directory and not from the working repository, and
 repeat the affected real path before merging. Prefer independent branches to stacked-merge choreography.
 Confirm the PR reads `MERGED` against the intended target; queued is not merged.
 
@@ -92,7 +95,7 @@ when its deliverables are retained. The watchdog ends only after owned work and
 resource cleanup finish, not after elapsed time.
 
 Report the consumer outcome, merged PRs, release, exercised checks and remaining
-blockers under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
+blockers under [Misty's reporting rules](../misty/SKILL.md#reporting).
 Distinguish `merged`, `released`, `artifact verified` and `live behavior proven`.
 
 **Complete when:** the deliverable meets [Conformance](../foundation/checklist.md#conformance); an unreachable prerequisite remains explicitly unproved.

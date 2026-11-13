@@ -29,9 +29,10 @@ Inspect immediately on a failure, completion claim, unsafe action or material
 change. Cadence controls when the supervisor looks, never how long the agent may
 work. Use native notifications and waits between sweeps, not a tight status-poll
 loop. Keep a live supervising session or an explicitly dispatched supervisor;
-writing a promise to check later is not supervision. In OMP, sweep on each
-check-in and notification, do useful coordinator work between sweeps, and use
-`wait` when otherwise blocked; repeat the sweep when it returns. Do not end the
+writing a promise to check later is not supervision. Sweep on each
+check-in and notification, do useful coordinator work between sweeps, and wait
+on the harness's native notification when otherwise blocked; repeat the sweep
+when it returns. Do not end the
 supervising turn with owned work still active.
 **Complete when:** each owned agent has an accessible full brief and an active
 supervisor that will inspect it again without a runtime deadline.
@@ -89,20 +90,9 @@ recovery has one writer with the full brief and a changed recovery path.
 
 ## 4. Use native supervision controls
 
-### OMP agents
+### Harness agents
 
-- Read `proc://` to enumerate jobs and agents, then `proc://<id>` for the owned
-  agent's state and output. Read `history://<id>` for the actual tool actions;
-  an `agent://<id>` summary is a lead, not completion proof.
-- Steer with `write` to `agent://<id>` using the concrete correction. Observe
-  subsequent actions or the real probe to establish whether it took effect.
-- When recovery requires termination, use `write` to `proc://<id>/kill` with no
-  content, targeting the exact owned ID. Confirm termination through native
-  state, then use `task` to respawn with the full self-contained recovery brief.
-  Do not kill unrelated agents or processes.
-- Inspect automatic completion deliveries and artifacts. A `completed` task
-  state means the agent returned; the brief is still owned until its outside
-  check and collection are satisfied.
+Your [harness note](../misty/SKILL.md) names the native controls for listing agents, reading their actual tool actions, steering them and stopping one. [OMP's](../misty/harnesses/omp.md#supervise-agents) are the most complete. Where a harness has none, supervise from a separate session that reads the worker's branch, artifacts and logs.
 
 ### Boat agents
 

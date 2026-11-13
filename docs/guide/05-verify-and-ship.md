@@ -1,9 +1,9 @@
 # 5. Verify and ship
 
 [Verification](../../skills/verification/SKILL.md) drives the real running app or
-installed artifact. Use pstack's verification generator for a missing procedure,
-and its formal-verification generator for consequential ordering, concurrency
-and durability. A test suite or a successful send alone does not prove the journey.
+installed artifact. A repository without a verification skill gets one written by
+[its recipe](../../skills/verification/recipe.md). Consequential ordering, concurrency
+and durability get a [formal check](../../skills/verification/SKILL.md#formal-properties) as well. A test suite or a successful send alone does not prove the journey.
 
 [Ship-loop](../../skills/ship-loop/SKILL.md) owns delivery: build the slice, prove
 its real path yourself and squash-merge without CI or review. Do not rebase just
@@ -24,6 +24,7 @@ agents until acceptance and cleanup, not a deadline.
 
 The [release convention](../release-convention.md) owns versions and generated
 notes. Report only the merged, published, artifact or live boundary actually
-observed under [pstack's reply rules](../../skills/poteto-mode/SKILL.md#writing-the-reply).
+observed, and say what the check did not cover, under
+[Misty's reporting rules](../../skills/misty/SKILL.md#reporting).
 
 Next: [Principles](06-principles.md).

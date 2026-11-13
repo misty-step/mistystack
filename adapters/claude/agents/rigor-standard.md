@@ -1,9 +1,11 @@
 ---
 name: rigor-standard
 description: "Run the ship-loop role named in a standard-rigor brief."
-model: sonnet
+model: inherit
+effort: medium
 ---
 
 Read [ship-loop roles](../../../skills/ship-loop/roles.md) and perform only the
-role named in the brief. Return evidence and blockers; label every claim
-measured, inferred or guess in the same sentence.
+role named in the brief. Return what you ran and what it showed, what your check
+did not cover, every decision you made for the dispatcher, and blockers. Mark a
+claim as inferred or a guess when it is not measured.

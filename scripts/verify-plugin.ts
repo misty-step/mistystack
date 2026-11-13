@@ -3,7 +3,6 @@ import { YAML } from "bun";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
-import { PSTACK_LOCK, isPstackTemplateTarget, readPstackLock, readPstackNames } from "./pstack-lock.mjs";
 import { readSkillLocks } from "./skill-locks.mjs";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -230,23 +229,9 @@ function inside(root: string, target: string) {
 export function lintPlugin(root: string, strict = false) {
 	const errors: string[] = [];
 	const warnings: string[] = [];
-	let vendored = new Set<string>();
-	let vendoredSources = new Map<string, string>();
-	let upstreamOnly: string[] = [];
-	const nativeNames = readPstackNames(root);
-	if (existsSync(join(root, PSTACK_LOCK))) {
-		try {
-			const parsed = readPstackLock(root);
-			vendored = new Set(parsed.vendoredSkills.keys());
-			vendoredSources = parsed.vendoredSources;
-			upstreamOnly = parsed.upstreamOnly;
-		} catch (error) {
-			errors.push(error instanceof SyntaxError ? `${PSTACK_LOCK}: ${error.message}` : error instanceof Error ? error.message : String(error));
-		}
-	}
 	const upstreams = readSkillLocks(root);
 	errors.push(...upstreams.errors);
-	for (const file of upstreams.vendoredSkills) vendored.add(file);
+	const vendored = upstreams.vendoredSkills;
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
 	if (skills.length === 0) errors.push("skills/: no SKILL.md files found");
 	for (const file of skills) {
@@ -255,7 +240,7 @@ export function lintPlugin(root: string, strict = false) {
 			const name = basename(dirname(file));
 			if (frontmatter.name !== name) errors.push(`${file}: name must equal directory ${name}`);
 			if (!nonempty(frontmatter.description)) errors.push(`${file}: description must be non-empty`);
-			if ((name.startsWith("principle-") || ["recompile", "setup-mistystack", "poteto-mode", "poteto-help"].includes(name)) && frontmatter["disable-model-invocation"] !== true) {
+			if (["recompile", "setup-mistystack"].includes(name) && frontmatter["disable-model-invocation"] !== true) {
 				errors.push(`${file}: disable-model-invocation must be true`);
 			}
 			if (!vendored.has(file)) {
@@ -306,15 +291,11 @@ export function lintPlugin(root: string, strict = false) {
 			const target = resolve(dirname(join(root, file)), decoded);
 			const targetStat = existsSync(target) ? statSync(target) : undefined;
 			if (!targetStat?.isFile() && !targetStat?.isDirectory()) {
-				if (vendoredSources.has(file) && isPstackTemplateTarget(file, decoded)) continue;
-				const source = vendoredSources.get(file);
-				const upstreamTarget = source && posix.normalize(posix.join(posix.dirname(source), decoded));
-				if (upstreamTarget && upstreamOnly.some(source => upstreamTarget === source || upstreamTarget.startsWith(`${source}/`))) continue;
 				references.add(`${file}: missing reference ${relative(root, target)}`);
 			}
 		}
 		for (const [, name] of text.matchAll(/\bthe\s+`([a-z0-9-]+)`\s+skill\b/gi)) {
-			if (!names.has(name) && !((vendoredSources.has(file) || upstreams.files.has(file)) && (nativeNames.has(name) || upstreamOnly.includes(`skills/${name}`)))) {
+			if (!names.has(name) && !upstreams.files.has(file)) {
 				references.add(`${file}: unknown skill ${name} (missing skills/${name}/SKILL.md)`);
 			}
 		}
@@ -495,8 +476,7 @@ function installedRoot(value: unknown, scratch: string, root?: string) {
 
 function installedContent(root: string, installed: string) {
 	const skills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].sort();
-	const locked = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).lock : undefined;
-	const files = new Set([...skills, "rules/core.md", ...Object.keys(locked?.files ?? {}), ...(locked?.patches ?? []).map(patch => patch.file), ...readSkillLocks(root).files.keys()]);
+	const files = new Set([...skills, "rules/core.md", ...readSkillLocks(root).files.keys()]);
 	for (const file of files) {
 		const target = join(installed, file);
 		if (!existsSync(target) || !readFileSync(target).equals(readFileSync(join(root, file)))) {
@@ -755,7 +735,7 @@ if (import.meta.main) {
 		for (const error of report.errors) console.error(`ERROR: ${error}`);
 		console.log(`Plugin structure: ${report.skillCount} skills, ${report.errors.length} errors, ${report.warnings.length} warnings`);
 		if (report.errors.length > 0) process.exit(1);
-		const vendoredTests = existsSync(join(root, PSTACK_LOCK)) ? readPstackLock(root).vendoredSources : new Map<string, string>();
+		const vendoredTests = readSkillLocks(root).files;
 		const maintainedTests = [...new Bun.Glob("**/*.{test,spec}.{js,jsx,ts,tsx,mjs,cjs}").scanSync({ cwd: root })]
 			.filter(file => !file.startsWith("site/") && !file.split("/").includes("node_modules") && !vendoredTests.has(file)).sort();
 		const tests = Bun.spawnSync([process.execPath, "test", "--max-concurrency=1", ...maintainedTests.map(file => `./${file}`)], {

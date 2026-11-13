@@ -4,7 +4,6 @@ import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseDocument } from 'yaml';
 import { SKILL_UPSTREAMS, readSkillLocks } from '../../../scripts/skill-locks.mjs';
-import { readPstackLock } from '../../../scripts/pstack-lock.mjs';
 import { encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 
 export const INDEX_VERSION = 1;
@@ -20,7 +19,7 @@ const SHA = /^[0-9a-f]{40}$/;
 const REPOSITORY = /^([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+?)(?:\.git)?$/;
 const PLUGIN_NAME = /^[A-Za-z0-9](?:[A-Za-z0-9.-]{0,62}[A-Za-z0-9])?$/;
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
-const VENDORED_PACKS = ['pstack', ...SKILL_UPSTREAMS.map(({ pack }) => pack)];
+const VENDORED_PACKS = SKILL_UPSTREAMS.map(({ pack }) => pack);
 const ROOT_CATALOGS = ['marketplace.json', '.omp-plugin/marketplace.json', '.claude-plugin/marketplace.json'];
 const encoder = new TextEncoder();
 const utf8 = new TextDecoder('utf-8', { fatal: true });
@@ -123,10 +122,8 @@ function catalogPlugins(catalog) {
 }
 
 async function repositorySkills(root, pack, revision) {
-  const { lock: pstack, vendoredSkills } = readPstackLock(root);
   const upstreams = readSkillLocks(root);
   if (upstreams.errors.length) throw new Error(upstreams.errors.join('\n'));
-  const pstackPrefix = `${pstack.repo}@${pstack.commit}/`;
   const directories = (await readdir(path.join(root, 'skills')))
     .filter((directory) => !directory.startsWith('.') && existsSync(path.join(root, 'skills', directory, 'SKILL.md')))
     .sort();
@@ -139,11 +136,7 @@ async function repositorySkills(root, pack, revision) {
     const skill = parseSkill(text, file, directory);
     if (!skill) return null;
     let source = { pack, pin: revision, repository: repositoryUrl, path: file };
-    const upstream = vendoredSkills.get(file);
-    if (upstream !== undefined) {
-      if (!upstream.startsWith(pstackPrefix)) throw new Error(`${file}: unexpected pstack provenance ${upstream}`);
-      source = { pack: 'pstack', pin: pstack.commit, repository: `${GITHUB}/${pstack.repo}`, path: `${upstream.slice(pstackPrefix.length)}/SKILL.md` };
-    } else if (upstreams.vendoredSkills.has(file)) {
+    if (upstreams.vendoredSkills.has(file)) {
       const locked = upstreams.files.get(file);
       source = { pack: locked.pack, pin: locked.commit, repository: `${GITHUB}/${locked.repo}`, path: locked.source };
     }

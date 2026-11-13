@@ -3,8 +3,10 @@
 Maintain one harness-neutral method tree in Agent Skills format
 (`skills/<name>/SKILL.md`) and thin native adapters from this repository.
 Read [DOMAIN.md](DOMAIN.md) for terms and [USER_STORIES.md](USER_STORIES.md)
-for the affected consumer contract. Native adapters serve OMP, Claude Code, Codex
-and pi; private runtime setup belongs to the workstation plugin.
+for the affected consumer contract. The method must work on every harness we use: Claude Code, Codex, OMP, pi,
+Prime Agent, Antigravity, Cursor and others. [The universal install](skills/misty/harnesses/any.md)
+is the contract; the native adapters for Claude Code, Codex, OMP and pi are
+conveniences on top of it. Private runtime setup belongs to the workstation plugin.
 
 ## Route the change
 
@@ -12,10 +14,8 @@ and pi; private runtime setup belongs to the workstation plugin.
 | --- | --- |
 | `.omp-plugin/`, `.claude-plugin/`, `.codex-plugin/`, `.agents/plugins/`, `package.json` | Native plugin, marketplace and pi package manifests |
 | `rules/core.md` | Always-on core; keep it at most 20 lines |
-| `skills/misty/` | Mode routing, brief contract and native harness references |
-| `skills/poteto-mode/playbooks/` | Vendored pstack task playbooks; regenerate through the lock |
-| `skills/principle-*/` | One principle per on-demand leaf |
-| `skills/` | Task procedures; frontmatter follows DOMAIN.md |
+| `skills/misty/` | The method on one page: work loop, ownership, autonomy, delegation, reporting, routes; principles and native harness references beside it |
+| `skills/` | Task procedures; frontmatter follows DOMAIN.md. Skills under `vendor/*.lock.json` are upstream bytes; regenerate them through the lock |
 | `adapters/` | Claude/Codex role agents and native hooks/extensions; model choices stay in harness-native configuration |
 | `agents/` | OMP role agents at its fixed native discovery path |
 | `.agents/skills/verify-mistystack/` | This repository's consumer proof |
@@ -23,10 +23,20 @@ and pi; private runtime setup belongs to the workstation plugin.
 | `docs/guide/`, `docs/exemplars.md`, `ATTRIBUTION.md` | Human guide, exemplars and source notices |
 | `docs/decisions/`, `docs/postmortems/` | Decisions and incident records; historical paths remain historical |
 
+This repository is yours to shape: merge duplication, fix what you find next to
+your change and delete what is dead. Vendored skills are the exception; change
+them only through their lock.
+
 Edit maintained source, not installed plugin copies. Keep one home per fact;
 migrate callers before deleting an old path. Fleet runtime, credentials, hosts
 and launchers belong to private `misty-step/workstation`. Adapters use
 native harness mechanisms, not a custom installer or duplicated method content.
+Nothing in a shared skill may depend on one harness: tool names, URI schemes and
+configuration belong in `skills/misty/harnesses/`.
+The method is one page with no base document beneath it
+([ADR 0026](docs/decisions/0026-one-page-method.md)); add to a task skill or a
+sibling file before adding to [misty](skills/misty/SKILL.md), and check any new
+instruction against [agent-design](skills/agent-design/SKILL.md#writing-for-current-models).
 Use [boat-workers](skills/boat-workers/SKILL.md) for one snapshot-backed worker
 per slice and [watchdog](skills/watchdog/SKILL.md) for open-ended agent supervision.
 

@@ -27,6 +27,7 @@ supply the method to every adapter.
    | Claude Code | [Claude Code](../misty/harnesses/claude.md) |
    | Codex | [Codex](../misty/harnesses/codex.md) |
    | pi | [pi](../misty/harnesses/pi.md) |
+   | Cursor, Antigravity, Prime Agent and any other | [Any harness](../misty/harnesses/any.md) |
 
    Grok Bot runtime setup is private fleet machinery, outside this adapter table.
    **Complete when:** the runtime, version, destination scope and matching native
@@ -47,7 +48,11 @@ supply the method to every adapter.
    responsibilities. Inspect the active harness's accessible models, supported
    reasoning levels and existing assignments without exposing credentials. A
    catalog entry or shipped template is not proof of provider entitlement. Keep
-   usable existing choices; carry settled budget choices forward; ask for missing
+   usable existing choices; carry settled budget choices forward. Where the
+   harness exposes an effort or reasoning level, start interactive work at
+   medium, long unattended work at high and fully specified subagent slices at
+   low, and go above high only where a measured gain justifies the tokens;
+   rerun that choice when the model changes rather than carrying it over. Then ask for missing
    budget or provider choices together. The matching note's dispatch and rigor
    section says what is assignable in that harness, including harnesses that run
    rigor inline.
@@ -60,7 +65,8 @@ supply the method to every adapter.
    describes: [OMP](../misty/harnesses/omp.md#dispatch-and-rigor),
    [Claude Code](../misty/harnesses/claude.md#dispatch-and-rigor),
    [Codex](../misty/harnesses/codex.md#dispatch-and-rigor),
-   [pi](../misty/harnesses/pi.md#rigor-inline-without-subagents).
+   [pi](../misty/harnesses/pi.md#rigor-inline-without-subagents),
+   [any other](../misty/harnesses/any.md#3-roles-and-effort).
    Prove an unfamiliar config mechanism in an isolated home first ([OMP recipe](agents.md)).
    **Complete when:** native readback matches the chosen assignments and any
    shadowing is resolved explicitly. Readback proves persistence, not provider
@@ -69,7 +75,7 @@ supply the method to every adapter.
 5. **Prove a fresh destination session.** Follow the matching note's consumer
    proof. Retain runtime version, candidate revision, install/config results and
    actual events showing the core loaded, installed Misty was discovered/read,
-   and its relative bug-fix link reached the installed playbook. Check principle
+   and its relative ship-loop link reached the installed skill. Check explicit-only
    discovery policy and explicit reachability separately. Where native rigor
    agents exist, prove their discovery and a short authorized dispatch with actual
    agent/model identity and result. In pi, prove the main-session path instead.

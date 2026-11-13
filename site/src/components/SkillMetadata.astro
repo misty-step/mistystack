@@ -1,6 +1,6 @@
 ---
 const { document } = Astro.props;
-const skill = document.skill ?? (document.kind === 'Playbooks' ? undefined : document.parent?.skill);
+const skill = document.skill ?? document.parent?.skill;
 const inherited = !document.skill && skill;
 ---
 {skill && <section class="skill-metadata" aria-label={inherited ? 'Inherited skill provenance' : 'Skill metadata'}>

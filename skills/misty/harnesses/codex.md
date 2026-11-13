@@ -44,16 +44,13 @@ replace foreign trust settings. Codex stores a content hash with each trust, so
 check `hooks/list` trust status again after a refresh.
 
 Use Codex's native skill mechanism with `mistystack:misty` or
-`mistystack:<skill-name>`. Follow Misty's [bug-fix link](../../poteto-mode/playbooks/bug-fix.md)
+`mistystack:<skill-name>`. Follow Misty's [ship-loop link](../../ship-loop/SKILL.md)
 relative to its installed file, not the working directory or a checkout copy.
-Codex does not enforce `disable-model-invocation`; principle leaves, recompile
+Codex does not enforce `disable-model-invocation`; recompile
 and setup-mistystack also carry `agents/openai.yaml` with
 `policy.allow_implicit_invocation: false`. Check that they are excluded from
 implicit invocation while explicit invocation and installed-file reads still
-reach them. Misty's relative links reach its extension leaves and pstack's
-principle index, which names upstream leaves rather than linking each one.
-Open those through `mistystack:<skill-name>` or their installed
-`skills/<name>/SKILL.md` files.
+reach them.
 
 ## Dispatch and rigor
 
@@ -103,8 +100,8 @@ installed artifact readback. An install without a model run is
 
 After completing native hook trust, start a fresh destination session. Retain
 actual evidence of the installed core's `SessionStart` injection, Misty discovery,
-and the skill/read events that open installed Misty, follow its relative bug-fix
-link and quote the first step. Check principle-leaf implicit exclusion and
+and the skill/read events that open installed Misty, follow its relative ship-loop
+link and quote the first step. Check recompile's implicit exclusion and
 explicit reachability separately. Discover the separately installed rigor agents
 and, for live dispatch proof, retain an authorized task's agent, actual model
 identity and result. A model's self-report or config readback alone is not proof

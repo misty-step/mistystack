@@ -11,7 +11,8 @@ const CORE = 'rules/core.md';
 const MISTY = 'skills/misty/SKILL.md';
 const TRIAL = 'docs/evals/2026-10-28-kernel-trial.md';
 const HARNESSES = 'skills/misty/harnesses/';
-const PARTS = ['core', 'misty', 'playbooks', 'skills', 'principles', 'oracle'];
+const BRIEF = 'The brief';
+const PARTS = ['core', 'misty', 'skills', 'oracle'];
 
 const CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
   'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
@@ -39,15 +40,15 @@ function coreLines(core) {
   return list.children.map((item) => core.body.slice(item.position.start.offset, item.position.end.offset).trim());
 }
 
-// Field names of the misty skill's briefing contract, in source order.
+// Field names of the misty skill's brief, in source order.
 function briefFields(misty) {
   const children = misty.ast.children;
-  const heading = children.findIndex((node) => node.type === 'heading' && plain(node) === 'Briefing contract');
+  const heading = children.findIndex((node) => node.type === 'heading' && plain(node) === BRIEF);
   const list = children.slice(heading + 1).find((node) => node.type === 'list');
-  if (heading < 0 || !list) fail(`${MISTY} has no Briefing contract list`);
+  if (heading < 0 || !list) fail(`${MISTY} has no "${BRIEF}" list`);
   return list.children.map((item) => {
     const strong = item.children[0]?.children?.find((node) => node.type === 'strong');
-    return strong ? plain(strong).replace(/:$/, '') : fail(`${MISTY}: a briefing field has no bold name`);
+    return strong ? plain(strong).replace(/:$/, '') : fail(`${MISTY}: a brief field has no bold name`);
   });
 }
 
@@ -81,38 +82,26 @@ function build(graph) {
   const trial = need(graph, TRIAL);
   const lines = coreLines(core);
 
-  const installCopy = home.install({ inProgress: '' });
+  const installCopy = home.install({ native: '' });
   const tabs = harnesses(graph, installCopy);
   const withCommands = tabs.filter((tab) => tab.lines.length);
   const facts = {
     coreLines: cardinal(lines.length, 'core lines'),
     CoreLines: Cardinal(lines.length, 'core lines'),
-    commandHarnesses: series(withCommands.map((tab) => tab.name)),
+    commandHarnesses: series(withCommands.filter((tab) => tab.id !== 'any').map((tab) => tab.name)),
   };
 
-  const baseline = need(graph, 'skills/poteto-mode/SKILL.md');
-  const names = need(graph, 'skills/misty/harnesses/pstack-names.md');
-  const playbookIds = [...new Set([...misty.outboundLinks, ...baseline.outboundLinks, ...names.outboundLinks])].filter((id) => id.startsWith('skills/poteto-mode/playbooks/'));
-  const playbooks = graph.documents.filter((doc) => doc.kind === 'Playbooks');
-  if (playbookIds.length !== playbooks.length) fail(`Misty and its names adapter route to ${playbookIds.length} playbooks; the tree has ${playbooks.length}`);
-  const playbookNames = playbookIds.map((id, index) => {
-    const title = need(graph, id).title;
-    return index ? title.replace(/^./, (c) => c.toLowerCase()) : title;
-  });
   const skills = graph.documents.filter((doc) => doc.kind === 'Skills');
-  const principles = graph.documents.filter((doc) => doc.kind === 'Principles');
-  for (const id of ['skills/research/SKILL.md', 'skills/security-audit/SKILL.md', 'skills/principle-deep-modules/SKILL.md']) need(graph, id);
+  for (const id of ['skills/research/SKILL.md', 'skills/security-audit/SKILL.md']) need(graph, id);
 
-  const methodCopy = home.method({ Parts: Cardinal(PARTS.length, 'parts'), playbooks: cardinal(playbooks.length, 'playbooks') });
-  const contract = misty.headings.find((heading) => heading.label === 'Briefing contract') ?? fail(`${MISTY} has no Briefing contract heading`);
+  const methodCopy = home.method({ Parts: Cardinal(PARTS.length, 'parts') });
+  const contract = misty.headings.find((heading) => heading.label === BRIEF) ?? fail(`${MISTY} has no "${BRIEF}" heading`);
   const nodes = [
     { id: 'core', label: 'Core', href: core.url },
     { id: 'misty', label: 'Misty', href: misty.url },
-    { id: 'playbooks', label: 'Playbooks', count: playbooks.length, href: '/library/?section=Playbooks', body: methodCopy.nodes.playbooks(series(playbookNames)) },
     { id: 'skills', label: 'Skills', count: skills.length, href: '/library/?section=Skills' },
-    { id: 'principles', label: 'Principles', count: principles.length, href: '/library/?section=Principles' },
     { id: 'oracle', label: 'Oracle', href: `${misty.url}#${contract.id}` },
-  ].map((node) => ({ ...node, body: node.body ?? methodCopy.nodes[node.id] }));
+  ].map((node) => ({ ...node, body: methodCopy.nodes[node.id] }));
 
   const fields = briefFields(misty);
   const briefCopy = home.brief({ fields: cardinal(fields.length, 'brief fields') });
@@ -139,7 +128,7 @@ function build(graph) {
         limits: round.limits,
         href: trial.url,
       },
-      install: { ...home.install({ inProgress: series(withCommands.filter((tab) => tab.id !== 'omp').map((tab) => tab.name)) }), tabs },
+      install: { ...home.install({ native: series(withCommands.filter((tab) => tab.id !== 'any').map((tab) => tab.name)) }), tabs },
       read: home.read({ chapters: cardinal(chapters, 'guide chapters') }),
     },
     footer: home.footer,

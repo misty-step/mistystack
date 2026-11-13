@@ -1,6 +1,6 @@
 # Contributing
 
-Mistystack is an OMP method plugin. Start with [AGENTS.md](AGENTS.md), use
+Mistystack is a method for coding agents on any harness. Start with [AGENTS.md](AGENTS.md), use
 [DOMAIN.md](DOMAIN.md) terms, and name the affected [story](USER_STORIES.md).
 Fleet machinery belongs in private `misty-step/workstation`.
 

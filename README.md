@@ -3,27 +3,35 @@
 Misty Step's harness-neutral engineering method. One content tree uses the open
 Agent Skills format, `skills/<name>/SKILL.md`; thin native adapters from this
 repository connect it to a harness without copying the method or adding a custom
-installer. A small always-on core routes nontrivial work through
-[misty](skills/misty/SKILL.md). pstack supplies the baseline procedures and
-principles, with Misty's remaining deltas loaded when the task needs them.
+installer. A small always-on core
+stands alone for small work and routes nontrivial work through
+[misty](skills/misty/SKILL.md), one page that holds the work loop, ownership,
+autonomy, delegation and reporting.
 
+The method carries what a capable model cannot work out from a repository: who
+approves what, where work is tracked, how a change is proved and how a release
+ships. It leaves general engineering knowledge to the model.
 [Agent design](skills/agent-design/SKILL.md) owns skill-writing,
 [verification](skills/verification/SKILL.md) owns real-path proof and
 [release-watch](skills/release-watch/SKILL.md) owns live-break recovery.
-The [principle index](skills/misty/SKILL.md#principles) and
-[playbook routing](skills/misty/SKILL.md#playbooks) reach pstack's vendored foundation
-and Misty's extension leaves. The [lock](vendor/pstack.lock.json) owns the pin and
-vendored set and exact patches/removals. [ADR 0023](docs/decisions/0023-live-verification-and-release-gate.md)
+[ADR 0026](docs/decisions/0026-one-page-method.md) records why the method is one
+page and no longer vendors pstack. [ADR 0023](docs/decisions/0023-live-verification-and-release-gate.md)
 records author-owned running-product proof before merge, the fast pre-deploy CI
 and single critical assessment, and open-ended watchdog-supervised agents.
-Other vendored changes are limited to the documented harness pointer,
-recorded Cursor-mechanism swaps and generated Codex invocation sidecars.
+Matt Pocock's shaping skills and Warp's merge skills are vendored unchanged under
+[their locks](vendor/).
 
 Fleet machinery lives in the private `misty-step/workstation` repository.
 
 ## Harness support
 
-Install and refresh through the matching native reference:
+Mistystack works on any harness that reads Agent Skills and an always-on
+instruction file. That covers Cursor, Antigravity, Prime Agent, OpenCode, Gemini
+CLI and others through one path:
+
+- [Any harness](skills/misty/harnesses/any.md): `npx skills add misty-step/mistystack -g`, then the core in `AGENTS.md`.
+
+Four harnesses also have a native plugin that does both steps:
 
 - [OMP](skills/misty/harnesses/omp.md): marketplace plugin and role-backed agents.
 - [Claude Code](skills/misty/harnesses/claude.md): marketplace plugin, core hook and native agents.
@@ -57,15 +65,13 @@ Retired reference-page URLs redirect to the focused security review.
 .agents/plugins/   Codex marketplace
 package.json       pi package resource declarations
 rules/core.md      always-on routing and guardrails
-skills/misty/      mode, principle index and harness references
-skills/poteto-mode/playbooks/ vendored pstack task procedures
-skills/principle-* vendored principles and Misty extension leaves
+skills/misty/      the method page, principles and harness references
 skills/            one Agent Skills content tree
 adapters/          harness-specific agents, hooks and extensions
 agents/            OMP agents at its fixed native discovery path
 .agents/skills/    repository verification
 scripts/           checks, Git hook setup and release protection
-vendor/pstack.lock.json upstream pin, destinations, patches, references, hashes and executable files
+vendor/*.lock.json upstream pins, source mappings and file hashes for unchanged skills
 docs/guide/        human guide
 ```
 
@@ -97,7 +103,10 @@ evidence contract. No check installs into an operator's live profile.
 ## Release
 
 Landmark prepares a generated changelog PR, then publishes only its verified,
-landed commit. Keep [CHANGELOG.md](CHANGELOG.md) generated. The shared
+landed commit. Keep [CHANGELOG.md](CHANGELOG.md) generated. The same PR carries
+the release version in every native manifest, written by
+`scripts/stamp-version.ts`, so a harness that detects upgrades by version sees
+each release; `./scripts/check` fails when a manifest and the changelog disagree. The shared
 [release convention](docs/release-convention.md) stays at its existing path for
 external callers.
 
@@ -145,6 +154,6 @@ artifact. PRs and pushes do not start CI or deployment.
 - [Guide](docs/guide/): installation and the working method.
 - [Foundation checklist](skills/foundation/checklist.md): the audit rubric;
   [FOUNDATIONS.md](FOUNDATIONS.md) is a pointer, not another standard.
-- [Exemplars](docs/exemplars.md): people, codebases, prose and products whose perspectives we channel. The lock owns which pstack material is installed.
+- [Exemplars](docs/exemplars.md): people, codebases, prose and products whose perspectives we channel.
 - [Attribution](ATTRIBUTION.md): sources and license notices.
 - [Decisions](docs/decisions/index.md): boundaries and rejected alternatives.

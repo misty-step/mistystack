@@ -47,6 +47,13 @@ jobs:
           release-branch: landmark/release
           github-token: ${{ github.token }}
           synthesis: 'false'
+      - uses: oven-sh/setup-bun@v2
+        if: steps.prepare.outputs.released == 'true'
+        with:
+          bun-version: '1.4.2'
+      - name: Stamp the release version into native manifests
+        if: steps.prepare.outputs.released == 'true'
+        run: bun scripts/stamp-version.ts
       - name: Mint existing release-bot token
         if: steps.prepare.outputs.released == 'true'
         id: bot-token
@@ -62,12 +69,17 @@ jobs:
           token: ${{ steps.bot-token.outputs.token }}
           branch: ${{ steps.prepare.outputs.release-branch }}
           base: master
-          add-paths: CHANGELOG.md
+          add-paths: |
+            CHANGELOG.md
+            .omp-plugin/marketplace.json
+            .omp-plugin/plugin.json
+            .codex-plugin/plugin.json
+            package.json
           delete-branch: false
           title: ${{ steps.prepare.outputs.pull-request-title }}
           commit-message: ${{ steps.prepare.outputs.commit-message }}
           body: |
-            Generated notes for `${{ steps.prepare.outputs.release-tag }}` (US-015).
+            Generated notes and manifest versions for `${{ steps.prepare.outputs.release-tag }}` (US-015).
             Source verification and the critical assessment belong to this release run.
       - name: Merge generated notes and select candidate
         id: candidate

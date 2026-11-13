@@ -6,7 +6,7 @@
 
 ## Impact
 
-Who was harmed and what changed for them, under [pstack's reply rules](../poteto-mode/SKILL.md#writing-the-reply).
+Who was harmed and what changed for them, under [Misty's reporting rules](../misty/SKILL.md#reporting).
 
 ## Timeline and mechanism
 

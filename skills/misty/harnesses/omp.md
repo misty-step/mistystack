@@ -45,10 +45,10 @@ intact.
 
 OMP's `read` tool accepts `skill://misty` and `skill://<name>` for installed skills.
 A relative Markdown link is relative to the file containing it, not the session's
-working directory. Follow Misty's [bug-fix routing link](../../poteto-mode/playbooks/bug-fix.md)
+working directory. Follow Misty's [ship-loop link](../../ship-loop/SKILL.md)
 to that installed file; a checkout copy is not proof of installed content.
 
-Principle leaves, recompile and setup-mistystack retain
+Recompile and setup-mistystack retain
 `disable-model-invocation: true`: OMP omits them from its automatic model skill
 list, while explicit reads still reach them. Routers stay model-discoverable.
 Confirm the installed version's invocation behavior before relying on a metadata
@@ -94,6 +94,21 @@ Use [watchdog](../../watchdog/SKILL.md) to supervise open-ended tasks through
 budgets must not force wrap-up or termination; inspect the destination OMP
 configuration when a run stops without meeting its brief.
 
+## Supervise agents
+
+- Read `proc://` to enumerate jobs and agents, then `proc://<id>` for the owned
+  agent's state and output. Read `history://<id>` for the actual tool actions;
+  an `agent://<id>` summary is a lead, not completion proof.
+- Steer with `write` to `agent://<id>` using the concrete correction. Observe
+  subsequent actions or the real probe to establish whether it took effect.
+- When recovery requires termination, use `write` to `proc://<id>/kill` with no
+  content, targeting the exact owned ID. Confirm termination through native
+  state, then use `task` to respawn with the full self-contained recovery brief.
+  Do not kill unrelated agents or processes.
+- Inspect automatic completion deliveries and artifacts. A `completed` task
+  state means the agent returned; the brief is still owned until its outside
+  check and collection are satisfied.
+
 ## Drive the real UI
 
 Use OMP's browser tool through `eval`. Read its API instructions at
@@ -111,14 +126,14 @@ From the source checkout, run `./scripts/check plugin --strict`. The maintained
 helper installs the working tree through the native marketplace in an isolated
 OMP home and project, refuses an escaping config path before installation, and
 starts a fresh RPC session. It checks that the always-on core was injected,
-Misty is listed, the installed skill body matches the candidate, and principle
-leaves remain explicitly readable while hidden from the automatic list. The
+Misty is listed, the installed skill body matches the candidate, and explicit-only
+skills remain readable while hidden from the automatic list. The
 inference-free RPC selector uses the existing `modelRoles.smol` assignment;
 `plugin --model SELECTOR` supplies an explicit override. No check installs into
 the operator's live profile. A lint-only run does not prove installation.
 
 For changed routing, also ask a fresh isolated session to open the installed
-Misty skill, follow its relative bug-fix playbook link and quote the first step.
+Misty skill, follow its relative ship-loop link and quote the first step.
 Retain actual read-tool events and the response with the checked revision. File
 presence and a model's self-report alone are not loaded-method proof. For changed
 installed skills, rules or extensions, exercise the changed consumer path in a
