@@ -1,3 +1,14 @@
+# [0.4.0](https://github.com/misty-step/mistystack/compare/v0.3.25...v0.4.0) (2026-11-13)
+<!-- landmark:protected-release previous=v0.3.25 source=aa43cec7bcceb54309514ec47a1b93d007ce9c1e6245569cc84207c9fbb70f9e -->
+
+### BREAKING CHANGES
+
+* **method:** make the method one page and stop vendoring pstack (#690) ([5341a5c](https://github.com/misty-step/mistystack/commit/5341a5c88fddc69559bff2e5026e3793efc1a42c))
+* drop OMP support and add the deepen skill (#692) ([8939d48](https://github.com/misty-step/mistystack/commit/8939d4873eda1e46dceed5c550f06fc8fb815837))
+
+### Features
+
+* **skills:** codify first-principles draft rewrite before proof (#691) ([a8c877e](https://github.com/misty-step/mistystack/commit/a8c877edff14408338b7908618529ea24593556f))
 # [0.3.25](https://github.com/misty-step/mistystack/compare/v0.3.24...v0.3.25) (2026-11-07)
 <!-- landmark:protected-release previous=v0.3.24 source=49035cca0fa15c9e84f4cf6c282cec4dcfc7e52e66f1efec46472f4f50391c24 -->
 
