@@ -67,7 +67,7 @@ function fixture() {
     mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
     writeFileSync(path.join(root, file), text);
   };
-  const catalog = (...plugins) => put('.omp-plugin/marketplace.json', JSON.stringify({
+  const catalog = (...plugins) => put('.claude-plugin/marketplace.json', JSON.stringify({
     name: 'mistystack', owner: { name: 'Fixture' }, plugins: [{ name: 'mistystack', source: './' }, ...plugins],
   }));
   const gamma = skill('gamma', 'Vendored Pocock body.');
@@ -101,7 +101,7 @@ test('indexes repository and pinned catalog skills with provenance and invocatio
     id: 'catalog-a:alpha', name: 'alpha', pack: 'catalog-a', pin: CATALOG_SHA, description: 'alpha description.',
     core: 'Catalog body.', coreBytes: 13, coreTruncated: false,
     source: { pack: 'catalog-a', pin: CATALOG_SHA, repository: 'https://github.com/acme/skills', path: 'skills/alpha/SKILL.md' },
-    invoke: { skill: '/skill:alpha', install: 'omp plugin install catalog-a@mistystack' },
+    invoke: { skill: '/skill:alpha', install: 'claude plugin install catalog-a@mistystack' },
     url: `https://github.com/acme/skills/blob/${CATALOG_SHA}/skills/alpha/SKILL.md`,
   });
   assert.deepEqual(entry('catalog-b:epsilon').source, { pack: 'catalog-b', pin: SUBDIR_SHA, repository: 'https://github.com/acme/mono', path: 'plugins/b/extra/epsilon/SKILL.md' });

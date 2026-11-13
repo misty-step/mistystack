@@ -67,7 +67,6 @@ export const home = {
       any: 'Cursor, Antigravity, Prime Agent and others. Then add the core to AGENTS.md.',
       claude: 'Start a fresh session after installing.',
       codex: 'Review and trust the native SessionStart hook. Rigor agents are installed separately.',
-      omp: 'Start a fresh OMP session.',
       pi: 'Rigor runs inline; pi has no native subagent mechanism.',
     },
     source: 'Source:',

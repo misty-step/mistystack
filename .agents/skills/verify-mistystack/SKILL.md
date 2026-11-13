@@ -28,21 +28,16 @@ not evidence that the method loaded.
    Require exit 0 and retain optional Landmark replay results separately from
    skips. `./scripts/check --help` identifies the maintained flags.
 3. **Observe native installation and loading.** The full selection creates
-   disposable homes and projects for each available OMP, Claude Code, Codex and
+   disposable homes and projects for each available Claude Code, Codex and
    pi CLI, refuses escaping native configuration paths, installs through the
    native lifecycle and checks skills/core registration. Missing CLIs are named
    skipped; an available-harness failure leaves that consumer unproved. The
    lint-only selection explicitly skips installation and does not prove loading.
 
-   OMP additionally starts a fresh RPC session without inference. Its selector
-   comes from the existing `smol` role read before isolation; `--model SELECTOR`
-   supplies an override. Require the observed system prompt to contain the
-   installed core and list Misty plus Foundation's current trigger, the
-   installed skill body to match the candidate, and every explicit-only skill
-   (including recompile and setup-mistystack) to remain readable but hidden from
-   the automatic list, and read the installed `checklist.md#conformance` with content matching the candidate.
-   Other adapters' no-model inventory checks prove installation and registration,
-   not that a model received the core. Follow the matching
+   These no-model inventory checks prove installation and registration, not
+   that a model received the core, that explicit-only skills (recompile and
+   setup-mistystack) stay out of the automatic list, or that installed bodies
+   such as `checklist.md#conformance` match the candidate. Follow the matching
    [harness note](../../../skills/misty/SKILL.md) for fresh-session proof: use an
    existing subscription only if it works without copying credential files;
    quote the core's first bullet and retain the actual loaded/read events.

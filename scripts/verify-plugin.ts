@@ -2,7 +2,7 @@
 import { YAML } from "bun";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
-import { basename, dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { readSkillLocks } from "./skill-locks.mjs";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -128,7 +128,7 @@ function lintManifests(root: string, errors: string[]) {
 			}
 			required(plugin, `${file}: plugin`, ["name"]);
 			if (plugin.name === "mistystack") found = true;
-			if (file === ".omp-plugin/marketplace.json" && plugin.name !== "mistystack") {
+			if (file === ".claude-plugin/marketplace.json" && plugin.name !== "mistystack") {
 				const source = plugin.source;
 				const label = `${file}: ${String(plugin.name)}`;
 				if (!isRecord(source) || !["github", "git-subdir"].includes(String(source.source))) {
@@ -167,7 +167,6 @@ function lintManifests(root: string, errors: string[]) {
 	for (const [harness, file] of [
 		["claude", ".claude-plugin/plugin.json"],
 		["codex", ".codex-plugin/plugin.json"],
-		["omp", ".omp-plugin/plugin.json"],
 	] as const) {
 		const manifest = load(file);
 		if (!manifest) continue;
@@ -178,22 +177,14 @@ function lintManifests(root: string, errors: string[]) {
 		}
 		skills(file, harness === "claude" && manifest.skills === undefined ? "./skills" : manifest.skills);
 		if (harness === "claude") paths(`${file}: agents`, manifest.agents, "file");
-		if (harness === "omp") {
-			if (manifest.agents !== undefined) errors.push(`${file}: OMP discovers root agents/; manifest agents is unsupported`);
-			const agents = [...new Bun.Glob("agents/*.md").scanSync({ cwd: root })].sort();
-			if (agents.length === 0) errors.push("agents/: no native OMP agents found");
-			else paths(`${file}: agents`, agents, "file");
-		}
 		if (harness === "claude") coreHooks(file, manifest.hooks, "CLAUDE_PLUGIN_ROOT");
 		if (harness === "codex") {
 			if (typeof manifest.hooks !== "string") errors.push(`${file}: hooks must reference a JSON file`);
 			coreHooks(file, manifest.hooks, "PLUGIN_ROOT");
 		}
-		if (harness === "omp" && manifest.rules !== undefined) paths(`${file}: rules`, manifest.rules, "file");
 	}
 	marketplace(".claude-plugin/marketplace.json", false);
 	marketplace(".agents/plugins/marketplace.json", true);
-	marketplace(".omp-plugin/marketplace.json", false);
 	const file = "package.json";
 	const manifest = load(file);
 	if (manifest) {
@@ -208,15 +199,6 @@ function lintManifests(root: string, errors: string[]) {
 		const extensions = paths(`${file}: pi.extensions`, pi.extensions, "file");
 		if (!extensions.includes(resolve(root, "adapters/pi/core.ts"))) {
 			errors.push(`${file}: pi.extensions must register adapters/pi/core.ts`);
-		}
-	}
-	if (manifest && !isRecord(manifest.omp)) {
-		errors.push(`${file}: omp must be an explicit object to prevent pi adapter fallback`);
-	} else if (manifest && isRecord(manifest.omp) && manifest.omp.extensions !== undefined) {
-		const value = manifest.omp.extensions;
-		const extensions = Array.isArray(value) && value.length === 0 ? [] : paths(`${file}: omp.extensions`, value, "file");
-		if (extensions.includes(resolve(root, "adapters/pi/core.ts"))) {
-			errors.push(`${file}: omp.extensions must not register pi's core extension`);
 		}
 	}
 }
@@ -271,11 +253,6 @@ export function lintPlugin(root: string, strict = false) {
 		const bytes = readFileSync(join(root, file));
 		if (bytes.includes(0)) continue;
 		const text = bytes.toString("utf8");
-		if (!file.startsWith("skills/misty/harnesses/")) {
-			for (const scheme of new Set(text.match(/(?:skill|xd):\/\//g))) {
-				references.add(`${file}: harness-specific URI ${scheme} is only allowed in skills/misty/harnesses/`);
-			}
-		}
 		const links = /\.md$/i.test(file) ? markdownLinks(text) : [];
 		for (const destination of links) {
 			const path = destination.split(/[?#]/, 1)[0];
@@ -321,8 +298,8 @@ function checked(command: string[], cwd: string, env: NodeJS.ProcessEnv, input?:
 	return result.stdout.toString();
 }
 
-type Harness = "claude" | "codex" | "omp" | "pi";
-const harnesses: Harness[] = ["claude", "codex", "omp", "pi"];
+type Harness = "claude" | "codex" | "pi";
+const harnesses: Harness[] = ["claude", "codex", "pi"];
 
 function isolated<T>(harness: Harness, proof: (project: string, env: NodeJS.ProcessEnv, scratch: string) => Promise<T>): Promise<T>;
 function isolated<T>(harness: Harness, proof: (project: string, env: NodeJS.ProcessEnv, scratch: string) => T): T;
@@ -336,7 +313,7 @@ function isolated<T>(harness: Harness, proof: (project: string, env: NodeJS.Proc
 		const project = join(home, "project");
 		const env = { ...process.env };
 		for (const key of [
-			"OMP_PROFILE", "PI_PROFILE", "PI_CONFIG_FILES", "PI_PROJECT_DIR", "PI_PACKAGE_DIR",
+			"PI_PROFILE", "PI_CONFIG_FILES", "PI_PROJECT_DIR", "PI_PACKAGE_DIR",
 			"PI_CODING_AGENT_SESSION_DIR", "CLAUDE_CODE_PLUGIN_DIRS",
 		]) delete env[key];
 		Object.assign(env, {
@@ -346,8 +323,8 @@ function isolated<T>(harness: Harness, proof: (project: string, env: NodeJS.Proc
 			CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
 			DISABLE_AUTOUPDATER: "1",
 			CODEX_HOME: join(home, ".codex"),
-			PI_CONFIG_DIR: harness === "omp" ? ".omp" : ".pi",
-			PI_CODING_AGENT_DIR: join(home, harness === "omp" ? ".omp/agent" : ".pi/agent"),
+			PI_CONFIG_DIR: ".pi",
+			PI_CODING_AGENT_DIR: join(home, ".pi/agent"),
 			PI_OFFLINE: "1",
 			PI_TELEMETRY: "0",
 			TMPDIR: join(scratch, "tmp"),
@@ -379,88 +356,6 @@ function isolated<T>(harness: Harness, proof: (project: string, env: NodeJS.Proc
 	} finally {
 		if (!deferredCleanup) rmSync(scratch, { recursive: true, force: true });
 	}
-}
-
-export function verifyInstall(root: string, omp: string, model: string) {
-	isolated("omp", (project, env) => {
-		const configPath = checked([omp, "config", "path"], project, env).trim();
-		if (resolve(configPath) !== resolve(env.PI_CODING_AGENT_DIR!)) {
-			throw new Error(`isolation refused: omp config path resolved outside scratch: ${configPath}`);
-		}
-		console.log("Isolation: omp config path is inside scratch");
-		console.log(checked([omp, "plugin", "marketplace", "add", root], project, env).trim());
-		console.log(checked([omp, "plugin", "install", "--scope", "user", "mistystack@mistystack"], project, env).trim());
-		const output = checked([
-			omp, "launch", "--mode", "rpc", "--no-session", "--no-title", "--no-lsp", "--no-extensions",
-			"--no-context-files", "--tools", "read,task", "--model", model,
-		], project, env, '{"id":"plugin-proof","type":"get_state"}\n');
-		const frames = output.split("\n").filter(line => line.startsWith("{")).map(line => JSON.parse(line));
-		const response = frames.find(frame => frame.type === "response" && frame.id === "plugin-proof");
-		if (response?.success !== true || !Array.isArray(response.data?.systemPrompt)) {
-			throw new Error("OMP RPC get_state did not return the system prompt");
-		}
-		const task = Array.isArray(response.data.dumpTools) ? response.data.dumpTools.find((tool: { name?: string }) => tool.name === "task") : undefined;
-		if (!nonempty(task?.description)) throw new Error("OMP RPC get_state did not expose the native task agent inventory");
-		const agents = [...new Bun.Glob("agents/*.md").scanSync({ cwd: root })].sort();
-		if (agents.length === 0) throw new Error("agents/: no native OMP agents found");
-		for (const file of agents) {
-			const { frontmatter } = document(join(root, file));
-			if (!nonempty(frontmatter.name) || !task.description.includes(frontmatter.name)) {
-				throw new Error(`${file}: OMP's native task inventory did not discover the agent`);
-			}
-		}
-		const prompt = response.data.systemPrompt.join("\n");
-		const skillList = /<skills>([\s\S]*?)<\/skills>/.exec(prompt)?.[1];
-		if (!skillList || !/^- misty:/m.test(skillList)) throw new Error("misty is missing from the model's skill list");
-		const unexpected = [...skillList.matchAll(/^- ([^:\s]+):/gm)]
-			.map(match => match[1]).filter(name => !existsSync(join(root, "skills", name, "SKILL.md")));
-		if (unexpected.length > 0) throw new Error(`isolation leaked skills: ${unexpected.join(", ")}`);
-		const core = document(join(root, "rules/core.md")).body;
-		if (!prompt.includes(core)) throw new Error("the always-apply core body was not injected into the session");
-		const installedMisty = checked([omp, "read", "skill://misty"], project, env);
-		if (!installedMisty.includes(document(join(root, "skills/misty/SKILL.md")).body)) {
-			throw new Error("skill://misty did not read the working-tree body");
-		}
-		for (const file of readSkillLocks(root).vendoredSkills) {
-			const { frontmatter, body } = document(join(root, file));
-			const name = basename(dirname(file));
-			if (frontmatter["disable-model-invocation"] !== true && !new RegExp(`^- ${name}:`, "m").test(skillList)) {
-				throw new Error(`${file}: upstream skill is missing from the model's skill list`);
-			}
-			const content = checked([omp, "read", `skill://${name}`], project, env);
-			if (!content.includes(body)) throw new Error(`skill://${name} did not read the working-tree body`);
-			console.log(`Upstream skill readback: ${name} discovered and body matches candidate`);
-		}
-		const foundation = document(join(root, "skills/foundation/SKILL.md"));
-		const foundationEntry = /^- foundation: (.+)$/m.exec(skillList)?.[1];
-		// OMP truncates descriptions; the trigger precedes the first colon.
-		const foundationTrigger = String(foundation.frontmatter.description).split(":")[0];
-		if (!foundationEntry?.startsWith(`${foundationTrigger}:`)) {
-			throw new Error("foundation's installed trigger is missing from the model's skill list");
-		}
-		let hiddenSkills = 0;
-		for (const file of new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })) {
-			const { frontmatter, body } = document(join(root, file));
-			if (frontmatter["disable-model-invocation"] !== true) continue;
-			const name = basename(dirname(file));
-			if (new RegExp(`^- ${name}:`, "m").test(skillList)) {
-				throw new Error(`${file}: explicit-only skill leaked into the model's skill list`);
-			}
-			const content = checked([omp, "read", `skill://${name}`], project, env);
-			if (!content.includes(body)) throw new Error(`skill://${name} is not readable`);
-			console.log(`Explicit-only readback: ${name} hidden and body matches candidate`);
-			hiddenSkills++;
-		}
-		console.log(`Explicit-only skills: ${hiddenSkills} hidden from the model list and readable through skill://`);
-		const checklist = checked([omp, "read", "skill://foundation/checklist.md"], project, env);
-		const expectedChecklist = readFileSync(join(root, "skills/foundation/checklist.md"), "utf8").trim();
-		if (!checklist.includes(expectedChecklist) || !/^## Conformance$/m.test(checklist)) {
-			throw new Error("installed checklist conformance is missing or differs from the candidate");
-		}
-		console.log("Installed checklist: checklist.md#conformance readable and matches candidate");
-		console.log(`Discovery: misty and foundation listed; ${agents.length} native task agents listed; working-tree skill readable; always-apply core injected`);
-		console.log(core);
-	});
 }
 
 function installedRoot(value: unknown, scratch: string, root?: string) {
@@ -572,7 +467,7 @@ async function codexInventory(executable: string, project: string, env: NodeJS.P
 	}
 }
 
-export async function verifyNativeInstall(root: string, harness: Exclude<Harness, "omp">, executable: string) {
+export async function verifyNativeInstall(root: string, harness: Harness, executable: string) {
 	root = resolve(root);
 	await isolated(harness, async (project, env, scratch) => {
 		const id = "mistystack@mistystack";
@@ -678,7 +573,6 @@ export async function verifyNativeInstall(root: string, harness: Exclude<Harness
 
 export async function verifyAvailableInstalls(
 	root: string,
-	model?: string,
 	executables: Partial<Record<Harness, string>> = Object.fromEntries(harnesses.map(harness => [harness, Bun.which(harness)]).filter(([, executable]) => executable)),
 ) {
 	const results: { harness: Harness; status: "PASS" | "SKIP" }[] = [];
@@ -689,19 +583,7 @@ export async function verifyAvailableInstalls(
 			results.push({ harness, status: "SKIP" });
 			continue;
 		}
-		if (harness === "omp") {
-			if (model === undefined) {
-				const config: unknown = JSON.parse(checked([executable, "config", "get", "modelRoles", "--json"], root, process.env));
-				const roles = isRecord(config) && isRecord(config.value) ? config.value : {};
-				if (!nonempty(roles.smol)) throw new Error("Configure OMP's modelRoles.smol or pass plugin --model SELECTOR for the inference-free RPC proof");
-				model = roles.smol;
-				console.log("RPC model: resolved from OMP's smol role (no inference)");
-			}
-			verifyInstall(root, executable, model);
-			console.log("PASS omp: isolated native install, skill/agent discovery and fresh-session core injection (no inference)");
-		} else {
-			await verifyNativeInstall(root, harness, executable);
-		}
+		await verifyNativeInstall(root, harness, executable);
 		results.push({ harness, status: "PASS" });
 	}
 	return results;
@@ -710,21 +592,16 @@ export async function verifyAvailableInstalls(
 if (import.meta.main) {
 	try {
 		const flags = process.argv.slice(2);
-		const usage = "Usage: scripts/verify plugin [--strict] [--lint-only] [--model SELECTOR]";
+		const usage = "Usage: scripts/verify plugin [--strict] [--lint-only]";
 		let strict = false;
 		let lintOnly = false;
-		let model: string | undefined;
-		for (let index = 0; index < flags.length; index++) {
-			switch (flags[index]) {
+		for (const flag of flags) {
+			switch (flag) {
 				case "--strict": strict = true; break;
 				case "--lint-only": lintOnly = true; break;
-				case "--model":
-					model = flags[++index];
-					if (!model || model.startsWith("--")) throw new Error(usage);
-					break;
 				case "--help":
 				case "-h":
-					console.log(`${usage}\nAll options are plugin-only; --strict fails on broken relative Markdown links, unknown skill names and harness-specific URIs outside skills/misty/harnesses/. --lint-only skips installation for every harness. Available Claude, Codex, OMP and pi CLIs use isolated native installs; missing CLIs report SKIP, not PASS. The RPC model defaults to OMP's smol role; --model overrides it without inference.`);
+					console.log(`${usage}\nAll options are plugin-only; --strict fails on broken relative Markdown links and unknown skill names. --lint-only skips installation for every harness. Available Claude, Codex and pi CLIs use isolated native installs; missing CLIs report SKIP, not PASS.`);
 					process.exit(0);
 				default: throw new Error(usage);
 			}
@@ -745,7 +622,7 @@ if (import.meta.main) {
 		if (lintOnly) {
 			for (const harness of harnesses) console.log(`SKIP ${harness}: --lint-only; isolated install not exercised`);
 		} else {
-			const results = await verifyAvailableInstalls(root, model);
+			const results = await verifyAvailableInstalls(root);
 			console.log(`Native installs: ${results.filter(result => result.status === "PASS").length} PASS, ${results.filter(result => result.status === "SKIP").length} SKIP`);
 		}
 		console.log("Verification complete: plugin");

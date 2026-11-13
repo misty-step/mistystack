@@ -1,6 +1,6 @@
 # Any harness
 
-Mistystack needs two things from a harness, and nearly every coding agent provides both: it reads Agent Skills (`<name>/SKILL.md` directories) and it reads an always-on instruction file such as `AGENTS.md`. This note is the install path for every harness, including Cursor, Antigravity, Prime Agent, OpenCode, Gemini CLI and ones we have not met yet. [OMP](omp.md), [Claude Code](claude.md), [Codex](codex.md) and [pi](pi.md) also have a native plugin that does the same job in one step; use whichever you prefer there.
+Mistystack needs two things from a harness, and nearly every coding agent provides both: it reads Agent Skills (`<name>/SKILL.md` directories) and it reads an always-on instruction file such as `AGENTS.md`. This note is the install path for every harness, including Cursor, Antigravity, Prime Agent, OpenCode, Gemini CLI and ones we have not met yet. [Claude Code](claude.md), [Codex](codex.md) and [pi](pi.md) also have a native plugin that does the same job in one step; use whichever you prefer there.
 
 ## 1. Skills
 
@@ -58,4 +58,4 @@ Prime Agent can also install this repository as a package: `prime-agent package 
 
 ## Companion packs
 
-The design and cleanup packs we use beside mistystack are listed, pinned by commit, in [`.omp-plugin/marketplace.json`](https://github.com/misty-step/mistystack/blob/master/.omp-plugin/marketplace.json), the one list of those pins. On any harness, install each from its repository at that commit, through the harness's plugin command or `npx skills add <owner>/<repo>`.
+The design and cleanup packs we use beside mistystack are listed, pinned by commit, in [`.claude-plugin/marketplace.json`](https://github.com/misty-step/mistystack/blob/master/.claude-plugin/marketplace.json), the one list of those pins. On any harness, install each from its repository at that commit, through the harness's plugin command or `npx skills add <owner>/<repo>`.

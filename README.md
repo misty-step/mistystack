@@ -31,9 +31,8 @@ CLI and others through one path:
 
 - [Any harness](skills/misty/harnesses/any.md): `npx skills add misty-step/mistystack -g`, then the core in `AGENTS.md`.
 
-Four harnesses also have a native plugin that does both steps:
+Three harnesses also have a native plugin that does both steps:
 
-- [OMP](skills/misty/harnesses/omp.md): marketplace plugin and role-backed agents.
 - [Claude Code](skills/misty/harnesses/claude.md): marketplace plugin, core hook and native agents.
 - [Codex](skills/misty/harnesses/codex.md): marketplace plugin, core hook and user-installed agent templates.
 - [pi](skills/misty/harnesses/pi.md): Git package and core extension; rigor runs inline.
@@ -48,7 +47,7 @@ their procedures readable on demand.
 
 ## Operating default
 
-Follow [the core's placement rule](rules/core.md) through your environment's isolation skill. The [OMP note](skills/misty/harnesses/omp.md) owns the operator's local Tern+OMP setup.
+Follow [the core's placement rule](rules/core.md) through your environment's isolation skill.
 
 Security questions use the [focused security review](skills/security-audit/SKILL.md)
 and its execution-safety contract. Only an explicitly commissioned full audit
@@ -59,8 +58,7 @@ Retired reference-page URLs redirect to the focused security review.
 ## Layout
 
 ```text
-.omp-plugin/       OMP plugin and marketplace
-.claude-plugin/    Claude Code plugin and marketplace
+.claude-plugin/    Claude Code plugin; marketplace with the pinned companion packs
 .codex-plugin/     Codex plugin
 .agents/plugins/   Codex marketplace
 package.json       pi package resource declarations
@@ -68,7 +66,6 @@ rules/core.md      always-on routing and guardrails
 skills/misty/      the method page, principles and harness references
 skills/            one Agent Skills content tree
 adapters/          harness-specific agents, hooks and extensions
-agents/            OMP agents at its fixed native discovery path
 .agents/skills/    repository verification
 scripts/           checks, Git hook setup and release protection
 vendor/*.lock.json upstream pins, source mappings and file hashes for unchanged skills
@@ -89,11 +86,10 @@ live in [USER_STORIES.md](USER_STORIES.md). Maintainers start at
 
 `check` runs the maintained test suites and plugin lint sequentially. Release-only
 CI runs `./scripts/check plugin --strict --lint-only`: strict lint checks relative
-Markdown link resolution, named skill references, URI isolation and native
-manifests; installation is explicitly unproved. The full `plugin --strict`
-selection installs in disposable homes through every available OMP, Claude Code,
-Codex and pi CLI. Missing CLIs are named as skipped, not passed. OMP also inspects
-the loaded core and skill list without inference; other no-model checks prove
+Markdown link resolution, named skill references and native manifests;
+installation is explicitly unproved. The full `plugin --strict` selection
+installs in disposable homes through every available Claude Code, Codex and pi
+CLI. Missing CLIs are named as skipped, not passed. These no-model checks prove
 native installation, skill inventory and core hook/extension registration, not
 live model behavior. See the harness notes for fresh-session proof,
 `./scripts/check --help` for gate options and

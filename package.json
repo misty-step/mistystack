@@ -10,7 +10,6 @@
   "keywords": [
     "pi-package"
   ],
-  "omp": {},
   "pi": {
     "skills": [
       "./skills"

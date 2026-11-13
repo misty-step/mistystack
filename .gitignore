@@ -1,5 +1,4 @@
 # Runtime state, caches, credentials and machine-local agent imports are not source.
-.omp/
 .entire/
 /.worktrees/
 node_modules/

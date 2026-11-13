@@ -92,7 +92,7 @@ recovery has one writer with the full brief and a changed recovery path.
 
 ### Harness agents
 
-Your [harness note](../misty/SKILL.md) names the native controls for listing agents, reading their actual tool actions, steering them and stopping one. [OMP's](../misty/harnesses/omp.md#supervise-agents) are the most complete. Where a harness has none, supervise from a separate session that reads the worker's branch, artifacts and logs.
+Your [harness note](../misty/SKILL.md) names the native controls for listing agents, reading their actual tool actions, steering them and stopping one. Where a harness has none, supervise from a separate session that reads the worker's branch, artifacts and logs.
 
 ### Boat agents
 

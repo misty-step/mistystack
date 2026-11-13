@@ -20,10 +20,9 @@ A headingless vendored
 skill uses its installed name as the page title; raw source bytes stay unchanged.
 
 The full `plugin` selection installs the candidate in disposable homes through
-each available OMP, Claude Code, Codex and pi CLI. It reports a missing CLI by
+each available Claude Code, Codex and pi CLI. It reports a missing CLI by
 name as skipped, never passed. Each available adapter must list installed skills
-and register its core hook/extension; OMP additionally exposes the loaded core
-and skill list through a fresh inference-free RPC session. Registration is not
+and register its core hook/extension. Registration is not
 proof that a model received the core. Follow each
 [harness note](../skills/misty/SKILL.md) for that fresh-session proof.
 

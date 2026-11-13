@@ -34,6 +34,8 @@
 /library/playbooks/incident/ /library/skills/release-watch/recovery/ 301
 /library/playbooks/refactor/ /library/misty/ 301
 /install/pstack-names/ /install/ 301
+/install/omp/ /install/any/ 301
+/library/skills/setup-mistystack/agents/ /library/skills/setup-mistystack/ 301
 /library/playbooks/authoring-a-skill/ /library/misty/ 301
 /library/playbooks/autonomous-run/ /library/misty/ 301
 /library/playbooks/bug-fix/ /library/misty/ 301

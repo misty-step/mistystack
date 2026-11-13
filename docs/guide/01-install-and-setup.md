@@ -1,14 +1,13 @@
 # 1. Install and setup
 
 The method installs on any harness that reads Agent Skills and an always-on
-instruction file. Four harnesses also have a native adapter; there is no custom
+instruction file. Three harnesses also have a native adapter; there is no custom
 installer and no separate content tree per harness.
 
 Explicitly invoke [setup-mistystack](../../skills/setup-mistystack/SKILL.md). It identifies
 the destination harness, follows its native reference, assigns applicable rigor
 roles in native configuration and requires fresh-session proof:
 
-- [OMP](../../skills/misty/harnesses/omp.md)
 - [Claude Code](../../skills/misty/harnesses/claude.md)
 - [Codex](../../skills/misty/harnesses/codex.md)
 - [pi](../../skills/misty/harnesses/pi.md)
@@ -17,7 +16,7 @@ roles in native configuration and requires fresh-session proof:
 
 Grok Bot runtime setup is private fleet machinery. Grok Build CLI is not a target.
 Each public adapter needs its own native installation and loading evidence;
-an OMP pass does not prove another adapter. Native
+a Claude Code pass does not prove another adapter. Native
 installation, file inventory and hook/extension registration are not proof that
 a model received the core in a fresh session. Follow the matching reference's
 consumer path and report every skipped or unproved part separately. Fleet
@@ -35,7 +34,7 @@ statement. No adapter, dispatcher or consumer role remains for them.
 
 This public repository does not supply a general Hermes installer or a
 standalone Hermes native-loading reference. No install command or continuing
-Hermes integration is established here; do not substitute an OMP command or
-claim Hermes support from an OMP pass.
+Hermes integration is established here; do not substitute another harness's
+command or claim Hermes support from another harness's pass.
 
 Next: [Misty](02-misty.md).

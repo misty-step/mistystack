@@ -88,6 +88,8 @@ export default defineConfig({
     '/library/playbooks/incident/': '/library/skills/release-watch/recovery/',
     '/library/playbooks/refactor/': '/library/misty/',
     '/install/pstack-names/': '/install/',
+    '/install/omp/': '/install/any/',
+    '/library/skills/setup-mistystack/agents/': '/library/skills/setup-mistystack/',
     ...retired('/library/playbooks/', playbooks, '/library/misty/'),
     ...retired('/library/principles/', principles, '/library/skills/misty/principles/'),
     ...retired('/library/skills/', skills, '/library/'),

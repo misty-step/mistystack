@@ -5,11 +5,15 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0027](0027-drop-omp.md): OMP is not a supported harness. Removes its adapter,
+  agents, proof and lint; the companion-pack pins move unchanged to
+  `.claude-plugin/marketplace.json`, their one home. OMP users may try the
+  universal install at their own risk.
 - [0026](0026-one-page-method.md): the method is one self-contained page and
   pstack is no longer vendored. Supersedes 0021 and the "pstack governs"
   rule of 0022; the owner's rulings in 0022 to 0024 stay in force, restated in
-  the mode. Keeps all four adapters and makes the three-arm comparison a tool,
-  not a gate.
+  the mode. Makes the three-arm comparison a tool, not a gate. Its OMP
+  adapter and OMP home for companion pins are superseded by 0027.
 - [0025](0025-skill-finder-worker.md): one bounded Jev skill-finder route in the
   existing Worker, with pinned preferred-set content and explicit degradation.
   Supersedes 0018's assets-only restriction for skill discovery.
