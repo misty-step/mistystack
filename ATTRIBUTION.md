@@ -35,6 +35,7 @@ These source records cover each Misty-authored skill directory, including suppor
 | `misty` | misty-step/mistystack#533 Q10-Q12; pstack poteto-mode structure (cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack); Daybook artifacts/2026-10/pstack-vs-mistystack.md (Scholar); Phaedrus t2228u; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md |
 | `agent-design` | Daybook projects/mistystack.md decisions 6, 16-18; misty-step/mistystack#533 Q6, Q8 and frontmatter ruling; misty-step/mistystack@0ccc1a3/agent-config/skills/agent-design; mattpocock/skills@59db609eb1e18aaf59b63284d0e52255aff0c63c/skills/productivity/writing-for-agents; pstack (cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack), skills/{poteto-mode,principle-encode-lessons-in-structure,correct}; misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/way-of-working.md (Agent instructions, Keep it living); Nico Bailon skill-diet ruling (reference). |
 | `boat-workers` | Phaedrus, 2026-11-03 delivery directive and ADR 0023; prior 2026-10-28/29 placement rulings; misty-step/workstation@e82812ec29cbef7814db697b6a7b190d8ecf6b8d/skills/remote-execution/SKILL.md; Boat 1.0.89 installed help; https://docs.boat.dev/snapshots/templates.md; https://docs.boat.dev/long-running-tasks/auto-stop.md; https://docs.boat.dev/long-running-tasks/background-commands.md; https://docs.boat.dev/environments/access.md; https://docs.boat.dev/hosting/firewall.md; https://docs.boat.dev/data-retention/delete.md |
+| `deepen` | Phaedrus, 2026-11-13; Felix Rieseberg, How to be more ambitious, "Depth" (https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/#depth), the four questions; nicobailon/pi-better@509967c7dda0f8c68a927917b19adf4bd83853b8 (MIT), helper.md and brief.md, the read-source-first opening and the brief cold-read check, restated in our words. |
 | `design` | Foundations article 10 and way-of-working#design; misty-step/mistystack@0ccc1a3/agent-config/skills/{design-studio,visual-state-review}; emilkowalski/skills@2d228630ba1446365f614a108cb8252f1feda202; pbakaus/impeccable@5adaee704634e9031ec8943721c4ffa1a3c22221; see sources.md; pstack (cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack), skills/principle-experience-first |
 | `foundation` | misty-step/foundations@d96c99ce1152ab1d6ae4a0eed0b22cbac93897b7/{index.md,way-of-working.md}; misty-step/omp-config@1c6c749e70dfe11975a8622b2d5fd45104ba74e1/skills/foundation/SKILL.md; #533 Q6 |
 | `grill` (retired) | Daybook projects/mistystack.md decisions 16-18; mattpocock/skills@59db609eb1e18aaf59b63284d0e52255aff0c63c/skills/{productivity/{grill-me,grilling},engineering/{grill-with-docs,to-spec,to-tickets,domain-modeling}}; misty-step/mistystack@0ccc1a3/agent-config/{chief/AGENTS.md,skills/user-stories}; local Misty shape, groom, brief; Foundations way-of-working Scope; pstack (cursor/plugins@c742dd61706fbacc1b95f1a20b7b988cf096ce6c/pstack), skills/{in-your-own-words,sharpen} |
@@ -62,6 +63,34 @@ These source records cover each Misty-authored skill directory, including suppor
 MIT License
 
 Copyright (c) 2026 Lauren Tan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### pi-better — Nico Bailon
+
+Source: https://github.com/nicobailon/pi-better at `509967c7dda0f8c68a927917b19adf4bd83853b8`. Adapted in `skills/deepen/`.
+
+```text
+MIT License
+
+Copyright (c) 2026 Nico Bailon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

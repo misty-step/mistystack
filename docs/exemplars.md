@@ -46,6 +46,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 ## Writing
 
 - [Felix Rieseberg, “How to be more ambitious”](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/): deepen the method rather than inflate the scope. Already in `principle-deeper-not-bigger`.
+- [Nico Bailon, pi-better](https://github.com/nicobailon/pi-better): runs Rieseberg's depth prompt as a read-only helper that reads the code first, and checks a subagent's brief cold before it starts. [Deepen](../skills/deepen/SKILL.md) is the harness-neutral version; pi users can install pi-better itself.
 - [Martin Gratzer on slices](https://x.com/mgratzer/status/2114726996869595265): useful vertical slices and a concrete risk check. [Ship-loop](../skills/ship-loop/SKILL.md#1-settle-and-build-the-slice) owns author-run proof and delivery.
 - [Kent C. Dodds, “Write tests. Not too many. Mostly integration.”](https://kentcdodds.com/blog/write-tests): confidence through behavior across real boundaries; Dodds credits Guillermo Rauch for the original slogan.
 - [Linus Torvalds, Linux kernel coding style](https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst): simple code, clear ownership and maintainable interfaces.
