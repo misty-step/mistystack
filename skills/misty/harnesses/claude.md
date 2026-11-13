@@ -28,6 +28,9 @@ command alone does not prove the intended revision is loaded.
 Explicitly invoke [setup-mistystack](../../setup-mistystack/SKILL.md) for native rigor assignments.
 Preserve unrelated plugins, settings, credentials and runtime data.
 
+The same marketplace lists the pinned [companion packs](any.md#companion-packs);
+install one by name, for example `claude plugin install impeccable@mistystack`.
+
 ## Core, skills and relative links
 
 The plugin's `SessionStart` command hook reads
@@ -52,8 +55,7 @@ The plugin explicitly lists
 [rigor-standard](../../../adapters/claude/agents/rigor-standard.md) and
 [rigor-critical](../../../adapters/claude/agents/rigor-critical.md).
 The explicit `adapters/claude/agents/` manifest array replaces Claude's default
-root `agents/` scan, so OMP's fixed-scan root agents do not collide with Claude's
-agents. Select the matching agent for
+root `agents/` scan. Select the matching agent for
 the [rigor tier](../../ship-loop/roles.md#rigor), and put the worker's responsibility
 in the brief. The author proves the running path and merges. A separately briefed
 reviewer performs the single critical-correctness/security assessment at release.
@@ -65,7 +67,7 @@ critical work to a weaker model than its parent would invert the tier. Lower
 effort is the cheap way to run a fully specified slice; raise a tier to `xhigh`
 only where you have measured a gain. To put light work on a cheaper model,
 change that agent's `model` field in the target installation.
-These are Claude-native selections, not OMP `modelRoles`. Inspect native agent
+These are Claude-native selections. Inspect native agent
 configuration and any overrides in the target installation; do not maintain model
 choices in skill prose or edit plugin-cache copies as durable configuration.
 Retain actual agent/model identity from an authorized dispatch before claiming a
@@ -80,8 +82,7 @@ the closing report carries what the reader needs.
 
 ## Drive the real UI
 
-This adapter does not supply a browser integration, and OMP's `eval` browser API
-is not a Claude Code API. Use only a browser integration actually available and
+This adapter does not supply a browser integration. Use only a browser integration actually available and
 authorized in the current Claude session, after reading its native contract.
 Without one, report the browser path as unverified rather than manufacturing UI
 proof. The [design review procedure](../../design/review.md) owns state selection.

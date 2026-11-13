@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
-import { lintPlugin, verifyAvailableInstalls, verifyInstall, verifyNativeInstall } from "./verify-plugin";
+import { lintPlugin, verifyAvailableInstalls, verifyNativeInstall } from "./verify-plugin";
 
 const roots: string[] = [];
 afterEach(() => {
@@ -23,20 +23,16 @@ function fixture() {
 	put("rules/core.md", "---\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
 	const json = (path: string, value: unknown) => put(path, `${JSON.stringify(value)}\n`);
 	const hooks = (variable: string) => ({ SessionStart: [{ hooks: [{ type: "command", command: `cat "$${variable}/rules/core.md"` }] }] });
-	const marketplace = { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }] };
 	json(".claude-plugin/plugin.json", { name: "mistystack", agents: ["./adapters/claude/agents/fixture.md"], hooks: hooks("CLAUDE_PLUGIN_ROOT") });
-	json(".claude-plugin/marketplace.json", marketplace);
+	json(".claude-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }] });
 	json(".codex-plugin/plugin.json", { name: "mistystack", version: "1.0.0", skills: "./skills/", hooks: "./adapters/codex/hooks.json" });
 	json(".agents/plugins/marketplace.json", {
 		name: "mistystack",
 		plugins: [{ name: "mistystack", source: { source: "local", path: "./" }, policy: { installation: "AVAILABLE", authentication: "ON_USE" }, category: "Productivity" }],
 	});
 	json("adapters/codex/hooks.json", { hooks: hooks("PLUGIN_ROOT") });
-	json(".omp-plugin/plugin.json", { name: "mistystack", version: "1.0.0", skills: "./skills" });
-	json(".omp-plugin/marketplace.json", marketplace);
-	json("package.json", { name: "mistystack", version: "1.0.0", keywords: ["pi-package"], omp: {}, pi: { skills: ["./skills"], extensions: ["./adapters/pi/core.ts"] } });
+	json("package.json", { name: "mistystack", version: "1.0.0", keywords: ["pi-package"], pi: { skills: ["./skills"], extensions: ["./adapters/pi/core.ts"] } });
 	put("adapters/claude/agents/fixture.md", "---\nname: fixture\ndescription: Fixture worker.\n---\nComplete the assigned task.\n");
-	put("agents/fixture.md", "---\nname: fixture\ndescription: Fixture worker.\n---\nComplete the assigned task.\n");
 	put("adapters/pi/core.ts", 'import { readFileSync } from "node:fs";\nexport default function core(pi) {\nconst core = readFileSync(new URL("../../rules/core.md", import.meta.url), "utf8");\npi.on("before_agent_start", event => ({ systemPrompt: `${event.systemPrompt}\\n${core}` }));\n}\n');
 	return { root, put, skill, json };
 }
@@ -44,7 +40,7 @@ function fixture() {
 test.each([
 	".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
 	".codex-plugin/plugin.json", ".agents/plugins/marketplace.json",
-	".omp-plugin/plugin.json", ".omp-plugin/marketplace.json", "package.json",
+	"package.json",
 ])("requires a JSON object at native manifest %s", file => {
 	const { root, put } = fixture();
 	put(file, "{");
@@ -57,10 +53,9 @@ test.each([
 test.each([
 	[".claude-plugin/plugin.json", "name must be non-empty"],
 	[".codex-plugin/plugin.json", "version must be non-empty"],
-	[".omp-plugin/plugin.json", "version must be non-empty"],
 	[".claude-plugin/marketplace.json", "owner.name must be non-empty"],
+	[".claude-plugin/marketplace.json", "plugins must be a non-empty array"],
 	[".agents/plugins/marketplace.json", "plugins must be a non-empty array"],
-	[".omp-plugin/marketplace.json", "plugins must be a non-empty array"],
 	["package.json", "keywords must include pi-package"],
 ])("checks required native manifest fields in %s", (file, error) => {
 	const { root, json } = fixture();
@@ -68,7 +63,7 @@ test.each([
 	expect(lintPlugin(root).errors).toContain(`${file}: ${error}`);
 });
 
-test.each([".claude-plugin/plugin.json", ".codex-plugin/plugin.json", ".omp-plugin/plugin.json", "package.json"])(
+test.each([".claude-plugin/plugin.json", ".codex-plugin/plugin.json", "package.json"])(
 	"rejects a second skills tree registered by %s",
 	file => {
 		const { root, put, skill, json } = fixture();
@@ -88,27 +83,6 @@ test.each([
 	const { root } = fixture();
 	rmSync(join(root, file));
 	expect(lintPlugin(root).errors.some(error => error.includes(`missing file ./${file}`))).toBe(true);
-});
-
-test("requires OMP's native root agents rather than an ignored manifest agents field", () => {
-	const { root, json } = fixture();
-	rmSync(join(root, "agents/fixture.md"));
-	expect(lintPlugin(root).errors).toContain("agents/: no native OMP agents found");
-	const manifest = JSON.parse(readFileSync(join(root, ".omp-plugin/plugin.json"), "utf8"));
-	manifest.agents = ["./adapters/omp/agents/fixture.md"];
-	json(".omp-plugin/plugin.json", manifest);
-	expect(lintPlugin(root).errors).toContain(".omp-plugin/plugin.json: OMP discovers root agents/; manifest agents is unsupported");
-});
-
-test("an explicit OMP package manifest prevents fallback to pi's core extension", () => {
-	const { root, json } = fixture();
-	const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
-	delete manifest.omp;
-	json("package.json", manifest);
-	expect(lintPlugin(root).errors).toContain("package.json: omp must be an explicit object to prevent pi adapter fallback");
-	manifest.omp = { extensions: ["./adapters/pi/core.ts"] };
-	json("package.json", manifest);
-	expect(lintPlugin(root).errors).toContain("package.json: omp.extensions must not register pi's core extension");
 });
 
 test("Claude defaults to root skills only when the skills field is omitted", () => {
@@ -165,9 +139,9 @@ test("Codex marketplace policy and local source are required, not just its plugi
 test.each([
 	{ source: "github", repo: "owner/skills", sha: "a".repeat(40) },
 	{ source: "git-subdir", url: "https://github.com/owner/skills.git", path: "plugins/design", sha: "b".repeat(40) },
-])("accepts a pinned OMP catalog source without requiring local files", source => {
+])("accepts a pinned companion catalog source without requiring local files", source => {
 	const { root, json } = fixture();
-	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	json(".claude-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
 	expect(lintPlugin(root).errors).toEqual([]);
 });
 
@@ -175,10 +149,10 @@ test.each([
 	{ source: "github", repo: "owner/skills", ref: "main" },
 	{ source: "github", repo: "owner/skills", sha: "abc123" },
 	{ source: "github", repo: "owner/skills", sha: "z".repeat(40) },
-])("rejects branch-only and incomplete OMP catalog pins", source => {
+])("rejects branch-only and incomplete companion catalog pins", source => {
 	const { root, json } = fixture();
-	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
-	expect(lintPlugin(root).errors).toContain(".omp-plugin/marketplace.json: catalog-skill: catalog source requires a full 40-hex sha");
+	json(".claude-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toContain(".claude-plugin/marketplace.json: catalog-skill: catalog source requires a full 40-hex sha");
 });
 
 test.each([
@@ -186,10 +160,10 @@ test.each([
 	[{ source: "git-subdir", url: "file:///outside", path: "plugin", sha: "a".repeat(40) }, "git-subdir source requires an HTTPS repository URL"],
 	[{ source: "git-subdir", url: "https://github.com/owner/skills.git", path: "../outside", sha: "a".repeat(40) }, "git-subdir source requires an in-repository path"],
 	[{ source: "npm", package: "uninstalled", sha: "a".repeat(40) }, "catalog source must use github or git-subdir"],
-])("rejects malformed OMP catalog sources", (source, message) => {
+])("rejects malformed companion catalog sources", (source, message) => {
 	const { root, json } = fixture();
-	json(".omp-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
-	expect(lintPlugin(root).errors).toContain(`.omp-plugin/marketplace.json: catalog-skill: ${message}`);
+	json(".claude-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }, { name: "catalog-skill", source }] });
+	expect(lintPlugin(root).errors).toContain(`.claude-plugin/marketplace.json: catalog-skill: ${message}`);
 });
 
 function expectStrictWarnings(root: string, warnings: string[]) {
@@ -450,33 +424,10 @@ test.each(["recompile", "setup-mistystack"])(
 	},
 );
 
-test.each([
-	["skills/misty/SKILL.md", "skill://"],
-	["skills/misty/playbooks/feature.md", "xd://"],
-	["skills/release-watch/ship-loop.ts", "skill://"],
-	["skills/release-watch/ship-loop.test.ts", "xd://"],
-	["skills/setup-mistystack/SKILL.md", "skill://"],
-	["rules/core.md", "xd://"],
-	["rules/helper.ts", "skill://"],
-	["skills/misty/harnesses-other/notes.md", "xd://"],
-])("rejects literal harness URI in %s (%s) only in strict mode", (file, scheme) => {
-	const { root, put, skill } = fixture();
-	const body = file.endsWith(".ts") ? `export const target = ${JSON.stringify(`${scheme}example`)};\n` : `\`\`\`text\n${scheme}example\n\`\`\`\n`;
-	put(file, file.endsWith("/SKILL.md") ? skill(file.split("/")[1], body) : file === "rules/core.md" ? `---\nalwaysApply: true\n---\n${body}` : body);
-	expectStrictWarnings(root, [`${file}: harness-specific URI ${scheme} is only allowed in skills/misty/harnesses/`]);
-});
-
-test("allows both harness URI schemes only inside the disclosed harness directory", () => {
-	const { root, put } = fixture();
-	put("skills/misty/harnesses/omp.md", "Read [native](skill://misty), use `xd://lsp`, then return to [router](../SKILL.md).\n");
-	put("skills/misty/harnesses/example.ts", 'export const targets = ["skill://misty", "xd://lsp"];\n');
-	expect(lintPlugin(root, true)).toEqual({ skillCount: 1, errors: [], warnings: [] });
-});
-
 test("missing native CLIs are explicit skips, not successful install proofs", async () => {
 	const { root } = fixture();
-	const results = await verifyAvailableInstalls(root, undefined, {});
-	expect(results.map(result => result.harness)).toEqual(["claude", "codex", "omp", "pi"]);
+	const results = await verifyAvailableInstalls(root, {});
+	expect(results.map(result => result.harness)).toEqual(["claude", "codex", "pi"]);
 	expect(results.every(result => result.status === "SKIP")).toBe(true);
 	expect(results.some(result => result.status === "PASS")).toBe(false);
 });
@@ -491,106 +442,13 @@ test("strict lint failures exit nonzero before tests or installation", () => {
 	expect(result.out).not.toContain("Verification complete");
 });
 
-test("plugin help explains strict lint without requiring OMP", () => {
+test("plugin help explains strict lint without requiring a harness CLI", () => {
 	const { root } = fixture();
 	const result = runPlugin(root, ["--help"]);
 	expect(result.code).toBe(0);
-	expect(result.out).toContain("--strict fails on broken relative Markdown links, unknown skill names and harness-specific URIs");
-	expect(result.out).toContain("outside skills/misty/harnesses/");
+	expect(result.out).toContain("--strict fails on broken relative Markdown links and unknown skill names");
 	expect(result.out).toContain("--lint-only skips installation");
-});
-
-test("an escaping config path is refused before any install command", () => {
-	const { root, put } = fixture();
-	const trace = join(root, "omp-commands");
-	const omp = join(root, "omp");
-	put("omp", `#!/bin/sh\nprintf '%s\\n' "$*" >> ${JSON.stringify(trace)}\nprintf '%s\\n' ${JSON.stringify(join(root, "foreign-profile"))}\n`);
-	chmodSync(omp, 0o700);
-	expect(() => verifyInstall(root, omp, "fixture/model")).toThrow("isolation refused");
-	expect(readFileSync(trace, "utf8")).toBe("config path\n");
-});
-
-test.each([
-	["For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.", true],
-	["For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles…", true],
-	["When working on any project, run every Foundation checklist item.", false],
-	[undefined, false],
-] as const)("checks the named Foundation trigger in the native description (%j)", (description, accepted) => {
-	const { root, put, skill } = fixture();
-	const sourceDescription = "For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.";
-	put("skills/foundation/SKILL.md", skill("foundation").replace("When changing the consumer path.", sourceDescription));
-	put("skills/foundation/checklist.md", "# Constitution\n\n## Conformance\n\nReal product proof.\n");
-	for (const name of ["recompile", "setup-mistystack"]) put(`skills/${name}/SKILL.md`, skill(name));
-	const skills = [
-		`- misty: ${sourceDescription}`,
-		...(description === undefined ? [] : [`- foundation: ${description}`]),
-	];
-	const frame = JSON.stringify({
-		type: "response", id: "plugin-proof", success: true,
-		data: {
-			systemPrompt: [`# Core\n\n- Load misty.\n<skills>\n${skills.join("\n")}\n</skills>`],
-			dumpTools: [{ name: "task", description: "fixture" }],
-		},
-	});
-	const trace = join(root, "omp-reads");
-	put("omp", `#!/bin/sh
-case "$1" in
-  config) printf '%s\\n' "$PI_CODING_AGENT_DIR" ;;
-  launch) printf '%s\\n' '${frame}' ;;
-  read) printf '%s\\n' "$2" >> ${JSON.stringify(trace)}; if [ "$2" = "skill://foundation/checklist.md" ]; then cat ${JSON.stringify(join(root, "skills/foundation/checklist.md"))}; else printf 'Run the owned check.\\n'; fi ;;
-  *) printf 'Installed fixture\\n' ;;
-esac
-`);
-	chmodSync(join(root, "omp"), 0o700);
-	if (accepted) {
-		expect(() => verifyInstall(root, join(root, "omp"), "fixture/model")).not.toThrow();
-		expect(readFileSync(trace, "utf8")).toContain("skill://recompile\n");
-		expect(readFileSync(trace, "utf8")).toContain("skill://setup-mistystack\n");
-	} else {
-		expect(() => verifyInstall(root, join(root, "omp"), "fixture/model")).toThrow("foundation's installed trigger is missing");
-	}
-});
-
-test.each(["readable", "unreadable", "listed", "stale-checklist", "missing-conformance"])("checks installed explicit-only leaves and conformance (%s)", state => {
-	const { root, put, skill } = fixture();
-	put("skills/principle-alpha/SKILL.md", skill("principle-alpha", "Alpha's independent procedure."));
-	put("skills/principle-omega/SKILL.md", skill("principle-omega", "Omega's independent procedure."));
-	const foundationDescription = "For a whole-project audit, new project setup or stack decision: run all twelve Foundation articles and make the project adhere.";
-	put("skills/foundation/SKILL.md", skill("foundation").replace("When changing the consumer path.", foundationDescription));
-	put("skills/foundation/checklist.md", `# Constitution\n\n## ${state === "missing-conformance" ? "Other" : "Conformance"}\n\nReal product proof.\n`);
-	const trace = join(root, "omp-commands");
-	const omp = join(root, "omp");
-	const prompt = `# Core\n\n- Load misty.\n<skills>\n- misty: Fixture router.\n- foundation: ${foundationDescription}\n${state === "listed" ? "- principle-omega: Leaked leaf.\n" : ""}</skills>`;
-	const response = JSON.stringify({
-		type: "response", id: "plugin-proof", success: true,
-		data: { systemPrompt: [prompt], dumpTools: [{ name: "task", description: "fixture" }] },
-	});
-	const omega = state === "unreadable" ? "printf '%s\\n' 'Unavailable procedure'" : `cat ${JSON.stringify(join(root, "skills/principle-omega/SKILL.md"))}`;
-	const checklist = state === "stale-checklist" ? "printf '%s\\n' '## Conformance'" : `cat ${JSON.stringify(join(root, "skills/foundation/checklist.md"))}`;
-	put("omp", `#!/bin/sh
-printf '%s\\n' "$*" >> ${JSON.stringify(trace)}
-case "$1 $2" in
-  "config path") printf '%s\\n' "$PI_CODING_AGENT_DIR" ;;
-  "plugin marketplace"|"plugin install") ;;
-  "launch --mode") printf '%s\\n' ${JSON.stringify(response)} ;;
-  "read skill://misty") cat ${JSON.stringify(join(root, "skills/misty/SKILL.md"))} ;;
-  "read skill://principle-alpha") cat ${JSON.stringify(join(root, "skills/principle-alpha/SKILL.md"))} ;;
-  "read skill://principle-omega") ${omega} ;;
-  "read skill://foundation/checklist.md") ${checklist} ;;
-  *) exit 1 ;;
-esac
-`);
-	chmodSync(omp, 0o700);
-	const verify = () => verifyInstall(root, omp, "fixture/model");
-	if (state === "listed") expect(verify).toThrow("explicit-only skill leaked into the model's skill list");
-	else if (state === "unreadable") expect(verify).toThrow("skill://principle-omega is not readable");
-	else if (state === "stale-checklist" || state === "missing-conformance") expect(verify).toThrow("installed checklist conformance is missing or differs from the candidate");
-	else {
-		expect(verify).not.toThrow();
-		const commands = readFileSync(trace, "utf8");
-		for (const name of ["principle-alpha", "principle-omega"]) expect(commands).toContain(`read skill://${name}\n`);
-		expect(commands).toContain("read skill://foundation/checklist.md\n");
-	}
+	expect(result.out).toContain("Available Claude, Codex and pi CLIs use isolated native installs");
 });
 
 test.each(["claude", "codex", "pi"] as const)("refuses leaked %s state before installing and removes its scratch home", async harness => {

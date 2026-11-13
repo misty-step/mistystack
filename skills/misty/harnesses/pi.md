@@ -48,7 +48,7 @@ Prove discovery and explicit reachability separately.
 ## Rigor inline, without subagents
 
 pi 1.4.0 has no native subagent mechanism. This adapter supplies no `rigor-*`
-agents, dispatch tool or OMP `modelRoles` mapping. Apply the
+agents, dispatch tool or per-agent model mapping. Apply the
 [rigor tiers and responsibilities](../../ship-loop/roles.md#rigor) inline in the
 current session, keeping the [Misty briefing contract](../SKILL.md) explicit.
 Choose the main session's model and reasoning budget through pi's native model
@@ -62,8 +62,7 @@ a subagent API or imposing an agent deadline.
 
 ## Drive the real UI
 
-This adapter does not supply a browser integration, and OMP's `eval` browser API
-is not a pi API. Use only an integration actually available and authorized in the
+This adapter does not supply a browser integration. Use only an integration actually available and authorized in the
 current pi session, after reading its native contract. Otherwise report the
 browser path as unverified. The
 [design review procedure](../../design/review.md) owns state selection; generated

@@ -13,8 +13,8 @@ Criteria:
 1. `./scripts/check` runs the maintained release-protection, secret-scanner,
    plugin and skill tests sequentially, with Bun concurrency capped at one.
 2. `./scripts/check plugin` uses isolated native installs for every available
-   OMP, Claude Code, Codex and pi CLI, checking skills and core registration;
-   OMP also observes a fresh session's loaded core without inference.
+   Claude Code, Codex and pi CLI, checking skills and core registration
+   without inference.
 3. A failed test, invalid plugin or failed available-harness proof exits nonzero.
    Missing CLIs and lint-only installation skips are named, never reported passed.
 4. Verification preserves the live profile, credentials and foreign state.
@@ -69,7 +69,7 @@ model roster in skill prose.
 Criteria:
 1. The user explicitly invokes [setup](skills/setup-mistystack/SKILL.md), which assigns `rigor-light`,
    `rigor-standard` and `rigor-critical` through the active harness's authority:
-   OMP model roles, Claude agent model fields or Codex user-agent TOML.
+   Claude agent model fields or Codex user-agent TOML.
 2. Native role agents select the tier where subagents exist; the brief supplies
    responsibility. pi and harnesses on the universal install run rigor inline
    without inventing subagents or model roles.
@@ -84,7 +84,7 @@ Criteria:
    runs on a weaker model than the session that dispatched it. A second opinion
    uses the same prompt with a different model family.
 
-Proof: `skills/setup-mistystack/`, `agents/`, `adapters/`, [rigor roles](skills/ship-loop/roles.md).
+Proof: `skills/setup-mistystack/`, `adapters/`, [rigor roles](skills/ship-loop/roles.md).
 
 ## US-015 Publish verified mistystack releases
 
@@ -353,8 +353,9 @@ stalls and wasted spend are corrected without arbitrary run deadlines.
 Criteria:
 1. A supervisor compares each active agent's observed work with its self-contained
    brief and acceptance condition. Elapsed wall-clock time is not a stop condition.
-2. OMP supervision uses native process/history observations, real completion
-   probes, messages to steer and exact-agent termination/replacement when needed.
+2. Harness supervision uses the harness note's native observations of agent
+   actions, real completion probes, steering and exact-agent
+   termination/replacement when needed.
 3. Boat supervision uses events, conversations, steering and interruption.
    A separately briefed Boat agent can own the loop through `boat prompt`.
 4. Replacement carries the full outcome, current evidence and remaining scope;
@@ -381,7 +382,7 @@ Criteria:
 2. [Misty](skills/misty/SKILL.md#the-loop) and its [shaping facts](skills/misty/shaping.md) route unsettled intent to `grilling`, where agents find facts and the owner decides, and supplies the tracker, workflow-state, `DOMAIN.md` and `docs/decisions/` facts the skills expect.
 3. The vendored skills match `vendor/pocock.lock.json` byte for byte; plugin lint rejects edited, missing or unrecorded files.
 
-Proof: [ADR 0024](docs/decisions/0024-pocock-shaping-skills.md), plugin lint, and a fresh isolated OMP session's skill list and installed routing.
+Proof: [ADR 0024](docs/decisions/0024-pocock-shaping-skills.md), plugin lint, and a fresh isolated Claude Code session's skill list and installed routing.
 
 ## US-066 Orient and look back through named intents
 
@@ -391,7 +392,7 @@ Criteria:
 1. [Misty's routes](skills/misty/SKILL.md#routes) name Look back (`retro`) and Supervise (`watchdog`). Orienting and explaining need no skill: the mode says to read the branch, pull request and tracker item themselves.
 2. Matt Pocock's `retro` is vendored unchanged under `vendor/pocock.lock.json`; [Looking back](skills/misty/shaping.md#looking-back) maps its reviewer assumptions to Misty's, adds harness and spend review and a pass over stale standing instructions, routes each accepted candidate to a structural check, agent-design or the owning repository as a ship-loop slice, and records re-run proposals on the tracker.
 
-Proof: plugin lint and a fresh isolated OMP session following the installed Look back route.
+Proof: plugin lint and a fresh isolated Claude Code session following the installed Look back route.
 
 ## US-067 Find a skill by the work
 
@@ -419,10 +420,10 @@ Criteria:
 2. Misty routes both intents. Ship-loop records merge-risk's overall and
    per-category verdicts in Merge Danger and in the single release assessment,
    and uses resolve-merge-conflicts on forge conflicts.
-3. Misty's route says to run Warp's script from the installed skill directory. A fresh isolated OMP session lists merge-risk and reads
-   `skill://resolve-merge-conflicts`.
+3. Misty's route says to run Warp's script from the installed skill directory. A fresh isolated Claude Code session lists merge-risk and reads
+   the installed `resolve-merge-conflicts` skill.
 4. The built skill index identifies both skills as pack Warp, with the locked
    pin and `warpdotdev/common-skills` repository.
 
 Proof: shared sync containment/layout tests, strict plugin checks, built skill
-index assertions and isolated OMP discovery/read events.
+index assertions and isolated Claude Code discovery/read events.

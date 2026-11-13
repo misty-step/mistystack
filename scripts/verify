@@ -6,16 +6,14 @@ cd "$root"
 usage() {
   printf '%s\n' \
     'Usage: scripts/verify [all]' \
-    '       scripts/verify plugin [--strict] [--lint-only] [--model SELECTOR]' \
+    '       scripts/verify plugin [--strict] [--lint-only]' \
     '' \
     'all: maintained tests and structural lint; no native installation.' \
-    'plugin: maintained tests and isolated Claude, Codex, OMP and pi install checks.' \
+    'plugin: maintained tests and isolated Claude, Codex and pi install checks.' \
     '' \
     'Plugin-only options:' \
-    '  --strict       Fail on broken relative Markdown links, unknown skill names and harness-specific URIs.' \
-    '                 Harness-specific URIs are allowed only in skills/misty/harnesses/.' \
+    '  --strict       Fail on broken relative Markdown links and unknown skill names.' \
     '  --lint-only    Skip every native installation explicitly (CI structural proof only).' \
-    '  --model VALUE  RPC model selector; defaults to the configured OMP smol role.' \
     '' \
     '-h, --help: show this help. Install checks make no model inference request.' \
     'Missing harness CLIs report SKIP, never PASS; available CLIs must pass their native checks.'

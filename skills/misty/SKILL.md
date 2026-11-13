@@ -12,11 +12,11 @@ metadata:
 
 This is how Misty Step builds software with agents. It is one page on purpose. It carries the local facts and decisions a capable model cannot work out from the repository, and it leaves general engineering knowledge to you. When this page and your own judgment disagree about how to do good work, say so in your report; when they disagree about a Misty Step decision (who approves what, where work is tracked, how a release ships), this page wins.
 
-The method runs on any harness that reads Agent Skills and an always-on instruction file. Read your harness note once per session for native mechanics: [Claude Code](harnesses/claude.md), [Codex](harnesses/codex.md), [OMP](harnesses/omp.md), [pi](harnesses/pi.md), or [any other harness](harnesses/any.md), which covers Cursor, Antigravity and Prime Agent.
+The method runs on any harness that reads Agent Skills and an always-on instruction file. Read your harness note once per session for native mechanics: [Claude Code](harnesses/claude.md), [Codex](harnesses/codex.md), [pi](harnesses/pi.md), or [any other harness](harnesses/any.md), which covers Cursor, Antigravity and Prime Agent.
 
 ## The loop
 
-1. **Understand.** Say what the user wants and the change you expect to make, then start. Read the source, the failing run and the tracker item themselves; a summary of them is not evidence. A question whose answer you could observe by running something is yours to answer by running it. A question about product intent or preference belongs to the owner: take it to [grilling](../grilling/SKILL.md) under the [shaping facts](shaping.md). If the evidence rules out the change that was asked for, show the evidence and stop that part.
+1. **Understand.** Say what the user wants and the change you expect to make, then start. Read the source, the failing run and the tracker item themselves; a summary of them is not evidence. A question whose answer you could observe by running something is yours to answer by running it. A question about product intent or preference belongs to the owner: take it to [grilling](../grilling/SKILL.md) under the [shaping facts](shaping.md). If the evidence rules out the change that was asked for, show the evidence and stop that part. When the request is vague, ambitious or arrives as someone's summary, [deepen](../deepen/SKILL.md) it first.
 2. **Make it verifiable.** Before you design, ask how this change can be fully verified, and name the check: the exact command or the real user journey, and what it will show when the change is right and when it is wrong. A design you cannot check is the wrong design. [Verification](../verification/SKILL.md) owns the procedure.
 3. **Build.** Make the smallest complete change: migrate every caller and delete what the change makes obsolete. The [principles](principles.md) describe the taste we hold; read the entry whose trigger matches. When a change does not fit the existing design, neither bolt it on nor widen the task silently. Name the reshape at the start, land it first as its own behavior-preserving slice, then build on it. That reshape is part of the work. Stop only the part whose reshape would break behavior the brief says to keep or reach outside the scope you own; report it as a recommendation with its evidence and finish the rest.
 4. **Cut the draft.** A first draft records how you found the solution, not the solution. Before proving it, [review it for complexity](principles.md#cut-the-draft-before-proof): delete what the change replaces, collapse parallel controls and state, call existing boundaries directly, and rewrite it from scratch if it is bloated.
@@ -78,7 +78,7 @@ Give each writer its own worktree and branch, and each shared resource one write
 
 ### The brief
 
-Pass this, not your transcript. Size it to the unit: a rename needs names and a check, an open design needs constraints and raw material.
+Pass this, not your transcript, and for nontrivial work [check it cold](../deepen/SKILL.md#check-a-brief-before-handing-it-off) before you send it. Size it to the unit: a rename needs names and a check, an open design needs constraints and raw material.
 
 - **Outcome and why:** the consumer's change, in the user's terms, with source links.
 - **Terms:** the `DOMAIN.md` terms involved.
@@ -119,6 +119,7 @@ The same rules cover pull requests, commit messages, documents and comments in t
 | Builds, suites and browser QA on isolated machines | [boat-workers](../boat-workers/SKILL.md) |
 | Running agents to supervise | [watchdog](../watchdog/SKILL.md) |
 | Looking back on a session | [retro](../retro/SKILL.md), with the [shaping facts](shaping.md#looking-back) |
+| A vague, ambitious or summary-only request, or a brief about to be handed off | [deepen](../deepen/SKILL.md) |
 | Prompts, skills, `AGENTS.md` or agent tools | [agent-design](../agent-design/SKILL.md) |
 | A whole-project audit, a new project or a stack decision | [foundation](../foundation/SKILL.md) |
 | Routing work by a typed model decision | [classified handoffs](classified-handoffs.md) |

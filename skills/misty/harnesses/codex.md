@@ -67,7 +67,7 @@ refresh alone does not update separately installed native agents.
 
 The native TOML keys are `name`, `description`, `model`,
 `model_reasoning_effort` and `developer_instructions`. Keep model and reasoning
-choices in those native fields, not OMP `modelRoles` or skill prose. Shipped
+choices in those native fields, not skill prose. Shipped
 templates are starting choices, not proof of provider entitlement: review and
 replace their model/reasoning fields as needed for the destination account before
 installing. Preserve the agent instructions while selecting an accessible model
@@ -83,8 +83,7 @@ identity in a fresh session; a TOML file on disk is not dispatch proof.
 
 ## Drive the real UI
 
-This adapter does not supply a browser integration, and OMP's `eval` browser API
-is not a Codex API. Use only an integration actually available and authorized in
+This adapter does not supply a browser integration. Use only an integration actually available and authorized in
 the current Codex session, after reading its native contract. Otherwise report
 the browser path as unverified. The
 [design review procedure](../../design/review.md) owns state selection; generated

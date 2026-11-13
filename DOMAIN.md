@@ -51,8 +51,7 @@ through [AGENTS.md](AGENTS.md), and boundary decisions live in
   [proof on the real path](skills/misty/principles.md), not a separate mandatory
   pre-dispatch gate.
 - **Local development environment:** the environment where the agent runs.
-  Its harness note owns local constraints. The
-  [OMP note](skills/misty/harnesses/omp.md) names the operator's Tern+OMP setup.
+  Its harness note owns local constraints.
 - **Slice worker:** one isolated Boat environment, started from a saved clean
   toolchain snapshot, reused for a slice's portable execution, stopped when idle
   and deleted after its evidence is retained. [Boat workers](skills/boat-workers/SKILL.md)
@@ -119,5 +118,5 @@ serialize the skill as JSON. The plugin lint rejects plain date/timestamp values
 and requires a non-empty string for `metadata.sunset`.
 
 Model selectors and reasoning budgets belong in harness-native configuration,
-not shared method prose or task-agent prompts. OMP's configuration and invocation
-behavior are disclosed in the [OMP reference](skills/misty/harnesses/omp.md).
+not shared method prose or task-agent prompts. Each
+[harness note](skills/misty/SKILL.md) discloses its configuration and invocation behavior.
