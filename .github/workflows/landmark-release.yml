@@ -71,8 +71,6 @@ jobs:
           base: master
           add-paths: |
             CHANGELOG.md
-            .omp-plugin/marketplace.json
-            .omp-plugin/plugin.json
             .codex-plugin/plugin.json
             package.json
           delete-branch: false

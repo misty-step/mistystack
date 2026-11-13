@@ -2,7 +2,6 @@
 /site/
 
 # npm uses this file instead of .gitignore; retain its runtime exclusions.
-.omp/
 /.worktrees/
 node_modules/
 __pycache__/

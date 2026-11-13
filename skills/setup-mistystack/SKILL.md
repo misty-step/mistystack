@@ -23,7 +23,6 @@ supply the method to every adapter.
 
    | Harness | Native mechanics |
    | --- | --- |
-   | OMP | [OMP](../misty/harnesses/omp.md) |
    | Claude Code | [Claude Code](../misty/harnesses/claude.md) |
    | Codex | [Codex](../misty/harnesses/codex.md) |
    | pi | [pi](../misty/harnesses/pi.md) |
@@ -62,12 +61,11 @@ supply the method to every adapter.
 
 4. **Persist through native authority.** Apply and read back only the selected
    harness's owned assignments, exactly as its note's dispatch and rigor section
-   describes: [OMP](../misty/harnesses/omp.md#dispatch-and-rigor),
-   [Claude Code](../misty/harnesses/claude.md#dispatch-and-rigor),
+   describes: [Claude Code](../misty/harnesses/claude.md#dispatch-and-rigor),
    [Codex](../misty/harnesses/codex.md#dispatch-and-rigor),
    [pi](../misty/harnesses/pi.md#rigor-inline-without-subagents),
    [any other](../misty/harnesses/any.md#3-roles-and-effort).
-   Prove an unfamiliar config mechanism in an isolated home first ([OMP recipe](agents.md)).
+   Prove an unfamiliar config mechanism in an isolated home first.
    **Complete when:** native readback matches the chosen assignments and any
    shadowing is resolved explicitly. Readback proves persistence, not provider
    access or successful inference.

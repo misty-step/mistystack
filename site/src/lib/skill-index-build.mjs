@@ -8,7 +8,7 @@ import { encodePath, release, repoRoot, repositoryUrl } from './release.mjs';
 
 export const INDEX_VERSION = 1;
 export const CORE_TEXT_LIMIT_BYTES = 8000;
-export const MARKETPLACE = '.omp-plugin/marketplace.json';
+export const MARKETPLACE = '.claude-plugin/marketplace.json';
 
 const GITHUB = 'https://github.com';
 const API = 'https://api.github.com';
@@ -20,7 +20,6 @@ const REPOSITORY = /^([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+?)(?:\.git)?$/;
 const PLUGIN_NAME = /^[A-Za-z0-9](?:[A-Za-z0-9.-]{0,62}[A-Za-z0-9])?$/;
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 const VENDORED_PACKS = SKILL_UPSTREAMS.map(({ pack }) => pack);
-const ROOT_CATALOGS = ['marketplace.json', '.omp-plugin/marketplace.json', '.claude-plugin/marketplace.json'];
 const encoder = new TextEncoder();
 const utf8 = new TextDecoder('utf-8', { fatal: true });
 const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -45,7 +44,7 @@ export function capUtf8(text, limit = CORE_TEXT_LIMIT_BYTES) {
   return { text: utf8.decode(bytes.subarray(0, end)), bytes: end, truncated: true };
 }
 
-// Reads a SKILL.md as OMP does: `name` falls back to the skill directory and
+// Reads a SKILL.md leniently: `name` falls back to the skill directory and
 // `enabled: false` hides the skill. The index additionally needs a description and body.
 export function parseSkill(text, label, directoryName) {
   const match = FRONTMATTER.exec(text);
@@ -253,9 +252,9 @@ function within(root, declared) {
   return !root || directory === root || directory.startsWith(`${root}/`) ? directory : undefined;
 }
 
-// Mirrors OMP's marketplace (claude-plugins) discovery: `.claude-plugin/plugin.json`
-// skill paths add to skills/, unless the plugin's own root catalog lists it by name
-// with source "./", whose declared paths are then the complete selection. Each skill
+// Mirrors Claude Code's plugin discovery: `.claude-plugin/plugin.json` skill paths
+// add to skills/, unless the plugin's own `.claude-plugin/marketplace.json` lists it by
+// name with source "./", whose declared paths are then the complete selection. Each skill
 // directory contributes its own SKILL.md and its immediate children's.
 async function pluginSkills(plugin, store, marketplace) {
   const pin = { owner: plugin.owner, repo: plugin.repo, sha: plugin.sha };
@@ -272,15 +271,9 @@ async function pluginSkills(plugin, store, marketplace) {
     catch (error) { throw new Error(`${label}: ${file}: ${error.message}`); }
   };
   const manifest = await json('.claude-plugin/plugin.json');
-  let selection = null;
-  for (const relative of ROOT_CATALOGS) {
-    const catalog = await json(relative);
-    const entry = Array.isArray(catalog?.plugins) ? catalog.plugins.find((candidate) => isRecord(candidate) && candidate.name === plugin.name && candidate.source === './') : undefined;
-    if (isRecord(entry)) {
-      selection = entry;
-      break;
-    }
-  }
+  const catalog = await json(MARKETPLACE);
+  const entry = Array.isArray(catalog?.plugins) ? catalog.plugins.find((candidate) => isRecord(candidate) && candidate.name === plugin.name && candidate.source === './') : undefined;
+  const selection = isRecord(entry) ? entry : null;
   const declared = [...skillPaths(isRecord(manifest) ? manifest.skills : undefined), ...skillPaths(selection?.skills)];
   const directories = declared.length && selection ? [] : [inRoot('skills')];
   for (const entry of declared) {
@@ -302,7 +295,7 @@ async function pluginSkills(plugin, store, marketplace) {
     }
   }
   const repository = `${GITHUB}/${pin.owner}/${pin.repo}`;
-  const install = `omp plugin install ${plugin.name}@${marketplace}`;
+  const install = `claude plugin install ${plugin.name}@${marketplace}`;
   const skills = (await Promise.all([...files].sort().map(async (file) => {
     const directory = path.posix.dirname(file);
     const fallback = directory === (plugin.root || '.') ? undefined : path.posix.basename(directory);

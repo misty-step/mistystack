@@ -223,10 +223,7 @@ function decorateHtml(doc, graph) {
   visit(doc.hast, 'element', (node, index, parent) => {
     const properties = node.properties ?? {};
     if (node.tagName === 'a' && typeof properties.href === 'string') {
-      if (properties.href.startsWith('omp://')) {
-        node.children.push(literal(' (Open in OMP)'));
-        properties.title = 'Open in OMP';
-      } else properties.href = resolveTarget(doc, properties.href, node, graph);
+      properties.href = resolveTarget(doc, properties.href, node, graph);
       if (!properties.className?.includes('heading-anchor')) addClass(node, 'sp-link');
     }
     if (node.tagName === 'img' && typeof properties.src === 'string') properties.src = resolveTarget(doc, properties.src, node, graph, true);

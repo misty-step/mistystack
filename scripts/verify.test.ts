@@ -57,8 +57,8 @@ test("the default and all gates skip native installs while selecting maintained 
 	}
 });
 
-test("native install checks remain explicit and forward the no-inference OMP model override", () => {
-	for (const flags of [[], ["--strict"], ["--strict", "--lint-only"], ["--model", "fixture/model"]]) {
+test("native install checks remain explicit and forward plugin options", () => {
+	for (const flags of [[], ["--strict"], ["--strict", "--lint-only"]]) {
 		const result = run(["plugin", ...flags]);
 		expect(result.code).toBe(0);
 		expect(result.args).toEqual(["scripts/stamp-version.ts --check", ["scripts/verify-plugin.ts", ...flags].join(" ")]);
@@ -66,7 +66,7 @@ test("native install checks remain explicit and forward the no-inference OMP mod
 });
 
 test("retired selections and unsupported all arguments fail before invoking proof", () => {
-	for (const args of [["shared"], ["pi"], ["omp"], ["workspace"], ["unknown"], ["all", "--strict"], ["all", "--lint-only"], ["all", "--model", "fixture/model"]]) {
+	for (const args of [["shared"], ["pi"], ["workspace"], ["unknown"], ["all", "--strict"], ["all", "--lint-only"]]) {
 		const result = run(args);
 		expect(result.code).not.toBe(0);
 		expect(result.args).toBeUndefined();
@@ -79,13 +79,12 @@ test("help succeeds without proof and identifies plugin-only options", () => {
 	expect(result.code).toBe(0);
 	expect(result.args).toBeUndefined();
 	expect(result.out).toContain("scripts/verify [all]\n");
-	expect(result.out).toContain("scripts/verify plugin [--strict] [--lint-only] [--model SELECTOR]");
+	expect(result.out).toContain("scripts/verify plugin [--strict] [--lint-only]");
 	expect(result.out).toContain("Plugin-only options:");
-	expect(result.out).toContain("--strict       Fail on broken relative Markdown links, unknown skill names and harness-specific URIs.");
-	expect(result.out).toContain("allowed only in skills/misty/harnesses/");
+	expect(result.out).toContain("--strict       Fail on broken relative Markdown links and unknown skill names.");
 	expect(result.out).toContain("CI structural proof only");
 	expect(result.out).toContain("no model inference request");
-	expect(result.out).toContain("isolated Claude, Codex, OMP and pi install checks");
+	expect(result.out).toContain("isolated Claude, Codex and pi install checks");
 	expect(result.out).toContain("Missing harness CLIs report SKIP, never PASS");
 });
 
