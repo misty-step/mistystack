@@ -1,62 +1,66 @@
 ---
 name: recompile
-description: "Monthly and on a model-capability jump: review rebuilding from the vision without breaking the record or existing consumers."
+description: "Monthly and on a model-capability jump: review rebuilding cleanly from SPEC.md while deciding UI aesthetic continuity and safe production data migration."
 disable-model-invocation: true
 metadata:
   owner: phaedrus
-  prevents: "Inherited architecture surviving capability changes, or monthly rewrites breaking accepted contracts; Phaedrus's 2026-10-30 ruling on mistystack#631."
+  prevents: "Inherited architecture surviving capability changes, or rebuilds silently dropping live production user data; Phaedrus's 2026-10-30 and 2026-11-13 rulings."
   source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
-  sunset: "2026-11-27"
+  sunset: "2026-12-13"
 ---
 
 # Recompile
 
-Review monthly and additionally when model capability jumps. This is Mistystack's
-adaptation, not a claim about Spawn's internal rewrite procedure. A review may
-conclude **no rebuild**; the calendar is not a reason to rewrite.
+Review monthly and additionally when model capability jumps. Rebuilding from
+[SPEC.md](../spec/SKILL.md) lets stronger models replace accumulated scaffolding
+with a simpler design rather than patching old structure forever; a review may
+still conclude **no rebuild**, because the calendar alone is not a reason to
+rewrite.
 
-1. **Recover intent.** Re-read the project's vision and durable record: artifacts,
-   actual user evidence, decisions and obligations, including its SPEC and tracker.
-   Preserve provenance, accepted history and existing access/retention boundaries.
-   Resolve unsettled or conflicting product intent with the owner through
-   [grilling](../grilling/SKILL.md), not code as
-   the deciding authority. Plan execution only after the outcome is settled. **Done when:** the intended outcome
-   and continuity obligations have source links, and missing evidence is explicit.
+1. **Recover target state and cutover choices.** Read the project's `SPEC.md`
+   ([spec](../spec/SKILL.md)), `docs/decisions/` and actual user evidence. Settle
+   stale, missing or conflicting product intent in `SPEC.md` with the owner
+   through [grilling](../grilling/SKILL.md) before designing, rather than treating
+   legacy code as the authority. Anything worth keeping across a rebuild belongs
+   directly in `SPEC.md`. Confirm two explicit owner choices when applicable: on a
+   UI project with `DESIGN.md`, whether to keep the existing `DESIGN.md` aesthetic
+   or discard and regenerate it; and whether live production holds accepted user
+   data that must survive cutover. **Done when:** `SPEC.md` states the agreed
+   target state and the `DESIGN.md` and live-data cutover choices are explicit.
 
-2. **Start blank.** Before inspecting current code, describe the simplest system
-   that achieves the intent with today's capabilities. Identify which new
-   capability removes a previous constraint. **Done when:** the proposal explains
-   the consumer outcome without treating inherited components as requirements.
+2. **Start blank.** Before inspecting legacy implementation internals, describe
+   the simplest system achievable with today's capabilities that satisfies
+   `SPEC.md` (and `DESIGN.md` if kept). Name which new capability removes a
+   previous constraint. **Done when:** the blank-sheet design explains the user
+   outcome without treating inherited modules or stacks as requirements.
 
-3. **Compare.** Now inspect the implementation. For each component, give a reason
-   to keep, remove or replace it. Compare the whole-system costs of keeping it,
-   rebuilding part and rebuilding all, including migration, compatibility and
-   operation. Use [foundation](../foundation/SKILL.md) for the quality checklist.
-   **Done when:** one keep / rebuild part / rebuild all decision follows from user
-   evidence and present capabilities, not sunk cost or line count.
+3. **Compare.** Now inspect the running system and implementation. Compare keep,
+   rebuild part and rebuild all using [foundation](../foundation/SKILL.md),
+   weighing operational reliability and cutover migration cost alongside
+   simplification. **Done when:** one keep / rebuild part / rebuild all decision
+   follows from `SPEC.md`, user evidence and current capabilities rather than sunk
+   cost or line count.
 
-4. **Freeze reliance, if rebuilding.** Pin the record format, command contract and
-   acceptance suite before replacement work. Include accepted data, identities,
-   meaning and decision/evidence history. Breaking contracts ship only as opt-in
-   [editions](../../DOMAIN.md#terms); old editions keep working. Migration is an
-   explicit command with a non-mutating dry run, refusal with reasons before any
-   unsafe or incomplete conversion, and a tested reversal that preserves accepted
-   data and history. **Done when:** the frozen contracts and executable success,
-   refusal and reversal checks are named; a review alone grants no mutation
-   authority.
+4. **Prepare live-data protection and acceptance, if rebuilding.** Derive an
+   executable acceptance suite directly from `SPEC.md` so the rebuild is judged
+   against target behavior, not internal test scaffolding. When live production
+   holds accepted user data, require a one-time cutover migration with a
+   non-mutating dry run, explicit refusal before unsafe or incomplete conversion,
+   and a rehearsed reversal that preserves original production state. **Done when:**
+   the acceptance checks and any stateful dry-run, refusal and rollback checks are
+   named; a review alone grants no mutation authority.
 
-5. **Record the decision.** Use the project's existing tracker, not a second
-   ledger. Link the record, blank-sheet proposal, component reasons and chosen
-   outcome. Name the accountable owner, bounded authorized replacement work (if
-   any) and next monthly review date; a capability jump prompts an extra review.
-   **Done when:** another owner can recover why to rebuild or keep the system and
-   when to reconsider it. A no-rebuild review ends here.
+5. **Record the decision.** Record the keep / rebuild decision, blank-sheet
+   proposal, `DESIGN.md` choice, accountable owner, bounded cutover work (if any)
+   and next review date in `docs/decisions/` (linking an operational tracker item
+   only where external coordination needs one, never splitting `SPEC.md` into a
+   ticket backlog). **Done when:** another owner can recover why to rebuild or
+   keep the system and when to reconsider it. A no-rebuild review ends here.
 
-6. **Prove before cutover.** Carry authorized rebuild work through
-   [ship-loop](../ship-loop/SKILL.md). Cut over only after an independent acceptance
-   suite run passes on the real record through the actual consumer path, including
-   old-edition continuity, migration refusal and reversal. Follow
-   [verification](../verification/SKILL.md) within the record's access boundaries;
-   preserve the original record throughout. **Done when:** the tracker links the
-   checked revision, acceptance evidence and explicit opt-in migration result;
-   otherwise retain the working edition and record the failed or unproven check.
+6. **Prove before cutover.** Carry authorized replacement work through
+   [ship-loop](../ship-loop/SKILL.md) and [verification](../verification/SKILL.md).
+   Cut over only after real running-product proof satisfies `SPEC.md` end to end
+   and any stateful migration passes dry-run, refusal and reversal on realistic
+   production-shaped data within existing access boundaries. **Done when:**
+   homeostasis (`SPEC.md == running product`) holds on the candidate revision and
+   original production data survived safely.

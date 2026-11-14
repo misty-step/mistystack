@@ -42,4 +42,11 @@ export const historicalSources = new Map([
   ...['scripts/sync-pstack.ts', 'skills/misty/harnesses/pstack-names.md', 'vendor/pstack.lock.json'].map((file) => [
     file, { commit: 'c750ff4d4ec2a61e3e4ecb0eaf1f73e0e088e356', fragments: [] },
   ]),
+  ['USER_STORIES.md#us-067-find-a-skill-by-the-work', {
+    commit: '47598b404a78a83539ace9ba5c89d28d765857d6',
+    fragments: ['us-067-find-a-skill-by-the-work'],
+  }],
+  ...['DOMAIN.md', 'USER_STORIES.md'].map((file) => [
+    file, { commit: '47598b404a78a83539ace9ba5c89d28d765857d6', fragments: [] },
+  ]),
 ]);

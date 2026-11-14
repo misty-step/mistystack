@@ -42,7 +42,7 @@ export const home = {
     // One body per brief field in skills/misty/SKILL.md, in its order.
     fields: {
       'Outcome and why': 'The change the consumer gets, with links to its sources.',
-      Terms: "The project's own words for the work, from its DOMAIN.md.",
+      Terms: "The project's own words for the work, from its SPEC.md.",
       'Raw material': 'The failing run, logs, data or source to start from, rather than a summary of them.',
       Oracle: 'The check outside the worker that proves the result, with the exact command.',
       'Scope and keep': 'The change this worker owns, and the behavior that must remain.',

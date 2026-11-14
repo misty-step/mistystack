@@ -1,11 +1,11 @@
 # Contributing
 
 Mistystack is a method for coding agents on any harness. Start with [AGENTS.md](AGENTS.md), use
-[DOMAIN.md](DOMAIN.md) terms, and name the affected [story](USER_STORIES.md).
+[SPEC.md](SPEC.md) terms, and name the reconciled section in [SPEC.md](SPEC.md).
 Fleet machinery belongs in private `misty-step/workstation`.
 
-Keep the smallest useful change. Follow the skill frontmatter convention in
-DOMAIN.md, retain source notices, and migrate every caller when a fact moves.
+Keep the smallest useful change. Follow the [skill frontmatter convention](skills/agent-design/SKILL.md#skill-frontmatter),
+retain source notices, and migrate every caller when a fact moves.
 Human instructions belong in [docs/guide/](docs/guide/); upstream reading belongs
 in [docs/exemplars.md](docs/exemplars.md), not an installed skill pack.
 
@@ -17,6 +17,7 @@ link the checked revision, actions and observed results from the PR. Merge when
 your proof passes, without CI or review. Fast CI and one critical assessment run
 only at the pre-deploy release gate.
 
-Use a Conventional Commit title and include `Story:` IDs, the rigor tier and
-reason, and diff size in the PR. Keep CHANGELOG.md generated; Landmark owns the
-release path described in [docs/release-convention.md](docs/release-convention.md).
+Use a Conventional Commit title and include the reconciled `SPEC.md` section
+(plus `Fixes` issue when an operational tracker item exists), the rigor tier and
+reason, Merge Danger, and diff size in the PR. Keep CHANGELOG.md generated;
+Landmark owns the release path described in [docs/release-convention.md](docs/release-convention.md).

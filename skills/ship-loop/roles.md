@@ -23,8 +23,8 @@ judges, or CI. The [ship loop](SKILL.md) owns delivery order.
 ## Builder
 
 ```text
-Outcome and why: <consumer change and owning issue/spec links>.
-Terms: <DOMAIN.md terms>.
+Outcome and why: <consumer change and SPEC.md section / issue links>.
+Terms: <SPEC.md terms>.
 Raw material: <failing run, logs, data or source links>.
 Oracle: <real consumer path and exact affected checks>.
 Scope: <owned paths, acceptance criteria, base branch and PR target>.
@@ -39,8 +39,9 @@ Prove the affected running-app journey through the verification skill. For
 ordering, concurrency or durability, use the formal verification generator.
 Retain the observed result and narrow affected native-check evidence.
 
-Open a PR with a Conventional Commit title, owning issue reference,
-Story: <IDs|none>, Rigor: <tier> — <risk>, and concrete observed verification.
+Open a PR with a Conventional Commit title, reconciled SPEC.md section (and Fixes
+<issue> when an operational tracker item exists), Rigor: <tier> — <risk>, and
+concrete observed verification.
 Once your real-path proof passes, squash-merge yourself without CI or review.
 Do not rebase merely to catch up; resolve actual conflicts and repeat the
 affected path. Preserve other writers' commits.
@@ -59,7 +60,8 @@ Scope: <critical user/data/security failure modes and release identity>.
 
 Do not perform a style, architecture or general improvement review. A blocker
 needs a reproducible critical failure or a source-backed security violation.
-State the concrete impact and evidence. Noncritical findings become tickets.
+State the concrete impact and evidence. Report noncritical observations
+separately without blocking release.
 This is the release's single assessment, not a PR approval or another round.
 
 Return candidate identity, critical findings or none, proof consulted and

@@ -11,7 +11,7 @@ const repository = defineCollection({
       'rules/core.md',
       'docs/**/*.md',
       '!docs/decisions/0000-template.md',
-      'README.md', 'DOMAIN.md', 'USER_STORIES.md', 'ATTRIBUTION.md',
+      'README.md', 'ATTRIBUTION.md',
       'CHANGELOG.md', 'CONTRIBUTING.md', 'FOUNDATIONS.md', 'SPEC.md',
     ],
     generateId: ({ entry }) => entry,

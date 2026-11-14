@@ -5,6 +5,11 @@ Records explain trade-offs; current method guidance lives in the
 
 ## Current
 
+- [0028](0028-spec-drives-the-application.md): `SPEC.md` is the single
+  implementation-free target state per program (folding `DOMAIN.md` and
+  `USER_STORIES.md`), reconciling drift directly to homeostasis without
+  ticket-backlog materialization; adds `skills/spec` and removes `to-spec` and
+  `to-tickets` from `vendor/pocock.lock.json`.
 - [0027](0027-drop-omp.md): OMP is not a supported harness. Removes its adapter,
   agents, proof and lint; the companion-pack pins move unchanged to
   `.claude-plugin/marketplace.json`, their one home. OMP users may try the
@@ -18,8 +23,9 @@ Records explain trade-offs; current method guidance lives in the
   existing Worker, with pinned preferred-set content and explicit degradation.
   Supersedes 0018's assets-only restriction for skill discovery.
 - [0024](0024-pocock-shaping-skills.md): unsettled intent routes to vendored
-  Matt Pocock shaping skills (`grilling`, `to-spec`, `to-tickets` and others)
-  under a hash-checked lock. Supersedes 0022 row 7's unrouted owner provision.
+  Matt Pocock shaping skills under a hash-checked lock. Supersedes 0022 row 7's
+  unrouted owner provision; tracker-published specs and `to-spec` /
+  `to-tickets` are superseded by 0028.
 - [0023](0023-live-verification-and-release-gate.md): author-owned running-product
   proof, merge without CI/review, fast CI and one critical assessment at release;
   one snapshot-backed Boat worker per slice and open-ended watchdog supervision.
@@ -38,7 +44,8 @@ Records explain trade-offs; current method guidance lives in the
 
 - [0020](0020-github-and-linear-replace-entire.md): GitHub hosts code and pull
   requests; Misty Step tracks work items in Linear. Its retired PR-ledger
-  mechanism is removed by 0023. Supersedes [0019](0019-entire-is-the-forge.md),
+  mechanism is removed by 0023; Linear-as-product-intent-backlog is superseded
+  by 0028. Supersedes [0019](0019-entire-is-the-forge.md),
   which made Entire the forge on 2026-10-30.
 - [0018](0018-static-publishing-stack.md): Astro static publishing, Pagefind and
   Workers Static Assets as a recorded stack exception; deployment commissioned

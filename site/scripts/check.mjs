@@ -168,7 +168,7 @@ function checkLink(value, base, label) {
 function publicSource(source) {
   if (!nonempty(source) || source.includes('\\') || source.split('/').some((part) => !part || part === '.' || part === '..' || part.startsWith('.'))) return false;
   if (!/\.(md|json)$/.test(source)) return false;
-  return /^(docs|skills)\//.test(source) || source === 'rules/core.md' || /^(README|DOMAIN|USER_STORIES|ATTRIBUTION|CHANGELOG|CONTRIBUTING|FOUNDATIONS|SPEC)\.md$/.test(source);
+  return /^(docs|skills)\//.test(source) || source === 'rules/core.md' || /^(README|ATTRIBUTION|CHANGELOG|CONTRIBUTING|FOUNDATIONS|SPEC)\.md$/.test(source);
 }
 
 // Pagefind's pinned bundle uses gzip + a pagefind_dcd marker. Decode its small

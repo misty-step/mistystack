@@ -12,26 +12,30 @@ metadata:
 
 Build → verify on the running product → merge → release gate → deploy → verify live.
 The author owns the first proof. CI and review belong only to the pre-deploy
-release gate, not a PR or push. Use the owning tracker from
-[Foundation article 2](../foundation/checklist.md#article-2).
+release gate, not a PR or push. Reconcile behavioral intent from
+[SPEC.md](../spec/SKILL.md) and link the repository's operational tracker from
+[Foundation article 2](../foundation/checklist.md#article-2) when an external
+or cross-repository issue exists.
 
 ## 1. Settle and build the slice
 
 Carry confirmed intent forward. Resolve unsettled product intent with the owner
-through [grilling](../grilling/SKILL.md); planning execution of a settled outcome
-is ordinary work under [Misty's loop](../misty/SKILL.md#the-loop). Give the builder
-[Misty's briefing contract](../misty/SKILL.md#the-brief), owned paths,
-a base branch, acceptance criteria and the [risk-appropriate role](roles.md#rigor).
-Keep independently useful slices separate and sequence only genuine dependencies.
-Use [boat-workers](../boat-workers/SKILL.md) for one snapshot-backed worker per
-slice and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
+through [grilling](../grilling/SKILL.md) into `SPEC.md`; planning execution of a
+settled outcome is ordinary work under [Misty's loop](../misty/SKILL.md#the-loop).
+Give the builder [Misty's briefing contract](../misty/SKILL.md#the-brief), owned
+paths, a base branch, acceptance criteria and the
+[risk-appropriate role](roles.md#rigor). Keep independently useful slices separate
+and sequence only genuine dependencies. Use
+[boat-workers](../boat-workers/SKILL.md) for one snapshot-backed worker per slice
+and [watchdog](../watchdog/SKILL.md) for open-ended supervision.
 
 Implement the smallest complete change. Migrate every caller and delete obsolete
 paths. Before proving, [cut the draft](../misty/principles.md#cut-the-draft-before-proof):
 if it accumulated wrappers, parallel state or retained legacy code, rewrite it
 from first principles first. Open the PR body with a one-sentence `## Why` in the user's terms. Record
-`Story: <IDs|none>`, `Rigor: <tier> — <changed-path risk>`, the observed proof and
-`Unproved: <claims|none>`, and close the owning issue with `Fixes MIS-<n>`. A change
+the reconciled `SPEC.md` section (plus `Fixes MIS-<n>` when closing an operational
+tracker item), `Rigor: <tier> — <changed-path risk>`, the observed proof and
+`Unproved: <claims|none>`. A change
 that cannot be undone after release (a migration, a deletion, a published
 contract) is standard rigor or higher and carries its rollback or restore proof. The PR record's **Merge Danger** section carries
 [merge-risk](../merge-risk/SKILL.md)'s output: the overall verdict and every
@@ -74,7 +78,8 @@ and security. Give that reviewer the release diff, invariants, real-path and for
 proof, and concrete risk. Include a [merge-risk](../merge-risk/SKILL.md) verdict
 for this candidate, with its per-category verdicts, in that same assessment.
 It is one release assessment, not a per-PR review cycle or an additional review.
-Noncritical findings go to the owning tracker. A critical defect stops deployment:
+Report noncritical observations separately without blocking deployment or
+inventing a backlog outside `SPEC.md`. A critical defect stops deployment:
 repair it and prove the affected behavior; do not restart a broad review process.
 
 Publish and deploy the candidate that passed the fast checks and critical review,

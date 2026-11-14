@@ -22,7 +22,7 @@ An exhaustive criterion names the whole set: "Every changed interface has consum
 
 ## Leading words and pruning
 
-A leading word recruits a familiar concept, such as **frontier** or **red**, so the agent can think with it without rereading a definition. Use the same word in pointers and bodies. Define a coined term once in `DOMAIN.md`; prefer an established precise term when it already fits.
+A leading word recruits a familiar concept, such as **frontier** or **red**, so the agent can think with it without rereading a definition. Use the same word in pointers and bodies. Define a coined term once in `SPEC.md`; prefer an established precise term when it already fits.
 
 Keep each meaning in one authoritative location and reference it elsewhere. Commands, settings, dependency versions and file structure already have owners in the environment. Cache them in prose only when lookup is expensive or they encode a trap the source cannot explain.
 

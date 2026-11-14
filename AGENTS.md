@@ -2,8 +2,8 @@
 
 Maintain one harness-neutral method tree in Agent Skills format
 (`skills/<name>/SKILL.md`) and thin native adapters from this repository.
-Read [DOMAIN.md](DOMAIN.md) for terms and [USER_STORIES.md](USER_STORIES.md)
-for the affected consumer contract. The method must work on every harness we support: Claude Code, Codex, pi,
+Read [SPEC.md](SPEC.md) for terms, invariants and consumer contracts. The
+method must work on every harness we support: Claude Code, Codex, pi,
 Prime Agent, Antigravity and Cursor ([ADR 0027](docs/decisions/0027-drop-omp.md)).
 [The universal install](skills/misty/harnesses/any.md) is the contract; the native
 adapters for Claude Code, Codex and pi are conveniences on top of it. Private runtime setup belongs to the workstation plugin.
@@ -15,7 +15,7 @@ adapters for Claude Code, Codex and pi are conveniences on top of it. Private ru
 | `.claude-plugin/`, `.codex-plugin/`, `.agents/plugins/`, `package.json` | Native plugin, marketplace and pi package manifests; `.claude-plugin/marketplace.json` is the one list of pinned companion packs |
 | `rules/core.md` | Always-on core; keep it at most 20 lines |
 | `skills/misty/` | The method on one page: work loop, ownership, autonomy, delegation, reporting, routes; principles and native harness references beside it |
-| `skills/` | Task procedures; frontmatter follows DOMAIN.md. Skills under `vendor/*.lock.json` are upstream bytes; regenerate them through the lock |
+| `skills/` | Task procedures; frontmatter follows [agent-design](skills/agent-design/SKILL.md#skill-frontmatter). Skills under `vendor/*.lock.json` are upstream bytes; regenerate them through the lock |
 | `adapters/` | Claude/Codex role agents and native hooks/extensions; model choices stay in harness-native configuration |
 | `.agents/skills/verify-mistystack/` | This repository's consumer proof |
 | `scripts/`, `.github/`, `.githooks/` | Checks, release protection and secret scanning |
