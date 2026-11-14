@@ -28,8 +28,8 @@ not evidence that the method loaded.
    Require exit 0 and retain optional Landmark replay results separately from
    skips. `./scripts/check --help` identifies the maintained flags.
 3. **Observe native installation and loading.** The full selection creates
-   disposable homes and projects for each available Claude Code, Codex and
-   pi CLI, refuses escaping native configuration paths, installs through the
+   disposable homes and projects for each available Claude Code, Codex, pi and
+   Antigravity CLI, refuses escaping native configuration paths, installs through the
    native lifecycle and checks skills/core registration. Missing CLIs are named
    skipped; an available-harness failure leaves that consumer unproved. The
    lint-only selection explicitly skips installation and does not prove loading.
@@ -92,7 +92,7 @@ the site artifact uploaded by CI and does not rebuild it.
 The check is part of the proof command above. Its built-in broken variant removes
 publication's verification dependency and must produce `prepare → publish`.
 Coverage maps to the release workflow and its reusable `ci.yml` / `site-deploy.yml`
-at their last source change, `ac66123ce3961cd68b74a6686879334d26a294c4`.
+at their last source change, `352958ffd84630ec5756e5a250e4b02bd6673d93`.
 When those files change, confirm that this four-job model still describes them
 before advancing that coverage revision.
 

@@ -1,2 +1,4 @@
-# Same policy as the component hooks: everything is scanned except .git
+# Exclude .git and gitignored/local build or runtime directories.
 .*\.git/.*
+(^|/)(\.entire|\.worktrees|\.landmark|\.omp|node_modules|coverage)(/|$)
+(^|/)site/(node_modules|dist|\.astro|\.wrangler|screenshots|\.generated|\.cache)(/|$)

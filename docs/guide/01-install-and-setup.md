@@ -1,7 +1,7 @@
 # 1. Install and setup
 
 The method installs on any harness that reads Agent Skills and an always-on
-instruction file. Three harnesses also have a native adapter; there is no custom
+instruction file. Four harnesses also have a native adapter; there is no custom
 installer and no separate content tree per harness.
 
 Explicitly invoke [setup-mistystack](../../skills/setup-mistystack/SKILL.md). It identifies
@@ -11,7 +11,8 @@ roles in native configuration and requires fresh-session proof:
 - [Claude Code](../../skills/misty/harnesses/claude.md)
 - [Codex](../../skills/misty/harnesses/codex.md)
 - [pi](../../skills/misty/harnesses/pi.md)
-- [Cursor, Antigravity, Prime Agent and any other harness](../../skills/misty/harnesses/any.md)
+- [Antigravity](../../skills/misty/harnesses/antigravity.md)
+- [Cursor, Prime Agent and any other harness](../../skills/misty/harnesses/any.md)
 - [Hermes status](#hermes)
 
 Grok Bot runtime setup is private fleet machinery. Grok Build CLI is not a target.

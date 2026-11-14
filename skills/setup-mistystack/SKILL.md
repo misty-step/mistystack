@@ -26,7 +26,8 @@ supply the method to every adapter.
    | Claude Code | [Claude Code](../misty/harnesses/claude.md) |
    | Codex | [Codex](../misty/harnesses/codex.md) |
    | pi | [pi](../misty/harnesses/pi.md) |
-   | Cursor, Antigravity, Prime Agent and any other | [Any harness](../misty/harnesses/any.md) |
+   | Antigravity | [Antigravity](../misty/harnesses/antigravity.md) |
+   | Cursor, Prime Agent and any other | [Any harness](../misty/harnesses/any.md) |
 
    Grok Bot runtime setup is private fleet machinery, outside this adapter table.
    **Complete when:** the runtime, version, destination scope and matching native
@@ -64,6 +65,7 @@ supply the method to every adapter.
    describes: [Claude Code](../misty/harnesses/claude.md#dispatch-and-rigor),
    [Codex](../misty/harnesses/codex.md#dispatch-and-rigor),
    [pi](../misty/harnesses/pi.md#rigor-inline-without-subagents),
+   [Antigravity](../misty/harnesses/antigravity.md#dispatch-and-rigor),
    [any other](../misty/harnesses/any.md#3-roles-and-effort).
    Prove an unfamiliar config mechanism in an isolated home first.
    **Complete when:** native readback matches the chosen assignments and any

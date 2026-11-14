@@ -1,6 +1,6 @@
 # Any harness
 
-Mistystack needs two things from a harness, and nearly every coding agent provides both: it reads Agent Skills (`<name>/SKILL.md` directories) and it reads an always-on instruction file such as `AGENTS.md`. This note is the install path for every harness, including Cursor, Antigravity, Prime Agent, OpenCode, Gemini CLI and ones we have not met yet. [Claude Code](claude.md), [Codex](codex.md) and [pi](pi.md) also have a native plugin that does the same job in one step; use whichever you prefer there.
+Mistystack needs two things from a harness, and nearly every coding agent provides both: it reads Agent Skills (`<name>/SKILL.md` directories) and it reads an always-on instruction file such as `AGENTS.md`. This note is the install path for every harness, including Cursor, Prime Agent, OpenCode, Gemini CLI and ones we have not met yet. [Claude Code](claude.md), [Codex](codex.md), [pi](pi.md) and [Antigravity](antigravity.md) also have a native plugin that does the same job in one step; use whichever you prefer there.
 
 ## 1. Skills
 

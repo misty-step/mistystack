@@ -9,7 +9,7 @@ usage() {
     '       scripts/verify plugin [--strict] [--lint-only]' \
     '' \
     'all: maintained tests and structural lint; no native installation.' \
-    'plugin: maintained tests and isolated Claude, Codex and pi install checks.' \
+    'plugin: maintained tests and isolated Claude, Codex, pi and Antigravity install checks.' \
     '' \
     'Plugin-only options:' \
     '  --strict       Fail on broken relative Markdown links and unknown skill names.' \

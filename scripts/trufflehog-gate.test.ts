@@ -1,13 +1,16 @@
 import { afterEach, expect, test } from "bun:test";
 import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 const gate = resolve(import.meta.dir, "../.githooks/trufflehog-gate.py");
 const roots: string[] = [];
 const sha = "789ae58ddd" + "0aecad3406" + "3f53304665" + "f215a9418a";
 const raw = sha.slice(0, 20);
 const commitLink = `https://github.com/misty-step/harness/commit/${sha}`;
+const sentryDigest = "2d4f83048eac1df5" + "30b399e2aed75dd7" + "c9c18577b7665420" + "aaeb96d0ceb0b702";
+const cloudflareCommit = "c1c8a8c147" + "1069fb0e18" + "8eeaff69b8" + "e8db6564a8";
+const openclawCommit = "80930af448" + "ebabc84174" + "146b56bc10" + "6d37fab3b4";
 
 function finding(changes: Record<string, unknown> = {}) {
 	return {
@@ -19,12 +22,23 @@ function finding(changes: Record<string, unknown> = {}) {
 	};
 }
 
-function run(rows: unknown[], exit = rows.length ? 183 : 0, changelog = `* release (${commitLink})\n`, scanError = false) {
+function run(
+	rows: unknown[],
+	exit = rows.length ? 183 : 0,
+	changelog = `* release (${commitLink})\n`,
+	scanError = false,
+	extraFiles: Record<string, string> = {},
+) {
 	const root = mkdtempSync(join(tmpdir(), "mistystack-trufflehog-gate-"));
 	roots.push(root);
 	const bin = join(root, "bin");
 	mkdirSync(bin);
 	writeFileSync(join(root, "CHANGELOG.md"), changelog);
+	for (const [rel, content] of Object.entries(extraFiles)) {
+		const dest = join(root, rel);
+		mkdirSync(dirname(dest), { recursive: true });
+		writeFileSync(dest, content);
+	}
 	const reports = join(root, "reports.jsonl");
 	writeFileSync(reports, rows.map(row => typeof row === "string" ? row : JSON.stringify(row)).join("\n") + (rows.length ? "\n" : ""));
 	const scanner = join(bin, "trufflehog");
@@ -111,4 +125,41 @@ test("a scanner read error cannot masquerade as a clean scan", () => {
 	const result = run([], 0, undefined, true);
 	expect(result.code).toBe(1);
 	expect(result.err).toContain("scan failed or returned unexpected output");
+});
+
+test("admits pinned public lock digests and attribution commits while failing closed on variants", () => {
+	const files = {
+		".gitleaks.toml": `regexes = ['''^\\s*"skills/why/references/sources/sentry\\.md": "${sentryDigest}",?$''']\n`,
+		"ATTRIBUTION.md": [
+			`| [cloudflare/security-audit-skill@${cloudflareCommit}](https://github.com/cloudflare/security-audit-skill/tree/${cloudflareCommit}) |`,
+			`| [openclaw/openclaw@${openclawCommit}](https://github.com/openclaw/openclaw/tree/${openclawCommit}/.agents/skills/test-audit) |`,
+			`| \`security-audit\` | cloudflare/security-audit-skill@${cloudflareCommit}/skills/security-audit/SKILL.md |`,
+		].join("\n") + "\n",
+		"skills/security-audit/SKILL.md": [
+			`[Cloudflare's upstream skill](https://github.com/cloudflare/security-audit-skill/blob/${cloudflareCommit}/skills/security-audit/SKILL.md)`,
+			`fetch \`cloudflare/security-audit-skill\` at \`${cloudflareCommit}\` locally.`,
+		].join("\n") + "\n",
+	};
+	const allowed = [
+		finding({ DetectorName: "SentryToken", Raw: sentryDigest, SourceMetadata: { Data: { Filesystem: { file: ".gitleaks.toml", line: 1 } } } }),
+		finding({ DetectorName: "CloudflareApiToken", Raw: cloudflareCommit, SourceMetadata: { Data: { Filesystem: { file: "ATTRIBUTION.md", line: 1 } } } }),
+		finding({ DetectorName: "CloudflareApiToken", Raw: openclawCommit, SourceMetadata: { Data: { Filesystem: { file: "ATTRIBUTION.md", line: 2 } } } }),
+		finding({ DetectorName: "CloudflareApiToken", Raw: cloudflareCommit, SourceMetadata: { Data: { Filesystem: { file: "ATTRIBUTION.md", line: 3 } } } }),
+		finding({ DetectorName: "CloudflareApiToken", Raw: cloudflareCommit, SourceMetadata: { Data: { Filesystem: { file: "skills/security-audit/SKILL.md", line: 1 } } } }),
+		finding({ DetectorName: "CloudflareApiToken", Raw: cloudflareCommit, SourceMetadata: { Data: { Filesystem: { file: "skills/security-audit/SKILL.md", line: 2 } } } }),
+	];
+	const passing = run(allowed, 183, undefined, false, files);
+	expect(passing.code).toBe(0);
+	expect(passing.err).toContain("ignored 6 unverified public commit-SHA finding(s)");
+
+	for (const [name, badRow, badFiles] of [
+		["verified", { ...allowed[0], Verified: true }, files],
+		["wrong line", { ...allowed[1], SourceMetadata: { Data: { Filesystem: { file: "ATTRIBUTION.md", line: 2 } } } }, files],
+		["wrong file", { ...allowed[0], SourceMetadata: { Data: { Filesystem: { file: "other.toml", line: 1 } } } }, files],
+		["extended digest", allowed[0], { ...files, ".gitleaks.toml": `regexes = ['''"skills/why/references/sources/sentry\\.md": "${sentryDigest}a"''']\n` }],
+	] as const) {
+		const rejected = run([badRow], 183, undefined, false, badFiles);
+		expect(rejected.code, name).toBe(1);
+		expect(rejected.err, name).toContain("finding outside public commit links");
+	}
 });

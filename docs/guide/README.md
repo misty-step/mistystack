@@ -2,7 +2,7 @@
 
 Misty Step's harness-neutral method: one content tree in Agent Skills format
 (`skills/<name>/SKILL.md`), installed on any harness that reads Agent Skills and an
-always-on instruction file. Claude Code, Codex and pi also have a native
+always-on instruction file. Claude Code, Codex, pi and Antigravity also have a native
 plugin from this repository. Work through [misty](../../skills/misty/SKILL.md); each project keeps its own
 intent, decisions and proof.
 

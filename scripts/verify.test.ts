@@ -84,7 +84,7 @@ test("help succeeds without proof and identifies plugin-only options", () => {
 	expect(result.out).toContain("--strict       Fail on broken relative Markdown links and unknown skill names.");
 	expect(result.out).toContain("CI structural proof only");
 	expect(result.out).toContain("no model inference request");
-	expect(result.out).toContain("isolated Claude, Codex and pi install checks");
+	expect(result.out).toContain("isolated Claude, Codex, pi and Antigravity install checks");
 	expect(result.out).toContain("Missing harness CLIs report SKIP, never PASS");
 });
 
