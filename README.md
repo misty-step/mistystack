@@ -72,8 +72,7 @@ vendor/*.lock.json upstream pins, source mappings and file hashes for unchanged 
 docs/guide/        human guide
 ```
 
-Vocabulary and invariants live in [DOMAIN.md](DOMAIN.md); consumer contracts
-live in [USER_STORIES.md](USER_STORIES.md). Maintainers start at
+Terms, invariants and consumer contracts live in [SPEC.md](SPEC.md). Maintainers start at
 [AGENTS.md](AGENTS.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Verify
@@ -148,6 +147,7 @@ artifact. PRs and pushes do not start CI or deployment.
 ## Read
 
 - [Guide](docs/guide/): installation and the working method.
+- [Specification](SPEC.md): terms, invariants and consumer contracts.
 - [Foundation checklist](skills/foundation/checklist.md): the audit rubric;
   [FOUNDATIONS.md](FOUNDATIONS.md) is a pointer, not another standard.
 - [Exemplars](docs/exemplars.md): people, codebases, prose and products whose perspectives we channel.

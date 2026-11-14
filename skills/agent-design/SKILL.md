@@ -21,11 +21,31 @@ and context contract:
 
 3. **Structure.** Front-load a pointer's leading word and name each distinct trigger branch. Keep common steps in SKILL.md and rare branches in sibling files. Put numbered actions before lookup material, co-locate rules with their definition, and give each step a checkable, exhaustive completion criterion. Read [context.md](context.md) for boundaries, invocation or cache layout. Done when each path reaches what it needs without loading unrelated branches.
 
-4. **Contract.** Follow [DOMAIN.md's frontmatter contract](../../DOMAIN.md#skill-frontmatter). Keep routers discoverable and principle leaves reachable on demand. Done when frontmatter parses, names match directories and structural checks pass.
+4. **Contract.** Follow [the skill frontmatter contract](#skill-frontmatter). Keep routers discoverable and principle leaves reachable on demand. Done when frontmatter parses, names match directories and structural checks pass.
 
 5. **Prune.** Use exact terms and precise leading words, not repeated definitions. State targets positively and pair a hard prohibition with the positive action. Cut model-default no-ops, persona, role-play, stale tool facts and copies of structural facts. Keep permissions in tool scope, configuration and credentials; prose is not a security boundary. Prefer native task state to a second ledger. Done when each instruction changes a decision or carries a needed local fact.
 
 6. **Compare and deliver.** Exercise discovery and affected pointers in an isolated installation. Ship on the evidence you have: the correction that prompted the change, the vendor's guidance for the model in use, and your judgment. Prefer the simpler instruction. Use [Instruction eval](#instruction-eval) when a change is disputed or a wrong call would be expensive, not as a gate on every edit. Deliver through ship-loop and retain notices. At sunset, repair drift, consolidate weak triggers or delete ineffective guidance. Done when structural and consumer checks pass and the unit states its evidence and keep/delete decision under [Misty's reporting rules](../misty/SKILL.md#reporting). Watch the next sessions for the correction recurring.
+
+## Skill frontmatter
+
+Every skill directory exposes a `SKILL.md` whose `name` matches its directory and whose `description` is non-empty and trigger-first. Vendored skills keep their upstream metadata untouched; plugin lint validates their provenance and file hashes from the lock in `vendor/`. `recompile` and `setup-mistystack` remain explicit-only (`disable-model-invocation: true`).
+
+For Misty-authored skills, `metadata.prevents` cites observed failure evidence, and `metadata.owner` and `metadata.sunset` identify who reviews drift and when. Short `metadata.source` values point to [ATTRIBUTION.md](../../ATTRIBUTION.md#skill-provenance), which owns full directory-level provenance including supporting files.
+
+```yaml
+---
+name: <directory name>
+description: "When to use it; trigger first."
+metadata:
+  owner: phaedrus
+  prevents: "The observed failure this skill prevents."
+  source: "Misty Step; provenance in ATTRIBUTION.md#skill-provenance."
+  sunset: "2026-12-13"
+---
+```
+
+Keep `metadata.sunset` a quoted ISO date string (`"YYYY-MM-DD"`) so YAML 1.1 readers such as PyYAML serialize the skill as JSON without turning bare dates into native date objects; plugin lint rejects unquoted dates. Model selectors and reasoning budgets belong in harness-native configuration described in each [harness note](../misty/SKILL.md), never inside shared skill prose or task-agent briefs.
 
 ## Instruction eval
 

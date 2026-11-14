@@ -23,7 +23,7 @@ const element = (tagName, properties, children) => ({ type: 'element', tagName, 
 const literal = (value) => ({ type: 'text', value });
 const addClass = (node, name) => { node.properties.className = [...(node.properties.className ?? []), name]; };
 const rootRoutes = {
-  'README.md': '/repository/', 'DOMAIN.md': '/domain/', 'USER_STORIES.md': '/stories/',
+  'README.md': '/repository/',
   'ATTRIBUTION.md': '/attribution/', 'CHANGELOG.md': '/changelog/',
   'CONTRIBUTING.md': '/contributing/', 'FOUNDATIONS.md': '/foundations/', 'SPEC.md': '/spec/',
   'rules/core.md': '/library/core/', 'docs/exemplars.md': '/exemplars/',

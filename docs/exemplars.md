@@ -1,13 +1,14 @@
 # Exemplars
 
-Favourite sources we learned from. An [Exemplar](../DOMAIN.md#terms) is a person, codebase or piece of writing whose perspective we deliberately channel in our workflows, skills, processes, applications and designs. Products show those perspectives in use.
+Favourite sources we learned from. An [Exemplar](../SPEC.md#terms) is a person, codebase or piece of writing whose perspective we deliberately channel in our workflows, skills, processes, applications and designs. Products show those perspectives in use.
 
 Add an entry with a primary-source link, what to channel and any skill where it already appears. These are selected lenses, not blanket endorsements or requirements to copy a stack. Skills cite their sources in `metadata.source`. [ATTRIBUTION.md](../ATTRIBUTION.md) records adapted material and its licences. The locks under `vendor/` own the installed upstream skills. Other packs and tools below are reference material, not dependencies. Entries without an adoption note are references to study.
 
 ## People
 
 - **[Jacob Sansbury — Written for Readers That Didn't Exist Yet](https://www.workbyjacob.com/thoughts/written-for-readers-that-didnt-exist-yet):** a record-first company, whole-outcome ownership, one mind builds while another attacks, and mechanical authority rather than inferred permission.
-  Channel [recompiling the company from the vision](https://x.com/jsnnsa/status/2115671437575168084), not mandatory monthly rewrites; [recompile](../skills/recompile/SKILL.md) makes this a monthly and capability-triggered review with opt-in editions. [How We Build 2.0](https://www.workbyjacob.com/thoughts/how-we-build-2-0) offers four materially different variants so people can discover what they want. The other adaptations remain proposed in [#631](https://github.com/misty-step/mistystack/issues/631).
+  Channel [recompiling the company from the vision](https://x.com/jsnnsa/status/2115671437575168084), not mandatory monthly rewrites; [recompile](../skills/recompile/SKILL.md) makes this a monthly and capability-triggered review against `SPEC.md`, with reversible live-data migration when stateful. [How We Build 2.0](https://www.workbyjacob.com/thoughts/how-we-build-2-0) offers four materially different variants so people can discover what they want. The other adaptations remain proposed in [#631](https://github.com/misty-step/mistystack/issues/631).
+- [Nate Berkopec — There is only the spec](https://x.com/nateberkopec/status/2121374054016028943) ([homeostasis](https://x.com/nateberkopec/status/2121392732258341151), [on tickets](https://x.com/nateberkopec/status/2121394782115430712)): turning a spec into a ticket backlog introduces drift and lacks backpressure; `spec == impl` is homeostasis. [Spec](../skills/spec/SKILL.md) and [ADR 0028](decisions/0028-spec-drives-the-application.md) make `SPEC.md` the single upstream target state and reconcile drift directly against the running product without ticket materialization.
 - [Linus Torvalds — Git data-design email](https://lwn.net/Articles/193245/): design around data and their relationships; remove special cases through representation. Already in `principle-deep-modules` through his good-taste lens.
 - [John Ousterhout — the Ousterhout–Martin written debate](https://github.com/johnousterhout/aposd-vs-clean-code/), alongside [A Philosophy of Software Design](https://web.stanford.edu/~ouster/cgi-bin/book.php): deep modules and small interfaces. Already in `principle-deep-modules`; compare the disagreement rather than flattening it.
 - [John Carmack — On Inlined Code, with his 2014 correction](https://number-none.com/blow/john_carmack_on_inlined_code.html): visible sequential execution, explicit dependencies and less unexpected state mutation.
@@ -56,7 +57,7 @@ Add an entry with a primary-source link, what to channel and any skill where it 
 ## Products
 
 - [TypeSafe](https://docs.typesafe.ai/): typed judgments as composable program primitives.
-- [Linear](https://linear.app/docs/initiatives), [updates](https://linear.app/docs/initiative-and-project-updates) and [agents](https://linear.app/docs/agents-in-linear): steer by objectives, evidence and decisions, with execution records underneath.
+- [Linear](https://linear.app/docs/initiatives), [updates](https://linear.app/docs/initiative-and-project-updates) and [agents](https://linear.app/docs/agents-in-linear): steer operational coordination, external incidents and cross-repo objectives without duplicating `SPEC.md` into feature ticket backlogs.
 - [Kiro](https://kiro.dev/docs/specs/) and [requirement analysis](https://kiro.dev/docs/specs/analyze-requirements/): reconsider contradictions, ambiguity and missing cases when specifications change.
 - [Granola](https://docs.granola.ai/help-center/sharing/integrations/mcp): directly addressable meeting evidence and quotations under existing access scopes.
 - [PostHog](https://posthog.com/docs/product-analytics/funnels) and [AI traces](https://posthog.com/docs/ai-observability): connect real user outcomes to behavior and agent costs; bounded path exploration is not funnel conversion measurement.

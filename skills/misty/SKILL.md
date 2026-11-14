@@ -16,7 +16,7 @@ The method runs on any harness that reads Agent Skills and an always-on instruct
 
 ## The loop
 
-1. **Understand.** Say what the user wants and the change you expect to make, then start. Read the source, the failing run and the tracker item themselves; a summary of them is not evidence. A question whose answer you could observe by running something is yours to answer by running it. A question about product intent or preference belongs to the owner: take it to [grilling](../grilling/SKILL.md) under the [shaping facts](shaping.md). If the evidence rules out the change that was asked for, show the evidence and stop that part. When the request is vague, ambitious or arrives as someone's summary, [deepen](../deepen/SKILL.md) it first.
+1. **Understand.** Say what the user wants and the change you expect to make, then start. Read the source, `SPEC.md`, the failing run and any linked issue themselves; a summary of them is not evidence. A question whose answer you could observe by running something is yours to answer by running it. A question about product intent or preference belongs to the owner: take it to [grilling](../grilling/SKILL.md) under the [shaping facts](shaping.md) and write the agreed target state to `SPEC.md` ([spec](../spec/SKILL.md)). If the evidence rules out the change that was asked for, show the evidence and stop that part. When the request is vague, ambitious or arrives as someone's summary, [deepen](../deepen/SKILL.md) it first.
 2. **Make it verifiable.** Before you design, ask how this change can be fully verified, and name the check: the exact command or the real user journey, and what it will show when the change is right and when it is wrong. A design you cannot check is the wrong design. [Verification](../verification/SKILL.md) owns the procedure.
 3. **Build.** Make the smallest complete change: migrate every caller and delete what the change makes obsolete. The [principles](principles.md) describe the taste we hold; read the entry whose trigger matches. When a change does not fit the existing design, neither bolt it on nor widen the task silently. Name the reshape at the start, land it first as its own behavior-preserving slice, then build on it. That reshape is part of the work. Stop only the part whose reshape would break behavior the brief says to keep or reach outside the scope you own; report it as a recommendation with its evidence and finish the rest.
 4. **Cut the draft.** A first draft records how you found the solution, not the solution. Before proving it, [review it for complexity](principles.md#cut-the-draft-before-proof): delete what the change replaces, collapse parallel controls and state, call existing boundaries directly, and rewrite it from scratch if it is bloated.
@@ -30,7 +30,7 @@ Some tasks have a shape worth naming:
 - **A number** (speed, cost, an eval score). Take a baseline with the same fixture first. Before you trust or report the number, find what limits it and rule out that it measured something else.
 - **A question.** Answer from sources you read, with citations. Do not build to answer a read-only question.
 - **A long or unattended run.** State the exit condition as something checkable before the first iteration. Verify each unit before the next. A plateau is a reason to change approach, not to stop. Keep a short decision log (what you chose, why, the evidence, the result) where the owner will find it, because they will read it instead of watching.
-- **Picking up someone's work.** Read the branch, the pull request and the tracker item before any summary of them.
+- **Picking up someone's work.** Read `SPEC.md`, the branch, the pull request and any linked issue before any summary of them.
 
 ## Ownership
 
@@ -81,7 +81,7 @@ Give each writer its own worktree and branch, and each shared resource one write
 Pass this, not your transcript, and for nontrivial work [check it cold](../deepen/SKILL.md#check-a-brief-before-handing-it-off) before you send it. Size it to the unit: a rename needs names and a check, an open design needs constraints and raw material.
 
 - **Outcome and why:** the consumer's change, in the user's terms, with source links.
-- **Terms:** the `DOMAIN.md` terms involved.
+- **Terms:** the `SPEC.md` terms involved.
 - **Raw material:** the failing run, logs, data or source itself.
 - **Oracle:** the exact command or real user path that can disprove completion.
 - **Scope and keep:** the paths it owns, and the behavior it must preserve.
@@ -108,7 +108,8 @@ The same rules cover pull requests, commit messages, documents and comments in t
 
 | When | Read |
 | --- | --- |
-| Unsettled intent, a feature spec, tickets, decisions needed from several people | [grilling](../grilling/SKILL.md), [to-spec](../to-spec/SKILL.md), [to-tickets](../to-tickets/SKILL.md), [to-questionnaire](../to-questionnaire/SKILL.md), with the [shaping facts](shaping.md) |
+| Unsettled product intent, domain terms, decisions needed from several people | [grilling](../grilling/SKILL.md), [domain-modeling](../domain-modeling/SKILL.md), [to-questionnaire](../to-questionnaire/SKILL.md), with the [shaping facts](shaping.md) |
+| Writing, bootstrapping or reconciling `SPEC.md` against the running product | [spec](../spec/SKILL.md) |
 | An unfamiliar API, dependency or claim to check against sources | [research](../research/SKILL.md) |
 | Proving a change, writing or auditing tests | [verification](../verification/SKILL.md), [test-audit](../test-audit/SKILL.md) |
 | An interface or interaction | [design](../design/SKILL.md) |
