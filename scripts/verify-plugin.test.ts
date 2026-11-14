@@ -516,3 +516,47 @@ esac
 	put("bad-validate", "1\n");
 	await expect(verifyNativeInstall(root, "agy", executable)).rejects.toThrow("unexpected findings");
 });
+
+test("stages only non-ignored git files for agy install so gitignored external symlinks do not fail copy", async () => {
+	const { root, put } = fixture();
+	const init = Bun.spawnSync(["git", "init", "--quiet"], { cwd: root, stdout: "pipe", stderr: "pipe" });
+	expect(init.exitCode).toBe(0);
+	put(".gitignore", ".omp/\n");
+	mkdirSync(join(root, ".omp"), { recursive: true });
+	symlinkSync("/tmp", join(root, ".omp/.mcp.json"));
+	const executable = join(root, "agy");
+	put("agy", `#!/bin/sh
+set -eu
+dest="$HOME/.gemini/config/plugins/mistystack"
+case "$1 $2 $3" in
+  "plugin list --json")
+    if [ -d "$dest" ]; then
+      printf '[{"name":"mistystack","enabled":true,"version":"1.0.0","path":"%s","skills":["misty"],"rules":["core.md"]}]\\n' "$dest"
+    else
+      printf '[]\\n'
+    fi
+    ;;
+  "plugin validate --json")
+    [ ! -e "$4/.omp" ] || exit 1
+    printf '{"name":"mistystack","findings":[]}\\n'
+    ;;
+  "plugin install "*)
+    [ ! -e "$3/.omp" ] || exit 1
+    mkdir -p "$dest/skills/misty" "$dest/rules"
+    cp "$3/skills/misty/SKILL.md" "$dest/skills/misty/SKILL.md"
+    cp "$3/rules/core.md" "$dest/rules/core.md"
+    ;;
+  *) exit 1 ;;
+esac
+`);
+	chmodSync(executable, 0o700);
+	await verifyNativeInstall(root, "agy", executable);
+});
+
+test("rejects rules field in .antigravity-plugin/plugin.json", () => {
+	const { root, json } = fixture();
+	const manifest = JSON.parse(readFileSync(join(root, ".antigravity-plugin/plugin.json"), "utf8"));
+	manifest.rules = "rules/";
+	json(".antigravity-plugin/plugin.json", manifest);
+	expect(lintPlugin(root).errors).toContain(".antigravity-plugin/plugin.json: rules must not be declared; agy loads rules/ directly");
+});

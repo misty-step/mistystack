@@ -26,20 +26,23 @@ agy plugin list --json
 
 `mistystack` appears with `"enabled": true`, `"rules": ["core.md"]`, and all bundled skills including `misty` and `spec`.
 
-## Remote Agents (Antigravity Cloud)
+## Remote Agents (Antigravity Cloud) vs. Remote Control
 
-Cloud Remote Agent sessions run in isolated sandboxes and do not sync your local `~/.gemini/config/plugins/` directory. To load `mistystack` automatically in cloud sessions:
+- **Remote Control** (`agy remote-control start`, or App Remote Control) executes on your own workstation and already loads `~/.gemini/config/plugins/mistystack` across every repository without per-project setup.
+- **Remote Agents (Antigravity Cloud)** run in isolated Google VMs that do not sync `~/.gemini/config/plugins/` yet, syncing account-global plugins only from the Antigravity Marketplace once published.
 
-1. Ensure the target repository has a root `AGENTS.md` with the core block ([Any harness](any.md)).
-2. Open the project in Antigravity Cloud and attach `misty-step/mistystack` as a **Resource** (GitHub repository). Antigravity discovers the plugin's skills and rules through `.agents/skills.json` and `.agents/rules.json` when the session starts.
+To run cloud sessions with **zero manual cloning or Resource setup** per repository:
 
-Inside an already-running cloud session that started before the resource was attached, clone and link into the user skills directory:
+1. Ensure the target repository has a root `AGENTS.md` containing the current `<!-- mistystack:core -->` block ([Any harness](any.md)). Remote Agents load `AGENTS.md` on Turn 0 and default to `always-proceed (turbo)`.
+2. When `mistystack` skills are absent inside the remote container, the core instruction directs the agent itself to run:
 
 ```sh
 git clone --depth 1 https://github.com/misty-step/mistystack.git /tmp/mistystack &&
   mkdir -p ~/.gemini/config/skills &&
   ln -sfn /tmp/mistystack/skills/* ~/.gemini/config/skills/
 ```
+
+Linking all `skills/*` into `~/.gemini/config/skills/` exposes `spec` and the remaining bundled skills for the rest of the cloud session without further clones. Attaching `misty-step/mistystack` as a GitHub **Resource** on a Remote Project also works via `.agents/skills.json` and `.agents/rules.json`, but is optional once `AGENTS.md` carries the self-bootstrapping core.
 
 ## Dispatch and rigor
 

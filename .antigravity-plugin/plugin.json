@@ -1,7 +1,13 @@
 {
   "name": "mistystack",
+  "displayName": "Mistystack",
   "version": "0.4.0",
   "description": "Misty Step's harness-neutral engineering method.",
+  "suggestedPrompts": [
+    "Bootstrap or reconcile SPEC.md against the running product",
+    "Audit this repository against the twelve Foundation articles",
+    "Build, prove on the real running path, and ship a change"
+  ],
   "author": {
     "name": "Misty Step",
     "url": "https://mistystep.io"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import { YAML } from "bun";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
+import { cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { readSkillLocks } from "./skill-locks.mjs";
@@ -484,6 +484,22 @@ async function codexInventory(executable: string, project: string, env: NodeJS.P
 	}
 }
 
+function stagePluginSource(root: string, scratch: string, env: NodeJS.ProcessEnv) {
+	if (!existsSync(join(root, ".git"))) return root;
+	const staged = join(scratch, "plugin-source");
+	mkdirSync(staged, { recursive: true });
+	const files = checked(["git", "-C", root, "ls-files", "-z", "--cached", "--others", "--exclude-standard"], root, env).split("\0");
+	for (const file of files) {
+		if (!file) continue;
+		const source = join(root, file);
+		if (!lstatSync(source, { throwIfNoEntry: false })) continue;
+		const target = join(staged, file);
+		mkdirSync(dirname(target), { recursive: true });
+		cpSync(source, target, { dereference: false, recursive: true });
+	}
+	return staged;
+}
+
 export async function verifyNativeInstall(root: string, harness: Harness, executable: string) {
 	root = resolve(root);
 	await isolated(harness, async (project, env, scratch) => {
@@ -589,7 +605,8 @@ export async function verifyNativeInstall(root: string, harness: Harness, execut
 			if (!Array.isArray(before) || before.length !== 0) {
 				throw new Error("isolation refused: agy catalog is not empty before install");
 			}
-			const validated: unknown = JSON.parse(checked([executable, "plugin", "validate", "--json", root], project, env));
+			const source = stagePluginSource(root, scratch, env);
+			const validated: unknown = JSON.parse(checked([executable, "plugin", "validate", "--json", source], project, env));
 			if (!isRecord(validated) || validated.name !== "mistystack" || !Array.isArray(validated.findings)) {
 				throw new Error("agy plugin validate did not return a mistystack validation report");
 			}
@@ -599,7 +616,7 @@ export async function verifyNativeInstall(root: string, harness: Harness, execut
 			if (unexpected.length > 0) {
 				throw new Error(`agy plugin validate reported unexpected findings: ${JSON.stringify(unexpected)}`);
 			}
-			console.log(checked([executable, "plugin", "install", root], project, env).trim());
+			console.log(checked([executable, "plugin", "install", source], project, env).trim());
 			const catalog: unknown = JSON.parse(checked([executable, "plugin", "list", "--json"], project, env));
 			const plugin = Array.isArray(catalog) ? catalog.find(entry => isRecord(entry) && entry.name === "mistystack") : undefined;
 			if (!isRecord(plugin) || plugin.enabled !== true) {
