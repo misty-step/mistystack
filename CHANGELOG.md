@@ -1,3 +1,13 @@
+# [0.5.0](https://github.com/misty-step/mistystack/compare/v0.4.0...v0.5.0) (2026-11-14)
+<!-- landmark:protected-release previous=v0.4.0 source=db6423fc68c920256b3449539b4a395d8a4e38da18e7c0162fa6ed5290ff5c8c -->
+
+### BREAKING CHANGES
+
+* **spec:** make SPEC.md the declarative target state and fold DOMAIN.md and USER_STORIES.md (#694) ([4f262a2](https://github.com/misty-step/mistystack/commit/4f262a2c26324503a3d24c53e3ece13abbc45185))
+
+### Features
+
+* **antigravity:** add native Antigravity plugin and self-bootstrapping cloud core (#695) ([81b7a5a](https://github.com/misty-step/mistystack/commit/81b7a5a9da95d2037e2d60a7a75ce18b4cdcfb9b))
 # [0.4.0](https://github.com/misty-step/mistystack/compare/v0.3.25...v0.4.0) (2026-11-13)
 <!-- landmark:protected-release previous=v0.3.25 source=aa43cec7bcceb54309514ec47a1b93d007ce9c1e6245569cc84207c9fbb70f9e -->
 
