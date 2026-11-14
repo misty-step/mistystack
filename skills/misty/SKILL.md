@@ -12,7 +12,7 @@ metadata:
 
 This is how Misty Step builds software with agents. It is one page on purpose. It carries the local facts and decisions a capable model cannot work out from the repository, and it leaves general engineering knowledge to you. When this page and your own judgment disagree about how to do good work, say so in your report; when they disagree about a Misty Step decision (who approves what, where work is tracked, how a release ships), this page wins.
 
-The method runs on any harness that reads Agent Skills and an always-on instruction file. Read your harness note once per session for native mechanics: [Claude Code](harnesses/claude.md), [Codex](harnesses/codex.md), [pi](harnesses/pi.md), or [any other harness](harnesses/any.md), which covers Cursor, Antigravity and Prime Agent.
+The method runs on any harness that reads Agent Skills and an always-on instruction file. Read your harness note once per session for native mechanics: [Claude Code](harnesses/claude.md), [Codex](harnesses/codex.md), [pi](harnesses/pi.md), [Antigravity](harnesses/antigravity.md), or [any other harness](harnesses/any.md), which covers Cursor and Prime Agent.
 
 ## The loop
 

@@ -26,16 +26,17 @@ Fleet machinery lives in the private `misty-step/workstation` repository.
 ## Harness support
 
 Mistystack works on any harness that reads Agent Skills and an always-on
-instruction file. That covers Cursor, Antigravity, Prime Agent, OpenCode, Gemini
-CLI and others through one path:
+instruction file. That covers Cursor, Prime Agent, OpenCode, Gemini CLI and
+others through one path:
 
 - [Any harness](skills/misty/harnesses/any.md): `npx skills add misty-step/mistystack -g`, then the core in `AGENTS.md`.
 
-Three harnesses also have a native plugin that does both steps:
+Four harnesses also have a native plugin that does both steps:
 
 - [Claude Code](skills/misty/harnesses/claude.md): marketplace plugin, core hook and native agents.
 - [Codex](skills/misty/harnesses/codex.md): marketplace plugin, core hook and user-installed agent templates.
 - [pi](skills/misty/harnesses/pi.md): Git package and core extension; rigor runs inline.
+- [Antigravity](skills/misty/harnesses/antigravity.md): native plugin (`agy`), always-on rule and remote-project discovery.
 
 Grok Bot runtime setup is private fleet machinery, not a public adapter.
 Grok Build CLI is not a target; there is no `.grok-plugin` adapter.
@@ -58,10 +59,11 @@ Retired reference-page URLs redirect to the focused security review.
 ## Layout
 
 ```text
-.claude-plugin/    Claude Code plugin; marketplace with the pinned companion packs
-.codex-plugin/     Codex plugin
-.agents/plugins/   Codex marketplace
-package.json       pi package resource declarations
+.claude-plugin/       Claude Code plugin; marketplace with the pinned companion packs
+.codex-plugin/        Codex plugin
+.antigravity-plugin/  Antigravity plugin
+.agents/              Codex marketplace, Antigravity workspace discovery and repo verification
+package.json          pi package resource declarations
 rules/core.md      always-on routing and guardrails
 skills/misty/      the method page, principles and harness references
 skills/            one Agent Skills content tree
@@ -87,8 +89,8 @@ Terms, invariants and consumer contracts live in [SPEC.md](SPEC.md). Maintainers
 CI runs `./scripts/check plugin --strict --lint-only`: strict lint checks relative
 Markdown link resolution, named skill references and native manifests;
 installation is explicitly unproved. The full `plugin --strict` selection
-installs in disposable homes through every available Claude Code, Codex and pi
-CLI. Missing CLIs are named as skipped, not passed. These no-model checks prove
+installs in disposable homes through every available Claude Code, Codex, pi and
+Antigravity CLI. Missing CLIs are named as skipped, not passed. These no-model checks prove
 native installation, skill inventory and core hook/extension registration, not
 live model behavior. See the harness notes for fresh-session proof,
 `./scripts/check --help` for gate options and

@@ -9,8 +9,8 @@ Private fleet runtime setup, credentials, host automation and operator schedulin
 - **Specification (`SPEC.md`):** a program's single, implementation-free, present-tense target state owning purpose, domain terms, invariants and observable user capabilities.
 - **Homeostasis:** the state where the live running application and `SPEC.md` agree with zero drift, removing the need to materialize a specification into ticket backlogs.
 - **Content tree:** the canonical Agent Skills package (`SKILL.md` entry points with supporting files beside each procedure).
-- **Universal install:** installing the shared content tree in a harness's Agent Skills directory and placing the core in its always-on instruction file so Cursor, Antigravity, Prime Agent, OpenCode, Gemini CLI and any compatible runtime share one method without a dedicated plugin.
-- **Native adapter:** thin repository-owned integration for Claude Code, Codex or pi exposing that same tree and core through the harness's own lifecycle without a custom installer or a second copy of the method.
+- **Universal install:** installing the shared content tree in a harness's Agent Skills directory and placing the core in its always-on instruction file so Cursor, Prime Agent, OpenCode, Gemini CLI and any compatible runtime share one method without a dedicated plugin.
+- **Native adapter:** thin repository-owned integration for Claude Code, Codex, pi or Antigravity exposing that same tree and core through the harness's own lifecycle without a custom installer or a second copy of the method.
 - **Core rule:** the always-applied entry guardrails and routing (`<= 20` lines).
 - **Mode:** `misty`, one self-contained page holding the work loop, ownership, autonomy, delegation, reporting and routes to every task skill, with no base document beneath it.
 - **Principle:** an engineering taste heuristic consulted on demand when its trigger matches, never cited as a blanket bureaucratic rule.
@@ -52,7 +52,7 @@ Private fleet runtime setup, credentials, host automation and operator schedulin
 
 - `setup-mistystack` and `recompile` remain excluded from automatic model discovery (`disable-model-invocation`) while staying readable directly via `misty`'s route table.
 - Explicitly invoking `setup-mistystack` installs or upgrades the shared tree through the active harness's native lifecycle without disturbing unrelated plugins, foreign settings or credentials, maps `rigor-light`, `rigor-standard` and `rigor-critical` in native configuration where subagents exist (inline on pi and universal installs), reads back persisted assignments and honors symlink safety.
-- One verification gate checks release-protection, secret-scanning, manifest/skill metadata contracts, offline vendored lock integrity, relative Markdown link and skill-name resolution, and disposable isolated native installations across all available Claude Code, Codex and pi CLIs (naming missing CLIs or lint-only runs explicitly as unproved rather than passes).
+- One verification gate checks release-protection, secret-scanning, manifest/skill metadata contracts, offline vendored lock integrity, relative Markdown link and skill-name resolution, and disposable isolated native installations across all available Claude Code, Codex, pi and Antigravity CLIs (naming missing CLIs or lint-only runs explicitly as unproved rather than passes).
 
 ### Shaping, living specs and homeostasis
 

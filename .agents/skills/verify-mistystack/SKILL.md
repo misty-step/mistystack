@@ -28,8 +28,8 @@ not evidence that the method loaded.
    Require exit 0 and retain optional Landmark replay results separately from
    skips. `./scripts/check --help` identifies the maintained flags.
 3. **Observe native installation and loading.** The full selection creates
-   disposable homes and projects for each available Claude Code, Codex and
-   pi CLI, refuses escaping native configuration paths, installs through the
+   disposable homes and projects for each available Claude Code, Codex, pi and
+   Antigravity CLI, refuses escaping native configuration paths, installs through the
    native lifecycle and checks skills/core registration. Missing CLIs are named
    skipped; an available-harness failure leaves that consumer unproved. The
    lint-only selection explicitly skips installation and does not prove loading.

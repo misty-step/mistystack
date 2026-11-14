@@ -20,12 +20,16 @@ function fixture() {
 	};
 	const skill = (name: string, body = "Run the owned check.") => `---\nname: ${name}\ndescription: "When changing the consumer path."\n${name.startsWith("principle-") || name === "recompile" || name === "setup-mistystack" ? "disable-model-invocation: true\n" : ""}metadata:\n  owner: phaedrus\n  prevents: "A recorded consumer failure."\n  source: "owner/repo@0123456789abcdef/source"\n  sunset: "2026-11-27"\n---\n${body}\n`;
 	put("skills/misty/SKILL.md", skill("misty"));
-	put("rules/core.md", "---\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
+	put("rules/core.md", "---\ntrigger: always_on\nalwaysApply: true\n---\n# Core\n\n- Load misty.\n");
+	put("assets/logo.svg", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"></svg>\n');
 	const json = (path: string, value: unknown) => put(path, `${JSON.stringify(value)}\n`);
 	const hooks = (variable: string) => ({ SessionStart: [{ hooks: [{ type: "command", command: `cat "$${variable}/rules/core.md"` }] }] });
 	json(".claude-plugin/plugin.json", { name: "mistystack", agents: ["./adapters/claude/agents/fixture.md"], hooks: hooks("CLAUDE_PLUGIN_ROOT") });
 	json(".claude-plugin/marketplace.json", { name: "mistystack", owner: { name: "Fixture owner" }, plugins: [{ name: "mistystack", source: "./" }] });
 	json(".codex-plugin/plugin.json", { name: "mistystack", version: "1.0.0", skills: "./skills/", hooks: "./adapters/codex/hooks.json" });
+	json(".antigravity-plugin/plugin.json", { name: "mistystack", version: "1.0.0", logo: "assets/logo.svg", skills: "skills" });
+	json(".agents/skills.json", { entries: [{ path: "skills" }] });
+	json(".agents/rules.json", { entries: [{ path: "rules" }] });
 	json(".agents/plugins/marketplace.json", {
 		name: "mistystack",
 		plugins: [{ name: "mistystack", source: { source: "local", path: "./" }, policy: { installation: "AVAILABLE", authentication: "ON_USE" }, category: "Productivity" }],
@@ -39,7 +43,8 @@ function fixture() {
 
 test.each([
 	".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
-	".codex-plugin/plugin.json", ".agents/plugins/marketplace.json",
+	".codex-plugin/plugin.json", ".antigravity-plugin/plugin.json",
+	".agents/plugins/marketplace.json", ".agents/skills.json", ".agents/rules.json",
 	"package.json",
 ])("requires a JSON object at native manifest %s", file => {
 	const { root, put } = fixture();
@@ -53,9 +58,12 @@ test.each([
 test.each([
 	[".claude-plugin/plugin.json", "name must be non-empty"],
 	[".codex-plugin/plugin.json", "version must be non-empty"],
+	[".antigravity-plugin/plugin.json", "version must be non-empty"],
 	[".claude-plugin/marketplace.json", "owner.name must be non-empty"],
 	[".claude-plugin/marketplace.json", "plugins must be a non-empty array"],
 	[".agents/plugins/marketplace.json", "plugins must be a non-empty array"],
+	[".agents/skills.json", "entries must reference skills/"],
+	[".agents/rules.json", "entries must reference rules/"],
 	["package.json", "keywords must include pi-package"],
 ])("checks required native manifest fields in %s", (file, error) => {
 	const { root, json } = fixture();
@@ -63,7 +71,7 @@ test.each([
 	expect(lintPlugin(root).errors).toContain(`${file}: ${error}`);
 });
 
-test.each([".claude-plugin/plugin.json", ".codex-plugin/plugin.json", "package.json"])(
+test.each([".claude-plugin/plugin.json", ".codex-plugin/plugin.json", ".antigravity-plugin/plugin.json", "package.json"])(
 	"rejects a second skills tree registered by %s",
 	file => {
 		const { root, put, skill, json } = fixture();
@@ -207,7 +215,7 @@ test("accepts relative inline and reference links, supporting files and named sk
 	put("skills/misty/playbooks/fix complete.md", "Completed fix.\n");
 	put("skills/misty/playbooks/fix(complete).md", "Completed fix.\n");
 	put("LICENSE", "Repository notice.\n");
-	put("rules/core.md", "---\nalwaysApply: true\n---\nRead [router](../skills/misty/SKILL.md#misty).\n");
+	put("rules/core.md", "---\ntrigger: always_on\nalwaysApply: true\n---\nRead [router](../skills/misty/SKILL.md#misty).\n");
 	expect(lintPlugin(root, true)).toEqual({ skillCount: 3, errors: [], warnings: [] });
 });
 
@@ -330,10 +338,11 @@ test("rejects invalid frontmatter rather than recovering a malformed skill", () 
 	expect(lintPlugin(root).errors).toEqual(["skills/misty/SKILL.md: missing YAML frontmatter"]);
 });
 
-test("requires a boolean alwaysApply core and at most twenty body lines", () => {
+test("requires an always_on boolean alwaysApply core and at most twenty body lines", () => {
 	const { root, put } = fixture();
 	put("rules/core.md", `---\nalwaysApply: 'true'\n---\n${Array.from({ length: 21 }, (_, i) => `- Rule ${i}`).join("\n")}\n`);
 	expect(lintPlugin(root).errors).toEqual([
+		"rules/core.md: trigger must be always_on",
 		"rules/core.md: alwaysApply must be true",
 		"rules/core.md: 21 body lines exceeds 20",
 	]);
@@ -427,7 +436,7 @@ test.each(["recompile", "setup-mistystack"])(
 test("missing native CLIs are explicit skips, not successful install proofs", async () => {
 	const { root } = fixture();
 	const results = await verifyAvailableInstalls(root, {});
-	expect(results.map(result => result.harness)).toEqual(["claude", "codex", "pi"]);
+	expect(results.map(result => result.harness)).toEqual(["claude", "codex", "pi", "agy"]);
 	expect(results.every(result => result.status === "SKIP")).toBe(true);
 	expect(results.some(result => result.status === "PASS")).toBe(false);
 });
@@ -448,15 +457,15 @@ test("plugin help explains strict lint without requiring a harness CLI", () => {
 	expect(result.code).toBe(0);
 	expect(result.out).toContain("--strict fails on broken relative Markdown links and unknown skill names");
 	expect(result.out).toContain("--lint-only skips installation");
-	expect(result.out).toContain("Available Claude, Codex and pi CLIs use isolated native installs");
+	expect(result.out).toContain("Available Claude, Codex, pi and Antigravity (agy) CLIs use isolated native installs");
 });
 
-test.each(["claude", "codex", "pi"] as const)("refuses leaked %s state before installing and removes its scratch home", async harness => {
+test.each(["claude", "codex", "pi", "agy"] as const)("refuses leaked %s state before installing and removes its scratch home", async harness => {
 	const { root, put } = fixture();
 	const trace = join(root, "native-commands");
 	const state = join(root, "native-state");
 	const executable = join(root, harness);
-	const response = harness === "claude" ? '[{"id":"foreign","enabled":true}]' : JSON.stringify({ id: 1, result: { codexHome: root } });
+	const response = harness === "claude" || harness === "agy" ? '[{"id":"foreign","enabled":true}]' : JSON.stringify({ id: 1, result: { codexHome: root } });
 	const leak = harness === "pi" ?
 		`printf '%s\\n' '{"packages":["foreign-package"]}' > "$PI_CODING_AGENT_DIR/settings.json"\nprintf 'Foreign package\\n'` :
 		`${harness === "codex" ? 'IFS= read -r request\n' : ""}printf '%s\\n' ${JSON.stringify(response)}`;
@@ -468,4 +477,42 @@ test.each(["claude", "codex", "pi"] as const)("refuses leaked %s state before in
 	expect(home).not.toBe(process.env.HOME);
 	for (const config of configs) expect(config.startsWith(`${home}/`)).toBe(true);
 	expect(existsSync(home)).toBe(false);
+});
+
+test("verifies isolated agy plugin validation and installation and rejects unexpected validate findings", async () => {
+	const { root, put } = fixture();
+	const executable = join(root, "agy");
+	const state = join(root, "agy-installed");
+	put("agy", `#!/bin/sh
+set -eu
+dest="$HOME/.gemini/config/plugins/mistystack"
+case "$1 $2 $3" in
+  "plugin list --json")
+    if [ -d "$dest" ]; then
+      printf '[{"name":"mistystack","enabled":true,"version":"1.0.0","path":"%s","skills":["misty"],"rules":["core.md"]}]\\n' "$dest"
+    else
+      printf '[]\\n'
+    fi
+    ;;
+  "plugin validate --json")
+    if [ -f ${JSON.stringify(join(root, "bad-validate"))} ]; then
+      printf '{"name":"mistystack","findings":[{"severity":"warning","file":"rules/core.md","message":"bad trigger"}]}\\n'
+    else
+      printf '{"name":"mistystack","findings":[{"severity":"warning","file":"AGENTS.md","message":"never loaded"}]}\\n'
+    fi
+    ;;
+  "plugin install "*)
+    mkdir -p "$dest/skills/misty" "$dest/rules"
+    cp "$3/skills/misty/SKILL.md" "$dest/skills/misty/SKILL.md"
+    cp "$3/rules/core.md" "$dest/rules/core.md"
+    printf 'installed:%s\\n' "$dest" > ${JSON.stringify(state)}
+    ;;
+  *) exit 1 ;;
+esac
+`);
+	chmodSync(executable, 0o700);
+	await verifyNativeInstall(root, "agy", executable);
+	expect(readFileSync(state, "utf8")).toContain("/.gemini/config/plugins/mistystack");
+	put("bad-validate", "1\n");
+	await expect(verifyNativeInstall(root, "agy", executable)).rejects.toThrow("unexpected findings");
 });

@@ -1,0 +1,14 @@
+{
+  "name": "mistystack",
+  "version": "0.4.0",
+  "description": "Misty Step's harness-neutral engineering method.",
+  "author": {
+    "name": "Misty Step",
+    "url": "https://mistystep.io"
+  },
+  "homepage": "https://stack.mistystep.io",
+  "repository": "https://github.com/misty-step/mistystack",
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "skills": "skills"
+}

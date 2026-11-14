@@ -64,10 +64,11 @@ export const home = {
     copyFailed: 'Select the command to copy',
     // Tab order and one note per harness reference with an installation command.
     harnesses: {
-      any: 'Cursor, Antigravity, Prime Agent and others. Then add the core to AGENTS.md.',
+      any: 'Cursor, Prime Agent and others. Then add the core to AGENTS.md.',
       claude: 'Start a fresh session after installing.',
       codex: 'Review and trust the native SessionStart hook. Rigor agents are installed separately.',
       pi: 'Rigor runs inline; pi has no native subagent mechanism.',
+      antigravity: 'Install with agy locally; attach misty-step/mistystack as a Remote Project resource in cloud sessions.',
     },
     source: 'Source:',
   }),

@@ -167,6 +167,7 @@ function lintManifests(root: string, errors: string[]) {
 	for (const [harness, file] of [
 		["claude", ".claude-plugin/plugin.json"],
 		["codex", ".codex-plugin/plugin.json"],
+		["antigravity", ".antigravity-plugin/plugin.json"],
 	] as const) {
 		const manifest = load(file);
 		if (!manifest) continue;
@@ -175,12 +176,27 @@ function lintManifests(root: string, errors: string[]) {
 		if (harness === "claude" && manifest.version !== undefined && !nonempty(manifest.version)) {
 			errors.push(`${file}: version must be non-empty when provided`);
 		}
-		skills(file, harness === "claude" && manifest.skills === undefined ? "./skills" : manifest.skills);
+		skills(file, (harness === "claude" || harness === "antigravity") && manifest.skills === undefined ? "./skills" : manifest.skills);
 		if (harness === "claude") paths(`${file}: agents`, manifest.agents, "file");
 		if (harness === "claude") coreHooks(file, manifest.hooks, "CLAUDE_PLUGIN_ROOT");
 		if (harness === "codex") {
 			if (typeof manifest.hooks !== "string") errors.push(`${file}: hooks must reference a JSON file`);
 			coreHooks(file, manifest.hooks, "PLUGIN_ROOT");
+		}
+		if (harness === "antigravity") {
+			path(`${file}: logo`, manifest.logo, "file");
+			if ("rules" in manifest) errors.push(`${file}: rules must not be declared; agy loads rules/ directly`);
+		}
+	}
+	for (const [file, dir] of [
+		[".agents/skills.json", "skills"],
+		[".agents/rules.json", "rules"],
+	] as const) {
+		const manifest = load(file);
+		if (!manifest) continue;
+		const entries = Array.isArray(manifest.entries) ? manifest.entries : [];
+		if (entries.length !== 1 || !isRecord(entries[0]) || path(`${file}: entries[0].path`, entries[0].path, "directory") !== resolve(root, dir)) {
+			errors.push(`${file}: entries must reference ${dir}/`);
 		}
 	}
 	marketplace(".claude-plugin/marketplace.json", false);
@@ -239,6 +255,7 @@ export function lintPlugin(root: string, strict = false) {
 
 	try {
 		const { frontmatter, body } = document(join(root, "rules/core.md"));
+		if (frontmatter.trigger !== "always_on") errors.push("rules/core.md: trigger must be always_on");
 		if (frontmatter.alwaysApply !== true) errors.push("rules/core.md: alwaysApply must be true");
 		const lines = body.split("\n").length;
 		if (lines > 20) errors.push(`rules/core.md: ${lines} body lines exceeds 20`);
@@ -298,8 +315,8 @@ function checked(command: string[], cwd: string, env: NodeJS.ProcessEnv, input?:
 	return result.stdout.toString();
 }
 
-type Harness = "claude" | "codex" | "pi";
-const harnesses: Harness[] = ["claude", "codex", "pi"];
+type Harness = "claude" | "codex" | "pi" | "agy";
+const harnesses: Harness[] = ["claude", "codex", "pi", "agy"];
 
 function isolated<T>(harness: Harness, proof: (project: string, env: NodeJS.ProcessEnv, scratch: string) => Promise<T>): Promise<T>;
 function isolated<T>(harness: Harness, proof: (project: string, env: NodeJS.ProcessEnv, scratch: string) => T): T;
@@ -525,7 +542,7 @@ export async function verifyNativeInstall(root: string, harness: Harness, execut
 				nonempty(hook.sourcePath) && inside(installed, hook.sourcePath));
 			if (!hook) throw new Error("codex native hooks/list did not register the installed SessionStart core hook");
 			console.log(`PASS codex: enabled native catalog entry; skills/list discovers ${count} skills; hooks/list registers SessionStart (trust: ${hook.trustStatus}; no inference or hook execution)`);
-		} else {
+		} else if (harness === "pi") {
 			const settingsPath = join(env.PI_CODING_AGENT_DIR!, "settings.json");
 			checked([executable, "list", "--no-approve"], project, env);
 			if (existsSync(settingsPath)) {
@@ -567,6 +584,36 @@ export async function verifyNativeInstall(root: string, harness: Harness, execut
 			}
 			if (commands.length !== count) throw new Error("pi native get_commands returned unexpected skills");
 			console.log(`PASS pi: native get_commands discovers ${count} installed skills; package registers the core extension (no inference; extension invocation not exercised)`);
+		} else {
+			const before: unknown = JSON.parse(checked([executable, "plugin", "list", "--json"], project, env));
+			if (!Array.isArray(before) || before.length !== 0) {
+				throw new Error("isolation refused: agy catalog is not empty before install");
+			}
+			const validated: unknown = JSON.parse(checked([executable, "plugin", "validate", "--json", root], project, env));
+			if (!isRecord(validated) || validated.name !== "mistystack" || !Array.isArray(validated.findings)) {
+				throw new Error("agy plugin validate did not return a mistystack validation report");
+			}
+			const unexpected = validated.findings.filter(finding =>
+				!isRecord(finding) || finding.severity !== "warning" || finding.file !== "AGENTS.md",
+			);
+			if (unexpected.length > 0) {
+				throw new Error(`agy plugin validate reported unexpected findings: ${JSON.stringify(unexpected)}`);
+			}
+			console.log(checked([executable, "plugin", "install", root], project, env).trim());
+			const catalog: unknown = JSON.parse(checked([executable, "plugin", "list", "--json"], project, env));
+			const plugin = Array.isArray(catalog) ? catalog.find(entry => isRecord(entry) && entry.name === "mistystack") : undefined;
+			if (!isRecord(plugin) || plugin.enabled !== true) {
+				throw new Error("agy native catalog did not install and enable mistystack");
+			}
+			const installed = installedRoot(plugin.path, scratch);
+			const count = installedContent(root, installed);
+			const expectedSkills = [...new Bun.Glob("skills/*/SKILL.md").scanSync({ cwd: root })].map(file => basename(dirname(file))).sort();
+			const listedSkills = Array.isArray(plugin.skills) ? plugin.skills.filter((skill): skill is string => typeof skill === "string").sort() : [];
+			const listedRules = Array.isArray(plugin.rules) ? plugin.rules.filter((rule): rule is string => typeof rule === "string") : [];
+			if (listedSkills.length !== count || !expectedSkills.every((name, index) => listedSkills[index] === name) || !listedRules.includes("core.md")) {
+				throw new Error(`agy native catalog did not register expected skills and core.md\n${JSON.stringify(plugin)}`);
+			}
+			console.log(`PASS agy: ${count} installed skills; native catalog registers mistystack and core.md (no inference)`);
 		}
 	});
 }
@@ -601,7 +648,7 @@ if (import.meta.main) {
 				case "--lint-only": lintOnly = true; break;
 				case "--help":
 				case "-h":
-					console.log(`${usage}\nAll options are plugin-only; --strict fails on broken relative Markdown links and unknown skill names. --lint-only skips installation for every harness. Available Claude, Codex and pi CLIs use isolated native installs; missing CLIs report SKIP, not PASS.`);
+					console.log(`${usage}\nAll options are plugin-only; --strict fails on broken relative Markdown links and unknown skill names. --lint-only skips installation for every harness. Available Claude, Codex, pi and Antigravity (agy) CLIs use isolated native installs; missing CLIs report SKIP, not PASS.`);
 					process.exit(0);
 				default: throw new Error(usage);
 			}

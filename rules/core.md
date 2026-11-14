@@ -1,4 +1,5 @@
 ---
+trigger: always_on
 alwaysApply: true
 ---
 # Misty Step core
